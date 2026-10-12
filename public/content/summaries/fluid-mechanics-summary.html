@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fluid Mechanics - Quick Formulas Summary</title>
+  <style>
+    :root {
+      --bg: #090d16;
+      --card: #0f172a;
+      --border: #1e293b;
+      --text: #e2e8f0;
+      --accent: #f59e0b;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      padding: 2.5rem 1.5rem;
+      max-width: 900px;
+      margin: 0 auto;
+      line-height: 1.7;
+    }
+    h1 { font-size: 2rem; color: #f8fafc; margin-bottom: 0.5rem; }
+    .badge {
+      display: inline-block;
+      background: rgba(245, 158, 11, 0.15);
+      border: 1px solid #f59e0b;
+      color: #fbbf24;
+      padding: 0.25rem 0.75rem;
+      border-radius: 9999px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+    }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; margin: 1.5rem 0; }
+    .box {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 0.5rem;
+      padding: 1.25rem;
+    }
+    .box h3 { color: #fbbf24; margin-bottom: 0.5rem; font-size: 1.1rem; }
+    .code {
+      font-family: monospace;
+      background: #020617;
+      border: 1px solid #1e293b;
+      padding: 0.5rem 0.75rem;
+      border-radius: 0.25rem;
+      color: #38bdf8;
+      display: block;
+      margin-top: 0.5rem;
+    }
+  </style>
+</head>
+<body>
+  <span class="badge">Cheat Sheet & Summary</span>
+  <h1>Fluid Mechanics — Core Formulas</h1>
+  <p style="color: #94a3b8; margin-bottom: 1.5rem;">Condensed reference for hydrostatics, Bernoulli equation, and pipe flow dynamics.</p>
+
+  <div class="grid">
+    <div class="box">
+      <h3>Hydrostatic Pressure</h3>
+      <p>Pressure variation in incompressible static fluid:</p>
+      <span class="code">P = P₀ + ρ·g·h</span>
+    </div>
+    <div class="box">
+      <h3>Continuity Equation</h3>
+      <p>Conservation of mass for incompressible flow:</p>
+      <span class="code">A₁ · V₁ = A₂ · V₂ = Q</span>
+    </div>
+    <div class="box">
+      <h3>Bernoulli Equation</h3>
+      <p>Along a streamline without friction or work:</p>
+      <span class="code">P/γ + V²/(2g) + z = Constant</span>
+    </div>
+    <div class="box">
+      <h3>Reynolds Number (Re)</h3>
+      <p>Ratio of inertial to viscous forces:</p>
+      <span class="code">Re = (ρ · V · D) / μ = (V · D) / ν</span>
+      <p style="font-size: 0.85rem; color: #94a3b8; margin-top: 0.5rem;">Laminar: Re &lt; 2300 | Turbulent: Re &gt; 4000</p>
+    </div>
+  </div>
+</body>
+</html>
