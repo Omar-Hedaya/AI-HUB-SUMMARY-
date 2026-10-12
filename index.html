@@ -941,54 +941,8 @@
       }
     };
 
-    // Built-in Baseline Library
-    const BUNDLED_SAMPLE_DOCS = [
-      {
-        name: "All Math 2 (Lectures Summary + Sheets Answers).html",
-        title: "All Math 2 (Lectures Summary + Sheets Answers)",
-        category: "Math 2",
-        slug: "all-math-2-lectures-summary-sheets-answers",
-        path: "content/Math 2/All Math 2 (Lectures Summary + Sheets Answers).html",
-        localUrl: "./content/Math 2/All Math 2 (Lectures Summary + Sheets Answers).html",
-        size: 495000
-      },
-      {
-        name: "lecture-01-intro-to-thermodynamics.html",
-        title: "Lecture 01 Intro To Thermodynamics",
-        category: "lectures",
-        slug: "lecture-01-intro-to-thermodynamics",
-        path: "content/lectures/lecture-01-intro-to-thermodynamics.html",
-        localUrl: "./content/lectures/lecture-01-intro-to-thermodynamics.html",
-        size: 3840
-      },
-      {
-        name: "thermo-sheet-1.html",
-        title: "Thermo Sheet 1",
-        category: "sheets",
-        slug: "thermo-sheet-1",
-        path: "content/sheets/thermo-sheet-1.html",
-        localUrl: "./content/sheets/thermo-sheet-1.html",
-        size: 2950
-      },
-      {
-        name: "fluid-mechanics-summary.html",
-        title: "Fluid Mechanics Summary",
-        category: "summaries",
-        slug: "fluid-mechanics-summary",
-        path: "content/summaries/fluid-mechanics-summary.html",
-        localUrl: "./content/summaries/fluid-mechanics-summary.html",
-        size: 2420
-      },
-      {
-        name: "midterm-review-2025.html",
-        title: "Midterm Review 2025",
-        category: "exams",
-        slug: "midterm-review-2025",
-        path: "content/exams/midterm-review-2025.html",
-        localUrl: "./content/exams/midterm-review-2025.html",
-        size: 2180
-      }
-    ];
+    // Baseline Document Library (Empty - purely loaded dynamically from GitHub)
+    const BUNDLED_SAMPLE_DOCS = [];
 
     // ==========================================================
     // UTILITY FUNCTIONS & LANGUAGE SWITCHER
@@ -1567,7 +1521,23 @@
     }
 
     function getCacheKey(user, repo) {
-      return `aihub_catalog_cache_v10_${user}_${repo}`;
+      return `aihub_catalog_cache_v11_${user}_${repo}`;
+    }
+
+    // Forcefully wipe all current and legacy catalog cache keys from localStorage
+    function clearAllCatalogCaches() {
+      try {
+        const keysToRemove = [];
+        for (let i = 0; i < localStorage.length; i++) {
+          const key = localStorage.key(i);
+          if (key && (key.startsWith("aihub_catalog_cache_") || key === "last_catalog_cache")) {
+            keysToRemove.push(key);
+          }
+        }
+        keysToRemove.forEach(k => localStorage.removeItem(k));
+      } catch (e) {
+        console.warn("Catalog cache clear note:", e);
+      }
     }
 
     // ==========================================================
@@ -1623,6 +1593,10 @@
       if (!navigator.onLine) {
         if (forceRefresh && refreshIcon) refreshIcon.classList.remove("animate-spin");
         return;
+      }
+
+      if (forceRefresh) {
+        clearAllCatalogCaches();
       }
 
       const cacheKey = getCacheKey(currentUsername, currentRepo);
@@ -1718,81 +1692,107 @@
 
         // --------------------------------------------------------
         // 2. FALLBACK STRATEGY: Silent GitHub API Directory Fetcher
+        // (Case-insensitive 'content' discovery with deep nested traversal)
         // --------------------------------------------------------
         if (!catalogDiscovered) {
-          const apiUrl = `https://api.github.com/repos/${currentUsername}/${currentRepo}/contents/content`;
-          const res = await fetch(apiUrl, {
-            headers: { "Accept": "application/vnd.github.v3+json" }
-          });
+          const contentCandidates = ["content", "public/content"];
+          let foundContentPath = null;
 
-          if (res.status === 403) {
-            const resetHeader = res.headers.get("x-ratelimit-reset");
-            const resetTime = resetHeader ? new Date(parseInt(resetHeader) * 1000).toLocaleTimeString() : "in ~1 hour";
-            console.warn(`GitHub API unauthenticated rate limit reached (resets ~${resetTime}). Seamlessly using cached study folders.`);
-            return;
-          }
+          // Discover exact content root path
+          for (const candPath of contentCandidates) {
+            try {
+              const checkUrl = `https://api.github.com/repos/${currentUsername}/${currentRepo}/contents/${candPath}`;
+              const checkRes = await fetch(checkUrl, {
+                headers: { "Accept": "application/vnd.github.v3+json" }
+              });
 
-          if (res.status === 404 || !res.ok) {
-            return;
-          }
-
-          const items = await res.json();
-          if (Array.isArray(items)) {
-            const dirItems = items.filter(item => item.type === "dir");
-            categoriesFound = dirItems.map(d => d.name);
-
-            const docPromises = dirItems.map(async (dir) => {
-              try {
-                const folderRes = await fetch(dir.url, {
-                  headers: { "Accept": "application/vnd.github.v3+json" }
-                });
-                if (!folderRes.ok) return [];
-                const folderItems = await folderRes.json();
-                if (!Array.isArray(folderItems)) return [];
-
-                return folderItems
-                  .filter(file => file.type === "file" && file.name.toLowerCase().endsWith(".html"))
-                  .map(file => ({
-                    name: file.name,
-                    path: file.path,
-                    download_url: file.download_url,
-                    size: file.size || 0
-                  }));
-              } catch (err) {
-                return [];
+              if (checkRes.status === 403) {
+                const resetHeader = checkRes.headers.get("x-ratelimit-reset");
+                const resetTime = resetHeader ? new Date(parseInt(resetHeader) * 1000).toLocaleTimeString() : "in ~1 hour";
+                console.warn(`GitHub API unauthenticated rate limit reached (resets ~${resetTime}). Seamlessly using cached study folders.`);
+                return;
               }
-            });
 
-            const nestedDocs = await Promise.all(docPromises);
-            remoteDocs = nestedDocs.flat();
-            if (remoteDocs.length > 0) {
-              catalogDiscovered = true;
+              if (checkRes.ok) {
+                const checkItems = await checkRes.json();
+                if (Array.isArray(checkItems) && checkItems.length > 0) {
+                  // Found items in this directory
+                  foundContentPath = candPath;
+                  const dirItems = checkItems.filter(item => item.type === "dir");
+                  const rootHtmlFiles = checkItems
+                    .filter(item => item.type === "file" && item.name.toLowerCase().endsWith(".html"))
+                    .map(file => ({
+                      name: file.name,
+                      path: file.path,
+                      category: extractCategoryFromPath(file.path),
+                      download_url: file.download_url,
+                      size: file.size || 0
+                    }));
+
+                  if (rootHtmlFiles.length > 0) {
+                    remoteDocs.push(...rootHtmlFiles);
+                    catalogDiscovered = true;
+                  }
+
+                  if (dirItems.length > 0) {
+                    dirItems.forEach(d => {
+                      if (!categoriesFound.some(c => c.toLowerCase() === d.name.toLowerCase())) {
+                        categoriesFound.push(d.name);
+                      }
+                    });
+
+                    const docPromises = dirItems.map(async (dir) => {
+                      try {
+                        const folderRes = await fetch(dir.url, {
+                          headers: { "Accept": "application/vnd.github.v3+json" }
+                        });
+                        if (!folderRes.ok) return [];
+                        const folderItems = await folderRes.json();
+                        if (!Array.isArray(folderItems)) return [];
+
+                        return folderItems
+                          .filter(file => file.type === "file" && file.name.toLowerCase().endsWith(".html"))
+                          .map(file => ({
+                            name: file.name,
+                            path: file.path,
+                            category: dir.name,
+                            download_url: file.download_url,
+                            size: file.size || 0
+                          }));
+                      } catch (err) {
+                        return [];
+                      }
+                    });
+
+                    const nestedDocs = await Promise.all(docPromises);
+                    const flatNested = nestedDocs.flat();
+                    if (flatNested.length > 0) {
+                      remoteDocs.push(...flatNested);
+                      catalogDiscovered = true;
+                    }
+                  }
+
+                  // If we discovered documents, break early
+                  if (catalogDiscovered && remoteDocs.length > 0) {
+                    break;
+                  }
+                }
+              }
+            } catch (candErr) {
+              console.warn("Content candidate query note:", candErr);
             }
           }
         }
 
         // --------------------------------------------------------
         // 3. PERSISTENCE, REHYDRATION & SMOOTH DOM UPDATE
+        // (Pure remote documents only - no fake/mock sample files injected)
         // --------------------------------------------------------
-        if (catalogDiscovered && remoteDocs.length > 0) {
-          BUNDLED_SAMPLE_DOCS.forEach(sample => {
-            if (!remoteDocs.some(d => d.path === sample.path || d.name === sample.name)) {
-              remoteDocs.push({
-                name: sample.name,
-                path: sample.path,
-                download_url: sample.download_url || sample.downloadUrl || "",
-                size: sample.size || 0
-              });
-              if (!categoriesFound.some(c => c.toLowerCase() === sample.category.toLowerCase())) {
-                categoriesFound.push(sample.category);
-              }
-            }
-          });
-
-          const inflatedRemoteDocs = remoteDocs.map(inflateDocument);
+        if (catalogDiscovered) {
+          const inflatedRemoteDocs = remoteDocs.map(inflateDocument).filter(Boolean);
           const newlyDiscoveredDocs = inflatedRemoteDocs.filter(d => !previousPaths.has(d.path));
 
-          // Check if data actually changed to avoid superfluous re-renders
+          // Check if data changed or forceRefresh requested
           const hasCatalogChanged = forceRefresh ||
             inflatedRemoteDocs.length !== previousDocCount ||
             newlyDiscoveredDocs.length > 0 ||
@@ -1829,6 +1829,18 @@
           if (forceRefresh) {
             showToast(currentLang === "ar" ? "تم تحديث الملفات بنجاح!" : "Fetched latest files from GitHub!");
           }
+        } else if (forceRefresh) {
+          // Force refresh completed but no files returned from GitHub
+          allDocuments = [];
+          discoveredCategories = [];
+          const cacheData = {
+            timestamp: Date.now(),
+            categories: [],
+            documents: []
+          };
+          localStorage.setItem(cacheKey, JSON.stringify(cacheData));
+          renderUI();
+          showToast(currentLang === "ar" ? "تم تحديث الملفات بنجاح!" : "Fetched latest files from GitHub!");
         }
 
       } catch (error) {
@@ -1848,8 +1860,8 @@
     }
 
     function fallbackToLocalSamples() {
-      allDocuments = BUNDLED_SAMPLE_DOCS.map(inflateDocument);
-      discoveredCategories = ["Math 2", "lectures", "sheets", "summaries", "exams"];
+      allDocuments = [];
+      discoveredCategories = [];
     }
 
     // ==========================================================
@@ -2879,10 +2891,7 @@
       if (swWaitingWorker) {
         swWaitingWorker.postMessage({ type: 'SKIP_WAITING' });
       }
-      try {
-        const cacheKey = getCacheKey(currentUsername, currentRepo);
-        localStorage.removeItem(cacheKey);
-      } catch (e) {}
+      clearAllCatalogCaches();
       window.location.reload();
     }
 
