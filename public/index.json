@@ -1,0 +1,40 @@
+{
+  "categories": ["Math 2", "lectures", "sheets", "summaries", "exams"],
+  "documents": [
+    {
+      "name": "All Math 2 (Lectures Summary + Sheets Answers).html",
+      "path": "content/Math 2/All Math 2 (Lectures Summary + Sheets Answers).html",
+      "category": "Math 2",
+      "size": 495000,
+      "download_url": "https://raw.githubusercontent.com/Omar-Hedaya/AI-SUMMARY-/main/content/Math%202/All%20Math%202%20(Lectures%20Summary%20%2B%20Sheets%20Answers).html"
+    },
+    {
+      "name": "lecture-01-intro-to-thermodynamics.html",
+      "path": "content/lectures/lecture-01-intro-to-thermodynamics.html",
+      "category": "lectures",
+      "size": 3840,
+      "download_url": "https://raw.githubusercontent.com/Omar-Hedaya/AI-SUMMARY-/main/content/lectures/lecture-01-intro-to-thermodynamics.html"
+    },
+    {
+      "name": "thermo-sheet-1.html",
+      "path": "content/sheets/thermo-sheet-1.html",
+      "category": "sheets",
+      "size": 2950,
+      "download_url": "https://raw.githubusercontent.com/Omar-Hedaya/AI-SUMMARY-/main/content/sheets/thermo-sheet-1.html"
+    },
+    {
+      "name": "fluid-mechanics-summary.html",
+      "path": "content/summaries/fluid-mechanics-summary.html",
+      "category": "summaries",
+      "size": 2420,
+      "download_url": "https://raw.githubusercontent.com/Omar-Hedaya/AI-SUMMARY-/main/content/summaries/fluid-mechanics-summary.html"
+    },
+    {
+      "name": "midterm-review-2025.html",
+      "path": "content/exams/midterm-review-2025.html",
+      "category": "exams",
+      "size": 2180,
+      "download_url": "https://raw.githubusercontent.com/Omar-Hedaya/AI-SUMMARY-/main/content/exams/midterm-review-2025.html"
+    }
+  ]
+}

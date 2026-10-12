@@ -276,9 +276,6 @@
   <!-- ======================================================== -->
   <main id="list-view" class="flex-1 max-w-5xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 transition-opacity duration-200">
     
-    <!-- Status / Notice Banner (Rate limit or offline info) -->
-    <div id="status-banner" class="hidden mb-6 p-4 rounded-xl text-sm border"></div>
-
     <!-- 1. SEARCH BAR & CONTINUE STUDYING QUICK ACCESS -->
     <div class="mb-6 space-y-3">
       <!-- Instant Client-Side Search Input -->
@@ -337,57 +334,20 @@
     <!-- VIEW 1: GOOGLE DRIVE STYLE FOLDERS DIRECTORY VIEW -->
     <section id="folders-directory-view" class="transition-all duration-200">
       
-      <!-- Directory Hero Header -->
-      <div class="mb-6 pb-5 border-b border-slate-800/80 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
-        <div>
-          <h1 id="study-title" class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">Study Materials & Notes</h1>
-          <p id="study-subtitle" class="text-sm sm:text-base text-slate-400 mt-1 max-w-2xl">
-            Select a subject folder below to read uploaded lectures, sheets, and summaries directly in-browser.
-          </p>
-        </div>
-        <!-- Stats badge -->
-        <div class="flex items-center gap-2 self-start sm:self-auto text-xs font-medium text-slate-400 bg-slate-900/90 px-3 py-1.5 rounded-lg border border-slate-800 shrink-0">
+      <!-- Directory Hero Header (Single Row with space-between) -->
+      <div class="mb-5 pb-3 border-b border-slate-800/80 flex items-center justify-between gap-3">
+        <h1 id="study-title" class="text-xl sm:text-2xl font-extrabold text-white tracking-tight">
+          Study Materials & Notes
+        </h1>
+        <!-- Stats badge on exact same row -->
+        <div class="flex items-center gap-2 text-xs font-medium text-slate-400 bg-slate-900/90 px-3 py-1.5 rounded-lg border border-slate-800 shrink-0">
           <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
           <span id="total-docs-count">Scanning...</span>
         </div>
       </div>
 
-      <!-- Quick Access Priority Cards: "All Documents" + "Starred / Favorites" -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5 mb-6">
-        
-        <!-- All Documents Card -->
-        <button 
-          type="button" 
-          onclick="openFolder('all')"
-          class="w-full text-left rtl:text-right group bg-gradient-to-r from-[#0f172a] via-[#131d33] to-[#0f172a] hover:from-[#131d33] hover:to-[#172554]/40 border border-slate-800 hover:border-sky-500/50 rounded-2xl p-4 sm:p-5 flex items-center justify-between gap-3 transition-all duration-200 hover:shadow-xl hover:shadow-sky-500/5 active:scale-[0.99]">
-          <div class="flex items-center gap-3.5 min-w-0 flex-1">
-            <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-sky-500/10 border border-sky-500/30 flex items-center justify-center shrink-0 text-sky-400 group-hover:scale-105 group-hover:bg-sky-500/20 transition">
-              <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-              </svg>
-            </div>
-            <div class="min-w-0 flex-1">
-              <div class="flex items-center gap-1.5">
-                <h3 id="all-docs-card-title" class="text-sm sm:text-base font-bold text-white group-hover:text-sky-300 transition whitespace-nowrap">
-                  All Documents
-                </h3>
-              </div>
-              <p id="all-docs-card-desc" class="text-xs text-slate-400 mt-0.5 truncate">
-                Browse all subjects & notes
-              </p>
-            </div>
-          </div>
-          <div class="flex items-center gap-2 shrink-0">
-            <span id="all-docs-counter" class="text-xs font-mono font-semibold px-2 py-0.5 rounded-lg bg-slate-900 border border-slate-800 text-slate-300 group-hover:border-sky-500/40 transition">
-              ...
-            </span>
-            <svg class="w-4 h-4 text-slate-500 group-hover:text-sky-400 group-hover:translate-x-0.5 rtl:group-hover:-translate-x-0.5 rtl:rotate-180 transition" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
-            </svg>
-          </div>
-        </button>
-
-        <!-- Starred / Favorites Card -->
+      <!-- Quick Access Priority Card: "Starred / Favorites" Only -->
+      <div class="mb-5">
         <button 
           type="button" 
           onclick="openFolder('starred')"
@@ -418,7 +378,6 @@
             </svg>
           </div>
         </button>
-
       </div>
 
       <!-- Pinned Folders Prioritized Section (Folder Favoriting / Pinning) -->
@@ -554,6 +513,19 @@
         <!-- Right: Zoom Controls, Star Button, & Actions -->
         <div class="flex items-center gap-1 sm:gap-1.5 shrink-0">
           
+          <!-- Table of Contents (TOC) Quick-Jump Button -->
+          <button 
+            id="viewer-toc-btn" 
+            type="button" 
+            onclick="toggleTocModal()"
+            title="Table of Contents / فهرس المحتويات"
+            class="flex items-center gap-1 px-2 py-1.5 sm:px-2.5 sm:py-1.5 rounded-lg bg-slate-900/90 hover:bg-slate-800 text-sky-400 hover:text-sky-300 border border-slate-800 hover:border-sky-500/40 transition active:scale-95 text-xs font-semibold shadow-sm">
+            <svg class="w-4 h-4 text-sky-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 10h12M4 14h16M4 18h10" />
+            </svg>
+            <span id="viewer-toc-btn-text" class="hidden xs:inline">TOC</span>
+          </button>
+
           <!-- Path-Specific Star / Favorite in Viewer -->
           <button 
             id="viewer-star-btn" 
@@ -654,6 +626,45 @@
 
     </div>
 
+    <!-- Quick-Jump Table of Contents (TOC) Collapsible Modal / Drawer -->
+    <div id="viewer-toc-modal" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-start justify-end sm:justify-center p-3 sm:p-6 transition-all">
+      <div class="relative w-full max-w-md max-h-[82vh] bg-[#0c1220] border border-slate-700/80 rounded-2xl shadow-2xl flex flex-col overflow-hidden mt-14 sm:mt-16 ring-1 ring-white/10 animate-in fade-in zoom-in-95 duration-150">
+        <!-- TOC Header -->
+        <div class="px-4 py-3 border-b border-slate-800/80 flex items-center justify-between bg-slate-900/90">
+          <div class="flex items-center gap-2">
+            <div class="w-7 h-7 rounded-lg bg-sky-500/10 border border-sky-500/30 flex items-center justify-center text-sky-400 shrink-0">
+              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 10h12M4 14h16M4 18h10" />
+              </svg>
+            </div>
+            <div>
+              <h3 id="toc-modal-title" class="text-xs sm:text-sm font-bold text-white">Table of Contents</h3>
+              <p id="toc-modal-count" class="text-[10px] sm:text-[11px] font-mono text-slate-400">0 topics</p>
+            </div>
+          </div>
+          <button 
+            type="button" 
+            onclick="toggleTocModal(false)"
+            title="Close TOC"
+            class="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition">
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+
+        <!-- TOC Items List -->
+        <div id="viewer-toc-list" class="flex-1 overflow-y-auto p-2 sm:p-2.5 space-y-1">
+          <!-- Populated dynamically via querySelectorAll('h1, h2, h3') -->
+        </div>
+
+        <!-- Empty TOC fallback -->
+        <div id="viewer-toc-empty" class="hidden p-8 text-center text-xs text-slate-400">
+          No headings detected in this document.
+        </div>
+      </div>
+    </div>
+
   </section>
 
   <!-- ======================================================== -->
@@ -677,10 +688,13 @@
           <p class="text-xs text-slate-400 mt-0.5">Read your notes and sheets offline on any device.</p>
         </div>
       </div>
-      <button id="pwa-dismiss-btn" type="button" class="text-slate-400 hover:text-white p-1">✕</button>
+      <button id="pwa-dismiss-btn" type="button" title="Dismiss" class="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition">✕</button>
     </div>
     <div class="mt-3.5 flex items-center justify-end gap-2">
-      <button id="pwa-install-btn" type="button" class="w-full py-2 px-3 rounded-xl bg-sky-500 hover:bg-sky-400 text-slate-950 font-bold text-xs transition active:scale-95 shadow-md shadow-sky-500/20">
+      <button id="pwa-dismiss-btn-secondary" type="button" class="py-2 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold text-xs transition active:scale-95">
+        Dismiss
+      </button>
+      <button id="pwa-install-btn" type="button" class="flex-1 py-2 px-3 rounded-xl bg-sky-500 hover:bg-sky-400 text-slate-950 font-bold text-xs transition active:scale-95 shadow-md shadow-sky-500/20">
         Install App
       </button>
     </div>
@@ -746,6 +760,12 @@
         pinned: "Pinned",
         pinTooltip: "Pin folder to top",
         unpinTooltip: "Unpin folder",
+        toc: "TOC",
+        tableOfContents: "Table of Contents",
+        topics: "topics",
+        topic: "topic",
+        noHeadingsFound: "No headings detected in this document.",
+        dismiss: "Dismiss",
         langNext: "AR",
         langTitle: "التبديل إلى العربية (Switch to Arabic)"
       },
@@ -783,6 +803,12 @@
         pinned: "مثبت",
         pinTooltip: "تثبيت المجلد في الأعلى",
         unpinTooltip: "إلغاء تثبيت المجلد",
+        toc: "الفهرس",
+        tableOfContents: "فهرس المحتويات",
+        topics: "أقسام",
+        topic: "قسم",
+        noHeadingsFound: "لم يتم العثور على عناوين في هذا المستند.",
+        dismiss: "تجاهل",
         langNext: "EN",
         langTitle: "Switch to English (التبديل للإنجليزية)"
       }
@@ -1040,6 +1066,18 @@
 
       const searchEmptyState = document.getElementById("search-empty-state");
       if (searchEmptyState) searchEmptyState.textContent = dict.noSearchResults;
+
+      const viewerTocBtnText = document.getElementById("viewer-toc-btn-text");
+      if (viewerTocBtnText) viewerTocBtnText.textContent = dict.toc;
+
+      const tocModalTitle = document.getElementById("toc-modal-title");
+      if (tocModalTitle) tocModalTitle.textContent = dict.tableOfContents;
+
+      const viewerTocEmpty = document.getElementById("viewer-toc-empty");
+      if (viewerTocEmpty) viewerTocEmpty.textContent = dict.noHeadingsFound;
+
+      const pwaDismissSecondary = document.getElementById("pwa-dismiss-btn-secondary");
+      if (pwaDismissSecondary) pwaDismissSecondary.textContent = dict.dismiss;
 
       renderUI();
     }
@@ -1533,6 +1571,7 @@
 
     // ==========================================================
     // STALE-WHILE-REVALIDATE CATALOG DISCOVERY & LAUNCH ENGINE
+    // (Dual-Strategy: Fast Static index.json -> Graceful API Fallback)
     // ==========================================================
 
     async function loadDocuments(forceRefresh = false) {
@@ -1576,59 +1615,157 @@
       }
 
       try {
-        const apiUrl = `https://api.github.com/repos/${currentUsername}/${currentRepo}/contents/content`;
-        const res = await fetch(apiUrl, {
-          headers: { "Accept": "application/vnd.github.v3+json" }
-        });
+        let catalogDiscovered = false;
+        let remoteDocs = [];
+        let categoriesFound = [];
 
-        if (res.status === 403) {
-          const resetHeader = res.headers.get("x-ratelimit-reset");
-          const resetTime = resetHeader ? new Date(parseInt(resetHeader) * 1000).toLocaleTimeString() : "in ~1 hour";
-          if (!hasRenderedFromCache) showRateLimitFallback(resetTime);
-          return;
-        }
-
-        if (res.status === 404) {
-          if (!hasRenderedFromCache) showRepoNotFoundFallback();
-          return;
-        }
-
-        if (!res.ok) {
-          throw new Error(`GitHub API error: ${res.status}`);
-        }
-
-        const items = await res.json();
-        if (!Array.isArray(items)) throw new Error("Invalid response");
-
-        const dirItems = items.filter(item => item.type === "dir");
-        const categoriesFound = dirItems.map(d => d.name);
-
-        const docPromises = dirItems.map(async (dir) => {
-          try {
-            const folderRes = await fetch(dir.url, {
-              headers: { "Accept": "application/vnd.github.v3+json" }
-            });
-            if (!folderRes.ok) return [];
-            const folderItems = await folderRes.json();
-            if (!Array.isArray(folderItems)) return [];
-
-            return folderItems
-              .filter(file => file.type === "file" && file.name.toLowerCase().endsWith(".html"))
-              .map(file => ({
-                name: file.name,
-                path: file.path,
-                download_url: file.download_url,
-                size: file.size || 0
-              }));
-          } catch (err) {
-            return [];
+        // --------------------------------------------------------
+        // 1. PRIMARY STRATEGY: Static index.json from Raw GitHub CDN
+        // (Bypasses all GitHub API rate limits, ultra-fast 1-request load)
+        // --------------------------------------------------------
+        const staticIndexUrl = `https://raw.githubusercontent.com/${currentUsername}/${currentRepo}/${GITHUB_BRANCH}/index.json`;
+        try {
+          let staticRes = await fetch(staticIndexUrl, { cache: forceRefresh ? "reload" : "no-cache" });
+          
+          // If remote 404, check if a local index.json is bundled in the app
+          if (!staticRes.ok && window.location.origin) {
+            try {
+              const localRes = await fetch("./index.json");
+              if (localRes.ok) staticRes = localRes;
+            } catch (e) {}
           }
-        });
 
-        const nestedDocs = await Promise.all(docPromises);
-        const remoteDocs = nestedDocs.flat();
+          if (staticRes.ok) {
+            const rawData = await staticRes.json();
+            let rawDocsList = [];
+            let customCategories = [];
 
-        if (remoteDocs.length > 0) {
+            if (Array.isArray(rawData)) {
+              rawDocsList = rawData;
+            } else if (rawData && typeof rawData === "object") {
+              if (Array.isArray(rawData.documents)) {
+                rawDocsList = rawData.documents;
+              } else if (Array.isArray(rawData.files)) {
+                rawDocsList = rawData.files;
+              } else {
+                // Dictionary format: { "Math 2": [...], "exams": [...] }
+                for (const [folderKey, items] of Object.entries(rawData)) {
+                  if (Array.isArray(items)) {
+                    items.forEach(item => {
+                      if (typeof item === "object" && item !== null) {
+                        if (!item.category) item.category = folderKey;
+                        rawDocsList.push(item);
+                      } else if (typeof item === "string") {
+                        rawDocsList.push({
+                          name: item,
+                          category: folderKey,
+                          path: `content/${folderKey}/${item}`
+                        });
+                      }
+                    });
+                  }
+                }
+              }
+
+              if (Array.isArray(rawData.categories)) {
+                customCategories = rawData.categories;
+              } else if (Array.isArray(rawData.folders)) {
+                customCategories = rawData.folders;
+              }
+            }
+
+            if (rawDocsList.length > 0) {
+              remoteDocs = rawDocsList.map(item => {
+                const docName = item.name || (item.path ? item.path.split("/").pop() : "document.html");
+                const docPath = item.path || (item.category ? `content/${item.category}/${docName}` : docName);
+                const downloadUrl = item.download_url || item.downloadUrl || `https://raw.githubusercontent.com/${currentUsername}/${currentRepo}/${GITHUB_BRANCH}/${docPath}`;
+                return {
+                  name: docName,
+                  path: docPath,
+                  category: item.category || extractCategoryFromPath(docPath),
+                  download_url: downloadUrl,
+                  size: item.size || 0
+                };
+              });
+
+              if (customCategories.length > 0) {
+                categoriesFound = customCategories;
+              } else {
+                categoriesFound = Array.from(new Set(remoteDocs.map(d => d.category || extractCategoryFromPath(d.path))));
+              }
+
+              catalogDiscovered = true;
+            }
+          }
+        } catch (staticErr) {
+          console.warn("Static index.json unreachable, gracefully checking GitHub API:", staticErr);
+        }
+
+        // --------------------------------------------------------
+        // 2. FALLBACK STRATEGY: Silent GitHub API Directory Fetcher
+        // --------------------------------------------------------
+        if (!catalogDiscovered) {
+          const apiUrl = `https://api.github.com/repos/${currentUsername}/${currentRepo}/contents/content`;
+          const res = await fetch(apiUrl, {
+            headers: { "Accept": "application/vnd.github.v3+json" }
+          });
+
+          if (res.status === 403) {
+            const resetHeader = res.headers.get("x-ratelimit-reset");
+            const resetTime = resetHeader ? new Date(parseInt(resetHeader) * 1000).toLocaleTimeString() : "in ~1 hour";
+            console.warn(`GitHub API unauthenticated rate limit reached (resets ~${resetTime}). Seamlessly using cached study folders.`);
+            return;
+          }
+
+          if (res.status === 404) {
+            console.warn("GitHub API content/ directory not found (404). Seamlessly using cached study folders.");
+            return;
+          }
+
+          if (!res.ok) {
+            console.warn(`GitHub API responded with status ${res.status}. Seamlessly using cached study folders.`);
+            return;
+          }
+
+          const items = await res.json();
+          if (Array.isArray(items)) {
+            const dirItems = items.filter(item => item.type === "dir");
+            categoriesFound = dirItems.map(d => d.name);
+
+            const docPromises = dirItems.map(async (dir) => {
+              try {
+                const folderRes = await fetch(dir.url, {
+                  headers: { "Accept": "application/vnd.github.v3+json" }
+                });
+                if (!folderRes.ok) return [];
+                const folderItems = await folderRes.json();
+                if (!Array.isArray(folderItems)) return [];
+
+                return folderItems
+                  .filter(file => file.type === "file" && file.name.toLowerCase().endsWith(".html"))
+                  .map(file => ({
+                    name: file.name,
+                    path: file.path,
+                    download_url: file.download_url,
+                    size: file.size || 0
+                  }));
+              } catch (err) {
+                return [];
+              }
+            });
+
+            const nestedDocs = await Promise.all(docPromises);
+            remoteDocs = nestedDocs.flat();
+            if (remoteDocs.length > 0) {
+              catalogDiscovered = true;
+            }
+          }
+        }
+
+        // --------------------------------------------------------
+        // 3. PERSISTENCE, REHYDRATION & SILENT UI UPDATE
+        // --------------------------------------------------------
+        if (catalogDiscovered && remoteDocs.length > 0) {
           BUNDLED_SAMPLE_DOCS.forEach(sample => {
             if (!remoteDocs.some(d => d.path === sample.path || d.name === sample.name)) {
               remoteDocs.push({
@@ -1650,7 +1787,9 @@
           );
 
           allDocuments = inflatedRemoteDocs;
-          discoveredCategories = categoriesFound;
+          discoveredCategories = categoriesFound.length > 0
+            ? categoriesFound
+            : Array.from(new Set(allDocuments.map(d => d.category)));
 
           const sanitizedDocs = allDocuments.map(doc => ({
             name: doc.name,
@@ -1682,37 +1821,6 @@
         if (refreshIcon) refreshIcon.classList.remove("animate-spin");
         syncCachedDocPaths();
       }
-    }
-
-    function showRateLimitFallback(resetTime) {
-      const banner = document.getElementById("status-banner");
-      banner.className = "mb-6 p-4 rounded-xl text-sm border bg-amber-950/40 border-amber-800/80 text-amber-200 flex items-start gap-3";
-      banner.innerHTML = `
-        <svg class="w-5 h-5 text-amber-400 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-        </svg>
-        <div>
-          <strong class="font-semibold text-white">GitHub API Unauthenticated Rate Limit:</strong>
-          Rate limit reached. Reset occurs around <span class="font-mono font-bold">${resetTime}</span>.
-          Displaying cached study folders so browsing remains fast and seamless.
-        </div>
-      `;
-      banner.classList.remove("hidden");
-    }
-
-    function showRepoNotFoundFallback() {
-      const banner = document.getElementById("status-banner");
-      banner.className = "mb-6 p-4 rounded-xl text-sm border bg-slate-900 border-sky-800/60 text-slate-300 flex items-start gap-3";
-      banner.innerHTML = `
-        <svg class="w-5 h-5 text-sky-400 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-        </svg>
-        <div class="flex-1">
-          <strong class="font-semibold text-white">Repository Connected:</strong>
-          Displaying your study folders from <code class="text-sky-300 font-mono text-xs bg-slate-950 px-1.5 py-0.5 rounded">content/</code> for instant in-browser reading.
-        </div>
-      `;
-      banner.classList.remove("hidden");
     }
 
     function fallbackToLocalSamples() {
@@ -1801,8 +1909,13 @@
         return;
       }
 
-      const pinnedCats = categories.filter(cat => starredFolders.has(cat.toLowerCase()));
-      const otherCats = categories.filter(cat => !starredFolders.has(cat.toLowerCase()));
+      const naturalSort = (a, b) => a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' });
+      const pinnedCats = categories
+        .filter(cat => starredFolders.has(cat.toLowerCase()))
+        .sort(naturalSort);
+      const otherCats = categories
+        .filter(cat => !starredFolders.has(cat.toLowerCase()))
+        .sort(naturalSort);
 
       if (pinnedSection && pinnedContainer) {
         if (pinnedCats.length > 0) {
@@ -2472,6 +2585,7 @@
       const viewerView = document.getElementById("viewer-view");
       const iframe = document.getElementById("reader-iframe");
       
+      toggleTocModal(false);
       viewerView.classList.add("hidden");
       document.body.style.overflow = "";
       if (iframe) iframe.src = "about:blank";
@@ -2540,23 +2654,42 @@
     }
 
     function updateZoomLevelDisplay() {
+      // Clamp strictly between 0.6 (60%) and 2.5 (250%) to guarantee KaTeX readability
+      currentZoom = Math.max(0.6, Math.min(2.5, currentZoom));
       const zoomText = document.getElementById("zoom-level-text");
       if (zoomText) {
         zoomText.textContent = `${Math.round(currentZoom * 100)}%`;
+      }
+      const zoomOutBtn = document.getElementById("zoom-out-btn");
+      if (zoomOutBtn) {
+        if (currentZoom <= 0.601) {
+          zoomOutBtn.classList.add("opacity-40", "cursor-not-allowed");
+        } else {
+          zoomOutBtn.classList.remove("opacity-40", "cursor-not-allowed");
+        }
+      }
+      const zoomInBtn = document.getElementById("zoom-in-btn");
+      if (zoomInBtn) {
+        if (currentZoom >= 2.499) {
+          zoomInBtn.classList.add("opacity-40", "cursor-not-allowed");
+        } else {
+          zoomInBtn.classList.remove("opacity-40", "cursor-not-allowed");
+        }
       }
       applyDirectZoomToIframe();
     }
 
     function zoomIn() {
       if (currentZoom < 2.5) {
-        currentZoom = parseFloat((currentZoom + 0.1).toFixed(2));
+        currentZoom = Math.min(2.5, parseFloat((currentZoom + 0.1).toFixed(2)));
         updateZoomLevelDisplay();
       }
     }
 
     function zoomOut() {
+      // Enforce strict 60% (0.6) lower bound to preserve formula legibility
       if (currentZoom > 0.6) {
-        currentZoom = parseFloat((currentZoom - 0.1).toFixed(2));
+        currentZoom = Math.max(0.6, parseFloat((currentZoom - 0.1).toFixed(2)));
         updateZoomLevelDisplay();
       }
     }
@@ -2564,6 +2697,114 @@
     function zoomReset() {
       currentZoom = 1.0;
       updateZoomLevelDisplay();
+    }
+
+    // ==========================================================
+    // LIGHTWEIGHT QUICK-JUMP TABLE OF CONTENTS (TOC) ENGINE
+    // ==========================================================
+
+    function toggleTocModal(show) {
+      const modal = document.getElementById("viewer-toc-modal");
+      if (!modal) return;
+      const isHidden = modal.classList.contains("hidden");
+      const shouldOpen = typeof show === "boolean" ? show : isHidden;
+
+      if (shouldOpen) {
+        generateTableOfContents();
+        modal.classList.remove("hidden");
+      } else {
+        modal.classList.add("hidden");
+      }
+    }
+
+    function generateTableOfContents() {
+      const iframe = document.getElementById("reader-iframe");
+      const tocList = document.getElementById("viewer-toc-list");
+      const tocCount = document.getElementById("toc-modal-count");
+      const tocEmpty = document.getElementById("viewer-toc-empty");
+      if (!iframe || !tocList) return;
+
+      try {
+        const iDoc = iframe.contentDocument || iframe.contentWindow?.document;
+        if (!iDoc) {
+          tocList.innerHTML = "";
+          if (tocEmpty) tocEmpty.classList.remove("hidden");
+          return;
+        }
+
+        const headings = Array.from(iDoc.querySelectorAll("h1, h2, h3"));
+        if (headings.length === 0) {
+          tocList.innerHTML = "";
+          if (tocEmpty) tocEmpty.classList.remove("hidden");
+          if (tocCount) tocCount.textContent = currentLang === "ar" ? "لا توجد عناوين" : "0 topics";
+          return;
+        }
+
+        if (tocEmpty) tocEmpty.classList.add("hidden");
+        const dict = I18N[currentLang];
+        if (tocCount) {
+          tocCount.textContent = currentLang === "ar"
+            ? `${headings.length} ${dict.topics}`
+            : `${headings.length} ${headings.length === 1 ? dict.topic : dict.topics}`;
+        }
+
+        tocList.innerHTML = headings.map((h, idx) => {
+          if (!h.id) {
+            h.id = `aihub-heading-${idx}`;
+          }
+          const tag = h.tagName.toLowerCase();
+          const rawText = (h.textContent || "").replace(/#+\s*/g, "").trim();
+          if (!rawText) return "";
+
+          const isH1 = tag === 'h1';
+          const isH2 = tag === 'h2';
+          const indentClass = isH1 
+            ? 'font-bold text-white text-xs sm:text-sm pl-1 rtl:pl-0 rtl:pr-1' 
+            : (isH2 ? 'font-semibold text-sky-200 text-xs pl-3 rtl:pl-0 rtl:pr-3' : 'text-slate-300 text-xs pl-5 rtl:pl-0 rtl:pr-5');
+
+          const tagBadge = isH1 
+            ? 'bg-sky-500/20 text-sky-300 border-sky-500/40' 
+            : (isH2 ? 'bg-indigo-500/20 text-indigo-300 border-indigo-500/40' : 'bg-slate-800 text-slate-400 border-slate-700');
+
+          return `
+            <button 
+              type="button" 
+              onclick="jumpToHeading('${h.id}')"
+              class="w-full text-left rtl:text-right p-2 rounded-xl hover:bg-slate-800/80 active:bg-slate-800 transition flex items-center justify-between gap-2.5 group">
+              <div class="flex items-center gap-2 min-w-0 flex-1 ${indentClass}">
+                <span class="text-[9px] font-mono uppercase px-1.5 py-0.5 rounded border ${tagBadge} shrink-0">
+                  ${tag}
+                </span>
+                <span class="truncate">${rawText}</span>
+              </div>
+              <svg class="w-3.5 h-3.5 text-slate-500 group-hover:text-sky-400 rtl:rotate-180 shrink-0 transition" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+              </svg>
+            </button>
+          `;
+        }).join("");
+
+      } catch (err) {
+        console.warn("TOC generation note:", err);
+      }
+    }
+
+    function jumpToHeading(headingId) {
+      const iframe = document.getElementById("reader-iframe");
+      if (!iframe) return;
+
+      try {
+        const iDoc = iframe.contentDocument || iframe.contentWindow?.document;
+        if (!iDoc) return;
+        const target = iDoc.getElementById(headingId);
+        if (target) {
+          target.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+      } catch (e) {
+        console.warn("Jump to heading error:", e);
+      }
+
+      toggleTocModal(false);
     }
 
     function toggleFullScreen() {
@@ -2660,6 +2901,11 @@
 
     window.addEventListener("keydown", (e) => {
       if (e.key === "Escape") {
+        const tocModal = document.getElementById("viewer-toc-modal");
+        if (tocModal && !tocModal.classList.contains("hidden")) {
+          toggleTocModal(false);
+          return;
+        }
         const searchInput = document.getElementById("doc-search-input");
         if (searchInput && searchInput.value) {
           clearSearch();
@@ -2706,15 +2952,19 @@
     window.addEventListener("offline", updateOnlineStatus);
 
     // ==========================================================
-    // PWA INSTALL BANNER & PROMPT HANDLER
+    // PWA INSTALL BANNER & PROMPT HANDLER (PERSISTENT DISMISSAL)
     // ==========================================================
 
     function initPwaInstallPrompt() {
+      if (localStorage.getItem("pwa_dismissed")) {
+        return;
+      }
+
       window.addEventListener("beforeinstallprompt", (e) => {
         e.preventDefault();
         deferredPwaPrompt = e;
         
-        if (!sessionStorage.getItem("pwa_install_dismissed")) {
+        if (!localStorage.getItem("pwa_dismissed")) {
           const banner = document.getElementById("pwa-install-banner");
           if (banner) banner.classList.remove("hidden");
         }
@@ -2726,6 +2976,7 @@
           const { outcome } = await deferredPwaPrompt.userChoice;
           if (outcome === "accepted") {
             showToast("Installing AI HUB SUMMARY...");
+            try { localStorage.setItem("pwa_dismissed", "true"); } catch (e) {}
           }
           deferredPwaPrompt = null;
           const banner = document.getElementById("pwa-install-banner");
@@ -2733,11 +2984,14 @@
         }
       });
 
-      document.getElementById("pwa-dismiss-btn")?.addEventListener("click", () => {
-        sessionStorage.setItem("pwa_install_dismissed", "true");
+      const dismissPwa = () => {
+        try { localStorage.setItem("pwa_dismissed", "true"); } catch (e) {}
         const banner = document.getElementById("pwa-install-banner");
         if (banner) banner.classList.add("hidden");
-      });
+      };
+
+      document.getElementById("pwa-dismiss-btn")?.addEventListener("click", dismissPwa);
+      document.getElementById("pwa-dismiss-btn-secondary")?.addEventListener("click", dismissPwa);
     }
 
     // ==========================================================
@@ -2864,6 +3118,12 @@
       document.getElementById("fullscreen-toggle-btn")?.addEventListener("click", toggleFullScreen);
       document.getElementById("copy-direct-link-btn")?.addEventListener("click", copyDirectLink);
       document.getElementById("scroll-top-btn")?.addEventListener("click", scrollToTop);
+
+      document.getElementById("viewer-toc-modal")?.addEventListener("click", (e) => {
+        if (e.target.id === "viewer-toc-modal") {
+          toggleTocModal(false);
+        }
+      });
 
       initToastSwipeGesture();
       updateOnlineStatus();
