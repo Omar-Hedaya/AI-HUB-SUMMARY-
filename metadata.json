@@ -1,6 +1,8 @@
 {
-  "name": "StudyHub - HTML Study Docs Viewer",
-  "description": "Fast, standalone single-page dark theme viewer for GitHub Pages to read uploaded HTML lectures, sheets, and study materials without leaving the page.",
+  "name": "AI HUB SUMMARY",
+  "description": "Fast, standalone single-page dark theme viewer for GitHub Pages to read study lectures, sheets, and summaries directly in-browser.",
   "requestFramePermissions": [],
-  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
 }

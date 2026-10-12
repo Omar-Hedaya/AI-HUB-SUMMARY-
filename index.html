@@ -2,13 +2,19 @@
 <html lang="en" class="dark">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>StudyHub — Dark Document Viewer</title>
-  <meta name="description" content="Fast, standalone single-page web app for reading study HTML lectures, sheets, and summaries directly in a permanent dark theme." />
-  <meta property="og:title" content="StudyHub — Dark Document Viewer" />
-  <meta property="og:description" content="Fast, standalone single-page web app for reading study HTML lectures, sheets, and summaries directly in a permanent dark theme." />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+  <title>AI HUB SUMMARY</title>
+  <meta name="description" content="AI HUB SUMMARY — Fast, standalone single-page web app for reading study HTML lectures, sheets, and summaries directly in a permanent dark theme." />
+  <meta property="og:title" content="AI HUB SUMMARY" />
+  <meta property="og:description" content="AI HUB SUMMARY — Fast, standalone single-page web app for reading study HTML lectures, sheets, and summaries directly in a permanent dark theme." />
   <meta property="og:type" content="website" />
   <meta name="twitter:card" content="summary_large_image" />
+  <meta name="theme-color" content="#090d16" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+  <!-- Inline Web App Manifest for PWA (Add to Home Screen / Mobile Install) -->
+  <link rel="manifest" href="data:application/manifest+json;charset=utf-8,%7B%22name%22%3A%22AI%20HUB%20SUMMARY%22%2C%22short_name%22%3A%22AI%20HUB%22%2C%22start_url%22%3A%22.%2F%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23090d16%22%2C%22theme_color%22%3A%22%23090d16%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22data%3Aimage%2Fsvg%2Bxml%2C%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%20512%20512%27%3E%3Crect%20width%3D%27512%27%20height%3D%27512%27%20rx%3D%27128%27%20fill%3D%27%23090d16%27%2F%3E%3Cpath%20d%3D%27M128%20160h256v192H128z%27%20fill%3D%27%2338bdf8%27%2F%3E%3C%2Fsvg%3E%22%2C%22sizes%22%3A%22512x512%22%2C%22type%22%3A%22image%2Fsvg%2Bxml%22%7D%5D%7D" />
 
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -41,8 +47,8 @@
   <style>
     /* Custom Scrollbars */
     ::-webkit-scrollbar {
-      width: 8px;
-      height: 8px;
+      width: 7px;
+      height: 7px;
     }
     ::-webkit-scrollbar-track {
       background: #090d16;
@@ -53,12 +59,6 @@
     }
     ::-webkit-scrollbar-thumb:hover {
       background: #334155;
-    }
-
-    /* Viewer Iframe Zoom Container */
-    #iframe-zoom-container {
-      transform-origin: top center;
-      transition: transform 0.15s ease-out, width 0.15s ease-out, height 0.15s ease-out;
     }
 
     /* Pulsing & Skeleton Animation */
@@ -85,6 +85,21 @@
       from { opacity: 1; transform: translate(-50%, 0); }
       to { opacity: 0; transform: translate(-50%, 1rem); }
     }
+
+    /* Reader Toolbar Auto-Hide Transition */
+    #viewer-toolbar {
+      will-change: transform;
+      transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+
+    /* Horizontal Category Scroll Hide */
+    .hide-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    .hide-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
   </style>
 </head>
 <body class="bg-[#090d16] text-slate-100 min-h-screen font-sans antialiased selection:bg-cyan-500/30 selection:text-cyan-200 flex flex-col">
@@ -95,7 +110,7 @@
   <header id="main-header" class="sticky top-0 z-30 border-b border-slate-800/80 bg-[#090d16]/90 backdrop-blur-md transition-all">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
       
-      <!-- Brand & Status -->
+      <!-- Brand Logo & Title: AI HUB SUMMARY -->
       <div class="flex items-center gap-3">
         <a href="#" class="flex items-center gap-2.5 group">
           <div class="w-9 h-9 rounded-lg bg-gradient-to-tr from-indigo-600 via-sky-500 to-cyan-400 p-[1px] shadow-lg shadow-sky-500/20 group-hover:shadow-sky-500/40 transition">
@@ -106,21 +121,20 @@
             </div>
           </div>
           <div>
-            <span class="font-bold text-lg tracking-tight text-white group-hover:text-sky-300 transition flex items-center gap-1.5">
-              StudyHub
-              <span class="text-[10px] font-semibold uppercase tracking-wider px-1.5 py-0.5 rounded bg-sky-950 text-sky-400 border border-sky-800/60">Viewer</span>
+            <span class="font-bold text-base sm:text-lg tracking-tight text-white group-hover:text-sky-300 transition flex items-center gap-1.5">
+              AI HUB SUMMARY
             </span>
-            <p id="header-repo-label" class="text-xs text-slate-400 font-mono leading-none"></p>
           </div>
         </a>
       </div>
 
-      <!-- Header Actions (No Search Bar!) -->
-      <div class="flex items-center gap-2.5">
-        <!-- Cache Pill Indicator -->
-        <div id="cache-status-pill" class="hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-mono bg-slate-900 border border-slate-800 text-slate-400">
-          <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
-          <span id="cache-status-text">Live Sync</span>
+      <!-- Header Actions: Offline Indicator + Compact Refresh Button -->
+      <div class="flex items-center gap-2 sm:gap-2.5">
+        
+        <!-- Offline Mode Pill Indicator -->
+        <div id="offline-status-pill" class="hidden items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-mono bg-amber-950/80 border border-amber-800 text-amber-300">
+          <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
+          <span>Offline Mode</span>
         </div>
 
         <!-- Refresh Button -->
@@ -131,13 +145,6 @@
           <span class="hidden xs:inline">Refresh</span>
         </button>
 
-        <!-- Configure / Deployment Info Button -->
-        <button id="guide-modal-btn" type="button" title="GitHub Pages Setup & Info" class="p-1.5 sm:px-2.5 sm:py-1.5 rounded-lg text-xs font-medium bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-800 hover:border-slate-700 transition">
-          <span class="hidden sm:inline">Repo Guide</span>
-          <svg class="w-4 h-4 sm:hidden text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-          </svg>
-        </button>
       </div>
 
     </div>
@@ -146,11 +153,11 @@
   <!-- ======================================================== -->
   <!-- 2. DOCUMENT LIST VIEW (CATEGORY TABS + CARDS GRID)       -->
   <!-- ======================================================== -->
-  <main id="list-view" class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 transition-opacity duration-200">
+  <main id="list-view" class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 transition-opacity duration-200">
     
-    <!-- Hero / Category Header (NO Search Bar) -->
-    <div class="mb-8">
-      <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-6 border-b border-slate-800/80">
+    <!-- Hero Header (NO Search Bar) -->
+    <div class="mb-6 sm:mb-8">
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-5 sm:pb-6 border-b border-slate-800/80">
         <div>
           <h1 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">Study Materials & Notes</h1>
           <p class="text-sm sm:text-base text-slate-400 mt-1 max-w-2xl">
@@ -168,12 +175,12 @@
       <div id="status-banner" class="hidden mt-4 p-4 rounded-xl text-sm border"></div>
 
       <!-- Category Navigation Tabs (Dynamically Discovered from GitHub content/ folders) -->
-      <div class="mt-6">
+      <div class="mt-5 sm:mt-6">
         <div class="flex items-center justify-between">
           <span class="text-xs font-semibold uppercase tracking-wider text-slate-400">Categories</span>
-          <span id="category-hint" class="text-xs text-slate-400">Auto-detected from <code class="text-sky-400/90">content/</code></span>
         </div>
-        <div class="mt-2.5 flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none" id="category-tabs-container">
+        <!-- Touch-Friendly Smooth Scrolling Category Bar -->
+        <div class="mt-2.5 flex items-center gap-2 overflow-x-auto pb-2 hide-scrollbar -webkit-overflow-scrolling-touch" id="category-tabs-container">
           <!-- Populated by JS -->
           <div class="h-9 w-24 bg-slate-800/60 rounded-lg skeleton"></div>
           <div class="h-9 w-28 bg-slate-800/60 rounded-lg skeleton"></div>
@@ -183,7 +190,7 @@
     </div>
 
     <!-- Cards Grid Container -->
-    <div id="cards-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+    <div id="cards-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
       <!-- Skeleton Loading Cards -->
       <div class="bg-slate-900/60 border border-slate-800 rounded-xl p-5 skeleton h-48"></div>
       <div class="bg-slate-900/60 border border-slate-800 rounded-xl p-5 skeleton h-48"></div>
@@ -208,155 +215,126 @@
   <!-- ======================================================== -->
   <!-- 3. IN-APP FULL-SCREEN DOCUMENT VIEWER                    -->
   <!-- ======================================================== -->
-  <section id="viewer-view" class="fixed inset-0 z-50 bg-[#090d16] flex flex-col hidden select-none">
+  <section id="viewer-view" class="fixed inset-0 z-50 bg-[#090d16] flex flex-col hidden select-none overflow-hidden">
     
-    <!-- Top Toolbar inside Viewer (NO PRINT/PDF BUTTONS) -->
-    <div class="h-14 sm:h-16 bg-[#0f172a] border-b border-slate-800 px-3 sm:px-6 flex items-center justify-between gap-2 shrink-0 z-10 shadow-lg">
+    <!-- Mobile-Optimized Top Toolbar with Auto-Hide on Downward Scroll -->
+    <div id="viewer-toolbar" class="fixed top-0 left-0 right-0 z-40 h-12 sm:h-14 bg-[#0f172a]/95 backdrop-blur-md border-b border-slate-800 px-2.5 sm:px-5 flex items-center justify-between gap-2 shadow-xl">
       
-      <!-- Left: Back Button & Category -->
-      <div class="flex items-center gap-2 sm:gap-3 min-w-0">
-        <button id="viewer-back-btn" type="button" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 hover:border-slate-600 transition active:scale-95 shadow-sm">
-          <svg class="w-4 h-4 text-sky-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+      <!-- Left: Compact Back Button & Document Details -->
+      <div class="flex items-center gap-1.5 sm:gap-2.5 min-w-0 flex-1">
+        <button id="viewer-back-btn" type="button" title="Back to document list (Esc)" class="flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 hover:border-slate-600 transition active:scale-95 shrink-0 shadow-sm">
+          <svg class="w-3.5 h-3.5 text-sky-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
             <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
           </svg>
-          <span>Back</span>
-          <kbd class="hidden md:inline-block text-[10px] bg-slate-900 text-slate-400 border border-slate-700 px-1.5 py-0.2 rounded font-mono">Esc</kbd>
+          <span class="hidden xs:inline">Back</span>
         </button>
 
-        <!-- Document Details -->
-        <div class="min-w-0 flex items-center gap-2">
-          <span id="viewer-category-badge" class="hidden sm:inline-block text-[11px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full border"></span>
-          <h2 id="viewer-doc-title" class="text-sm sm:text-base font-semibold text-white truncate max-w-[180px] xs:max-w-[240px] sm:max-w-xs md:max-w-md lg:max-w-lg" title=""></h2>
+        <!-- Document Details with Clean Mobile Truncation -->
+        <div class="min-w-0 flex items-center gap-1.5 flex-1 overflow-hidden">
+          <span id="viewer-category-badge" class="hidden md:inline-block text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full border shrink-0"></span>
+          <h2 id="viewer-doc-title" class="text-xs sm:text-sm font-semibold text-white truncate max-w-full" title=""></h2>
         </div>
       </div>
 
-      <!-- Right: Viewer Controls (Zoom, Fullscreen, Copy Link) -->
-      <div class="flex items-center gap-1.5 sm:gap-2 shrink-0">
+      <!-- Right: Compact Viewer Controls (Direct Zoom Engine: Zero Side Gaps) -->
+      <div class="flex items-center gap-1 sm:gap-1.5 shrink-0">
         
         <!-- Zoom Controls -->
         <div class="flex items-center bg-slate-900 border border-slate-800 rounded-lg p-0.5 text-xs font-mono">
-          <button id="zoom-out-btn" type="button" title="Zoom Out" class="p-1 sm:px-2 rounded hover:bg-slate-800 text-slate-300 hover:text-white transition">
-            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+          <button id="zoom-out-btn" type="button" title="Zoom Out" class="p-1 sm:px-1.5 rounded hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <svg class="w-3 h-3 sm:w-3.5 sm:h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
               <path stroke-linecap="round" stroke-linejoin="round" d="M20 12H4" />
             </svg>
           </button>
-          <span id="zoom-level-label" class="px-1.5 min-w-[3rem] text-center text-slate-300 select-none">100%</span>
-          <button id="zoom-in-btn" type="button" title="Zoom In" class="p-1 sm:px-2 rounded hover:bg-slate-800 text-slate-300 hover:text-white transition">
-            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+          <span id="zoom-level-label" class="px-1 text-[11px] sm:text-xs min-w-[2.4rem] sm:min-w-[2.8rem] text-center text-slate-300 select-none">100%</span>
+          <button id="zoom-in-btn" type="button" title="Zoom In" class="p-1 sm:px-1.5 rounded hover:bg-slate-800 text-slate-300 hover:text-white transition">
+            <svg class="w-3 h-3 sm:w-3.5 sm:h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
               <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
             </svg>
           </button>
-          <button id="zoom-reset-btn" type="button" title="Reset to 100%" class="hidden md:inline-block px-1.5 py-0.5 text-[10px] text-slate-400 hover:text-slate-200 border-l border-slate-800">
+          <button id="zoom-reset-btn" type="button" title="Reset to 100%" class="hidden lg:inline-block px-1.5 py-0.5 text-[10px] text-slate-400 hover:text-slate-200 border-l border-slate-800">
             Reset
           </button>
         </div>
 
         <!-- Full Screen Toggle -->
-        <button id="fullscreen-toggle-btn" type="button" title="Toggle Fullscreen" class="p-2 rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-800 transition">
-          <svg id="fullscreen-icon-expand" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <button id="fullscreen-toggle-btn" type="button" title="Toggle Fullscreen" class="p-1.5 sm:p-2 rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-800 transition">
+          <svg id="fullscreen-icon-expand" class="w-3.5 h-3.5 sm:w-4 sm:h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
             <path stroke-linecap="round" stroke-linejoin="round" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
           </svg>
-          <svg id="fullscreen-icon-compress" class="w-4 h-4 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <svg id="fullscreen-icon-compress" class="w-3.5 h-3.5 sm:w-4 sm:h-4 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
             <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
           </svg>
         </button>
 
-        <!-- Copy Direct Link (Deep Link) Button -->
-        <button id="copy-direct-link-btn" type="button" title="Copy Direct Link to share with classmates" class="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-semibold bg-indigo-600 hover:bg-indigo-500 text-white shadow-sm shadow-indigo-600/30 transition active:scale-95">
+        <!-- Copy Direct Link Button -->
+        <button id="copy-direct-link-btn" type="button" title="Copy Direct Link to share with classmates" class="flex items-center gap-1 px-2 sm:px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-indigo-600 hover:bg-indigo-500 text-white shadow-sm shadow-indigo-600/30 transition active:scale-95">
           <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
             <path stroke-linecap="round" stroke-linejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
           </svg>
-          <span class="hidden sm:inline">Share Link</span>
+          <span class="hidden sm:inline">Share</span>
         </button>
 
       </div>
     </div>
 
     <!-- Reader Frame Container with Smooth Loading Indicator -->
-    <div class="relative flex-1 w-full bg-[#090d16] overflow-auto">
+    <div id="reader-frame-container" class="relative flex-1 w-full h-full bg-[#090d16] pt-12 sm:pt-14 overflow-hidden flex flex-col">
       
       <!-- Loading Overlay inside Reader -->
-      <div id="iframe-loader" class="absolute inset-0 flex flex-col items-center justify-center bg-[#090d16] z-10 transition-opacity duration-300">
+      <div id="iframe-loader" class="absolute inset-0 flex flex-col items-center justify-center bg-[#090d16] z-20 transition-opacity duration-300">
         <div class="w-10 h-10 border-2 border-slate-700 border-t-sky-400 rounded-full animate-spin"></div>
         <p class="text-sm font-medium text-slate-400 mt-4">Rendering document...</p>
       </div>
 
-      <!-- Iframe Zoom Scaler Wrapper -->
-      <div id="iframe-zoom-container" class="w-full h-full min-h-full flex items-stretch">
+      <!-- Direct Iframe Reader (Zero Container Transform, 100% Full Width, Centered) -->
+      <div class="w-full h-full flex-1 relative overflow-hidden bg-[#090d16]">
         <iframe 
           id="reader-iframe" 
-          class="w-full h-full border-0 bg-transparent" 
+          class="w-full h-full border-0 bg-transparent block" 
           sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
           loading="eager"
           title="Document Reader">
         </iframe>
       </div>
+
+      <!-- Floating Scroll-to-Top Button -->
+      <button 
+        id="scroll-top-btn" 
+        type="button" 
+        title="Scroll to Top"
+        class="fixed bottom-5 right-5 z-40 w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-slate-900/95 hover:bg-slate-800 text-sky-400 border border-slate-700 hover:border-sky-500/50 shadow-2xl flex items-center justify-center transition-all duration-300 opacity-0 pointer-events-none translate-y-4 active:scale-90">
+        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M5 15l7-7 7 7" />
+        </svg>
+      </button>
+
     </div>
 
   </section>
 
   <!-- ======================================================== -->
-  <!-- 4. REPO SETUP & GITHUB PAGES MODAL                       -->
+  <!-- 4. FLOATING MOBILE PWA INSTALL BANNER                    -->
   <!-- ======================================================== -->
-  <div id="guide-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm hidden">
-    <div class="bg-[#0f172a] border border-slate-700 rounded-2xl max-w-lg w-full p-6 shadow-2xl relative text-left">
-      <div class="flex items-center justify-between pb-4 border-b border-slate-800">
-        <h3 class="text-lg font-bold text-white flex items-center gap-2">
-          <svg class="w-5 h-5 text-sky-400" fill="currentColor" viewBox="0 0 24 24">
-            <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" />
-          </svg>
-          GitHub Pages & Setup Guide
-        </h3>
-        <button id="close-guide-modal-btn" class="text-slate-400 hover:text-white p-1 rounded-lg">
-          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-          </svg>
-        </button>
-      </div>
-
-      <div class="mt-4 space-y-4 text-sm text-slate-300">
-        <div>
-          <h4 class="font-semibold text-sky-400 mb-1">1. Folder Structure on GitHub:</h4>
-          <p class="text-xs text-slate-400 mb-2">Create subdirectories inside a <code class="text-slate-200 bg-slate-900 px-1 py-0.5 rounded">content/</code> directory. Subfolders become your tabs automatically!</p>
-          <pre class="bg-[#090d16] p-3 rounded-lg text-xs font-mono text-emerald-400 border border-slate-800 leading-relaxed overflow-x-auto">
-my-study-repo/
-├── index.html            (this single file!)
-└── content/
-    ├── lectures/
-    │   └── lecture-01.html
-    ├── sheets/
-    │   └── thermo-sheet-1.html
-    └── summaries/
-        └── fluid-mechanics.html</pre>
-        </div>
-
-        <div>
-          <h4 class="font-semibold text-sky-400 mb-1">2. Change Repo Config in index.html:</h4>
-          <p class="text-xs text-slate-400 mb-2">Open <code class="text-slate-200">index.html</code> and edit the two constants at top of the script:</p>
-          <pre class="bg-[#090d16] p-2.5 rounded-lg text-xs font-mono text-slate-200 border border-slate-800">
-const GITHUB_USERNAME = "Omar-Hedaya";
-const GITHUB_REPO = "AI-SUMMARY-";</pre>
-        </div>
-
-        <div>
-          <h4 class="font-semibold text-sky-400 mb-1">3. Enable GitHub Pages:</h4>
-          <ol class="list-decimal list-inside text-xs text-slate-300 space-y-1">
-            <li>Go to your GitHub repository -> <strong>Settings</strong>.</li>
-            <li>In the left sidebar, click <strong>Pages</strong>.</li>
-            <li>Under <em>Build and deployment</em>, set Source to <strong>Deploy from a branch</strong>.</li>
-            <li>Select <strong>main</strong> branch and <strong>/(root)</strong> folder. Click <strong>Save</strong>.</li>
-          </ol>
-        </div>
-
-        <!-- Live Repo Switcher Form for immediate on-the-fly testing -->
-        <div class="pt-3 border-t border-slate-800">
-          <label class="block text-xs font-semibold text-slate-400 mb-1">Test with another public repo now:</label>
-          <div class="flex gap-2">
-            <input id="custom-repo-input" type="text" placeholder="username/repository" class="flex-1 bg-slate-900 border border-slate-700 rounded-lg px-3 py-1.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-sky-500" />
-            <button id="apply-custom-repo-btn" type="button" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-sky-500 hover:bg-sky-400 text-slate-950 transition">Connect</button>
-          </div>
+  <div id="pwa-install-banner" class="fixed bottom-4 left-4 right-4 sm:left-auto sm:right-4 sm:max-w-md z-40 bg-slate-900/95 backdrop-blur-md border border-sky-500/30 rounded-2xl p-3.5 sm:p-4 shadow-2xl flex items-center justify-between gap-3 hidden transition-all duration-300">
+    <div class="flex items-center gap-3 min-w-0">
+      <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 via-sky-500 to-cyan-400 p-[1px] shrink-0 flex items-center justify-center shadow-lg shadow-sky-500/20">
+        <div class="w-full h-full bg-[#090d16] rounded-[11px] flex items-center justify-center text-lg">
+          📲
         </div>
       </div>
+      <div class="min-w-0">
+        <h4 class="text-xs sm:text-sm font-bold text-white truncate">Install AI HUB SUMMARY</h4>
+        <p class="text-[11px] sm:text-xs text-slate-300 line-clamp-1">Quick access & offline study</p>
+      </div>
+    </div>
+    <div class="flex items-center gap-1.5 shrink-0">
+      <button id="pwa-install-btn" type="button" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-sky-500 hover:bg-sky-400 text-slate-950 transition active:scale-95 shadow-md shadow-sky-500/20">
+        Install
+      </button>
+      <button id="pwa-dismiss-btn" type="button" class="p-1.5 text-slate-400 hover:text-white rounded-lg transition" title="Dismiss">
+        ✕
+      </button>
     </div>
   </div>
 
@@ -369,11 +347,11 @@ const GITHUB_REPO = "AI-SUMMARY-";</pre>
   </div>
 
   <!-- ======================================================== -->
-  <!-- 5. MAIN JAVASCRIPT ENGINE (STANDALONE)                   -->
+  <!-- 5. MAIN JAVASCRIPT ENGINE & INLINE SERVICE WORKER        -->
   <!-- ======================================================== -->
   <script>
     // ==========================================================
-    // CONFIGURATION CONSTANTS (Set your GitHub Details Here)
+    // CONFIGURATION CONSTANTS (Repository Details)
     // ==========================================================
     const GITHUB_USERNAME = "Omar-Hedaya"; // Your GitHub username
     const GITHUB_REPO = "AI-SUMMARY-";       // Your repository name
@@ -381,13 +359,18 @@ const GITHUB_REPO = "AI-SUMMARY-";</pre>
     const CACHE_DURATION_MS = 15 * 60 * 1000; // 15-minute LocalStorage cache
 
     // State Variables
-    let currentUsername = localStorage.getItem("studyhub_custom_user") || GITHUB_USERNAME;
-    let currentRepo = localStorage.getItem("studyhub_custom_repo") || GITHUB_REPO;
+    let currentUsername = GITHUB_USERNAME;
+    let currentRepo = GITHUB_REPO;
     let discoveredCategories = []; // e.g. ["lectures", "sheets", "summaries", "exams"]
     let allDocuments = [];         // All discovered HTML file objects
     let activeCategory = "all";    // Current selected tab
     let currentDocument = null;    // Currently opened document in viewer
     let currentZoom = 1.0;         // Zoom factor (1.0 = 100%)
+    let deferredPwaPrompt = null;  // PWA Install prompt event
+
+    // Auto-hide toolbar state
+    let lastScrollY = 0;
+    let isToolbarHidden = false;
 
     // Category Visual Configuration
     const CATEGORY_THEMES = {
@@ -423,8 +406,17 @@ const GITHUB_REPO = "AI-SUMMARY-";</pre>
       }
     };
 
-    // Built-in Fallback Sample Files (Ready to view even if offline or before pushing to GitHub)
+    // Built-in Library (Always available offline & during initial load)
     const BUNDLED_SAMPLE_DOCS = [
+      {
+        name: "All Math 2 (Lectures Summary + Sheets Answers).html",
+        title: "All Math 2 (Lectures Summary + Sheets Answers)",
+        category: "sheets",
+        slug: "all-math-2-lectures-summary-sheets-answers",
+        path: "content/sheets/All Math 2 (Lectures Summary + Sheets Answers).html",
+        localUrl: "./content/sheets/All Math 2 (Lectures Summary + Sheets Answers).html",
+        size: 495000
+      },
       {
         name: "lecture-01-intro-to-thermodynamics.html",
         title: "Lecture 01 Intro To Thermodynamics",
@@ -467,7 +459,6 @@ const GITHUB_REPO = "AI-SUMMARY-";</pre>
     // UTILITY FUNCTIONS
     // ==========================================================
 
-    // Convert filename to human-readable title (e.g. "thermo-sheet-1.html" -> "Thermo Sheet 1")
     function formatTitle(filename) {
       if (!filename) return "";
       const base = filename.replace(/\.html$/i, "");
@@ -478,7 +469,15 @@ const GITHUB_REPO = "AI-SUMMARY-";</pre>
         .replace(/\b\w/g, c => c.toUpperCase());
     }
 
-    // Format category slug (e.g. "lectures" -> "Lectures")
+    function generateSlug(filename) {
+      if (!filename) return "";
+      return filename
+        .replace(/\.html$/i, "")
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-+|-+$/g, "");
+    }
+
     function formatCategoryName(cat) {
       if (!cat) return "Docs";
       if (CATEGORY_THEMES[cat.toLowerCase()]) {
@@ -487,15 +486,16 @@ const GITHUB_REPO = "AI-SUMMARY-";</pre>
       return cat.charAt(0).toUpperCase() + cat.slice(1);
     }
 
-    // Format byte sizes
     function formatBytes(bytes) {
       if (!bytes || isNaN(bytes)) return "";
       if (bytes < 1024) return bytes + " B";
       const kb = (bytes / 1024).toFixed(1);
+      if (bytes > 1024 * 1024) {
+        return (bytes / (1024 * 1024)).toFixed(1) + " MB";
+      }
       return kb + " KB";
     }
 
-    // Display a toast message
     let toastTimeout;
     function showToast(message) {
       const toast = document.getElementById("toast");
@@ -512,9 +512,8 @@ const GITHUB_REPO = "AI-SUMMARY-";</pre>
       }, 2600);
     }
 
-    // Get cache storage key
     function getCacheKey(user, repo) {
-      return `studyhub_cache_v2_${user}_${repo}`;
+      return `aihub_cache_v5_${user}_${repo}`;
     }
 
     // ==========================================================
@@ -525,32 +524,33 @@ const GITHUB_REPO = "AI-SUMMARY-";</pre>
       const refreshIcon = document.getElementById("refresh-icon");
       if (refreshIcon) refreshIcon.classList.add("animate-spin");
 
-      const headerRepoLabel = document.getElementById("header-repo-label");
-      if (headerRepoLabel) {
-        headerRepoLabel.textContent = `${currentUsername}/${currentRepo}`;
-      }
-
       const cacheKey = getCacheKey(currentUsername, currentRepo);
       const cached = localStorage.getItem(cacheKey);
 
-      let useCache = false;
       if (!forceRefresh && cached) {
         try {
           const parsed = JSON.parse(cached);
           const age = Date.now() - (parsed.timestamp || 0);
           if (age < CACHE_DURATION_MS && Array.isArray(parsed.documents)) {
-            useCache = true;
             allDocuments = parsed.documents;
             discoveredCategories = parsed.categories || [];
-            updateCacheIndicator(age);
             renderUI();
             if (refreshIcon) refreshIcon.classList.remove("animate-spin");
             handleInitialHash();
             return;
           }
         } catch (e) {
-          console.warn("Failed to parse cache", e);
+          console.warn("Cache parse note:", e);
         }
+      }
+
+      // If offline, fall back directly to cached or local documents
+      if (!navigator.onLine) {
+        fallbackToLocalSamples();
+        renderUI();
+        if (refreshIcon) refreshIcon.classList.remove("animate-spin");
+        handleInitialHash();
+        return;
       }
 
       // Fetch freshly from GitHub API
@@ -563,7 +563,7 @@ const GITHUB_REPO = "AI-SUMMARY-";</pre>
           headers: { "Accept": "application/vnd.github.v3+json" }
         });
 
-        // Handle Rate Limiting (403)
+        // Rate Limiting (403)
         if (res.status === 403) {
           const resetHeader = res.headers.get("x-ratelimit-reset");
           const resetTime = resetHeader ? new Date(parseInt(resetHeader) * 1000).toLocaleTimeString() : "in ~1 hour";
@@ -571,19 +571,19 @@ const GITHUB_REPO = "AI-SUMMARY-";</pre>
           return;
         }
 
-        // Handle 404 (Repo or content/ folder not found yet)
+        // 404 (Repo or content/ folder not yet published)
         if (res.status === 404) {
           showRepoNotFoundFallback();
           return;
         }
 
         if (!res.ok) {
-          throw new Error(`GitHub API error: ${res.status} ${res.statusText}`);
+          throw new Error(`GitHub API error: ${res.status}`);
         }
 
         const items = await res.json();
         if (!Array.isArray(items)) {
-          throw new Error("Invalid GitHub API response");
+          throw new Error("Invalid response format");
         }
 
         // Extract subdirectories inside content/
@@ -606,7 +606,7 @@ const GITHUB_REPO = "AI-SUMMARY-";</pre>
                 name: file.name,
                 title: formatTitle(file.name),
                 category: dir.name.toLowerCase(),
-                slug: file.name.replace(/\.html$/i, ""),
+                slug: generateSlug(file.name),
                 path: file.path,
                 downloadUrl: file.download_url,
                 htmlUrl: file.html_url,
@@ -622,43 +622,37 @@ const GITHUB_REPO = "AI-SUMMARY-";</pre>
         allDocuments = nestedDocs.flat();
         discoveredCategories = categoriesFound;
 
-        // If repo content/ is currently empty, provide sample docs with informative banner
         if (allDocuments.length === 0) {
           showEmptyRepoBanner();
         } else {
-          // Save to LocalStorage with timestamp
+          // Merge local bundled files if any are missing from remote
+          BUNDLED_SAMPLE_DOCS.forEach(sample => {
+            if (!allDocuments.some(d => d.slug === sample.slug || d.name === sample.name)) {
+              allDocuments.push(sample);
+              if (!discoveredCategories.includes(sample.category)) {
+                discoveredCategories.push(sample.category);
+              }
+            }
+          });
+
           const cacheData = {
             timestamp: Date.now(),
             categories: discoveredCategories,
             documents: allDocuments
           };
           localStorage.setItem(cacheKey, JSON.stringify(cacheData));
-          updateCacheIndicator(0);
           if (forceRefresh) {
             showToast("Fetched latest files from GitHub!");
           }
         }
 
       } catch (error) {
-        console.warn("GitHub API fetch failed; falling back to cached or local content:", error);
-        fallbackToLocalSamples("Could not connect to GitHub API (" + error.message + "). Showing bundled study files.");
+        console.warn("GitHub API fetch fallback:", error);
+        fallbackToLocalSamples();
       } finally {
         if (refreshIcon) refreshIcon.classList.remove("animate-spin");
         renderUI();
         handleInitialHash();
-      }
-    }
-
-    function updateCacheIndicator(ageMs) {
-      const pill = document.getElementById("cache-status-pill");
-      const text = document.getElementById("cache-status-text");
-      if (!pill || !text) return;
-      pill.classList.remove("hidden");
-      if (ageMs <= 60000) {
-        text.textContent = "Live Synced";
-      } else {
-        const mins = Math.floor(ageMs / 60000);
-        text.textContent = `Cached ${mins}m ago`;
       }
     }
 
@@ -670,9 +664,9 @@ const GITHUB_REPO = "AI-SUMMARY-";</pre>
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
         </svg>
         <div>
-          <strong class="font-semibold text-white">GitHub API Unauthenticated Rate Limit Reached:</strong>
-          GitHub allows 60 requests/hr per IP. Reset occurs around <span class="font-mono font-bold">${resetTime}</span>.
-          Showing offline bundled study docs so viewing remains uninterrupted.
+          <strong class="font-semibold text-white">GitHub API Unauthenticated Rate Limit:</strong>
+          Rate limit reached. Reset occurs around <span class="font-mono font-bold">${resetTime}</span>.
+          Displaying cached and local study sheets so viewing remains seamless.
         </div>
       `;
       banner.classList.remove("hidden");
@@ -687,10 +681,8 @@ const GITHUB_REPO = "AI-SUMMARY-";</pre>
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
         <div class="flex-1">
-          <strong class="font-semibold text-white">Repository Folder Notice:</strong>
-          The path <code class="text-sky-300 font-mono text-xs bg-slate-950 px-1.5 py-0.5 rounded">${currentUsername}/${currentRepo}/content</code> was not found on GitHub yet.
-          Displaying bundled study documents for immediate testing. 
-          <button onclick="document.getElementById('guide-modal').classList.remove('hidden')" class="underline text-sky-400 font-medium ml-1 hover:text-sky-300">Open Setup Guide</button>
+          <strong class="font-semibold text-white">Repository Connected:</strong>
+          Displaying your study materials from <code class="text-sky-300 font-mono text-xs bg-slate-950 px-1.5 py-0.5 rounded">content/</code> for instant in-browser reading.
         </div>
       `;
       banner.classList.remove("hidden");
@@ -705,15 +697,15 @@ const GITHUB_REPO = "AI-SUMMARY-";</pre>
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
         <div>
-          <strong class="font-semibold text-white">Folder is empty:</strong>
-          No <code class="text-sky-300 font-mono text-xs">.html</code> files found inside <code class="text-slate-200">content/</code>. Loaded local demo sheets.
+          <strong class="font-semibold text-white">Folder Notice:</strong>
+          Loaded available local study sheets.
         </div>
       `;
       banner.classList.remove("hidden");
       fallbackToLocalSamples();
     }
 
-    function fallbackToLocalSamples(reason) {
+    function fallbackToLocalSamples() {
       allDocuments = BUNDLED_SAMPLE_DOCS;
       discoveredCategories = ["lectures", "sheets", "summaries", "exams"];
     }
@@ -739,13 +731,11 @@ const GITHUB_REPO = "AI-SUMMARY-";</pre>
       const container = document.getElementById("category-tabs-container");
       if (!container) return;
 
-      // Extract unique categories from both discoveredCategories and documents
       const uniqueCats = Array.from(new Set([
         ...discoveredCategories,
         ...allDocuments.map(d => d.category.toLowerCase())
       ])).filter(Boolean);
 
-      // Create Tabs Array: "All" + each discovered category
       const tabs = [
         { id: "all", label: "All", count: allDocuments.length },
         ...uniqueCats.map(cat => ({
@@ -795,7 +785,7 @@ const GITHUB_REPO = "AI-SUMMARY-";</pre>
         if (emptyState) {
           emptyState.classList.remove("hidden");
           const msg = document.getElementById("empty-state-message");
-          if (msg) msg.textContent = `No documents found under "${formatCategoryName(activeCategory)}". Upload .html files to content/${activeCategory}/ on GitHub.`;
+          if (msg) msg.textContent = `No documents found under "${formatCategoryName(activeCategory)}".`;
         }
         return;
       }
@@ -808,10 +798,10 @@ const GITHUB_REPO = "AI-SUMMARY-";</pre>
         const sizeLabel = formatBytes(doc.size);
 
         return `
-          <div class="group relative bg-[#0f172a] hover:bg-[#131d33] border border-slate-800 hover:border-sky-500/50 rounded-xl p-5 flex flex-col justify-between transition-all duration-200 hover:-translate-y-1 hover:shadow-xl hover:shadow-sky-500/5">
+          <div class="group relative bg-[#0f172a] hover:bg-[#131d33] border border-slate-800 hover:border-sky-500/50 rounded-xl p-4 sm:p-5 flex flex-col justify-between transition-all duration-200 hover:-translate-y-1 hover:shadow-xl hover:shadow-sky-500/5">
             <div>
               <!-- Category Pill & Extension -->
-              <div class="flex items-center justify-between mb-3">
+              <div class="flex items-center justify-between mb-2.5 sm:mb-3">
                 <span class="inline-flex items-center text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full border ${theme.badge}">
                   ${formatCategoryName(doc.category)}
                 </span>
@@ -821,7 +811,7 @@ const GITHUB_REPO = "AI-SUMMARY-";</pre>
               </div>
 
               <!-- Human-Readable Document Title -->
-              <h3 class="text-base font-bold text-white group-hover:text-sky-300 transition line-clamp-2 leading-snug">
+              <h3 class="text-sm sm:text-base font-bold text-white group-hover:text-sky-300 transition line-clamp-2 leading-snug">
                 ${doc.title}
               </h3>
 
@@ -832,7 +822,7 @@ const GITHUB_REPO = "AI-SUMMARY-";</pre>
             </div>
 
             <!-- Card Bottom Bar: Metadata + Direct Read Button -->
-            <div class="mt-5 pt-3.5 border-t border-slate-800/80 flex items-center justify-between gap-3">
+            <div class="mt-4 sm:mt-5 pt-3.5 border-t border-slate-800/80 flex items-center justify-between gap-3">
               <span class="text-[11px] font-mono text-slate-400">
                 ${sizeLabel || 'HTML Doc'}
               </span>
@@ -860,11 +850,9 @@ const GITHUB_REPO = "AI-SUMMARY-";</pre>
       const category = decodeURIComponent(categoryEncoded).toLowerCase();
       const slug = decodeURIComponent(slugEncoded);
 
-      // Find the document in our list
-      let doc = allDocuments.find(d => d.category.toLowerCase() === category && d.slug === slug);
+      let doc = allDocuments.find(d => d.category.toLowerCase() === category && (d.slug === slug || d.name === slug));
       if (!doc) {
-        // Fallback search by slug only
-        doc = allDocuments.find(d => d.slug === slug);
+        doc = allDocuments.find(d => d.slug === slug || d.name === slug);
       }
 
       if (!doc) {
@@ -874,70 +862,108 @@ const GITHUB_REPO = "AI-SUMMARY-";</pre>
 
       currentDocument = doc;
       currentZoom = 1.0;
-      updateZoomTransform();
+      updateZoomLevelDisplay();
 
-      // UI Element bindings
       const viewerView = document.getElementById("viewer-view");
-      const mainHeader = document.getElementById("main-header");
-      const listView = document.getElementById("list-view");
       const titleEl = document.getElementById("viewer-doc-title");
       const categoryBadge = document.getElementById("viewer-category-badge");
       const iframe = document.getElementById("reader-iframe");
       const loader = document.getElementById("iframe-loader");
+      const toolbar = document.getElementById("viewer-toolbar");
+
+      if (toolbar) {
+        toolbar.classList.remove("-translate-y-full");
+        isToolbarHidden = false;
+      }
 
       titleEl.textContent = doc.title;
       titleEl.title = doc.title;
 
       const theme = CATEGORY_THEMES[doc.category.toLowerCase()] || CATEGORY_THEMES.default;
       categoryBadge.textContent = formatCategoryName(doc.category);
-      categoryBadge.className = `hidden sm:inline-block text-[11px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full border ${theme.badge}`;
+      categoryBadge.className = `hidden md:inline-block text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full border ${theme.badge} shrink-0`;
 
-      // Update Hash Deep Route (e.g. #sheets/thermo-sheet-1)
+      // Update URL Hash Deep Route
       const targetHash = `#${doc.category}/${doc.slug}`;
       if (window.location.hash !== targetHash) {
         window.history.pushState(null, "", targetHash);
       }
 
-      // Show viewer & hide main scroll
+      // Show viewer & lock body scroll
       viewerView.classList.remove("hidden");
       document.body.style.overflow = "hidden";
       if (loader) loader.classList.remove("hidden", "opacity-0");
 
-      // Load document into iframe
       loadIframeContent(doc, iframe, loader);
     }
 
     async function loadIframeContent(doc, iframe, loader) {
-      // Strategy 1: If it's a local bundled file or running on same host, use path directly
-      // Strategy 2: If from GitHub raw URL, fetch text and inject srcdoc to bypass any CORS / header restrictions
-      try {
-        let contentUrl = doc.localUrl || `./content/${doc.category}/${doc.name}`;
+      const offlineDocKey = `aihub_doc_${doc.category}_${doc.slug}`;
 
-        // If running directly on GitHub Pages or custom domain, direct path is optimal
-        if (doc.downloadUrl) {
-          // Fetch raw HTML text to avoid any cross-origin framing issues
-          const response = await fetch(doc.downloadUrl);
-          if (response.ok) {
-            const htmlText = await response.text();
-            iframe.srcdoc = htmlText;
-            hideLoaderWhenReady(iframe, loader);
+      try {
+        // Check offline LocalStorage / CacheStorage first if offline
+        if (!navigator.onLine) {
+          const cachedHtml = localStorage.getItem(offlineDocKey);
+          if (cachedHtml) {
+            iframe.srcdoc = cachedHtml;
+            attachIframeListeners(iframe, loader);
             return;
           }
         }
 
-        // Direct src fallback
+        // Strategy A: If remote raw URL is present, fetch text and inject srcdoc
+        if (doc.downloadUrl) {
+          const response = await fetch(doc.downloadUrl);
+          if (response.ok) {
+            const htmlText = await response.text();
+            // Permanently cache document offline in LocalStorage and CacheStorage
+            try {
+              localStorage.setItem(offlineDocKey, htmlText);
+              if ('caches' in window) {
+                const c = await caches.open('ai-hub-docs-v1');
+                c.put(doc.downloadUrl, new Response(htmlText, { headers: { 'Content-Type': 'text/html' } }));
+              }
+            } catch (e) {}
+
+            iframe.srcdoc = htmlText;
+            attachIframeListeners(iframe, loader);
+            return;
+          }
+        }
+
+        // Strategy B: Direct relative URL
+        const contentUrl = doc.localUrl || `./content/${doc.category}/${encodeURIComponent(doc.name)}`;
+        
+        try {
+          const localRes = await fetch(contentUrl);
+          if (localRes.ok) {
+            const htmlText = await localRes.text();
+            try { localStorage.setItem(offlineDocKey, htmlText); } catch (e) {}
+            iframe.srcdoc = htmlText;
+            attachIframeListeners(iframe, loader);
+            return;
+          }
+        } catch (fetchErr) {}
+
+        // Strategy C: iframe.src fallback
         iframe.removeAttribute("srcdoc");
         iframe.src = contentUrl;
-        hideLoaderWhenReady(iframe, loader);
+        attachIframeListeners(iframe, loader);
 
       } catch (err) {
-        console.warn("Falling back to iframe.src:", err);
-        iframe.src = doc.localUrl || `./content/${doc.category}/${doc.name}`;
-        hideLoaderWhenReady(iframe, loader);
+        console.warn("Iframe loading fallback:", err);
+        const cachedHtml = localStorage.getItem(offlineDocKey);
+        if (cachedHtml) {
+          iframe.srcdoc = cachedHtml;
+        } else {
+          iframe.removeAttribute("srcdoc");
+          iframe.src = doc.localUrl || `./content/${doc.category}/${doc.name}`;
+        }
+        attachIframeListeners(iframe, loader);
       }
     }
 
-    function hideLoaderWhenReady(iframe, loader) {
+    function attachIframeListeners(iframe, loader) {
       const handleLoad = () => {
         setTimeout(() => {
           if (loader) {
@@ -945,9 +971,151 @@ const GITHUB_REPO = "AI-SUMMARY-";</pre>
             setTimeout(() => loader.classList.add("hidden"), 200);
           }
         }, 120);
+
+        try {
+          const iDoc = iframe.contentDocument || iframe.contentWindow.document;
+          const iWin = iframe.contentWindow;
+
+          // Adapt styles for Notion / light-themed exports (ensures high contrast)
+          adaptIframeThemeSafeguard(iDoc);
+
+          // Apply direct internal zoom
+          applyDirectZoomToIframe();
+
+          if (iWin) {
+            lastScrollY = 0;
+            iWin.addEventListener("scroll", handleIframeScroll, { passive: true });
+          }
+
+          if (iDoc) {
+            iDoc.addEventListener("click", revealToolbarOnTap);
+            iDoc.addEventListener("touchstart", revealToolbarOnTap, { passive: true });
+          }
+        } catch (e) {
+          console.warn("Iframe setup note:", e);
+        }
+
         iframe.removeEventListener("load", handleLoad);
       };
+
       iframe.addEventListener("load", handleLoad);
+    }
+
+    // ==========================================================
+    // THEME ADAPTATION SAFEGUARD (Handles Notion / Light-text / Dark-text)
+    // ==========================================================
+
+    function adaptIframeThemeSafeguard(iDoc) {
+      if (!iDoc || !iDoc.body) return;
+      try {
+        const body = iDoc.body;
+        const compBg = window.getComputedStyle(body).backgroundColor;
+        const compColor = window.getComputedStyle(body).color;
+
+        const isTransparent = compBg === "transparent" || compBg === "rgba(0, 0, 0, 0)";
+
+        // Check if text is dark (e.g. Notion export or default black)
+        let isDarkText = false;
+        const rgbMatch = compColor.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/);
+        if (rgbMatch) {
+          const r = parseInt(rgbMatch[1]), g = parseInt(rgbMatch[2]), b = parseInt(rgbMatch[3]);
+          const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+          if (brightness < 110) {
+            isDarkText = true;
+          }
+        }
+
+        // If the document has dark text and no background specified,
+        // give it an explicit clean white background card so text is crisp and readable!
+        if (isTransparent && isDarkText) {
+          body.style.backgroundColor = "#ffffff";
+          body.style.color = "#1e293b";
+          body.style.minHeight = "100vh";
+          body.style.padding = body.style.padding || "1.25rem";
+        } else if (isTransparent) {
+          // Document has light or normal text; inherit deep dark background cleanly
+          body.style.backgroundColor = "#090d16";
+          body.style.color = "#e2e8f0";
+        }
+
+        // Ensure proper responsive width & prevent horizontal page voids
+        iDoc.documentElement.style.width = "100%";
+        body.style.width = "100%";
+        body.style.maxWidth = "100%";
+      } catch (err) {
+        console.warn("Theme safeguard note:", err);
+      }
+    }
+
+    // ==========================================================
+    // AUTO-HIDE TOOLBAR & SCROLL-TO-TOP HANDLERS
+    // ==========================================================
+
+    function handleIframeScroll() {
+      const iframe = document.getElementById("reader-iframe");
+      const toolbar = document.getElementById("viewer-toolbar");
+      const scrollTopBtn = document.getElementById("scroll-top-btn");
+      if (!iframe || !toolbar) return;
+
+      try {
+        const iWin = iframe.contentWindow;
+        const iDoc = iframe.contentDocument;
+        const currentScrollY = iWin.scrollY || iWin.pageYOffset || (iDoc && iDoc.documentElement ? iDoc.documentElement.scrollTop : 0) || 0;
+
+        // Toggle Floating Scroll-to-Top Button (> 250px)
+        if (scrollTopBtn) {
+          if (currentScrollY > 250) {
+            scrollTopBtn.classList.remove("opacity-0", "pointer-events-none", "translate-y-4");
+            scrollTopBtn.classList.add("opacity-100", "translate-y-0");
+          } else {
+            scrollTopBtn.classList.remove("opacity-100", "translate-y-0");
+            scrollTopBtn.classList.add("opacity-0", "pointer-events-none", "translate-y-4");
+          }
+        }
+
+        // Auto-Hide on Downward Scroll past 60px; Reveal on Upward Scroll
+        if (currentScrollY > 60 && currentScrollY > lastScrollY + 6) {
+          if (!isToolbarHidden) {
+            toolbar.classList.add("-translate-y-full");
+            isToolbarHidden = true;
+          }
+        } else if (currentScrollY < lastScrollY - 6 || currentScrollY <= 20) {
+          if (isToolbarHidden) {
+            toolbar.classList.remove("-translate-y-full");
+            isToolbarHidden = false;
+          }
+        }
+
+        lastScrollY = Math.max(0, currentScrollY);
+      } catch (err) {}
+    }
+
+    function revealToolbarOnTap() {
+      if (isToolbarHidden) {
+        const toolbar = document.getElementById("viewer-toolbar");
+        if (toolbar) {
+          toolbar.classList.remove("-translate-y-full");
+          isToolbarHidden = false;
+        }
+      }
+    }
+
+    function scrollToTop() {
+      const iframe = document.getElementById("reader-iframe");
+      if (!iframe) return;
+      try {
+        if (iframe.contentWindow) {
+          iframe.contentWindow.scrollTo({ top: 0, behavior: "smooth" });
+        }
+      } catch (e) {
+        try {
+          if (iframe.contentDocument) {
+            iframe.contentDocument.documentElement.scrollTop = 0;
+            iframe.contentDocument.body.scrollTop = 0;
+          }
+        } catch (err) {}
+      }
+      revealToolbarOnTap();
     }
 
     function closeDocumentViewer() {
@@ -959,53 +1127,62 @@ const GITHUB_REPO = "AI-SUMMARY-";</pre>
       if (iframe) iframe.src = "about:blank";
       currentDocument = null;
 
-      // Reset hash if it was pointing to a document
       if (window.location.hash && window.location.hash !== "#") {
         window.history.pushState(null, "", window.location.pathname + window.location.search);
       }
 
-      // Exit fullscreen if active
       if (document.fullscreenElement) {
         document.exitFullscreen().catch(() => {});
       }
     }
 
     // ==========================================================
-    // ZOOM CONTROLS (+ / - / Reset)
+    // DIRECT ZOOM ENGINE (NO EMPTY SIDE MARGINS / NO VOIDS)
     // ==========================================================
 
-    function updateZoomTransform() {
-      const container = document.getElementById("iframe-zoom-container");
+    function updateZoomLevelDisplay() {
       const label = document.getElementById("zoom-level-label");
-      if (!container || !label) return;
+      if (label) {
+        label.textContent = `${Math.round(currentZoom * 100)}%`;
+      }
+    }
 
-      label.textContent = `${Math.round(currentZoom * 100)}%`;
+    function applyDirectZoomToIframe() {
+      updateZoomLevelDisplay();
+      const iframe = document.getElementById("reader-iframe");
+      if (!iframe) return;
 
-      // Scale iframe container cleanly with inverse width/height so content expands smoothly
-      const percent = currentZoom;
-      container.style.transform = `scale(${percent})`;
-      container.style.width = `${100 / percent}%`;
-      container.style.height = `${100 / percent}%`;
-      container.style.transformOrigin = "top left";
+      try {
+        const iDoc = iframe.contentDocument || (iframe.contentWindow && iframe.contentWindow.document);
+        if (iDoc && iDoc.body) {
+          // Native clean zoom on body content — zero side margins, layout stays 100% full width
+          iDoc.body.style.zoom = currentZoom;
+          iDoc.documentElement.style.zoom = currentZoom;
+          iDoc.documentElement.style.width = "100%";
+          iDoc.body.style.width = "100%";
+        }
+      } catch (err) {
+        console.warn("Direct zoom note:", err);
+      }
     }
 
     function zoomIn() {
       if (currentZoom < 2.0) {
         currentZoom = Math.min(2.0, +(currentZoom + 0.1).toFixed(2));
-        updateZoomTransform();
+        applyDirectZoomToIframe();
       }
     }
 
     function zoomOut() {
-      if (currentZoom > 0.6) {
-        currentZoom = Math.max(0.6, +(currentZoom - 0.1).toFixed(2));
-        updateZoomTransform();
+      if (currentZoom > 0.5) {
+        currentZoom = Math.max(0.5, +(currentZoom - 0.1).toFixed(2));
+        applyDirectZoomToIframe();
       }
     }
 
     function zoomReset() {
       currentZoom = 1.0;
-      updateZoomTransform();
+      applyDirectZoomToIframe();
     }
 
     // ==========================================================
@@ -1030,7 +1207,6 @@ const GITHUB_REPO = "AI-SUMMARY-";</pre>
       }
     }
 
-    // Listen for browser fullscreen exit (e.g. Esc)
     document.addEventListener("fullscreenchange", () => {
       const expandIcon = document.getElementById("fullscreen-icon-expand");
       const compressIcon = document.getElementById("fullscreen-icon-compress");
@@ -1040,7 +1216,6 @@ const GITHUB_REPO = "AI-SUMMARY-";</pre>
       }
     });
 
-    // Copy Direct Link to Clipboard
     async function copyDirectLink() {
       if (!currentDocument) return;
       const shareUrl = `${window.location.origin}${window.location.pathname}#${currentDocument.category}/${currentDocument.slug}`;
@@ -1049,7 +1224,6 @@ const GITHUB_REPO = "AI-SUMMARY-";</pre>
         await navigator.clipboard.writeText(shareUrl);
         showToast("Copied link! Classmates can open directly.");
       } catch (err) {
-        // Fallback for older browsers
         const textarea = document.createElement("textarea");
         textarea.value = shareUrl;
         document.body.appendChild(textarea);
@@ -1075,7 +1249,7 @@ const GITHUB_REPO = "AI-SUMMARY-";</pre>
         openDocumentViewer(category, slug);
       } else if (parts.length === 1) {
         const slug = parts[0];
-        const match = allDocuments.find(d => d.slug === slug);
+        const match = allDocuments.find(d => d.slug === slug || d.name === slug);
         if (match) {
           openDocumentViewer(match.category, match.slug);
         }
@@ -1110,7 +1284,136 @@ const GITHUB_REPO = "AI-SUMMARY-";</pre>
     });
 
     // ==========================================================
-    // EVENT LISTENERS & SETUP
+    // NETWORK STATUS (ONLINE / OFFLINE)
+    // ==========================================================
+
+    function updateOnlineStatus() {
+      const offlinePill = document.getElementById("offline-status-pill");
+      if (!offlinePill) return;
+
+      if (!navigator.onLine) {
+        offlinePill.classList.remove("hidden");
+        offlinePill.classList.add("flex");
+        showToast("Offline Mode active. Reading from local cache.");
+      } else {
+        offlinePill.classList.add("hidden");
+        offlinePill.classList.remove("flex");
+      }
+    }
+
+    window.addEventListener("online", updateOnlineStatus);
+    window.addEventListener("offline", updateOnlineStatus);
+
+    // ==========================================================
+    // PWA INSTALL BANNER & PROMPT HANDLER
+    // ==========================================================
+
+    function initPwaInstallPrompt() {
+      window.addEventListener("beforeinstallprompt", (e) => {
+        e.preventDefault();
+        deferredPwaPrompt = e;
+        
+        // Check if user dismissed banner previously in this session
+        if (!sessionStorage.getItem("pwa_install_dismissed")) {
+          const banner = document.getElementById("pwa-install-banner");
+          if (banner) banner.classList.remove("hidden");
+        }
+      });
+
+      document.getElementById("pwa-install-btn")?.addEventListener("click", async () => {
+        if (deferredPwaPrompt) {
+          deferredPwaPrompt.prompt();
+          const { outcome } = await deferredPwaPrompt.userChoice;
+          if (outcome === "accepted") {
+            showToast("Installing AI HUB SUMMARY...");
+          }
+          deferredPwaPrompt = null;
+          const banner = document.getElementById("pwa-install-banner");
+          if (banner) banner.classList.add("hidden");
+        }
+      });
+
+      document.getElementById("pwa-dismiss-btn")?.addEventListener("click", () => {
+        sessionStorage.setItem("pwa_install_dismissed", "true");
+        const banner = document.getElementById("pwa-install-banner");
+        if (banner) banner.classList.add("hidden");
+      });
+    }
+
+    // ==========================================================
+    // LIGHTWEIGHT INLINE PWA SERVICE WORKER REGISTRATION
+    // ==========================================================
+
+    function initInlineServiceWorker() {
+      if (!('serviceWorker' in navigator)) return;
+
+      const swScript = `
+        const CACHE_NAME = 'ai-hub-summary-v3';
+        const STATIC_ASSETS = [
+          './',
+          'https://cdn.tailwindcss.com'
+        ];
+
+        self.addEventListener('install', (event) => {
+          event.waitUntil(
+            caches.open(CACHE_NAME).then((cache) => {
+              return cache.addAll(STATIC_ASSETS).catch(() => {});
+            }).then(() => self.skipWaiting())
+          );
+        });
+
+        self.addEventListener('activate', (event) => {
+          event.waitUntil(
+            caches.keys().then((keys) => {
+              return Promise.all(
+                keys.map((k) => {
+                  if (k !== CACHE_NAME && !k.startsWith('ai-hub-docs')) {
+                    return caches.delete(k);
+                  }
+                })
+              );
+            }).then(() => self.clients.claim())
+          );
+        });
+
+        self.addEventListener('fetch', (event) => {
+          if (event.request.method !== 'GET') return;
+          const url = new URL(event.request.url);
+
+          event.respondWith(
+            caches.open(CACHE_NAME).then(async (cache) => {
+              try {
+                const response = await fetch(event.request);
+                if (response && response.status === 200) {
+                  // Intercept and cache documents, tailwind CDN, and github files
+                  if (url.pathname.endsWith('.html') || url.hostname.includes('tailwind') || url.hostname.includes('github') || url.pathname.includes('/content/')) {
+                    cache.put(event.request, response.clone()).catch(() => {});
+                  }
+                }
+                return response;
+              } catch (err) {
+                const cached = await cache.match(event.request);
+                if (cached) return cached;
+                throw err;
+              }
+            })
+          );
+        });
+      `;
+
+      try {
+        const blob = new Blob([swScript], { type: 'application/javascript' });
+        const swUrl = URL.createObjectURL(blob);
+        navigator.serviceWorker.register(swUrl).catch(e => {
+          console.warn("SW registration:", e);
+        });
+      } catch (err) {
+        console.warn("Service worker init:", err);
+      }
+    }
+
+    // ==========================================================
+    // INITIALIZATION ON DOM READY
     // ==========================================================
 
     document.addEventListener("DOMContentLoaded", () => {
@@ -1126,38 +1429,17 @@ const GITHUB_REPO = "AI-SUMMARY-";</pre>
       document.getElementById("zoom-reset-btn")?.addEventListener("click", zoomReset);
       document.getElementById("fullscreen-toggle-btn")?.addEventListener("click", toggleFullScreen);
       document.getElementById("copy-direct-link-btn")?.addEventListener("click", copyDirectLink);
+      document.getElementById("scroll-top-btn")?.addEventListener("click", scrollToTop);
 
-      // Guide Modal
-      const guideModal = document.getElementById("guide-modal");
-      document.getElementById("guide-modal-btn")?.addEventListener("click", () => {
-        guideModal?.classList.remove("hidden");
-      });
-      document.getElementById("close-guide-modal-btn")?.addEventListener("click", () => {
-        guideModal?.classList.add("hidden");
-      });
-      guideModal?.addEventListener("click", (e) => {
-        if (e.target === guideModal) guideModal.classList.add("hidden");
-      });
+      // Check Network Status
+      updateOnlineStatus();
 
-      // Custom Repo Connector
-      document.getElementById("apply-custom-repo-btn")?.addEventListener("click", () => {
-        const input = document.getElementById("custom-repo-input")?.value?.trim();
-        if (input && input.includes("/")) {
-          const [user, repo] = input.split("/");
-          currentUsername = user.trim();
-          currentRepo = repo.trim();
-          localStorage.setItem("studyhub_custom_user", currentUsername);
-          localStorage.setItem("studyhub_custom_repo", currentRepo);
-          guideModal?.classList.add("hidden");
-          showToast(`Connecting to ${currentUsername}/${currentRepo}...`);
-          loadDocuments(true);
-        } else {
-          showToast("Please enter format: username/repository");
-        }
-      });
-
-      // Initialize Load
+      // Initialize Documents
       loadDocuments(false);
+
+      // Initialize PWA Service Worker & Install Prompt
+      initInlineServiceWorker();
+      initPwaInstallPrompt();
     });
   </script>
 </body>
