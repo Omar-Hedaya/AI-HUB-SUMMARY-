@@ -420,7 +420,7 @@
           </h2>
           <span id="pinned-folders-count" class="text-xs font-mono text-amber-400/80"></span>
         </div>
-        <div id="pinned-folders-container" class="space-y-2.5">
+        <div id="pinned-folders-container" class="space-y-2">
           <!-- Pinned folders rendered here -->
         </div>
       </div>
@@ -436,11 +436,11 @@
       </div>
 
       <!-- Vertical Folders List Container (Google Drive Style List) -->
-      <div id="folders-list-container" class="space-y-2.5">
+      <div id="folders-list-container" class="space-y-2">
         <!-- Skeleton Loaders -->
-        <div class="bg-slate-900/60 border border-slate-800 rounded-xl p-4 skeleton h-16"></div>
-        <div class="bg-slate-900/60 border border-slate-800 rounded-xl p-4 skeleton h-16"></div>
-        <div class="bg-slate-900/60 border border-slate-800 rounded-xl p-4 skeleton h-16"></div>
+        <div class="bg-slate-900/60 border border-slate-800 rounded-xl p-3 skeleton h-13"></div>
+        <div class="bg-slate-900/60 border border-slate-800 rounded-xl p-3 skeleton h-13"></div>
+        <div class="bg-slate-900/60 border border-slate-800 rounded-xl p-3 skeleton h-13"></div>
       </div>
 
     </section>
@@ -1973,18 +1973,18 @@
       const dict = I18N[currentLang];
 
       return `
-        <div class="folder-card w-full group bg-[#0f172a] hover:bg-[#131d33] border ${isPinned ? 'border-amber-500/50 bg-gradient-to-r from-amber-950/20 via-[#0f172a] to-[#0f172a]' : 'border-slate-800 hover:border-slate-700'} hover:border-l-4 hover:border-l-${theme.accent} rounded-xl p-3 sm:p-3.5 flex items-center justify-between gap-3 transition-all duration-200 active:scale-[0.99] shadow-sm">
+        <div class="folder-card w-full group bg-[#0f172a] hover:bg-[#131d33] border ${isPinned ? 'border-amber-500/50 bg-gradient-to-r from-amber-950/20 via-[#0f172a] to-[#0f172a]' : 'border-slate-800 hover:border-slate-700'} hover:border-l-4 hover:border-l-${theme.accent} rounded-xl px-3 py-2 sm:px-3.5 sm:py-2.5 flex items-center justify-between gap-2.5 transition-all duration-200 active:scale-[0.99] shadow-sm">
           
-          <div onclick="openFolder('${escapedCat}')" class="flex items-center gap-3 min-w-0 flex-1 cursor-pointer">
-            <div class="w-9 h-9 rounded-lg ${theme.iconBg} border flex items-center justify-center shrink-0 ${theme.iconColor} group-hover:scale-105 transition">
-              <svg class="w-4.5 h-4.5" fill="currentColor" viewBox="0 0 24 24">
+          <div onclick="openFolder('${escapedCat}')" class="flex items-center gap-2.5 sm:gap-3 min-w-0 flex-1 cursor-pointer">
+            <div class="w-10 h-10 rounded-xl ${theme.iconBg} border flex items-center justify-center shrink-0 ${theme.iconColor} group-hover:scale-105 transition">
+              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M19.5 21a3 3 0 003-3v-4.5a3 3 0 00-3-3h-1.5V9a3 3 0 00-3-3h-4.636a3 3 0 01-2.121-.879L6.879 3.757A3 3 0 004.757 3H3a3 3 0 00-3 3v12a3 3 0 003 3h16.5z" />
               </svg>
             </div>
 
             <div class="min-w-0 flex-1">
               <div class="flex items-center gap-2">
-                <h3 class="text-sm sm:text-base font-bold text-white group-hover:text-sky-300 transition truncate">
+                <h3 class="text-sm sm:text-base font-bold text-white group-hover:text-sky-300 transition truncate leading-snug">
                   ${displayName}
                 </h3>
                 ${isPinned ? `
@@ -1996,8 +1996,8 @@
             </div>
           </div>
 
-          <div class="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
-            <span class="text-xs font-mono px-2 py-0.5 sm:py-1 rounded-lg bg-slate-900 border border-slate-800 text-slate-300">
+          <div class="flex items-center gap-1.5 sm:gap-2 shrink-0">
+            <span class="text-xs font-mono px-2 py-0.5 rounded-lg bg-slate-900 border border-slate-800 text-slate-300">
               ${count} ${count === 1 ? dict.file : dict.files}
             </span>
 
