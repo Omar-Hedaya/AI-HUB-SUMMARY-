@@ -4,9 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
   <title>AI HUB SUMMARY</title>
-  <meta name="description" content="AI HUB SUMMARY — Fast, standalone single-page web app for reading study HTML lectures, sheets, and summaries directly in a permanent dark theme." />
+  <meta name="description" content="AI HUB SUMMARY — Fast, standalone single-page dark theme viewer for reading study lectures, sheets, and summaries directly in a permanent dark theme." />
   <meta property="og:title" content="AI HUB SUMMARY" />
-  <meta property="og:description" content="AI HUB SUMMARY — Fast, standalone single-page web app for reading study HTML lectures, sheets, and summaries directly in a permanent dark theme." />
+  <meta property="og:description" content="AI HUB SUMMARY — Fast, standalone single-page dark theme viewer for reading study lectures, sheets, and summaries directly in a permanent dark theme." />
   <meta property="og:type" content="website" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="theme-color" content="#090d16" />
@@ -86,19 +86,10 @@
       to { opacity: 0; transform: translate(-50%, 1rem); }
     }
 
-    /* Reader Toolbar Auto-Hide Transition */
+    /* Floating Reader Toolbar Transition */
     #viewer-toolbar {
       will-change: transform;
-      transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
-    }
-
-    /* Horizontal Category Scroll Hide */
-    .hide-scrollbar {
-      -ms-overflow-style: none;
-      scrollbar-width: none;
-    }
-    .hide-scrollbar::-webkit-scrollbar {
-      display: none;
+      transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
     }
   </style>
 </head>
@@ -108,11 +99,11 @@
   <!-- 1. MAIN APPLICATION HEADER                               -->
   <!-- ======================================================== -->
   <header id="main-header" class="sticky top-0 z-30 border-b border-slate-800/80 bg-[#090d16]/90 backdrop-blur-md transition-all">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
       
       <!-- Brand Logo & Title: AI HUB SUMMARY -->
       <div class="flex items-center gap-3">
-        <a href="#" class="flex items-center gap-2.5 group">
+        <a href="#" onclick="backToFolders(event)" class="flex items-center gap-2.5 group">
           <div class="w-9 h-9 rounded-lg bg-gradient-to-tr from-indigo-600 via-sky-500 to-cyan-400 p-[1px] shadow-lg shadow-sky-500/20 group-hover:shadow-sky-500/40 transition">
             <div class="w-full h-full bg-[#090d16] rounded-[7px] flex items-center justify-center">
               <svg class="w-5 h-5 text-sky-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -128,7 +119,7 @@
         </a>
       </div>
 
-      <!-- Header Actions: Offline Indicator + Compact Refresh Button -->
+      <!-- Header Actions: Offline Pill + Compact Refresh Button -->
       <div class="flex items-center gap-2 sm:gap-2.5">
         
         <!-- Offline Mode Pill Indicator -->
@@ -151,78 +142,155 @@
   </header>
 
   <!-- ======================================================== -->
-  <!-- 2. DOCUMENT LIST VIEW (CATEGORY TABS + CARDS GRID)       -->
+  <!-- 2. MAIN WORKSPACE CONTENT                                -->
   <!-- ======================================================== -->
-  <main id="list-view" class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 transition-opacity duration-200">
+  <main id="list-view" class="flex-1 max-w-5xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 transition-opacity duration-200">
     
-    <!-- Hero Header (NO Search Bar) -->
-    <div class="mb-6 sm:mb-8">
-      <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-5 sm:pb-6 border-b border-slate-800/80">
+    <!-- Status / Notice Banner (Rate limit or offline info) -->
+    <div id="status-banner" class="hidden mb-6 p-4 rounded-xl text-sm border"></div>
+
+    <!-- VIEW 1: GOOGLE DRIVE STYLE FOLDERS DIRECTORY VIEW -->
+    <section id="folders-directory-view" class="transition-all duration-200">
+      
+      <!-- Directory Hero Header -->
+      <div class="mb-6 pb-5 border-b border-slate-800/80 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
         <div>
           <h1 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">Study Materials & Notes</h1>
           <p class="text-sm sm:text-base text-slate-400 mt-1 max-w-2xl">
-            Read university lectures, problem sheets, and summaries directly in-browser. Zero downloads required.
+            Select a subject folder below to read uploaded lectures, sheets, and summaries directly in-browser.
           </p>
         </div>
         <!-- Stats badge -->
-        <div class="flex items-center gap-2 self-start md:self-auto text-xs font-medium text-slate-400 bg-slate-900/90 px-3 py-1.5 rounded-lg border border-slate-800">
+        <div class="flex items-center gap-2 self-start sm:self-auto text-xs font-medium text-slate-400 bg-slate-900/90 px-3 py-1.5 rounded-lg border border-slate-800 shrink-0">
           <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
           <span id="total-docs-count">Scanning...</span>
         </div>
       </div>
 
-      <!-- Notice Banner (Rate Limit, Repo Not Found, or Offline fallback) -->
-      <div id="status-banner" class="hidden mt-4 p-4 rounded-xl text-sm border"></div>
+      <!-- Quick Access Option: "All Documents" (Google Drive Style Priority Row) -->
+      <div class="mb-6">
+        <button 
+          type="button" 
+          onclick="openFolder('all')"
+          class="w-full text-left group bg-gradient-to-r from-[#0f172a] via-[#131d33] to-[#0f172a] hover:from-[#131d33] hover:to-[#172554]/40 border border-slate-800 hover:border-sky-500/50 rounded-2xl p-4 sm:p-5 flex items-center justify-between gap-4 transition-all duration-200 hover:shadow-xl hover:shadow-sky-500/5 active:scale-[0.99]">
+          <div class="flex items-center gap-3.5 sm:gap-4 min-w-0">
+            <!-- Distinctive Icon -->
+            <div class="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-sky-500/10 border border-sky-500/30 flex items-center justify-center shrink-0 text-sky-400 group-hover:scale-105 group-hover:bg-sky-500/20 transition">
+              <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+              </svg>
+            </div>
+            <div class="min-w-0">
+              <div class="flex items-center gap-2">
+                <h3 class="text-base sm:text-lg font-bold text-white group-hover:text-sky-300 transition truncate">
+                  All Documents
+                </h3>
+                <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-sky-950/80 text-sky-300 border border-sky-800/80 shrink-0">
+                  Quick Access
+                </span>
+              </div>
+              <p class="text-xs sm:text-sm text-slate-400 mt-0.5 truncate">
+                Browse every lecture, sheet, and summary across all subjects
+              </p>
+            </div>
+          </div>
+          <div class="flex items-center gap-3 shrink-0">
+            <span id="all-docs-counter" class="text-xs font-mono font-semibold px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-800 text-slate-300 group-hover:border-sky-500/40 transition">
+              ...
+            </span>
+            <svg class="w-5 h-5 text-slate-500 group-hover:text-sky-400 group-hover:translate-x-0.5 transition" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+            </svg>
+          </div>
+        </button>
+      </div>
 
-      <!-- Category Navigation Tabs (Dynamically Discovered from GitHub content/ folders) -->
-      <div class="mt-5 sm:mt-6">
-        <div class="flex items-center justify-between">
-          <span class="text-xs font-semibold uppercase tracking-wider text-slate-400">Categories</span>
+      <!-- Section Label -->
+      <div class="flex items-center justify-between mb-3 px-1">
+        <span class="text-xs font-semibold uppercase tracking-wider text-slate-400">Folders & Subjects</span>
+        <span class="text-xs font-mono text-slate-500" id="folders-count-label"></span>
+      </div>
+
+      <!-- Google Drive Style Vertical Folder List Container -->
+      <div id="folders-list-container" class="space-y-2.5 sm:space-y-3">
+        <!-- Skeleton Folder Items -->
+        <div class="bg-slate-900/60 border border-slate-800 rounded-xl p-4 skeleton h-16"></div>
+        <div class="bg-slate-900/60 border border-slate-800 rounded-xl p-4 skeleton h-16"></div>
+        <div class="bg-slate-900/60 border border-slate-800 rounded-xl p-4 skeleton h-16"></div>
+      </div>
+
+    </section>
+
+    <!-- VIEW 2: FOLDER DOCUMENTS VIEW (Google Drive Style Drill-down) -->
+    <section id="folder-docs-view" class="hidden transition-all duration-200">
+      
+      <!-- Drill-down Header with Clear "← Back to Folders" Navigation -->
+      <div class="mb-6 pb-4 border-b border-slate-800/80 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div class="flex items-center gap-3 min-w-0">
+          <button 
+            type="button" 
+            onclick="backToFolders(event)"
+            title="Return to folders list (Esc)"
+            class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white border border-slate-700 transition active:scale-95 shadow-sm shrink-0">
+            <svg class="w-4 h-4 text-sky-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+            <span>Back to Folders</span>
+          </button>
+
+          <!-- Breadcrumbs & Active Folder Name -->
+          <div class="min-w-0 flex items-center gap-2">
+            <span class="text-slate-500 text-xs hidden xs:inline">/</span>
+            <div id="active-folder-header" class="flex items-center gap-2 truncate">
+              <!-- Populated by JS -->
+            </div>
+          </div>
         </div>
-        <!-- Touch-Friendly Smooth Scrolling Category Bar -->
-        <div class="mt-2.5 flex items-center gap-2 overflow-x-auto pb-2 hide-scrollbar -webkit-overflow-scrolling-touch" id="category-tabs-container">
-          <!-- Populated by JS -->
-          <div class="h-9 w-24 bg-slate-800/60 rounded-lg skeleton"></div>
-          <div class="h-9 w-28 bg-slate-800/60 rounded-lg skeleton"></div>
-          <div class="h-9 w-28 bg-slate-800/60 rounded-lg skeleton"></div>
+
+        <!-- Files counter badge inside current folder -->
+        <div class="self-start sm:self-auto">
+          <span id="folder-files-count-badge" class="text-xs font-mono font-medium px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-800 text-slate-400">
+            0 files
+          </span>
         </div>
       </div>
-    </div>
 
-    <!-- Cards Grid Container -->
-    <div id="cards-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
-      <!-- Skeleton Loading Cards -->
-      <div class="bg-slate-900/60 border border-slate-800 rounded-xl p-5 skeleton h-48"></div>
-      <div class="bg-slate-900/60 border border-slate-800 rounded-xl p-5 skeleton h-48"></div>
-      <div class="bg-slate-900/60 border border-slate-800 rounded-xl p-5 skeleton h-48"></div>
-    </div>
-
-    <!-- Empty State Container -->
-    <div id="empty-state" class="hidden text-center py-16 px-4 bg-slate-900/30 border border-dashed border-slate-800 rounded-2xl my-8">
-      <div class="w-14 h-14 mx-auto rounded-full bg-slate-800/80 flex items-center justify-center text-slate-400 mb-3">
-        <svg class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-        </svg>
+      <!-- Cards Grid Container -->
+      <div id="cards-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
+        <!-- Document cards rendered here -->
       </div>
-      <h3 class="text-lg font-semibold text-slate-200">No Documents Found</h3>
-      <p class="text-sm text-slate-400 max-w-md mx-auto mt-1" id="empty-state-message">
-        No HTML files were discovered in this folder.
-      </p>
-    </div>
+
+      <!-- Empty State for Folder -->
+      <div id="empty-state" class="hidden text-center py-16 px-4 bg-slate-900/30 border border-dashed border-slate-800 rounded-2xl my-6">
+        <div class="w-14 h-14 mx-auto rounded-full bg-slate-800/80 flex items-center justify-center text-slate-400 mb-3">
+          <svg class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+          </svg>
+        </div>
+        <h3 class="text-lg font-semibold text-slate-200">No Documents Found</h3>
+        <p class="text-sm text-slate-400 max-w-md mx-auto mt-1" id="empty-state-message">
+          No HTML files were found in this folder.
+        </p>
+      </div>
+
+    </section>
 
   </main>
 
   <!-- ======================================================== -->
   <!-- 3. IN-APP FULL-SCREEN DOCUMENT VIEWER                    -->
   <!-- ======================================================== -->
-  <section id="viewer-view" class="fixed inset-0 z-50 bg-[#090d16] flex flex-col hidden select-none overflow-hidden">
+  <section id="viewer-view" class="fixed inset-0 z-50 bg-[#090d16] hidden select-none overflow-hidden">
     
-    <!-- Mobile-Optimized Top Toolbar with Auto-Hide on Downward Scroll -->
-    <div id="viewer-toolbar" class="fixed top-0 left-0 right-0 z-40 h-12 sm:h-14 bg-[#0f172a]/95 backdrop-blur-md border-b border-slate-800 px-2.5 sm:px-5 flex items-center justify-between gap-2 shadow-xl">
+    <!-- Floating Overlay Top Toolbar: position: fixed; top: 0; left: 0; right: 0; z-index: 50; 
+         Features sleek semi-transparent dark background and backdrop-filter: blur(10px).
+         Slides up (-100%) on scroll down; reveals on scroll up or tap.
+         ZERO GAP / MARGIN BEHIND IT! -->
+    <div id="viewer-toolbar" class="fixed top-0 left-0 right-0 z-50 h-12 sm:h-14 bg-[#0f172a]/80 backdrop-blur-md border-b border-slate-800/80 px-2.5 sm:px-5 flex items-center justify-between gap-2 shadow-2xl">
       
       <!-- Left: Compact Back Button & Document Details -->
       <div class="flex items-center gap-1.5 sm:gap-2.5 min-w-0 flex-1">
-        <button id="viewer-back-btn" type="button" title="Back to document list (Esc)" class="flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 hover:border-slate-600 transition active:scale-95 shrink-0 shadow-sm">
+        <button id="viewer-back-btn" type="button" title="Back to document list (Esc)" class="flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-slate-800/90 hover:bg-slate-700 text-slate-200 border border-slate-700 hover:border-slate-600 transition active:scale-95 shrink-0 shadow-sm">
           <svg class="w-3.5 h-3.5 text-sky-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
             <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
           </svg>
@@ -240,7 +308,7 @@
       <div class="flex items-center gap-1 sm:gap-1.5 shrink-0">
         
         <!-- Zoom Controls -->
-        <div class="flex items-center bg-slate-900 border border-slate-800 rounded-lg p-0.5 text-xs font-mono">
+        <div class="flex items-center bg-slate-900/90 border border-slate-800 rounded-lg p-0.5 text-xs font-mono">
           <button id="zoom-out-btn" type="button" title="Zoom Out" class="p-1 sm:px-1.5 rounded hover:bg-slate-800 text-slate-300 hover:text-white transition">
             <svg class="w-3 h-3 sm:w-3.5 sm:h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
               <path stroke-linecap="round" stroke-linejoin="round" d="M20 12H4" />
@@ -258,7 +326,7 @@
         </div>
 
         <!-- Full Screen Toggle -->
-        <button id="fullscreen-toggle-btn" type="button" title="Toggle Fullscreen" class="p-1.5 sm:p-2 rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-800 transition">
+        <button id="fullscreen-toggle-btn" type="button" title="Toggle Fullscreen" class="p-1.5 sm:p-2 rounded-lg bg-slate-900/90 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-800 transition">
           <svg id="fullscreen-icon-expand" class="w-3.5 h-3.5 sm:w-4 sm:h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
             <path stroke-linecap="round" stroke-linejoin="round" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
           </svg>
@@ -278,8 +346,9 @@
       </div>
     </div>
 
-    <!-- Reader Frame Container with Smooth Loading Indicator -->
-    <div id="reader-frame-container" class="relative flex-1 w-full h-full bg-[#090d16] pt-12 sm:pt-14 overflow-hidden flex flex-col">
+    <!-- Full-Viewport Reader Frame Container: position: absolute; inset: 0; width: 100%; height: 100vh;
+         Sits directly beneath the floating bar with 0 gap/margin! -->
+    <div id="reader-frame-container" class="absolute inset-0 w-full h-full bg-[#090d16] overflow-hidden">
       
       <!-- Loading Overlay inside Reader -->
       <div id="iframe-loader" class="absolute inset-0 flex flex-col items-center justify-center bg-[#090d16] z-20 transition-opacity duration-300">
@@ -287,16 +356,14 @@
         <p class="text-sm font-medium text-slate-400 mt-4">Rendering document...</p>
       </div>
 
-      <!-- Direct Iframe Reader (Zero Container Transform, 100% Full Width, Centered) -->
-      <div class="w-full h-full flex-1 relative overflow-hidden bg-[#090d16]">
-        <iframe 
-          id="reader-iframe" 
-          class="w-full h-full border-0 bg-transparent block" 
-          sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
-          loading="eager"
-          title="Document Reader">
-        </iframe>
-      </div>
+      <!-- Direct Iframe Reader (Zero Container Transform, 100% Full Viewport Width & Height) -->
+      <iframe 
+        id="reader-iframe" 
+        class="w-full h-full border-0 bg-transparent block" 
+        sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
+        loading="eager"
+        title="Document Reader">
+      </iframe>
 
       <!-- Floating Scroll-to-Top Button -->
       <button 
@@ -338,7 +405,7 @@
     </div>
   </div>
 
-  <!-- Toast Container -->
+  <!-- Toast Notification Container -->
   <div id="toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 pointer-events-none hidden px-4 py-2.5 rounded-xl bg-slate-800 border border-slate-700 text-white text-xs font-medium shadow-2xl flex items-center gap-2">
     <svg class="w-4 h-4 text-emerald-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
       <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
@@ -351,7 +418,7 @@
   <!-- ======================================================== -->
   <script>
     // ==========================================================
-    // CONFIGURATION CONSTANTS (Repository Details)
+    // CONFIGURATION CONSTANTS (Set your GitHub Details Here)
     // ==========================================================
     const GITHUB_USERNAME = "Omar-Hedaya"; // Your GitHub username
     const GITHUB_REPO = "AI-SUMMARY-";       // Your repository name
@@ -361,9 +428,9 @@
     // State Variables
     let currentUsername = GITHUB_USERNAME;
     let currentRepo = GITHUB_REPO;
-    let discoveredCategories = []; // e.g. ["lectures", "sheets", "summaries", "exams"]
+    let discoveredCategories = []; // e.g. ["Math 2", "lectures", "sheets", "summaries", "exams"]
     let allDocuments = [];         // All discovered HTML file objects
-    let activeCategory = "all";    // Current selected tab
+    let activeFolder = null;       // Active folder in drill-down view (null = root directory)
     let currentDocument = null;    // Currently opened document in viewer
     let currentZoom = 1.0;         // Zoom factor (1.0 = 100%)
     let deferredPwaPrompt = null;  // PWA Install prompt event
@@ -372,36 +439,55 @@
     let lastScrollY = 0;
     let isToolbarHidden = false;
 
-    // Category Visual Configuration
+    // Visual Themes for Folders and Categories
     const CATEGORY_THEMES = {
-      lectures: {
+      "math 2": {
+        label: "Math 2",
+        iconColor: "text-cyan-400",
+        iconBg: "bg-cyan-500/10 border-cyan-500/30 group-hover:bg-cyan-500/20",
+        badge: "bg-cyan-950/70 text-cyan-300 border-cyan-700/60",
+        accent: "#22d3ee"
+      },
+      "lectures": {
         label: "Lectures",
+        iconColor: "text-indigo-400",
+        iconBg: "bg-indigo-500/10 border-indigo-500/30 group-hover:bg-indigo-500/20",
         badge: "bg-indigo-950/70 text-indigo-300 border-indigo-700/60",
-        tabActive: "bg-indigo-600 text-white shadow-indigo-500/25",
         accent: "#818cf8"
       },
-      sheets: {
+      "sheets": {
         label: "Sheets",
+        iconColor: "text-emerald-400",
+        iconBg: "bg-emerald-500/10 border-emerald-500/30 group-hover:bg-emerald-500/20",
         badge: "bg-emerald-950/70 text-emerald-300 border-emerald-700/60",
-        tabActive: "bg-emerald-600 text-white shadow-emerald-500/25",
         accent: "#34d399"
       },
-      summaries: {
+      "summaries": {
         label: "Summaries",
+        iconColor: "text-amber-400",
+        iconBg: "bg-amber-500/10 border-amber-500/30 group-hover:bg-amber-500/20",
         badge: "bg-amber-950/70 text-amber-300 border-amber-700/60",
-        tabActive: "bg-amber-600 text-white shadow-amber-500/25",
         accent: "#fbbf24"
       },
-      exams: {
+      "exams": {
         label: "Exams",
+        iconColor: "text-rose-400",
+        iconBg: "bg-rose-500/10 border-rose-500/30 group-hover:bg-rose-500/20",
         badge: "bg-rose-950/70 text-rose-300 border-rose-700/60",
-        tabActive: "bg-rose-600 text-white shadow-rose-500/25",
         accent: "#fb7185"
       },
-      default: {
-        label: "Docs",
+      "power control": {
+        label: "Power Control",
+        iconColor: "text-purple-400",
+        iconBg: "bg-purple-500/10 border-purple-500/30 group-hover:bg-purple-500/20",
+        badge: "bg-purple-950/70 text-purple-300 border-purple-700/60",
+        accent: "#c084fc"
+      },
+      "default": {
+        label: "Folder",
+        iconColor: "text-sky-400",
+        iconBg: "bg-sky-500/10 border-sky-500/30 group-hover:bg-sky-500/20",
         badge: "bg-sky-950/70 text-sky-300 border-sky-700/60",
-        tabActive: "bg-sky-600 text-white shadow-sky-500/25",
         accent: "#38bdf8"
       }
     };
@@ -411,10 +497,10 @@
       {
         name: "All Math 2 (Lectures Summary + Sheets Answers).html",
         title: "All Math 2 (Lectures Summary + Sheets Answers)",
-        category: "sheets",
+        category: "Math 2",
         slug: "all-math-2-lectures-summary-sheets-answers",
-        path: "content/sheets/All Math 2 (Lectures Summary + Sheets Answers).html",
-        localUrl: "./content/sheets/All Math 2 (Lectures Summary + Sheets Answers).html",
+        path: "content/Math 2/All Math 2 (Lectures Summary + Sheets Answers).html",
+        localUrl: "./content/Math 2/All Math 2 (Lectures Summary + Sheets Answers).html",
         size: 495000
       },
       {
@@ -480,10 +566,19 @@
 
     function formatCategoryName(cat) {
       if (!cat) return "Docs";
-      if (CATEGORY_THEMES[cat.toLowerCase()]) {
-        return CATEGORY_THEMES[cat.toLowerCase()].label;
+      const key = cat.toLowerCase();
+      if (CATEGORY_THEMES[key]) {
+        return CATEGORY_THEMES[key].label;
       }
-      return cat.charAt(0).toUpperCase() + cat.slice(1);
+      return cat
+        .replace(/[-_]+/g, " ")
+        .replace(/\b\w/g, c => c.toUpperCase());
+    }
+
+    function getCategoryTheme(cat) {
+      if (!cat) return CATEGORY_THEMES.default;
+      const key = cat.toLowerCase();
+      return CATEGORY_THEMES[key] || CATEGORY_THEMES.default;
     }
 
     function formatBytes(bytes) {
@@ -513,7 +608,7 @@
     }
 
     function getCacheKey(user, repo) {
-      return `aihub_cache_v5_${user}_${repo}`;
+      return `aihub_cache_v6_${user}_${repo}`;
     }
 
     // ==========================================================
@@ -588,7 +683,7 @@
 
         // Extract subdirectories inside content/
         const dirItems = items.filter(item => item.type === "dir");
-        const categoriesFound = dirItems.map(d => d.name.toLowerCase());
+        const categoriesFound = dirItems.map(d => d.name);
 
         // For each subdirectory, fetch all HTML files
         const docPromises = dirItems.map(async (dir) => {
@@ -605,7 +700,7 @@
               .map(file => ({
                 name: file.name,
                 title: formatTitle(file.name),
-                category: dir.name.toLowerCase(),
+                category: dir.name,
                 slug: generateSlug(file.name),
                 path: file.path,
                 downloadUrl: file.download_url,
@@ -629,7 +724,7 @@
           BUNDLED_SAMPLE_DOCS.forEach(sample => {
             if (!allDocuments.some(d => d.slug === sample.slug || d.name === sample.name)) {
               allDocuments.push(sample);
-              if (!discoveredCategories.includes(sample.category)) {
+              if (!discoveredCategories.some(c => c.toLowerCase() === sample.category.toLowerCase())) {
                 discoveredCategories.push(sample.category);
               }
             }
@@ -658,7 +753,7 @@
 
     function showRateLimitFallback(resetTime) {
       const banner = document.getElementById("status-banner");
-      banner.className = "mt-4 p-4 rounded-xl text-sm border bg-amber-950/40 border-amber-800/80 text-amber-200 flex items-start gap-3";
+      banner.className = "mb-6 p-4 rounded-xl text-sm border bg-amber-950/40 border-amber-800/80 text-amber-200 flex items-start gap-3";
       banner.innerHTML = `
         <svg class="w-5 h-5 text-amber-400 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
@@ -666,7 +761,7 @@
         <div>
           <strong class="font-semibold text-white">GitHub API Unauthenticated Rate Limit:</strong>
           Rate limit reached. Reset occurs around <span class="font-mono font-bold">${resetTime}</span>.
-          Displaying cached and local study sheets so viewing remains seamless.
+          Displaying cached and local study folders so browsing remains fast and seamless.
         </div>
       `;
       banner.classList.remove("hidden");
@@ -675,14 +770,14 @@
 
     function showRepoNotFoundFallback() {
       const banner = document.getElementById("status-banner");
-      banner.className = "mt-4 p-4 rounded-xl text-sm border bg-slate-900 border-sky-800/60 text-slate-300 flex items-start gap-3";
+      banner.className = "mb-6 p-4 rounded-xl text-sm border bg-slate-900 border-sky-800/60 text-slate-300 flex items-start gap-3";
       banner.innerHTML = `
         <svg class="w-5 h-5 text-sky-400 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
         <div class="flex-1">
           <strong class="font-semibold text-white">Repository Connected:</strong>
-          Displaying your study materials from <code class="text-sky-300 font-mono text-xs bg-slate-950 px-1.5 py-0.5 rounded">content/</code> for instant in-browser reading.
+          Displaying your study folders from <code class="text-sky-300 font-mono text-xs bg-slate-950 px-1.5 py-0.5 rounded">content/</code> for instant in-browser reading.
         </div>
       `;
       banner.classList.remove("hidden");
@@ -691,14 +786,14 @@
 
     function showEmptyRepoBanner() {
       const banner = document.getElementById("status-banner");
-      banner.className = "mt-4 p-4 rounded-xl text-sm border bg-slate-900 border-slate-700 text-slate-300 flex items-start gap-3";
+      banner.className = "mb-6 p-4 rounded-xl text-sm border bg-slate-900 border-slate-700 text-slate-300 flex items-start gap-3";
       banner.innerHTML = `
         <svg class="w-5 h-5 text-sky-400 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
         <div>
           <strong class="font-semibold text-white">Folder Notice:</strong>
-          Loaded available local study sheets.
+          Loaded available local study folders and documents.
         </div>
       `;
       banner.classList.remove("hidden");
@@ -707,85 +802,200 @@
 
     function fallbackToLocalSamples() {
       allDocuments = BUNDLED_SAMPLE_DOCS;
-      discoveredCategories = ["lectures", "sheets", "summaries", "exams"];
+      discoveredCategories = ["Math 2", "lectures", "sheets", "summaries", "exams"];
     }
 
     // ==========================================================
-    // RENDERING: CATEGORY TABS & CARDS GRID (NO SEARCH BAR)
+    // GOOGLE DRIVE STYLE FOLDER NAVIGATION & RENDERING
     // ==========================================================
+
+    function getUniqueCategories() {
+      const catsMap = new Map();
+      
+      discoveredCategories.forEach(cat => {
+        if (cat) catsMap.set(cat.toLowerCase(), cat);
+      });
+
+      allDocuments.forEach(doc => {
+        if (doc.category && !catsMap.has(doc.category.toLowerCase())) {
+          catsMap.set(doc.category.toLowerCase(), doc.category);
+        }
+      });
+
+      return Array.from(catsMap.values());
+    }
 
     function renderUI() {
-      renderCategoryTabs();
-      renderDocumentCards();
-      updateTotalCountBadge();
+      updateTotalCountBadges();
+      renderFoldersList();
+      if (activeFolder) {
+        renderFolderDocuments(activeFolder);
+      }
     }
 
-    function updateTotalCountBadge() {
-      const badge = document.getElementById("total-docs-count");
-      if (!badge) return;
-      const count = allDocuments.length;
-      badge.textContent = `${count} ${count === 1 ? 'Document' : 'Documents'} Available`;
+    function updateTotalCountBadges() {
+      const totalDocsEl = document.getElementById("total-docs-count");
+      const allDocsCounter = document.getElementById("all-docs-counter");
+      const foldersCountLabel = document.getElementById("folders-count-label");
+
+      const totalDocs = allDocuments.length;
+      const categories = getUniqueCategories();
+
+      if (totalDocsEl) {
+        totalDocsEl.textContent = `${categories.length} Folders • ${totalDocs} ${totalDocs === 1 ? 'Doc' : 'Docs'}`;
+      }
+
+      if (allDocsCounter) {
+        allDocsCounter.textContent = `${totalDocs} ${totalDocs === 1 ? 'file' : 'files'}`;
+      }
+
+      if (foldersCountLabel) {
+        foldersCountLabel.textContent = `${categories.length} folders detected`;
+      }
     }
 
-    function renderCategoryTabs() {
-      const container = document.getElementById("category-tabs-container");
+    // Render the Google Drive Style Vertical Folders List
+    function renderFoldersList() {
+      const container = document.getElementById("folders-list-container");
       if (!container) return;
 
-      const uniqueCats = Array.from(new Set([
-        ...discoveredCategories,
-        ...allDocuments.map(d => d.category.toLowerCase())
-      ])).filter(Boolean);
+      const categories = getUniqueCategories();
 
-      const tabs = [
-        { id: "all", label: "All", count: allDocuments.length },
-        ...uniqueCats.map(cat => ({
-          id: cat,
-          label: formatCategoryName(cat),
-          count: allDocuments.filter(d => d.category.toLowerCase() === cat).length
-        }))
-      ];
+      if (categories.length === 0) {
+        container.innerHTML = `
+          <div class="text-center py-8 text-slate-500 text-sm">
+            Scanning for folders in content/...
+          </div>
+        `;
+        return;
+      }
 
-      container.innerHTML = tabs.map(tab => {
-        const isActive = activeCategory === tab.id;
-        const theme = CATEGORY_THEMES[tab.id] || CATEGORY_THEMES.default;
-        
-        let tabClasses = "flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition cursor-pointer select-none ";
-        if (isActive) {
-          tabClasses += (tab.id === 'all' ? 'bg-sky-600 text-white shadow-lg shadow-sky-600/30 ring-1 ring-sky-400' : `${theme.tabActive} shadow-lg ring-1 ring-white/20`);
-        } else {
-          tabClasses += "bg-slate-900/90 text-slate-400 hover:text-slate-200 hover:bg-slate-800 border border-slate-800";
-        }
+      container.innerHTML = categories.map(cat => {
+        const catDocs = allDocuments.filter(d => d.category.toLowerCase() === cat.toLowerCase());
+        const count = catDocs.length;
+        const theme = getCategoryTheme(cat);
+        const displayName = formatCategoryName(cat);
 
         return `
-          <button type="button" onclick="selectCategory('${tab.id}')" class="${tabClasses}">
-            <span>${tab.label}</span>
-            <span class="text-[10px] px-1.5 py-0.2 rounded-full ${isActive ? 'bg-black/30 text-white' : 'bg-slate-800 text-slate-400'} font-mono">${tab.count}</span>
+          <button 
+            type="button" 
+            onclick="openFolder('${encodeURIComponent(cat)}')"
+            class="w-full text-left group bg-[#0f172a] hover:bg-[#131d33] border border-slate-800 hover:border-slate-700 hover:border-l-4 hover:border-l-${theme.accent} rounded-xl p-3.5 sm:p-4 flex items-center justify-between gap-3 transition-all duration-200 active:scale-[0.99] shadow-sm">
+            
+            <div class="flex items-center gap-3.5 min-w-0">
+              <!-- Google Drive Style Folder SVG Icon with Distinct Category Accent -->
+              <div class="w-10 h-10 rounded-lg ${theme.iconBg} border flex items-center justify-center shrink-0 ${theme.iconColor} group-hover:scale-105 transition">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M19.5 21a3 3 0 003-3v-4.5a3 3 0 00-3-3h-1.5V9a3 3 0 00-3-3h-4.636a3 3 0 01-2.121-.879L6.879 3.757A3 3 0 004.757 3H3a3 3 0 00-3 3v12a3 3 0 003 3h16.5z" />
+                </svg>
+              </div>
+
+              <!-- Folder Details -->
+              <div class="min-w-0">
+                <h3 class="text-sm sm:text-base font-bold text-white group-hover:text-sky-300 transition truncate">
+                  ${displayName}
+                </h3>
+                <p class="text-xs font-mono text-slate-400 mt-0.5 truncate">
+                  content/${cat}
+                </p>
+              </div>
+            </div>
+
+            <!-- Right: Item Counter Badge & Arrow -->
+            <div class="flex items-center gap-2.5 sm:gap-3 shrink-0">
+              <span class="text-xs font-mono px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-800 text-slate-300 group-hover:border-slate-700 transition">
+                ${count} ${count === 1 ? 'file' : 'files'}
+              </span>
+              <svg class="w-4 h-4 sm:w-5 sm:h-5 text-slate-500 group-hover:text-sky-400 group-hover:translate-x-0.5 transition" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+              </svg>
+            </div>
+
           </button>
         `;
       }).join("");
     }
 
-    function selectCategory(category) {
-      activeCategory = category;
-      renderCategoryTabs();
-      renderDocumentCards();
+    // Open a specific folder (Displays its documents in card view)
+    function openFolder(categoryEncoded) {
+      const category = decodeURIComponent(categoryEncoded);
+      activeFolder = category;
+
+      const foldersView = document.getElementById("folders-directory-view");
+      const folderDocsView = document.getElementById("folder-docs-view");
+
+      if (foldersView) foldersView.classList.add("hidden");
+      if (folderDocsView) folderDocsView.classList.remove("hidden");
+
+      renderFolderDocuments(category);
+
+      // Update URL hash for folder deep linking
+      const folderHash = category === "all" ? "#all" : `#folder/${encodeURIComponent(category.toLowerCase())}`;
+      if (window.location.hash !== folderHash && !currentDocument) {
+        window.history.pushState(null, "", folderHash);
+      }
+
+      window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
-    function renderDocumentCards() {
+    // Return back to the Folders Directory View
+    function backToFolders(e) {
+      if (e) e.preventDefault();
+      activeFolder = null;
+
+      const foldersView = document.getElementById("folders-directory-view");
+      const folderDocsView = document.getElementById("folder-docs-view");
+
+      if (folderDocsView) folderDocsView.classList.add("hidden");
+      if (foldersView) foldersView.classList.remove("hidden");
+
+      // Reset hash if not viewing a doc
+      if (!currentDocument && window.location.hash) {
+        window.history.pushState(null, "", window.location.pathname + window.location.search);
+      }
+
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    // Render documents inside the selected folder
+    function renderFolderDocuments(category) {
+      const activeHeader = document.getElementById("active-folder-header");
+      const countBadge = document.getElementById("folder-files-count-badge");
       const container = document.getElementById("cards-container");
       const emptyState = document.getElementById("empty-state");
-      if (!container) return;
 
-      const filtered = activeCategory === "all"
+      const isAll = category === "all";
+      const filtered = isAll
         ? allDocuments
-        : allDocuments.filter(d => d.category.toLowerCase() === activeCategory);
+        : allDocuments.filter(d => d.category.toLowerCase() === category.toLowerCase());
+
+      const theme = isAll ? CATEGORY_THEMES.default : getCategoryTheme(category);
+      const displayName = isAll ? "All Documents" : formatCategoryName(category);
+
+      // Update Header Breadcrumb
+      if (activeHeader) {
+        activeHeader.innerHTML = `
+          <div class="w-6 h-6 rounded-md ${theme.iconBg} border flex items-center justify-center shrink-0 ${theme.iconColor}">
+            <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M19.5 21a3 3 0 003-3v-4.5a3 3 0 00-3-3h-1.5V9a3 3 0 00-3-3h-4.636a3 3 0 01-2.121-.879L6.879 3.757A3 3 0 004.757 3H3a3 3 0 00-3 3v12a3 3 0 003 3h16.5z" />
+            </svg>
+          </div>
+          <h2 class="text-sm sm:text-base font-bold text-white truncate">${displayName}</h2>
+        `;
+      }
+
+      if (countBadge) {
+        countBadge.textContent = `${filtered.length} ${filtered.length === 1 ? 'document' : 'documents'}`;
+      }
+
+      if (!container) return;
 
       if (filtered.length === 0) {
         container.innerHTML = "";
         if (emptyState) {
           emptyState.classList.remove("hidden");
           const msg = document.getElementById("empty-state-message");
-          if (msg) msg.textContent = `No documents found under "${formatCategoryName(activeCategory)}".`;
+          if (msg) msg.textContent = `No HTML documents were discovered in folder "${displayName}".`;
         }
         return;
       }
@@ -793,8 +1003,7 @@
       if (emptyState) emptyState.classList.add("hidden");
 
       container.innerHTML = filtered.map(doc => {
-        const catKey = doc.category.toLowerCase();
-        const theme = CATEGORY_THEMES[catKey] || CATEGORY_THEMES.default;
+        const docTheme = getCategoryTheme(doc.category);
         const sizeLabel = formatBytes(doc.size);
 
         return `
@@ -802,7 +1011,7 @@
             <div>
               <!-- Category Pill & Extension -->
               <div class="flex items-center justify-between mb-2.5 sm:mb-3">
-                <span class="inline-flex items-center text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full border ${theme.badge}">
+                <span class="inline-flex items-center text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full border ${docTheme.badge}">
                   ${formatCategoryName(doc.category)}
                 </span>
                 <span class="text-[11px] font-mono text-slate-400 group-hover:text-slate-300">
@@ -816,7 +1025,7 @@
               </h3>
 
               <!-- Raw Filename / Path -->
-              <p class="text-xs font-mono text-slate-400 mt-2 truncate group-hover:text-slate-400">
+              <p class="text-xs font-mono text-slate-400 mt-2 truncate group-hover:text-slate-400" title="${doc.name}">
                 ${doc.name}
               </p>
             </div>
@@ -830,7 +1039,7 @@
               <button 
                 type="button" 
                 onclick="openDocumentViewer('${encodeURIComponent(doc.category)}', '${encodeURIComponent(doc.slug)}')"
-                class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-sky-500/10 text-sky-400 hover:bg-sky-500 hover:text-slate-950 border border-sky-500/30 transition active:scale-95">
+                class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-sky-500/10 text-sky-400 hover:bg-sky-500 hover:text-slate-950 border border-sky-500/30 transition active:scale-95 shadow-sm">
                 <span>Read Doc</span>
                 <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
@@ -843,7 +1052,7 @@
     }
 
     // ==========================================================
-    // IN-APP DOCUMENT VIEWER LOGIC (NO PRINT/PDF BUTTONS)
+    // IN-APP DOCUMENT VIEWER LOGIC (NO SIDE GAPS / NO TOP VOID)
     // ==========================================================
 
     async function openDocumentViewer(categoryEncoded, slugEncoded) {
@@ -861,6 +1070,7 @@
       }
 
       currentDocument = doc;
+      activeFolder = doc.category;
       currentZoom = 1.0;
       updateZoomLevelDisplay();
 
@@ -879,12 +1089,12 @@
       titleEl.textContent = doc.title;
       titleEl.title = doc.title;
 
-      const theme = CATEGORY_THEMES[doc.category.toLowerCase()] || CATEGORY_THEMES.default;
+      const theme = getCategoryTheme(doc.category);
       categoryBadge.textContent = formatCategoryName(doc.category);
       categoryBadge.className = `hidden md:inline-block text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full border ${theme.badge} shrink-0`;
 
       // Update URL Hash Deep Route
-      const targetHash = `#${doc.category}/${doc.slug}`;
+      const targetHash = `#${encodeURIComponent(doc.category.toLowerCase())}/${encodeURIComponent(doc.slug)}`;
       if (window.location.hash !== targetHash) {
         window.history.pushState(null, "", targetHash);
       }
@@ -932,7 +1142,7 @@
         }
 
         // Strategy B: Direct relative URL
-        const contentUrl = doc.localUrl || `./content/${doc.category}/${encodeURIComponent(doc.name)}`;
+        const contentUrl = doc.localUrl || `./content/${encodeURIComponent(doc.category)}/${encodeURIComponent(doc.name)}`;
         
         try {
           const localRes = await fetch(contentUrl);
@@ -957,7 +1167,7 @@
           iframe.srcdoc = cachedHtml;
         } else {
           iframe.removeAttribute("srcdoc");
-          iframe.src = doc.localUrl || `./content/${doc.category}/${doc.name}`;
+          iframe.src = doc.localUrl || `./content/${encodeURIComponent(doc.category)}/${encodeURIComponent(doc.name)}`;
         }
         attachIframeListeners(iframe, loader);
       }
@@ -976,7 +1186,7 @@
           const iDoc = iframe.contentDocument || iframe.contentWindow.document;
           const iWin = iframe.contentWindow;
 
-          // Adapt styles for Notion / light-themed exports (ensures high contrast)
+          // Adapt styles for high contrast & ensure clean padding under floating bar
           adaptIframeThemeSafeguard(iDoc);
 
           // Apply direct internal zoom
@@ -1002,7 +1212,7 @@
     }
 
     // ==========================================================
-    // THEME ADAPTATION SAFEGUARD (Handles Notion / Light-text / Dark-text)
+    // THEME & VIEWPORT SAFEGUARD
     // ==========================================================
 
     function adaptIframeThemeSafeguard(iDoc) {
@@ -1014,7 +1224,7 @@
 
         const isTransparent = compBg === "transparent" || compBg === "rgba(0, 0, 0, 0)";
 
-        // Check if text is dark (e.g. Notion export or default black)
+        // Check text brightness
         let isDarkText = false;
         const rgbMatch = compColor.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/);
         if (rgbMatch) {
@@ -1025,20 +1235,22 @@
           }
         }
 
-        // If the document has dark text and no background specified,
-        // give it an explicit clean white background card so text is crisp and readable!
         if (isTransparent && isDarkText) {
           body.style.backgroundColor = "#ffffff";
           body.style.color = "#1e293b";
           body.style.minHeight = "100vh";
-          body.style.padding = body.style.padding || "1.25rem";
         } else if (isTransparent) {
-          // Document has light or normal text; inherit deep dark background cleanly
           body.style.backgroundColor = "#090d16";
           body.style.color = "#e2e8f0";
         }
 
-        // Ensure proper responsive width & prevent horizontal page voids
+        // Add comfortable top padding so initial document title sits gracefully beneath the frosted bar
+        const currentPadTop = parseInt(window.getComputedStyle(body).paddingTop) || 0;
+        if (currentPadTop < 50) {
+          body.style.paddingTop = "3.8rem";
+        }
+
+        // Ensure 100% full width and no horizontal void
         iDoc.documentElement.style.width = "100%";
         body.style.width = "100%";
         body.style.maxWidth = "100%";
@@ -1125,9 +1337,14 @@
       viewerView.classList.add("hidden");
       document.body.style.overflow = "";
       if (iframe) iframe.src = "about:blank";
+      
+      const previousDoc = currentDocument;
       currentDocument = null;
 
-      if (window.location.hash && window.location.hash !== "#") {
+      // Restore folder view url hash
+      if (previousDoc && previousDoc.category) {
+        window.history.pushState(null, "", `#folder/${encodeURIComponent(previousDoc.category.toLowerCase())}`);
+      } else {
         window.history.pushState(null, "", window.location.pathname + window.location.search);
       }
 
@@ -1218,7 +1435,7 @@
 
     async function copyDirectLink() {
       if (!currentDocument) return;
-      const shareUrl = `${window.location.origin}${window.location.pathname}#${currentDocument.category}/${currentDocument.slug}`;
+      const shareUrl = `${window.location.origin}${window.location.pathname}#${encodeURIComponent(currentDocument.category.toLowerCase())}/${encodeURIComponent(currentDocument.slug)}`;
 
       try {
         await navigator.clipboard.writeText(shareUrl);
@@ -1242,16 +1459,34 @@
       const hash = window.location.hash.replace(/^#/, "");
       if (!hash) return;
 
+      // Case 1: Folder deep link (e.g. #all, #folder/sheets, #folder/math%202)
+      if (hash === "all") {
+        openFolder("all");
+        return;
+      }
+      if (hash.startsWith("folder/")) {
+        const folderName = decodeURIComponent(hash.replace(/^folder\//, ""));
+        openFolder(folderName);
+        return;
+      }
+
+      // Case 2: Document deep link (e.g. #sheets/thermo-sheet-1)
       const parts = hash.split("/").filter(Boolean);
       if (parts.length >= 2) {
-        const category = parts[0];
-        const slug = parts[1];
+        const category = decodeURIComponent(parts[0]);
+        const slug = decodeURIComponent(parts[1]);
         openDocumentViewer(category, slug);
       } else if (parts.length === 1) {
-        const slug = parts[0];
-        const match = allDocuments.find(d => d.slug === slug || d.name === slug);
-        if (match) {
-          openDocumentViewer(match.category, match.slug);
+        const single = decodeURIComponent(parts[0]);
+        // Check if it's a category
+        const isCat = getUniqueCategories().some(c => c.toLowerCase() === single.toLowerCase());
+        if (isCat) {
+          openFolder(single);
+        } else {
+          const match = allDocuments.find(d => d.slug === single || d.name === single);
+          if (match) {
+            openDocumentViewer(match.category, match.slug);
+          }
         }
       }
     }
@@ -1260,15 +1495,20 @@
       const hash = window.location.hash.replace(/^#/, "");
       if (!hash) {
         if (currentDocument) closeDocumentViewer();
+        if (activeFolder) backToFolders();
       } else {
         handleInitialHash();
       }
     });
 
-    // Keyboard Shortcuts (Esc to close viewer, +/- to zoom)
+    // Keyboard Shortcuts (Esc to close viewer or return to folders, +/- to zoom)
     window.addEventListener("keydown", (e) => {
-      if (e.key === "Escape" && currentDocument) {
-        closeDocumentViewer();
+      if (e.key === "Escape") {
+        if (currentDocument) {
+          closeDocumentViewer();
+        } else if (activeFolder) {
+          backToFolders();
+        }
       } else if (currentDocument && (e.ctrlKey || e.metaKey)) {
         if (e.key === "=" || e.key === "+") {
           e.preventDefault();
@@ -1313,7 +1553,6 @@
         e.preventDefault();
         deferredPwaPrompt = e;
         
-        // Check if user dismissed banner previously in this session
         if (!sessionStorage.getItem("pwa_install_dismissed")) {
           const banner = document.getElementById("pwa-install-banner");
           if (banner) banner.classList.remove("hidden");
@@ -1348,7 +1587,7 @@
       if (!('serviceWorker' in navigator)) return;
 
       const swScript = `
-        const CACHE_NAME = 'ai-hub-summary-v3';
+        const CACHE_NAME = 'ai-hub-summary-v4';
         const STATIC_ASSETS = [
           './',
           'https://cdn.tailwindcss.com'
@@ -1385,7 +1624,6 @@
               try {
                 const response = await fetch(event.request);
                 if (response && response.status === 200) {
-                  // Intercept and cache documents, tailwind CDN, and github files
                   if (url.pathname.endsWith('.html') || url.hostname.includes('tailwind') || url.hostname.includes('github') || url.pathname.includes('/content/')) {
                     cache.put(event.request, response.clone()).catch(() => {});
                   }
