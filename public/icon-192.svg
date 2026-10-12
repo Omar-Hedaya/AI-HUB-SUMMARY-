@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192" width="192" height="192">
+  <defs>
+    <linearGradient id="bgGrad192" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#080c18" />
+      <stop offset="100%" stop-color="#03050a" />
+    </linearGradient>
+    <linearGradient id="blueGrad192" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#3b82f6" />
+      <stop offset="45%" stop-color="#2563eb" />
+      <stop offset="100%" stop-color="#1d4ed8" />
+    </linearGradient>
+    <filter id="squircleGlow192" x="-25%" y="-25%" width="150%" height="150%">
+      <feGaussianBlur stdDeviation="7" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+
+  <!-- Deep Canvas Backdrop -->
+  <rect width="192" height="192" rx="28" fill="url(#bgGrad192)" />
+
+  <!-- Ambient Blue Halo Glow -->
+  <rect x="47" y="24" width="98" height="98" rx="28" fill="#2563eb" opacity="0.45" filter="url(#squircleGlow192)" />
+
+  <!-- Royal Blue Squircle -->
+  <rect x="47" y="24" width="98" height="98" rx="28" fill="url(#blueGrad192)" />
+
+  <!-- Open White Book Icon -->
+  <g stroke="#ffffff" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" fill="none">
+    <path d="M 70 68 L 70 97 C 70 99 71 100 73 100 L 76 100" />
+    <path d="M 122 68 L 122 97 C 122 99 121 100 119 100 L 116 100" />
+    <path d="M 96 64 C 88 59 80 60 76 62 L 76 96 C 80 94 88 93 96 98 Z" />
+    <path d="M 96 64 C 104 59 112 60 116 62 L 116 96 C 112 94 104 93 96 98 Z" />
+  </g>
+
+  <!-- Center Bottom Spine Node -->
+  <circle cx="96" cy="100" r="3" fill="#ffffff" />
+
+  <!-- Typography -->
+  <text x="96" y="156" 
+        text-anchor="middle" 
+        fill="#ffffff" 
+        font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', Roboto, sans-serif" 
+        font-weight="800" 
+        font-size="12.5" 
+        letter-spacing="0.8">AI HUB SUMMARY</text>
+</svg>

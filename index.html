@@ -12,9 +12,18 @@
   <meta name="theme-color" content="#090d16" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="AI HUB SUMMARY" />
 
-  <!-- Inline Web App Manifest for PWA (Add to Home Screen / Mobile Install) -->
-  <link rel="manifest" href="data:application/manifest+json;charset=utf-8,%7B%22name%22%3A%22AI%20HUB%20SUMMARY%22%2C%22short_name%22%3A%22AI%20HUB%22%2C%22start_url%22%3A%22.%2F%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23090d16%22%2C%22theme_color%22%3A%22%23090d16%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22data%3Aimage%2Fsvg%2Bxml%2C%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%20512%20512%27%3E%3Crect%20width%3D%27512%27%20height%3D%27512%27%20rx%3D%27128%27%20fill%3D%27%23090d16%27%2F%3E%3Cpath%20d%3D%27M128%20160h256v192H128z%27%20fill%3D%27%2338bdf8%27%2F%3E%3C%2Fsvg%3E%22%2C%22sizes%22%3A%22512x512%22%2C%22type%22%3A%22image%2Fsvg%2Bxml%22%7D%5D%7D" />
+  <!-- Network Handshake Optimization: Fast Connection to GitHub Content CDN -->
+  <link rel="preconnect" href="https://raw.githubusercontent.com">
+  <link rel="dns-prefetch" href="https://raw.githubusercontent.com">
+
+  <!-- Comprehensive App Icon (Favicon & Apple Touch Icon & Manifest) -->
+  <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+  <link rel="alternate icon" type="image/svg+xml" href="./icon-192.svg" />
+  <link rel="apple-touch-icon" sizes="192x192" href="./icon-192.svg" />
+  <link rel="apple-touch-icon" sizes="512x512" href="./icon-512.svg" />
+  <link rel="manifest" href="./manifest.json" />
 
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -36,7 +45,7 @@
             }
           },
           fontFamily: {
-            sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+            sans: ['Inter', 'Noto Sans Arabic', 'Segoe UI', 'Roboto', '-apple-system', 'sans-serif'],
             mono: ['JetBrains Mono', 'Fira Code', 'monospace']
           }
         }
@@ -86,54 +95,175 @@
       to { opacity: 0; transform: translate(-50%, 1rem); }
     }
 
+    /* In-App Notification Banner animation */
+    .banner-enter {
+      animation: bannerSlideIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    .banner-exit {
+      animation: bannerSlideOut 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    @keyframes bannerSlideIn {
+      from { opacity: 0; transform: translate(-50%, -1.5rem); }
+      to { opacity: 1; transform: translate(-50%, 0); }
+    }
+    @keyframes bannerSlideOut {
+      from { opacity: 1; transform: translate(-50%, 0); }
+      to { opacity: 0; transform: translate(-50%, -1.5rem); }
+    }
+
     /* Floating Reader Toolbar Transition */
     #viewer-toolbar {
       will-change: transform;
       transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* Rendering Performance: 60fps Smooth Mobile Scrolling & GPU/DOM Overhead Reduction */
+    .folder-card,
+    .doc-card,
+    #folders-list-container > div,
+    #pinned-folders-container > div,
+    #cards-container > div,
+    #search-cards-container > div {
+      content-visibility: auto;
+      contain-intrinsic-size: 80px;
+    }
+
+    /* Flexible Multi-line Title Clamping (2 to 3 Lines Max) */
+    .clamp-title-3 {
+      display: -webkit-box !important;
+      -webkit-line-clamp: 3 !important;
+      -webkit-box-orient: vertical !important;
+      overflow: hidden !important;
+      text-overflow: ellipsis !important;
+      word-break: break-word !important;
+    }
+
+    /* Strict LTR Coordinate & Vector Isolation for SVG */
+    svg {
+      direction: ltr !important;
+      unicode-bidi: isolate !important;
     }
   </style>
 </head>
 <body class="bg-[#090d16] text-slate-100 min-h-screen font-sans antialiased selection:bg-cyan-500/30 selection:text-cyan-200 flex flex-col">
 
   <!-- ======================================================== -->
-  <!-- 1. MAIN APPLICATION HEADER                               -->
+  <!-- 0. IN-APP NEW CONTENT TOAST (Swipe-to-Dismiss)           -->
   <!-- ======================================================== -->
-  <header id="main-header" class="sticky top-0 z-30 border-b border-slate-800/80 bg-[#090d16]/90 backdrop-blur-md transition-all">
-    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+  <div id="new-content-toast" class="fixed top-20 left-1/2 -translate-x-1/2 z-50 pointer-events-auto hidden w-[94%] sm:w-auto max-w-lg cursor-grab active:cursor-grabbing select-none transition-transform duration-200">
+    <div class="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 border border-sky-500/50 text-white px-4 py-3 rounded-2xl shadow-2xl shadow-sky-500/20 flex items-center justify-between gap-3 backdrop-blur-xl ring-1 ring-white/10">
       
-      <!-- Brand Logo & Title: AI HUB SUMMARY -->
-      <div class="flex items-center gap-3">
-        <a href="#" onclick="backToFolders(event)" class="flex items-center gap-2.5 group">
-          <div class="w-9 h-9 rounded-lg bg-gradient-to-tr from-indigo-600 via-sky-500 to-cyan-400 p-[1px] shadow-lg shadow-sky-500/20 group-hover:shadow-sky-500/40 transition">
-            <div class="w-full h-full bg-[#090d16] rounded-[7px] flex items-center justify-center">
-              <svg class="w-5 h-5 text-sky-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-              </svg>
-            </div>
-          </div>
-          <div>
-            <span class="font-bold text-base sm:text-lg tracking-tight text-white group-hover:text-sky-300 transition flex items-center gap-1.5">
-              AI HUB SUMMARY
-            </span>
-          </div>
-        </a>
+      <div class="flex items-center gap-2.5 min-w-0 flex-1">
+        <span class="text-lg shrink-0">📄</span>
+        <div class="min-w-0 flex-1">
+          <p class="text-xs sm:text-sm text-slate-200 font-medium leading-snug">
+            <span class="text-sky-300 font-bold" id="toast-prefix-new">New file added:</span> 
+            <span id="toast-new-filename" class="text-white font-semibold">Lecture 1</span> 
+            <span class="text-slate-400" id="toast-prefix-in">in</span> 
+            <span id="toast-new-folder" class="text-indigo-300 font-semibold">Lectures</span>
+          </p>
+        </div>
       </div>
 
-      <!-- Header Actions: Offline Pill + Compact Refresh Button -->
+      <div class="flex items-center gap-1.5 shrink-0">
+        <!-- View Action Button -->
+        <button 
+          id="toast-view-btn" 
+          type="button" 
+          class="px-3 py-1.5 rounded-xl text-xs font-bold bg-sky-500 hover:bg-sky-400 text-slate-950 transition active:scale-95 shadow-md shadow-sky-500/30">
+          <span id="toast-view-btn-text">View</span>
+        </button>
+
+        <!-- Close Button (✕) -->
+        <button 
+          type="button" 
+          onclick="dismissNewContentToast()"
+          title="Dismiss notification"
+          class="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-white/10 transition active:scale-95">
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- In-App Floating Update Notification Banner (New Content / Service Worker) -->
+  <div id="update-notification-toast" class="fixed top-20 left-1/2 -translate-x-1/2 z-50 pointer-events-auto hidden w-[92%] sm:w-auto max-w-md">
+    <div class="bg-gradient-to-r from-sky-950 via-slate-900 to-indigo-950 border border-sky-500/40 text-white px-4 py-2.5 rounded-2xl shadow-2xl shadow-sky-500/20 flex items-center justify-between gap-3 backdrop-blur-md">
+      <div class="flex items-center gap-2 text-xs sm:text-sm">
+        <span class="text-base animate-pulse">✨</span>
+        <span id="update-banner-text" class="text-slate-200">New study materials available</span>
+      </div>
+      <button 
+        type="button" 
+        onclick="applyUpdateAndReload()"
+        class="px-3 py-1 rounded-xl text-xs font-bold bg-sky-500 hover:bg-sky-400 text-slate-950 transition active:scale-95 shadow-sm">
+        <span id="update-banner-btn">Update Now</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- 1. MAIN APP HEADER (Branded Squircle & EN/AR Switcher)   -->
+  <!-- ======================================================== -->
+  <header class="sticky top-0 z-40 bg-[#090d16]/90 backdrop-blur-md border-b border-slate-800/80 transition-colors">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-3">
+      
+      <!-- Brand Logo / Title (Matching custom identity from image) -->
+      <a href="./" onclick="backToFolders(event)" class="flex items-center gap-2.5 text-white hover:opacity-90 transition group">
+        <!-- Glowing Royal-Blue Squircle with White Open Book -->
+        <div class="w-9 h-9 rounded-xl bg-gradient-to-b from-blue-500 via-blue-600 to-blue-700 flex items-center justify-center shadow-lg shadow-blue-500/35 group-hover:scale-105 group-hover:shadow-blue-500/50 transition shrink-0 border border-blue-400/30">
+          <svg class="w-5 h-5 text-white" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M 16 28 L 16 46 C 16 47 17 48 18 48 L 20 48" />
+            <path d="M 48 28 L 48 46 C 48 47 47 48 46 48 L 44 48" />
+            <path d="M 32 25 C 27 22 22 23 20 25 L 20 45 C 23 43 28 43 32 46 Z" />
+            <path d="M 32 25 C 37 22 42 23 44 25 L 44 45 C 41 43 36 43 32 46 Z" />
+            <circle cx="32" cy="47" r="1.5" fill="currentColor" stroke="none" />
+          </svg>
+        </div>
+        <div class="flex flex-col">
+          <span class="font-extrabold text-base tracking-tight text-white group-hover:text-sky-300 transition">
+            AI HUB SUMMARY
+          </span>
+          <span id="header-subtitle" class="text-[10px] font-mono tracking-wider text-slate-400 uppercase">
+            Study Reader & Notes
+          </span>
+        </div>
+      </a>
+
+      <!-- Header Right Controls -->
       <div class="flex items-center gap-2 sm:gap-2.5">
         
         <!-- Offline Mode Pill Indicator -->
         <div id="offline-status-pill" class="hidden items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-mono bg-amber-950/80 border border-amber-800 text-amber-300">
           <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
-          <span>Offline Mode</span>
+          <span id="offline-status-text">Offline Mode</span>
         </div>
 
+        <!-- Language Toggle (AR / EN Switcher) -->
+        <button 
+          id="lang-toggle-btn" 
+          type="button" 
+          title="Switch Language / تغيير اللغة" 
+          class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-bold bg-slate-800/90 hover:bg-slate-700 text-sky-400 hover:text-sky-300 border border-slate-700/80 transition active:scale-95 shadow-sm">
+          <svg class="w-3.5 h-3.5 text-sky-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129" />
+          </svg>
+          <span id="lang-label" class="font-bold tracking-wide">AR</span>
+        </button>
+
         <!-- Refresh Button -->
-        <button id="refresh-btn" type="button" title="Refresh files from GitHub (Bypasses 15m Cache)" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800/80 hover:bg-slate-700/80 text-slate-200 border border-slate-700 transition active:scale-95 shadow-sm">
+        <button 
+          id="refresh-btn" 
+          type="button" 
+          title="Refresh files from GitHub" 
+          class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800/80 hover:bg-slate-700/80 text-slate-200 border border-slate-700 transition active:scale-95 shadow-sm">
           <svg id="refresh-icon" class="w-3.5 h-3.5 text-sky-400 transition" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
             <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
           </svg>
-          <span class="hidden xs:inline">Refresh</span>
+          <span id="refresh-text" class="hidden xs:inline">Refresh</span>
         </button>
 
       </div>
@@ -149,14 +279,69 @@
     <!-- Status / Notice Banner (Rate limit or offline info) -->
     <div id="status-banner" class="hidden mb-6 p-4 rounded-xl text-sm border"></div>
 
+    <!-- 1. SEARCH BAR & CONTINUE STUDYING QUICK ACCESS -->
+    <div class="mb-6 space-y-3">
+      <!-- Instant Client-Side Search Input -->
+      <div class="relative flex items-center">
+        <div class="absolute inset-y-0 left-0 rtl:left-auto rtl:right-0 pl-3.5 rtl:pl-0 rtl:pr-3.5 flex items-center pointer-events-none text-slate-400">
+          <svg class="w-4 h-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
+        </div>
+        <input 
+          id="doc-search-input" 
+          type="search" 
+          placeholder="Search all notes, lectures, sheets & summaries..." 
+          autocomplete="off"
+          class="w-full pl-10 rtl:pl-10 rtl:pr-10 pr-10 py-2.5 rounded-xl bg-[#0f172a] border border-slate-800 hover:border-slate-700 focus:border-sky-500 focus:ring-1 focus:ring-sky-500 text-sm text-white placeholder-slate-500 transition outline-none shadow-sm"
+        />
+        <button 
+          id="clear-search-btn" 
+          type="button" 
+          onclick="clearSearch()"
+          class="hidden absolute inset-y-0 right-0 rtl:right-auto rtl:left-0 pr-3.5 rtl:pr-0 rtl:pl-3.5 flex items-center text-slate-400 hover:text-white transition"
+          title="Clear search">
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+
+      <!-- Continue Studying Quick Access Card (Last Opened Document) -->
+      <div id="continue-studying-card-container" class="hidden"></div>
+    </div>
+
+    <!-- VIEW 0: SEARCH RESULTS VIEW (Instant Client-Side Filtering) -->
+    <section id="search-results-view" class="hidden transition-all duration-200 mb-8">
+      <div class="flex items-center justify-between pb-3 mb-4 border-b border-slate-800/80">
+        <div class="flex items-center gap-2">
+          <span id="search-results-title" class="text-sm font-bold text-white">Search Results</span>
+          <span id="search-results-count" class="text-xs font-mono px-2 py-0.5 rounded-full bg-slate-800 text-sky-300">0 results</span>
+        </div>
+        <button 
+          type="button" 
+          onclick="clearSearch()"
+          class="text-xs text-slate-400 hover:text-white transition flex items-center gap-1">
+          <span id="exit-search-text">Exit Search</span>
+          <svg class="w-3.5 h-3.5 rtl:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+      <div id="search-cards-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5"></div>
+      <div id="search-empty-state" class="hidden text-center py-12 text-slate-400 text-sm bg-slate-900/30 border border-dashed border-slate-800 rounded-2xl">
+        No documents matched your search query.
+      </div>
+    </section>
+
     <!-- VIEW 1: GOOGLE DRIVE STYLE FOLDERS DIRECTORY VIEW -->
     <section id="folders-directory-view" class="transition-all duration-200">
       
       <!-- Directory Hero Header -->
       <div class="mb-6 pb-5 border-b border-slate-800/80 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
         <div>
-          <h1 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">Study Materials & Notes</h1>
-          <p class="text-sm sm:text-base text-slate-400 mt-1 max-w-2xl">
+          <h1 id="study-title" class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">Study Materials & Notes</h1>
+          <p id="study-subtitle" class="text-sm sm:text-base text-slate-400 mt-1 max-w-2xl">
             Select a subject folder below to read uploaded lectures, sheets, and summaries directly in-browser.
           </p>
         </div>
@@ -167,53 +352,102 @@
         </div>
       </div>
 
-      <!-- Quick Access Option: "All Documents" (Google Drive Style Priority Row) -->
-      <div class="mb-6">
+      <!-- Quick Access Priority Cards: "All Documents" + "Starred / Favorites" -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5 mb-6">
+        
+        <!-- All Documents Card -->
         <button 
           type="button" 
           onclick="openFolder('all')"
-          class="w-full text-left group bg-gradient-to-r from-[#0f172a] via-[#131d33] to-[#0f172a] hover:from-[#131d33] hover:to-[#172554]/40 border border-slate-800 hover:border-sky-500/50 rounded-2xl p-4 sm:p-5 flex items-center justify-between gap-4 transition-all duration-200 hover:shadow-xl hover:shadow-sky-500/5 active:scale-[0.99]">
-          <div class="flex items-center gap-3.5 sm:gap-4 min-w-0">
-            <!-- Distinctive Icon -->
-            <div class="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-sky-500/10 border border-sky-500/30 flex items-center justify-center shrink-0 text-sky-400 group-hover:scale-105 group-hover:bg-sky-500/20 transition">
-              <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          class="w-full text-left rtl:text-right group bg-gradient-to-r from-[#0f172a] via-[#131d33] to-[#0f172a] hover:from-[#131d33] hover:to-[#172554]/40 border border-slate-800 hover:border-sky-500/50 rounded-2xl p-4 sm:p-5 flex items-center justify-between gap-3 transition-all duration-200 hover:shadow-xl hover:shadow-sky-500/5 active:scale-[0.99]">
+          <div class="flex items-center gap-3.5 min-w-0 flex-1">
+            <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-sky-500/10 border border-sky-500/30 flex items-center justify-center shrink-0 text-sky-400 group-hover:scale-105 group-hover:bg-sky-500/20 transition">
+              <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
               </svg>
             </div>
-            <div class="min-w-0">
-              <div class="flex items-center gap-2">
-                <h3 class="text-base sm:text-lg font-bold text-white group-hover:text-sky-300 transition truncate">
+            <div class="min-w-0 flex-1">
+              <div class="flex items-center gap-1.5">
+                <h3 id="all-docs-card-title" class="text-sm sm:text-base font-bold text-white group-hover:text-sky-300 transition whitespace-nowrap">
                   All Documents
                 </h3>
-                <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-sky-950/80 text-sky-300 border border-sky-800/80 shrink-0">
-                  Quick Access
-                </span>
               </div>
-              <p class="text-xs sm:text-sm text-slate-400 mt-0.5 truncate">
-                Browse every lecture, sheet, and summary across all subjects
+              <p id="all-docs-card-desc" class="text-xs text-slate-400 mt-0.5 truncate">
+                Browse all subjects & notes
               </p>
             </div>
           </div>
-          <div class="flex items-center gap-3 shrink-0">
-            <span id="all-docs-counter" class="text-xs font-mono font-semibold px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-800 text-slate-300 group-hover:border-sky-500/40 transition">
+          <div class="flex items-center gap-2 shrink-0">
+            <span id="all-docs-counter" class="text-xs font-mono font-semibold px-2 py-0.5 rounded-lg bg-slate-900 border border-slate-800 text-slate-300 group-hover:border-sky-500/40 transition">
               ...
             </span>
-            <svg class="w-5 h-5 text-slate-500 group-hover:text-sky-400 group-hover:translate-x-0.5 transition" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <svg class="w-4 h-4 text-slate-500 group-hover:text-sky-400 group-hover:translate-x-0.5 rtl:group-hover:-translate-x-0.5 rtl:rotate-180 transition" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
               <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
             </svg>
           </div>
         </button>
+
+        <!-- Starred / Favorites Card -->
+        <button 
+          type="button" 
+          onclick="openFolder('starred')"
+          class="w-full text-left rtl:text-right group bg-gradient-to-r from-[#0f172a] via-[#1a1727] to-[#0f172a] hover:from-[#1a1727] hover:to-[#2e1065]/30 border border-slate-800 hover:border-amber-500/50 rounded-2xl p-4 sm:p-5 flex items-center justify-between gap-3 transition-all duration-200 hover:shadow-xl hover:shadow-amber-500/5 active:scale-[0.99]">
+          <div class="flex items-center gap-3.5 min-w-0 flex-1">
+            <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center shrink-0 text-amber-400 group-hover:scale-105 group-hover:bg-amber-500/20 transition">
+              <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+              </svg>
+            </div>
+            <div class="min-w-0 flex-1">
+              <div class="flex items-center gap-1.5">
+                <h3 id="starred-card-title" class="text-sm sm:text-base font-bold text-white group-hover:text-amber-300 transition whitespace-nowrap">
+                  Starred Notes
+                </h3>
+              </div>
+              <p id="starred-card-desc" class="text-xs text-slate-400 mt-0.5 truncate">
+                Saved for quick exam revision
+              </p>
+            </div>
+          </div>
+          <div class="flex items-center gap-2 shrink-0">
+            <span id="starred-docs-counter" class="text-xs font-mono font-semibold px-2 py-0.5 rounded-lg bg-slate-900 border border-slate-800 text-amber-300 group-hover:border-amber-500/40 transition">
+              0 saved
+            </span>
+            <svg class="w-4 h-4 text-slate-500 group-hover:text-amber-400 group-hover:translate-x-0.5 rtl:group-hover:-translate-x-0.5 rtl:rotate-180 transition" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+            </svg>
+          </div>
+        </button>
+
       </div>
 
-      <!-- Section Label -->
-      <div class="flex items-center justify-between mb-3 px-1">
-        <span class="text-xs font-semibold uppercase tracking-wider text-slate-400">Folders & Subjects</span>
-        <span class="text-xs font-mono text-slate-500" id="folders-count-label"></span>
+      <!-- Pinned Folders Prioritized Section (Folder Favoriting / Pinning) -->
+      <div id="pinned-folders-section" class="hidden mb-6">
+        <div class="flex items-center justify-between mb-3.5">
+          <h2 class="text-xs font-bold uppercase tracking-wider text-amber-400 flex items-center gap-1.5">
+            <span>📌</span>
+            <span id="pinned-folders-heading-text">Pinned Folders</span>
+          </h2>
+          <span id="pinned-folders-count" class="text-xs font-mono text-amber-400/80"></span>
+        </div>
+        <div id="pinned-folders-container" class="space-y-2.5">
+          <!-- Pinned folders rendered here -->
+        </div>
       </div>
 
-      <!-- Google Drive Style Vertical Folder List Container -->
-      <div id="folders-list-container" class="space-y-2.5 sm:space-y-3">
-        <!-- Skeleton Folder Items -->
+      <!-- Subject Folders Section Label -->
+      <div class="flex items-center justify-between mb-3.5">
+        <h2 class="text-xs font-bold uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
+          <span id="subject-folders-heading-text">Subject Folders</span>
+        </h2>
+        <span id="folders-count-label" class="text-xs font-mono text-slate-400">
+          Scanning...
+        </span>
+      </div>
+
+      <!-- Vertical Folders List Container (Google Drive Style List) -->
+      <div id="folders-list-container" class="space-y-2.5">
+        <!-- Skeleton Loaders -->
         <div class="bg-slate-900/60 border border-slate-800 rounded-xl p-4 skeleton h-16"></div>
         <div class="bg-slate-900/60 border border-slate-800 rounded-xl p-4 skeleton h-16"></div>
         <div class="bg-slate-900/60 border border-slate-800 rounded-xl p-4 skeleton h-16"></div>
@@ -232,10 +466,10 @@
             onclick="backToFolders(event)"
             title="Return to folders list (Esc)"
             class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white border border-slate-700 transition active:scale-95 shadow-sm shrink-0">
-            <svg class="w-4 h-4 text-sky-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+            <svg class="w-4 h-4 text-sky-400 rtl:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
               <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
             </svg>
-            <span>Back to Folders</span>
+            <span id="back-to-folders-text">Back to Folders</span>
           </button>
 
           <!-- Breadcrumbs & Active Folder Name -->
@@ -256,20 +490,20 @@
       </div>
 
       <!-- Cards Grid Container -->
-      <div id="cards-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
-        <!-- Document cards rendered here -->
+      <div id="cards-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5 sm:gap-4">
+        <!-- Compact Document cards rendered here -->
       </div>
 
       <!-- Empty State for Folder -->
       <div id="empty-state" class="hidden text-center py-16 px-4 bg-slate-900/30 border border-dashed border-slate-800 rounded-2xl my-6">
         <div class="w-14 h-14 mx-auto rounded-full bg-slate-800/80 flex items-center justify-center text-slate-400 mb-3">
           <svg class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
           </svg>
         </div>
-        <h3 class="text-lg font-semibold text-slate-200">No Documents Found</h3>
-        <p class="text-sm text-slate-400 max-w-md mx-auto mt-1" id="empty-state-message">
-          No HTML files were found in this folder.
+        <h3 id="empty-state-title" class="text-sm font-semibold text-white mb-1">No Documents Found</h3>
+        <p id="empty-state-message" class="text-xs text-slate-400 max-w-sm mx-auto">
+          This folder currently contains no readable HTML summaries or sheets.
         </p>
       </div>
 
@@ -278,99 +512,141 @@
   </main>
 
   <!-- ======================================================== -->
-  <!-- 3. IN-APP FULL-SCREEN DOCUMENT VIEWER                    -->
+  <!-- 3. IN-APP VIEWER (Floating Overlay Toolbar & Fullscreen)  -->
   <!-- ======================================================== -->
-  <section id="viewer-view" class="fixed inset-0 z-50 bg-[#090d16] hidden select-none overflow-hidden">
+  <section id="viewer-view" class="fixed inset-0 z-50 bg-[#090d16] hidden flex flex-col">
     
-    <!-- Floating Overlay Top Toolbar: position: fixed; top: 0; left: 0; right: 0; z-index: 50; 
-         Features sleek semi-transparent dark background and backdrop-filter: blur(10px).
-         Slides up (-100%) on scroll down; reveals on scroll up or tap.
-         ZERO GAP / MARGIN BEHIND IT! -->
-    <div id="viewer-toolbar" class="fixed top-0 left-0 right-0 z-50 h-12 sm:h-14 bg-[#0f172a]/80 backdrop-blur-md border-b border-slate-800/80 px-2.5 sm:px-5 flex items-center justify-between gap-2 shadow-2xl">
+    <!-- Floating Overlay Top Bar with Backdrop Blur -->
+    <div id="viewer-toolbar" class="fixed top-0 left-0 right-0 z-50 bg-[#090d16]/85 backdrop-blur-md border-b border-slate-800/80 shadow-2xl transition-transform duration-300">
       
-      <!-- Left: Compact Back Button & Document Details -->
-      <div class="flex items-center gap-1.5 sm:gap-2.5 min-w-0 flex-1">
-        <button id="viewer-back-btn" type="button" title="Back to document list (Esc)" class="flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-slate-800/90 hover:bg-slate-700 text-slate-200 border border-slate-700 hover:border-slate-600 transition active:scale-95 shrink-0 shadow-sm">
-          <svg class="w-3.5 h-3.5 text-sky-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-          </svg>
-          <span class="hidden xs:inline">Back</span>
-        </button>
-
-        <!-- Document Details with Clean Mobile Truncation -->
-        <div class="min-w-0 flex items-center gap-1.5 flex-1 overflow-hidden">
-          <span id="viewer-category-badge" class="hidden md:inline-block text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full border shrink-0"></span>
-          <h2 id="viewer-doc-title" class="text-xs sm:text-sm font-semibold text-white truncate max-w-full" title=""></h2>
-        </div>
+      <!-- Reading Progress Bar (Top of Toolbar) -->
+      <div class="w-full h-0.5 bg-slate-800 overflow-hidden">
+        <div id="reading-progress-bar" class="h-full bg-gradient-to-r from-sky-400 via-indigo-400 to-cyan-300 w-0 transition-all duration-150 shadow-[0_0_8px_rgba(56,189,248,0.7)]"></div>
       </div>
 
-      <!-- Right: Compact Viewer Controls (Direct Zoom Engine: Zero Side Gaps) -->
-      <div class="flex items-center gap-1 sm:gap-1.5 shrink-0">
+      <!-- Compact Touch-Friendly Controls Container -->
+      <div class="px-2.5 sm:px-4 h-14 flex items-center justify-between gap-1.5 sm:gap-3">
         
-        <!-- Zoom Controls -->
-        <div class="flex items-center bg-slate-900/90 border border-slate-800 rounded-lg p-0.5 text-xs font-mono">
-          <button id="zoom-out-btn" type="button" title="Zoom Out" class="p-1 sm:px-1.5 rounded hover:bg-slate-800 text-slate-300 hover:text-white transition">
-            <svg class="w-3 h-3 sm:w-3.5 sm:h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+        <!-- Left: Back Button + Truncated Document Title -->
+        <div class="flex items-center gap-1 sm:gap-2.5 min-w-0 flex-1">
+          <button 
+            id="viewer-back-btn" 
+            type="button" 
+            title="Close viewer (Esc)"
+            class="flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-slate-800/90 hover:bg-slate-700 text-slate-200 hover:text-white border border-slate-700/80 transition active:scale-95 shrink-0 shadow-sm">
+            <svg class="w-4 h-4 text-sky-400 rtl:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+            </svg>
+            <span id="viewer-back-text" class="hidden sm:inline">Back</span>
+          </button>
+
+          <!-- Document Title & Category Badge -->
+          <div class="min-w-0 flex items-center gap-1.5 flex-1 pr-1 rtl:pr-0 rtl:pl-1">
+            <span id="viewer-category-badge" class="hidden md:inline-block text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full border border-sky-500/30 bg-sky-950/60 text-sky-300 shrink-0">
+              Doc
+            </span>
+            <h2 id="viewer-doc-title" class="text-xs sm:text-sm font-bold text-white truncate max-w-[160px] xs:max-w-[220px] sm:max-w-[340px] md:max-w-[480px]">
+              Document Viewer
+            </h2>
+          </div>
+        </div>
+
+        <!-- Right: Zoom Controls, Star Button, & Actions -->
+        <div class="flex items-center gap-1 sm:gap-1.5 shrink-0">
+          
+          <!-- Path-Specific Star / Favorite in Viewer -->
+          <button 
+            id="viewer-star-btn" 
+            type="button" 
+            title="Star this document"
+            class="p-1.5 sm:p-2 rounded-lg bg-slate-900/90 hover:bg-slate-800 text-slate-400 hover:text-amber-400 border border-slate-800 transition active:scale-95">
+            <svg id="viewer-star-icon" class="w-4 h-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+            </svg>
+          </button>
+
+          <!-- Zoom Out -->
+          <button 
+            id="zoom-out-btn" 
+            type="button" 
+            title="Zoom out"
+            class="p-1.5 sm:p-2 rounded-lg bg-slate-900/90 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-800 transition active:scale-95">
+            <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
               <path stroke-linecap="round" stroke-linejoin="round" d="M20 12H4" />
             </svg>
           </button>
-          <span id="zoom-level-label" class="px-1 text-[11px] sm:text-xs min-w-[2.4rem] sm:min-w-[2.8rem] text-center text-slate-300 select-none">100%</span>
-          <button id="zoom-in-btn" type="button" title="Zoom In" class="p-1 sm:px-1.5 rounded hover:bg-slate-800 text-slate-300 hover:text-white transition">
-            <svg class="w-3 h-3 sm:w-3.5 sm:h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+
+          <!-- Zoom Percentage (Click to Reset) -->
+          <button 
+            id="zoom-reset-btn" 
+            type="button" 
+            title="Click to reset zoom to 100%"
+            class="px-1.5 sm:px-2 py-1 rounded-lg bg-slate-900/90 hover:bg-slate-800 border border-slate-800 text-[11px] sm:text-xs font-mono font-bold text-sky-400 hover:text-sky-300 transition">
+            <span id="zoom-level-text">100%</span>
+          </button>
+
+          <!-- Zoom In -->
+          <button 
+            id="zoom-in-btn" 
+            type="button" 
+            title="Zoom in"
+            class="p-1.5 sm:p-2 rounded-lg bg-slate-900/90 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-800 transition active:scale-95">
+            <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
               <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
             </svg>
           </button>
-          <button id="zoom-reset-btn" type="button" title="Reset to 100%" class="hidden lg:inline-block px-1.5 py-0.5 text-[10px] text-slate-400 hover:text-slate-200 border-l border-slate-800">
-            Reset
+
+          <!-- Fullscreen Toggle -->
+          <button 
+            id="fullscreen-toggle-btn" 
+            type="button" 
+            title="Toggle fullscreen"
+            class="p-1.5 sm:p-2 rounded-lg bg-slate-900/90 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-800 transition active:scale-95">
+            <svg id="fullscreen-icon" class="w-3.5 h-3.5 sm:w-4 sm:h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
+            </svg>
           </button>
+
+          <!-- Copy Link -->
+          <button 
+            id="copy-direct-link-btn" 
+            type="button" 
+            title="Copy document direct URL"
+            class="p-1.5 sm:p-2 rounded-lg bg-slate-900/90 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-800 transition active:scale-95">
+            <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+            </svg>
+          </button>
+
         </div>
-
-        <!-- Full Screen Toggle -->
-        <button id="fullscreen-toggle-btn" type="button" title="Toggle Fullscreen" class="p-1.5 sm:p-2 rounded-lg bg-slate-900/90 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-800 transition">
-          <svg id="fullscreen-icon-expand" class="w-3.5 h-3.5 sm:w-4 sm:h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
-          </svg>
-          <svg id="fullscreen-icon-compress" class="w-3.5 h-3.5 sm:w-4 sm:h-4 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-          </svg>
-        </button>
-
-        <!-- Copy Direct Link Button -->
-        <button id="copy-direct-link-btn" type="button" title="Copy Direct Link to share with classmates" class="flex items-center gap-1 px-2 sm:px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-indigo-600 hover:bg-indigo-500 text-white shadow-sm shadow-indigo-600/30 transition active:scale-95">
-          <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
-          </svg>
-          <span class="hidden sm:inline">Share</span>
-        </button>
 
       </div>
     </div>
 
-    <!-- Full-Viewport Reader Frame Container: position: absolute; inset: 0; width: 100%; height: 100vh;
-         Sits directly beneath the floating bar with 0 gap/margin! -->
-    <div id="reader-frame-container" class="absolute inset-0 w-full h-full bg-[#090d16] overflow-hidden">
+    <!-- Gapless Full-Viewport Iframe Container -->
+    <div id="iframe-viewport-container" class="relative w-full h-full flex-1 bg-[#090d16] overflow-hidden">
       
-      <!-- Loading Overlay inside Reader -->
-      <div id="iframe-loader" class="absolute inset-0 flex flex-col items-center justify-center bg-[#090d16] z-20 transition-opacity duration-300">
-        <div class="w-10 h-10 border-2 border-slate-700 border-t-sky-400 rounded-full animate-spin"></div>
-        <p class="text-sm font-medium text-slate-400 mt-4">Rendering document...</p>
+      <!-- Loading Indicator with Skeleton -->
+      <div id="iframe-loader" class="absolute inset-0 z-20 flex flex-col items-center justify-center bg-[#090d16] transition-opacity duration-200">
+        <div class="w-10 h-10 border-3 border-sky-500/30 border-t-sky-400 rounded-full animate-spin mb-3"></div>
+        <p class="text-xs font-mono text-slate-400">Loading study document...</p>
       </div>
 
-      <!-- Direct Iframe Reader (Zero Container Transform, 100% Full Viewport Width & Height) -->
+      <!-- Native Full-Viewport Document Iframe -->
       <iframe 
         id="reader-iframe" 
-        class="w-full h-full border-0 bg-transparent block" 
-        sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
+        class="w-full h-full border-0 block bg-[#090d16]" 
         loading="eager"
-        title="Document Reader">
+        title="Document Reader Content"
+        sandbox="allow-same-origin allow-scripts allow-popups allow-forms">
       </iframe>
 
-      <!-- Floating Scroll-to-Top Button -->
+      <!-- Floating Scroll-to-Top Button inside Reader View -->
       <button 
         id="scroll-top-btn" 
         type="button" 
-        title="Scroll to Top"
-        class="fixed bottom-5 right-5 z-40 w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-slate-900/95 hover:bg-slate-800 text-sky-400 border border-slate-700 hover:border-sky-500/50 shadow-2xl flex items-center justify-center transition-all duration-300 opacity-0 pointer-events-none translate-y-4 active:scale-90">
+        title="Scroll to top"
+        class="fixed bottom-6 right-6 rtl:right-auto rtl:left-6 z-40 p-3 rounded-full bg-slate-900/90 hover:bg-slate-800 text-sky-400 border border-slate-700/80 shadow-2xl backdrop-blur-md transition-all duration-200 opacity-0 pointer-events-none translate-y-4 active:scale-90">
         <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
           <path stroke-linecap="round" stroke-linejoin="round" d="M5 15l7-7 7 7" />
         </svg>
@@ -381,26 +657,31 @@
   </section>
 
   <!-- ======================================================== -->
-  <!-- 4. FLOATING MOBILE PWA INSTALL BANNER                    -->
+  <!-- 4. PWA INSTALL BANNER & TOAST NOTIFICATION               -->
   <!-- ======================================================== -->
-  <div id="pwa-install-banner" class="fixed bottom-4 left-4 right-4 sm:left-auto sm:right-4 sm:max-w-md z-40 bg-slate-900/95 backdrop-blur-md border border-sky-500/30 rounded-2xl p-3.5 sm:p-4 shadow-2xl flex items-center justify-between gap-3 hidden transition-all duration-300">
-    <div class="flex items-center gap-3 min-w-0">
-      <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 via-sky-500 to-cyan-400 p-[1px] shrink-0 flex items-center justify-center shadow-lg shadow-sky-500/20">
-        <div class="w-full h-full bg-[#090d16] rounded-[11px] flex items-center justify-center text-lg">
-          📲
+  <div id="pwa-install-banner" class="hidden fixed bottom-4 left-4 right-4 sm:left-auto sm:right-6 rtl:sm:right-auto rtl:sm:left-6 sm:w-96 z-50 p-4 rounded-2xl bg-slate-900/95 border border-sky-500/40 shadow-2xl backdrop-blur-xl transition-all">
+    <div class="flex items-start justify-between gap-3">
+      <div class="flex items-center gap-3">
+        <!-- Glowing Royal-Blue Squircle with White Open Book -->
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-b from-blue-500 via-blue-600 to-blue-700 flex items-center justify-center shrink-0 shadow-lg shadow-blue-500/35 border border-blue-400/30">
+          <svg class="w-6 h-6 text-white" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M 16 28 L 16 46 C 16 47 17 48 18 48 L 20 48" />
+            <path d="M 48 28 L 48 46 C 48 47 47 48 46 48 L 44 48" />
+            <path d="M 32 25 C 27 22 22 23 20 25 L 20 45 C 23 43 28 43 32 46 Z" />
+            <path d="M 32 25 C 37 22 42 23 44 25 L 44 45 C 41 43 36 43 32 46 Z" />
+            <circle cx="32" cy="47" r="1.5" fill="currentColor" stroke="none" />
+          </svg>
+        </div>
+        <div>
+          <h4 class="text-sm font-bold text-white">Install AI HUB SUMMARY</h4>
+          <p class="text-xs text-slate-400 mt-0.5">Read your notes and sheets offline on any device.</p>
         </div>
       </div>
-      <div class="min-w-0">
-        <h4 class="text-xs sm:text-sm font-bold text-white truncate">Install AI HUB SUMMARY</h4>
-        <p class="text-[11px] sm:text-xs text-slate-300 line-clamp-1">Quick access & offline study</p>
-      </div>
+      <button id="pwa-dismiss-btn" type="button" class="text-slate-400 hover:text-white p-1">✕</button>
     </div>
-    <div class="flex items-center gap-1.5 shrink-0">
-      <button id="pwa-install-btn" type="button" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-sky-500 hover:bg-sky-400 text-slate-950 transition active:scale-95 shadow-md shadow-sky-500/20">
-        Install
-      </button>
-      <button id="pwa-dismiss-btn" type="button" class="p-1.5 text-slate-400 hover:text-white rounded-lg transition" title="Dismiss">
-        ✕
+    <div class="mt-3.5 flex items-center justify-end gap-2">
+      <button id="pwa-install-btn" type="button" class="w-full py-2 px-3 rounded-xl bg-sky-500 hover:bg-sky-400 text-slate-950 font-bold text-xs transition active:scale-95 shadow-md shadow-sky-500/20">
+        Install App
       </button>
     </div>
   </div>
@@ -414,16 +695,98 @@
   </div>
 
   <!-- ======================================================== -->
-  <!-- 5. MAIN JAVASCRIPT ENGINE & INLINE SERVICE WORKER        -->
+  <!-- 5. MAIN JAVASCRIPT ENGINE & I18N SYSTEM                  -->
   <!-- ======================================================== -->
   <script>
     // ==========================================================
-    // CONFIGURATION CONSTANTS (Set your GitHub Details Here)
+    // CONFIGURATION CONSTANTS (Repository Details)
     // ==========================================================
     const GITHUB_USERNAME = "Omar-Hedaya"; // Your GitHub username
     const GITHUB_REPO = "AI-SUMMARY-";       // Your repository name
     const GITHUB_BRANCH = "main";          // Branch name (main or master)
     const CACHE_DURATION_MS = 15 * 60 * 1000; // 15-minute LocalStorage cache
+
+    // ==========================================================
+    // LANGUAGE DICTIONARY & LOCALIZATION (EN / AR)
+    // ==========================================================
+    let currentLang = localStorage.getItem("app_lang") || "en";
+
+    const I18N = {
+      en: {
+        brandSubtitle: "Study Reader & Notes",
+        offlineMode: "Offline Mode",
+        refresh: "Refresh",
+        searchPlaceholder: "Search all notes, lectures, sheets & summaries...",
+        continueStudying: "Continue Studying",
+        resume: "Resume",
+        searchResults: "Search Results",
+        exitSearch: "Exit Search",
+        noSearchResults: "No documents matched your search query.",
+        studyTitle: "Study Materials & Notes",
+        studySubtitle: "Select a subject folder below to read uploaded lectures, sheets, and summaries directly in-browser.",
+        scanning: "Scanning...",
+        allDocuments: "All Documents",
+        allDocumentsDesc: "Browse all subjects & notes",
+        starredNotes: "Starred Notes",
+        starredNotesDesc: "Saved for quick exam revision",
+        subjectFolders: "Subject Folders",
+        pinnedFolders: "Pinned Folders",
+        foldersDetected: "folders detected",
+        backToFolders: "Back to Folders",
+        noDocsInFolder: "This folder currently contains no readable HTML summaries or sheets.",
+        noStarredNotes: "No starred notes yet. Tap the star icon ⭐ on any document card to pin it here for quick exam revision.",
+        noPinnedFolders: "No pinned folders yet. Tap the star icon ⭐ on any folder to pin it here.",
+        files: "files",
+        file: "file",
+        doc: "Doc",
+        docs: "Docs",
+        saved: "saved",
+        offlineReady: "Offline Ready",
+        viewerBack: "Back",
+        pinned: "Pinned",
+        pinTooltip: "Pin folder to top",
+        unpinTooltip: "Unpin folder",
+        langNext: "AR",
+        langTitle: "التبديل إلى العربية (Switch to Arabic)"
+      },
+      ar: {
+        brandSubtitle: "قارئ ومذكرات المواد",
+        offlineMode: "وضع عدم الاتصال",
+        refresh: "تحديث",
+        searchPlaceholder: "ابحث عن محاضرة أو شيت...",
+        continueStudying: "متابعة المذاكرة",
+        resume: "متابعة",
+        searchResults: "نتائج البحث",
+        exitSearch: "إلغاء البحث",
+        noSearchResults: "لم يتم العثور على ملفات مطابقة للبحث.",
+        studyTitle: "المواد الدراسية والمذكرات",
+        studySubtitle: "اختر مجلداً لقراءة المحاضرات والشيتات والملخصات مباشرة في المتصفح.",
+        scanning: "جاري الفحص...",
+        allDocuments: "جميع الملفات",
+        allDocumentsDesc: "تصفح جميع المواد والمذكرات",
+        starredNotes: "المفضلة",
+        starredNotesDesc: "محفوظ للمراجعة السريعة قبل الامتحان",
+        subjectFolders: "مجلدات المواد",
+        pinnedFolders: "المجلدات المثبتة",
+        foldersDetected: "مجلد تم العثور عليه",
+        backToFolders: "العودة للمجلدات",
+        noDocsInFolder: "لا توجد ملفات أو ملخصات في هذا المجلد حالياً.",
+        noStarredNotes: "لا توجد مذكرات مفضلة بعد. اضغط على رمز النجمة ⭐ في أي بطاقة لحفظها هنا للمراجعة السريعة.",
+        noPinnedFolders: "لا توجد مجلدات مثبتة بعد. اضغط على رمز النجمة ⭐ بجانب أي مجلد لتثبيته في الأعلى.",
+        files: "ملفات",
+        file: "ملف",
+        doc: "ملف",
+        docs: "ملفات",
+        saved: "محفوظ",
+        offlineReady: "جاهز بدون إنترنت",
+        viewerBack: "رجوع",
+        pinned: "مثبت",
+        pinTooltip: "تثبيت المجلد في الأعلى",
+        unpinTooltip: "إلغاء تثبيت المجلد",
+        langNext: "EN",
+        langTitle: "Switch to English (التبديل للإنجليزية)"
+      }
+    };
 
     // State Variables
     let currentUsername = GITHUB_USERNAME;
@@ -434,10 +797,62 @@
     let currentDocument = null;    // Currently opened document in viewer
     let currentZoom = 1.0;         // Zoom factor (1.0 = 100%)
     let deferredPwaPrompt = null;  // PWA Install prompt event
+    let swWaitingWorker = null;    // Service Worker waiting instance
+    let cachedDocPaths = new Set();// Set of unique document paths verified in cache
+    let starredPaths = new Set();  // Path-specific starred documents set (Unique by doc.path)
+    let starredFolders = new Set();// Set of pinned/starred folder names (stored in lowercase)
+    const prefetchedUrls = new Set(); // Set of URLs already prefetched
 
     // Auto-hide toolbar state
     let lastScrollY = 0;
     let isToolbarHidden = false;
+
+    // Load Path-Specific Starred Documents from LocalStorage
+    try {
+      const storedStars = JSON.parse(localStorage.getItem('aihub_starred_paths_v3') || '[]');
+      if (Array.isArray(storedStars)) {
+        starredPaths = new Set(storedStars);
+      }
+    } catch (e) {
+      starredPaths = new Set();
+    }
+
+    // Load Starred / Pinned Folders from LocalStorage
+    try {
+      const storedFolders = JSON.parse(localStorage.getItem('starred_folders') || '[]');
+      if (Array.isArray(storedFolders)) {
+        starredFolders = new Set(storedFolders.map(s => String(s).toLowerCase()));
+      }
+    } catch (e) {
+      starredFolders = new Set();
+    }
+
+    // Synchronize Cached Document Paths from LocalStorage and CacheStorage
+    function syncCachedDocPaths() {
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key && key.startsWith('aihub_doc_path_')) {
+          const docPath = decodeURIComponent(key.replace('aihub_doc_path_', ''));
+          cachedDocPaths.add(docPath);
+        }
+      }
+
+      if ('caches' in window) {
+        caches.open('ai-hub-docs-v1').then(cache => {
+          cache.keys().then(requests => {
+            requests.forEach(req => {
+              allDocuments.forEach(doc => {
+                const matchUrl = doc.localUrl || doc.downloadUrl || `./content/${encodeURIComponent(doc.category)}/${encodeURIComponent(doc.name)}`;
+                if (req.url.includes(encodeURIComponent(doc.name)) || req.url === matchUrl) {
+                  cachedDocPaths.add(doc.path);
+                }
+              });
+            });
+            updateOfflineReadyBadges();
+          }).catch(() => {});
+        }).catch(() => {});
+      }
+    }
 
     // Visual Themes for Folders and Categories
     const CATEGORY_THEMES = {
@@ -476,6 +891,13 @@
         badge: "bg-rose-950/70 text-rose-300 border-rose-700/60",
         accent: "#fb7185"
       },
+      "starred": {
+        label: "Starred Notes",
+        iconColor: "text-amber-400",
+        iconBg: "bg-amber-500/10 border-amber-500/30 group-hover:bg-amber-500/20",
+        badge: "bg-amber-950/70 text-amber-300 border-amber-700/60",
+        accent: "#f59e0b"
+      },
       "power control": {
         label: "Power Control",
         iconColor: "text-purple-400",
@@ -492,7 +914,7 @@
       }
     };
 
-    // Built-in Library (Always available offline & during initial load)
+    // Built-in Baseline Library
     const BUNDLED_SAMPLE_DOCS = [
       {
         name: "All Math 2 (Lectures Summary + Sheets Answers).html",
@@ -542,8 +964,102 @@
     ];
 
     // ==========================================================
-    // UTILITY FUNCTIONS
+    // UTILITY FUNCTIONS & LANGUAGE SWITCHER
     // ==========================================================
+
+    function toggleLanguage() {
+      const nextLang = currentLang === "en" ? "ar" : "en";
+      applyLanguage(nextLang);
+    }
+
+    function applyLanguage(lang) {
+      currentLang = lang;
+      try {
+        localStorage.setItem("app_lang", lang);
+      } catch (e) {}
+
+      const dict = I18N[lang];
+      const isRTL = lang === "ar";
+
+      document.documentElement.setAttribute("dir", isRTL ? "rtl" : "ltr");
+      document.documentElement.setAttribute("lang", lang);
+
+      const langLabel = document.getElementById("lang-label");
+      if (langLabel) langLabel.textContent = dict.langNext;
+
+      const langBtn = document.getElementById("lang-toggle-btn");
+      if (langBtn) langBtn.title = dict.langTitle;
+
+      const headerSubtitle = document.getElementById("header-subtitle");
+      if (headerSubtitle) headerSubtitle.textContent = dict.brandSubtitle;
+
+      const refreshText = document.getElementById("refresh-text");
+      if (refreshText) refreshText.textContent = dict.refresh;
+
+      const offlineStatusText = document.getElementById("offline-status-text");
+      if (offlineStatusText) offlineStatusText.textContent = dict.offlineMode;
+
+      const searchInput = document.getElementById("doc-search-input");
+      if (searchInput) searchInput.placeholder = dict.searchPlaceholder;
+
+      const studyTitle = document.getElementById("study-title");
+      if (studyTitle) studyTitle.textContent = dict.studyTitle;
+
+      const studySubtitle = document.getElementById("study-subtitle");
+      if (studySubtitle) studySubtitle.textContent = dict.studySubtitle;
+
+      const allDocsTitle = document.getElementById("all-docs-card-title");
+      if (allDocsTitle) allDocsTitle.textContent = dict.allDocuments;
+
+      const allDocsDesc = document.getElementById("all-docs-card-desc");
+      if (allDocsDesc) allDocsDesc.textContent = dict.allDocumentsDesc;
+
+      const starredTitle = document.getElementById("starred-card-title");
+      if (starredTitle) starredTitle.textContent = dict.starredNotes;
+
+      const starredDesc = document.getElementById("starred-card-desc");
+      if (starredDesc) starredDesc.textContent = dict.starredNotesDesc;
+
+      const pinnedHeading = document.getElementById("pinned-folders-heading-text");
+      if (pinnedHeading) pinnedHeading.textContent = dict.pinnedFolders;
+
+      const subjectHeading = document.getElementById("subject-folders-heading-text");
+      if (subjectHeading) subjectHeading.textContent = dict.subjectFolders;
+
+      const backToFoldersText = document.getElementById("back-to-folders-text");
+      if (backToFoldersText) backToFoldersText.textContent = dict.backToFolders;
+
+      const viewerBackText = document.getElementById("viewer-back-text");
+      if (viewerBackText) viewerBackText.textContent = dict.viewerBack;
+
+      const searchResultsTitle = document.getElementById("search-results-title");
+      if (searchResultsTitle) searchResultsTitle.textContent = dict.searchResults;
+
+      const exitSearchText = document.getElementById("exit-search-text");
+      if (exitSearchText) exitSearchText.textContent = dict.exitSearch;
+
+      const searchEmptyState = document.getElementById("search-empty-state");
+      if (searchEmptyState) searchEmptyState.textContent = dict.noSearchResults;
+
+      renderUI();
+    }
+
+    function formatCategoryName(cat) {
+      if (!cat) return "Docs";
+      const key = cat.toLowerCase();
+      if (CATEGORY_THEMES[key]) {
+        return CATEGORY_THEMES[key].label;
+      }
+      return cat
+        .replace(/[-_]+/g, " ")
+        .replace(/\b\w/g, c => c.toUpperCase());
+    }
+
+    function getCategoryTheme(cat) {
+      if (!cat) return CATEGORY_THEMES.default;
+      const key = cat.toLowerCase();
+      return CATEGORY_THEMES[key] || CATEGORY_THEMES.default;
+    }
 
     function formatTitle(filename) {
       if (!filename) return "";
@@ -564,23 +1080,6 @@
         .replace(/^-+|-+$/g, "");
     }
 
-    function formatCategoryName(cat) {
-      if (!cat) return "Docs";
-      const key = cat.toLowerCase();
-      if (CATEGORY_THEMES[key]) {
-        return CATEGORY_THEMES[key].label;
-      }
-      return cat
-        .replace(/[-_]+/g, " ")
-        .replace(/\b\w/g, c => c.toUpperCase());
-    }
-
-    function getCategoryTheme(cat) {
-      if (!cat) return CATEGORY_THEMES.default;
-      const key = cat.toLowerCase();
-      return CATEGORY_THEMES[key] || CATEGORY_THEMES.default;
-    }
-
     function formatBytes(bytes) {
       if (!bytes || isNaN(bytes)) return "";
       if (bytes < 1024) return bytes + " B";
@@ -589,6 +1088,36 @@
         return (bytes / (1024 * 1024)).toFixed(1) + " MB";
       }
       return kb + " KB";
+    }
+
+    function extractCategoryFromPath(filePath) {
+      if (!filePath) return "Docs";
+      const parts = filePath.split("/");
+      if (parts.length >= 2) {
+        if (parts[0].toLowerCase() === "content" && parts.length >= 3) {
+          return parts[1];
+        }
+        return parts[parts.length - 2];
+      }
+      return "Docs";
+    }
+
+    function inflateDocument(doc) {
+      if (!doc) return null;
+      const name = doc.name || (doc.path ? doc.path.split("/").pop() : "document.html");
+      const category = doc.category || extractCategoryFromPath(doc.path);
+      const downloadUrl = doc.download_url || doc.downloadUrl || "";
+      return {
+        name: name,
+        title: doc.title || formatTitle(name),
+        category: category,
+        slug: doc.slug || generateSlug(name),
+        path: doc.path || name,
+        download_url: downloadUrl,
+        downloadUrl: downloadUrl,
+        localUrl: doc.localUrl || `./content/${encodeURIComponent(category)}/${encodeURIComponent(name)}`,
+        size: doc.size || 0
+      };
     }
 
     let toastTimeout;
@@ -604,15 +1133,406 @@
         toast.classList.remove("toast-enter");
         toast.classList.add("toast-exit");
         setTimeout(() => toast.classList.add("hidden"), 200);
-      }, 2600);
-    }
-
-    function getCacheKey(user, repo) {
-      return `aihub_cache_v6_${user}_${repo}`;
+      }, 2200);
     }
 
     // ==========================================================
-    // GITHUB API DISCOVERY & LOCALSTORAGE CACHING
+    // STAR / FAVORITES SYSTEM (Documents & Folders)
+    // ==========================================================
+
+    function toggleStar(docPathEncoded, e) {
+      if (e) {
+        e.stopPropagation();
+        e.preventDefault();
+      }
+
+      const docPath = decodeURIComponent(docPathEncoded);
+      if (!docPath) return;
+
+      const isStarred = starredPaths.has(docPath);
+      if (isStarred) {
+        starredPaths.delete(docPath);
+        showToast(currentLang === "ar" ? "تمت الإزالة من المفضلة" : "Removed from Starred Notes");
+      } else {
+        starredPaths.add(docPath);
+        showToast(currentLang === "ar" ? "تم الحفظ في المفضلة ⭐" : "Saved to Starred Notes ⭐");
+      }
+
+      try {
+        localStorage.setItem('aihub_starred_paths_v3', JSON.stringify(Array.from(starredPaths)));
+      } catch (err) {}
+
+      updateTotalCountBadges();
+      if (activeFolder) {
+        renderFolderDocuments(activeFolder);
+      }
+      const searchInput = document.getElementById("doc-search-input");
+      if (searchInput && searchInput.value.trim()) {
+        renderSearchResults(searchInput.value.trim());
+      }
+      updateViewerStarButton();
+    }
+
+    function toggleFolderStar(categoryEncoded, e) {
+      if (e) {
+        e.stopPropagation();
+        e.preventDefault();
+      }
+
+      const category = decodeURIComponent(categoryEncoded);
+      const key = category.toLowerCase();
+
+      if (starredFolders.has(key)) {
+        starredFolders.delete(key);
+        showToast(currentLang === "ar" ? `تم إلغاء تثبيت مجلد ${category}` : `Unpinned ${category}`);
+      } else {
+        starredFolders.add(key);
+        showToast(currentLang === "ar" ? `تم تثبيت مجلد ${category} في الأعلى ⭐` : `Pinned ${category} to top ⭐`);
+      }
+
+      try {
+        localStorage.setItem('starred_folders', JSON.stringify(Array.from(starredFolders)));
+      } catch (err) {}
+
+      renderFoldersList();
+    }
+
+    function updateViewerStarButton() {
+      const starBtn = document.getElementById("viewer-star-btn");
+      const starIcon = document.getElementById("viewer-star-icon");
+      if (!starBtn || !starIcon || !currentDocument) return;
+
+      const isStarred = starredPaths.has(currentDocument.path);
+      if (isStarred) {
+        starIcon.className = "w-4 h-4 text-amber-400 fill-current";
+        starIcon.setAttribute("fill", "currentColor");
+        starBtn.className = "p-1.5 sm:p-2 rounded-lg bg-amber-500/10 text-amber-400 border border-amber-500/30 transition shadow-sm";
+      } else {
+        starIcon.className = "w-4 h-4 text-slate-400";
+        starIcon.setAttribute("fill", "none");
+        starBtn.className = "p-1.5 sm:p-2 rounded-lg bg-slate-900/90 hover:bg-slate-800 text-slate-400 hover:text-amber-400 border border-slate-800 transition";
+      }
+    }
+
+    // ==========================================================
+    // DOCUMENT PREFETCHING (Touchstart / Hover Zero-Latency Launch)
+    // ==========================================================
+
+    async function prefetchDocument(docPathEncoded) {
+      const docPath = decodeURIComponent(docPathEncoded);
+      const doc = allDocuments.find(d => d.path === docPath);
+      if (!doc) return;
+
+      const contentUrl = doc.localUrl || doc.downloadUrl || doc.download_url || `./content/${encodeURIComponent(doc.category)}/${encodeURIComponent(doc.name)}`;
+      if (prefetchedUrls.has(contentUrl) || cachedDocPaths.has(doc.path)) return;
+      prefetchedUrls.add(contentUrl);
+
+      try {
+        const res = await fetch(contentUrl, { cache: 'force-cache' });
+        if (res.ok) {
+          const htmlText = await res.text();
+          try {
+            localStorage.setItem('aihub_doc_path_' + encodeURIComponent(doc.path), htmlText);
+            if ('caches' in window) {
+              const cache = await caches.open('ai-hub-docs-v1');
+              cache.put(contentUrl, new Response(htmlText, { headers: { 'Content-Type': 'text/html' } }));
+            }
+          } catch (e) {}
+
+          cachedDocPaths.add(doc.path);
+          updateOfflineReadyBadgeForDoc(doc.path);
+        }
+      } catch (err) {}
+    }
+
+    function updateOfflineReadyBadges() {
+      allDocuments.forEach(doc => {
+        if (cachedDocPaths.has(doc.path)) {
+          updateOfflineReadyBadgeForDoc(doc.path);
+        }
+      });
+    }
+
+    function updateOfflineReadyBadgeForDoc(docPath) {
+      const escaped = encodeURIComponent(docPath);
+      const badgeContainers = document.querySelectorAll(`[id="offline-badge-${escaped}"]`);
+      const dict = I18N[currentLang];
+      badgeContainers.forEach(container => {
+        container.innerHTML = `
+          <span class="inline-flex items-center gap-1 text-[10px] font-mono font-medium text-emerald-400 bg-emerald-950/70 border border-emerald-800/80 px-1.5 py-0.5 rounded-full" title="Saved offline on this device">
+            <svg class="w-2.5 h-2.5 text-emerald-400 shrink-0" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+            </svg>
+            ${dict.offlineReady}
+          </span>
+        `;
+      });
+    }
+
+    // ==========================================================
+    // "CONTINUE STUDYING" (LAST OPENED DOCUMENT QUICK ACCESS)
+    // ==========================================================
+
+    function saveLastOpenedDoc(doc) {
+      if (!doc) return;
+      try {
+        const data = {
+          name: doc.name,
+          title: doc.title,
+          category: doc.category,
+          slug: doc.slug,
+          path: doc.path,
+          timestamp: Date.now()
+        };
+        localStorage.setItem("last_opened_doc", JSON.stringify(data));
+        renderContinueStudyingCard();
+      } catch (e) {}
+    }
+
+    function renderContinueStudyingCard() {
+      const container = document.getElementById("continue-studying-card-container");
+      if (!container) return;
+
+      try {
+        const saved = localStorage.getItem("last_opened_doc");
+        if (!saved) {
+          container.innerHTML = "";
+          container.classList.add("hidden");
+          return;
+        }
+
+        const doc = JSON.parse(saved);
+        if (!doc || !doc.title) {
+          container.innerHTML = "";
+          container.classList.add("hidden");
+          return;
+        }
+
+        const catName = formatCategoryName(doc.category);
+        const dict = I18N[currentLang];
+
+        container.classList.remove("hidden");
+        container.innerHTML = `
+          <div 
+            onclick="openDocumentViewer('${encodeURIComponent(doc.category)}', '${encodeURIComponent(doc.slug)}')"
+            class="group w-full text-left rtl:text-right bg-gradient-to-r from-indigo-950/70 via-slate-900 to-slate-900 hover:from-indigo-900/70 hover:to-slate-800 border border-indigo-500/40 hover:border-indigo-400 rounded-xl p-3 sm:p-3.5 flex items-center justify-between gap-3 transition-all duration-200 cursor-pointer shadow-lg shadow-indigo-500/5 active:scale-[0.99] select-none">
+            
+            <div class="flex items-center gap-3 min-w-0 flex-1">
+              <div class="w-8 h-8 rounded-lg bg-indigo-500/20 border border-indigo-500/40 flex items-center justify-center shrink-0 text-indigo-300 text-sm shadow-sm group-hover:scale-105 transition">
+                📖
+              </div>
+              <div class="min-w-0 flex-1">
+                <div class="flex items-center gap-1.5 flex-wrap">
+                  <span class="text-[10px] font-bold text-indigo-400 uppercase tracking-wide">${dict.continueStudying}</span>
+                  <span class="text-slate-600 text-[10px]">•</span>
+                  <span class="text-[11px] font-medium text-slate-400 truncate">${catName}</span>
+                </div>
+                <h4 class="text-xs sm:text-sm font-bold text-white group-hover:text-indigo-200 transition truncate mt-0.5">
+                  ${doc.title}
+                </h4>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-2 shrink-0">
+              <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-bold bg-indigo-500 text-white shadow-sm shadow-indigo-500/30 group-hover:bg-indigo-400 transition">
+                <span>${dict.resume}</span>
+                <svg class="w-3.5 h-3.5 rtl:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+                </svg>
+              </span>
+            </div>
+
+          </div>
+        `;
+      } catch (e) {
+        container.innerHTML = "";
+        container.classList.add("hidden");
+      }
+    }
+
+    // ==========================================================
+    // INSTANT CLIENT-SIDE SEARCH / FILTER ENGINE
+    // ==========================================================
+
+    function handleSearchInput(e) {
+      const query = (e.target.value || "").trim().toLowerCase();
+      const clearBtn = document.getElementById("clear-search-btn");
+      const searchView = document.getElementById("search-results-view");
+      const foldersView = document.getElementById("folders-directory-view");
+      const folderDocsView = document.getElementById("folder-docs-view");
+
+      if (clearBtn) {
+        if (query) clearBtn.classList.remove("hidden");
+        else clearBtn.classList.add("hidden");
+      }
+
+      if (!query) {
+        if (searchView) searchView.classList.add("hidden");
+        if (activeFolder) {
+          if (folderDocsView) folderDocsView.classList.remove("hidden");
+        } else {
+          if (foldersView) foldersView.classList.remove("hidden");
+        }
+        return;
+      }
+
+      if (foldersView) foldersView.classList.add("hidden");
+      if (folderDocsView) folderDocsView.classList.add("hidden");
+      if (searchView) searchView.classList.remove("hidden");
+
+      renderSearchResults(query);
+    }
+
+    function clearSearch() {
+      const input = document.getElementById("doc-search-input");
+      if (input) {
+        input.value = "";
+        handleSearchInput({ target: input });
+      }
+    }
+
+    function renderSearchResults(query) {
+      const container = document.getElementById("search-cards-container");
+      const countEl = document.getElementById("search-results-count");
+      const emptyEl = document.getElementById("search-empty-state");
+      if (!container) return;
+
+      const terms = query.toLowerCase().split(/\s+/).filter(Boolean);
+      const matches = allDocuments.filter(doc => {
+        const text = `${doc.title} ${doc.name} ${doc.category}`.toLowerCase();
+        return terms.every(term => text.includes(term));
+      });
+
+      const dict = I18N[currentLang];
+
+      if (countEl) {
+        countEl.textContent = `${matches.length} ${matches.length === 1 ? dict.doc : dict.docs}`;
+      }
+
+      if (matches.length === 0) {
+        container.innerHTML = "";
+        if (emptyEl) emptyEl.classList.remove("hidden");
+        return;
+      }
+
+      if (emptyEl) emptyEl.classList.add("hidden");
+      container.innerHTML = matches.map(doc => renderCompactDocCard(doc, true)).join("");
+    }
+
+    // ==========================================================
+    // DYNAMIC IN-APP NEW CONTENT TOAST (SWIPE-TO-DISMISS)
+    // ==========================================================
+
+    let newContentToastDoc = null;
+
+    function showNewContentToast(doc, totalNewCount = 1) {
+      const toast = document.getElementById("new-content-toast");
+      const filenameEl = document.getElementById("toast-new-filename");
+      const folderEl = document.getElementById("toast-new-folder");
+      const viewBtn = document.getElementById("toast-view-btn");
+      if (!toast || !doc) return;
+
+      newContentToastDoc = doc;
+
+      if (filenameEl) {
+        filenameEl.textContent = totalNewCount > 1 
+          ? `${doc.title} (+${totalNewCount - 1} more)` 
+          : doc.title;
+      }
+      if (folderEl) {
+        folderEl.textContent = formatCategoryName(doc.category);
+      }
+
+      if (viewBtn) {
+        viewBtn.onclick = () => {
+          dismissNewContentToast();
+          openDocumentViewer(encodeURIComponent(doc.category), encodeURIComponent(doc.slug));
+        };
+      }
+
+      toast.style.transform = "translate(-50%, 0)";
+      toast.style.opacity = "1";
+      toast.style.transition = "";
+      toast.classList.remove("hidden", "banner-exit");
+      toast.classList.add("banner-enter");
+    }
+
+    function dismissNewContentToast() {
+      const toast = document.getElementById("new-content-toast");
+      if (!toast) return;
+      toast.classList.remove("banner-enter");
+      toast.classList.add("banner-exit");
+      setTimeout(() => {
+        toast.classList.add("hidden");
+        toast.style.transform = "translate(-50%, 0)";
+        toast.style.opacity = "1";
+        toast.style.transition = "";
+      }, 250);
+    }
+
+    function initToastSwipeGesture() {
+      const toast = document.getElementById("new-content-toast");
+      if (!toast) return;
+
+      let touchStartX = 0;
+      let touchStartY = 0;
+      let isSwiping = false;
+
+      toast.addEventListener("touchstart", (e) => {
+        if (e.touches.length !== 1) return;
+        touchStartX = e.touches[0].clientX;
+        touchStartY = e.touches[0].clientY;
+        isSwiping = false;
+        toast.style.transition = "none";
+      }, { passive: true });
+
+      toast.addEventListener("touchmove", (e) => {
+        if (e.touches.length !== 1) return;
+        const currentX = e.touches[0].clientX;
+        const currentY = e.touches[0].clientY;
+        const diffX = currentX - touchStartX;
+        const diffY = currentY - touchStartY;
+
+        if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 10) {
+          isSwiping = true;
+          const opacity = Math.max(0, 1 - Math.abs(diffX) / 240);
+          toast.style.transform = `translate(calc(-50% + ${diffX}px), 0)`;
+          toast.style.opacity = opacity;
+        }
+      }, { passive: true });
+
+      toast.addEventListener("touchend", (e) => {
+        if (!isSwiping) return;
+        const endX = e.changedTouches[0].clientX;
+        const diffX = endX - touchStartX;
+        const threshold = 70;
+
+        if (Math.abs(diffX) > threshold) {
+          toast.style.transition = "transform 0.22s ease-out, opacity 0.22s ease-out";
+          const offscreenX = diffX > 0 ? "100vw" : "-100vw";
+          toast.style.transform = `translate(${offscreenX}, 0)`;
+          toast.style.opacity = "0";
+          setTimeout(() => {
+            dismissNewContentToast();
+          }, 220);
+        } else {
+          toast.style.transition = "transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease-out";
+          toast.style.transform = "translate(-50%, 0)";
+          toast.style.opacity = "1";
+          setTimeout(() => {
+            toast.style.transition = "";
+          }, 200);
+        }
+        isSwiping = false;
+      }, { passive: true });
+    }
+
+    function getCacheKey(user, repo) {
+      return `aihub_catalog_cache_v10_${user}_${repo}`;
+    }
+
+    // ==========================================================
+    // STALE-WHILE-REVALIDATE CATALOG DISCOVERY & LAUNCH ENGINE
     // ==========================================================
 
     async function loadDocuments(forceRefresh = false) {
@@ -622,53 +1542,54 @@
       const cacheKey = getCacheKey(currentUsername, currentRepo);
       const cached = localStorage.getItem(cacheKey);
 
+      let hasRenderedFromCache = false;
+      let cachedDocsSnapshot = [];
+
       if (!forceRefresh && cached) {
         try {
           const parsed = JSON.parse(cached);
-          const age = Date.now() - (parsed.timestamp || 0);
-          if (age < CACHE_DURATION_MS && Array.isArray(parsed.documents)) {
-            allDocuments = parsed.documents;
-            discoveredCategories = parsed.categories || [];
+          if (Array.isArray(parsed.documents) && parsed.documents.length > 0) {
+            allDocuments = parsed.documents.map(inflateDocument);
+            cachedDocsSnapshot = allDocuments.slice();
+            discoveredCategories = parsed.categories && parsed.categories.length > 0
+              ? parsed.categories
+              : Array.from(new Set(allDocuments.map(d => d.category)));
+            hasRenderedFromCache = true;
             renderUI();
-            if (refreshIcon) refreshIcon.classList.remove("animate-spin");
             handleInitialHash();
-            return;
           }
         } catch (e) {
-          console.warn("Cache parse note:", e);
+          console.warn("Cached catalog parse note:", e);
         }
       }
 
-      // If offline, fall back directly to cached or local documents
-      if (!navigator.onLine) {
+      if (!hasRenderedFromCache) {
         fallbackToLocalSamples();
+        cachedDocsSnapshot = allDocuments.slice();
         renderUI();
-        if (refreshIcon) refreshIcon.classList.remove("animate-spin");
         handleInitialHash();
+      }
+
+      if (!navigator.onLine) {
+        if (refreshIcon) refreshIcon.classList.remove("animate-spin");
         return;
       }
 
-      // Fetch freshly from GitHub API
       try {
-        const statusBanner = document.getElementById("status-banner");
-        statusBanner.classList.add("hidden");
-
         const apiUrl = `https://api.github.com/repos/${currentUsername}/${currentRepo}/contents/content`;
         const res = await fetch(apiUrl, {
           headers: { "Accept": "application/vnd.github.v3+json" }
         });
 
-        // Rate Limiting (403)
         if (res.status === 403) {
           const resetHeader = res.headers.get("x-ratelimit-reset");
           const resetTime = resetHeader ? new Date(parseInt(resetHeader) * 1000).toLocaleTimeString() : "in ~1 hour";
-          showRateLimitFallback(resetTime);
+          if (!hasRenderedFromCache) showRateLimitFallback(resetTime);
           return;
         }
 
-        // 404 (Repo or content/ folder not yet published)
         if (res.status === 404) {
-          showRepoNotFoundFallback();
+          if (!hasRenderedFromCache) showRepoNotFoundFallback();
           return;
         }
 
@@ -677,15 +1598,11 @@
         }
 
         const items = await res.json();
-        if (!Array.isArray(items)) {
-          throw new Error("Invalid response format");
-        }
+        if (!Array.isArray(items)) throw new Error("Invalid response");
 
-        // Extract subdirectories inside content/
         const dirItems = items.filter(item => item.type === "dir");
         const categoriesFound = dirItems.map(d => d.name);
 
-        // For each subdirectory, fetch all HTML files
         const docPromises = dirItems.map(async (dir) => {
           try {
             const folderRes = await fetch(dir.url, {
@@ -699,55 +1616,71 @@
               .filter(file => file.type === "file" && file.name.toLowerCase().endsWith(".html"))
               .map(file => ({
                 name: file.name,
-                title: formatTitle(file.name),
-                category: dir.name,
-                slug: generateSlug(file.name),
                 path: file.path,
-                downloadUrl: file.download_url,
-                htmlUrl: file.html_url,
+                download_url: file.download_url,
                 size: file.size || 0
               }));
           } catch (err) {
-            console.error(`Error loading folder ${dir.name}:`, err);
             return [];
           }
         });
 
         const nestedDocs = await Promise.all(docPromises);
-        allDocuments = nestedDocs.flat();
-        discoveredCategories = categoriesFound;
+        const remoteDocs = nestedDocs.flat();
 
-        if (allDocuments.length === 0) {
-          showEmptyRepoBanner();
-        } else {
-          // Merge local bundled files if any are missing from remote
+        if (remoteDocs.length > 0) {
           BUNDLED_SAMPLE_DOCS.forEach(sample => {
-            if (!allDocuments.some(d => d.slug === sample.slug || d.name === sample.name)) {
-              allDocuments.push(sample);
-              if (!discoveredCategories.some(c => c.toLowerCase() === sample.category.toLowerCase())) {
-                discoveredCategories.push(sample.category);
+            if (!remoteDocs.some(d => d.path === sample.path || d.name === sample.name)) {
+              remoteDocs.push({
+                name: sample.name,
+                path: sample.path,
+                download_url: sample.download_url || sample.downloadUrl || "",
+                size: sample.size || 0
+              });
+              if (!categoriesFound.some(c => c.toLowerCase() === sample.category.toLowerCase())) {
+                categoriesFound.push(sample.category);
               }
             }
           });
 
+          const inflatedRemoteDocs = remoteDocs.map(inflateDocument);
+
+          const newlyDiscoveredDocs = inflatedRemoteDocs.filter(d => 
+            !cachedDocsSnapshot.some(prev => prev.path === d.path)
+          );
+
+          allDocuments = inflatedRemoteDocs;
+          discoveredCategories = categoriesFound;
+
+          const sanitizedDocs = allDocuments.map(doc => ({
+            name: doc.name,
+            path: doc.path,
+            download_url: doc.download_url || doc.downloadUrl || "",
+            size: doc.size || 0
+          }));
+
           const cacheData = {
             timestamp: Date.now(),
             categories: discoveredCategories,
-            documents: allDocuments
+            documents: sanitizedDocs
           };
           localStorage.setItem(cacheKey, JSON.stringify(cacheData));
+
+          if (newlyDiscoveredDocs.length > 0 && hasRenderedFromCache) {
+            showNewContentToast(newlyDiscoveredDocs[0], newlyDiscoveredDocs.length);
+          }
+
+          renderUI();
           if (forceRefresh) {
-            showToast("Fetched latest files from GitHub!");
+            showToast(currentLang === "ar" ? "تم تحديث الملفات بنجاح!" : "Fetched latest files from GitHub!");
           }
         }
 
       } catch (error) {
-        console.warn("GitHub API fetch fallback:", error);
-        fallbackToLocalSamples();
+        console.warn("Background revalidation note:", error);
       } finally {
         if (refreshIcon) refreshIcon.classList.remove("animate-spin");
-        renderUI();
-        handleInitialHash();
+        syncCachedDocPaths();
       }
     }
 
@@ -761,11 +1694,10 @@
         <div>
           <strong class="font-semibold text-white">GitHub API Unauthenticated Rate Limit:</strong>
           Rate limit reached. Reset occurs around <span class="font-mono font-bold">${resetTime}</span>.
-          Displaying cached and local study folders so browsing remains fast and seamless.
+          Displaying cached study folders so browsing remains fast and seamless.
         </div>
       `;
       banner.classList.remove("hidden");
-      fallbackToLocalSamples();
     }
 
     function showRepoNotFoundFallback() {
@@ -773,7 +1705,7 @@
       banner.className = "mb-6 p-4 rounded-xl text-sm border bg-slate-900 border-sky-800/60 text-slate-300 flex items-start gap-3";
       banner.innerHTML = `
         <svg class="w-5 h-5 text-sky-400 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
         <div class="flex-1">
           <strong class="font-semibold text-white">Repository Connected:</strong>
@@ -781,32 +1713,15 @@
         </div>
       `;
       banner.classList.remove("hidden");
-      fallbackToLocalSamples();
-    }
-
-    function showEmptyRepoBanner() {
-      const banner = document.getElementById("status-banner");
-      banner.className = "mb-6 p-4 rounded-xl text-sm border bg-slate-900 border-slate-700 text-slate-300 flex items-start gap-3";
-      banner.innerHTML = `
-        <svg class="w-5 h-5 text-sky-400 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-        </svg>
-        <div>
-          <strong class="font-semibold text-white">Folder Notice:</strong>
-          Loaded available local study folders and documents.
-        </div>
-      `;
-      banner.classList.remove("hidden");
-      fallbackToLocalSamples();
     }
 
     function fallbackToLocalSamples() {
-      allDocuments = BUNDLED_SAMPLE_DOCS;
+      allDocuments = BUNDLED_SAMPLE_DOCS.map(inflateDocument);
       discoveredCategories = ["Math 2", "lectures", "sheets", "summaries", "exams"];
     }
 
     // ==========================================================
-    // GOOGLE DRIVE STYLE FOLDER NAVIGATION & RENDERING
+    // GOOGLE DRIVE STYLE FOLDER NAVIGATION & PINNING
     // ==========================================================
 
     function getUniqueCategories() {
@@ -827,6 +1742,7 @@
 
     function renderUI() {
       updateTotalCountBadges();
+      renderContinueStudyingCard();
       renderFoldersList();
       if (activeFolder) {
         renderFolderDocuments(activeFolder);
@@ -836,90 +1752,146 @@
     function updateTotalCountBadges() {
       const totalDocsEl = document.getElementById("total-docs-count");
       const allDocsCounter = document.getElementById("all-docs-counter");
+      const starredDocsCounter = document.getElementById("starred-docs-counter");
       const foldersCountLabel = document.getElementById("folders-count-label");
 
       const totalDocs = allDocuments.length;
       const categories = getUniqueCategories();
+      const starredCount = starredPaths.size;
+      const dict = I18N[currentLang];
 
       if (totalDocsEl) {
-        totalDocsEl.textContent = `${categories.length} Folders • ${totalDocs} ${totalDocs === 1 ? 'Doc' : 'Docs'}`;
+        if (currentLang === "ar") {
+          totalDocsEl.textContent = `${categories.length} مجلدات • ${totalDocs} ${dict.docs}`;
+        } else {
+          totalDocsEl.textContent = `${categories.length} Folders • ${totalDocs} ${totalDocs === 1 ? dict.doc : dict.docs}`;
+        }
       }
 
       if (allDocsCounter) {
-        allDocsCounter.textContent = `${totalDocs} ${totalDocs === 1 ? 'file' : 'files'}`;
+        allDocsCounter.textContent = `${totalDocs} ${totalDocs === 1 ? dict.file : dict.files}`;
+      }
+
+      if (starredDocsCounter) {
+        starredDocsCounter.textContent = `${starredCount} ${dict.saved}`;
       }
 
       if (foldersCountLabel) {
-        foldersCountLabel.textContent = `${categories.length} folders detected`;
+        foldersCountLabel.textContent = `${categories.length} ${dict.foldersDetected}`;
       }
     }
 
-    // Render the Google Drive Style Vertical Folders List
     function renderFoldersList() {
-      const container = document.getElementById("folders-list-container");
-      if (!container) return;
+      const pinnedSection = document.getElementById("pinned-folders-section");
+      const pinnedContainer = document.getElementById("pinned-folders-container");
+      const pinnedCountLabel = document.getElementById("pinned-folders-count");
+      const normalContainer = document.getElementById("folders-list-container");
+      if (!normalContainer) return;
 
       const categories = getUniqueCategories();
+      const dict = I18N[currentLang];
 
       if (categories.length === 0) {
-        container.innerHTML = `
+        normalContainer.innerHTML = `
           <div class="text-center py-8 text-slate-500 text-sm">
-            Scanning for folders in content/...
+            ${dict.scanning}
           </div>
         `;
+        if (pinnedSection) pinnedSection.classList.add("hidden");
         return;
       }
 
-      container.innerHTML = categories.map(cat => {
-        const catDocs = allDocuments.filter(d => d.category.toLowerCase() === cat.toLowerCase());
-        const count = catDocs.length;
-        const theme = getCategoryTheme(cat);
-        const displayName = formatCategoryName(cat);
+      const pinnedCats = categories.filter(cat => starredFolders.has(cat.toLowerCase()));
+      const otherCats = categories.filter(cat => !starredFolders.has(cat.toLowerCase()));
 
-        return `
-          <button 
-            type="button" 
-            onclick="openFolder('${encodeURIComponent(cat)}')"
-            class="w-full text-left group bg-[#0f172a] hover:bg-[#131d33] border border-slate-800 hover:border-slate-700 hover:border-l-4 hover:border-l-${theme.accent} rounded-xl p-3.5 sm:p-4 flex items-center justify-between gap-3 transition-all duration-200 active:scale-[0.99] shadow-sm">
-            
-            <div class="flex items-center gap-3.5 min-w-0">
-              <!-- Google Drive Style Folder SVG Icon with Distinct Category Accent -->
-              <div class="w-10 h-10 rounded-lg ${theme.iconBg} border flex items-center justify-center shrink-0 ${theme.iconColor} group-hover:scale-105 transition">
-                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M19.5 21a3 3 0 003-3v-4.5a3 3 0 00-3-3h-1.5V9a3 3 0 00-3-3h-4.636a3 3 0 01-2.121-.879L6.879 3.757A3 3 0 004.757 3H3a3 3 0 00-3 3v12a3 3 0 003 3h16.5z" />
-                </svg>
-              </div>
+      if (pinnedSection && pinnedContainer) {
+        if (pinnedCats.length > 0) {
+          pinnedSection.classList.remove("hidden");
+          if (pinnedCountLabel) {
+            pinnedCountLabel.textContent = `${pinnedCats.length} ${currentLang === 'ar' ? 'مثبت' : 'pinned'}`;
+          }
+          pinnedContainer.innerHTML = pinnedCats.map(cat => renderFolderRow(cat, true)).join("");
+        } else {
+          pinnedSection.classList.add("hidden");
+          pinnedContainer.innerHTML = "";
+        }
+      }
 
-              <!-- Folder Details -->
-              <div class="min-w-0">
-                <h3 class="text-sm sm:text-base font-bold text-white group-hover:text-sky-300 transition truncate">
-                  ${displayName}
-                </h3>
-                <p class="text-xs font-mono text-slate-400 mt-0.5 truncate">
-                  content/${cat}
-                </p>
-              </div>
-            </div>
+      normalContainer.innerHTML = otherCats.map(cat => renderFolderRow(cat, false)).join("");
+    }
 
-            <!-- Right: Item Counter Badge & Arrow -->
-            <div class="flex items-center gap-2.5 sm:gap-3 shrink-0">
-              <span class="text-xs font-mono px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-800 text-slate-300 group-hover:border-slate-700 transition">
-                ${count} ${count === 1 ? 'file' : 'files'}
-              </span>
-              <svg class="w-4 h-4 sm:w-5 sm:h-5 text-slate-500 group-hover:text-sky-400 group-hover:translate-x-0.5 transition" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+    function renderFolderRow(cat, isPinned) {
+      const catDocs = allDocuments.filter(d => d.category.toLowerCase() === cat.toLowerCase());
+      const count = catDocs.length;
+      const theme = getCategoryTheme(cat);
+      const displayName = formatCategoryName(cat);
+      const escapedCat = encodeURIComponent(cat);
+      const dict = I18N[currentLang];
+
+      return `
+        <div class="folder-card w-full group bg-[#0f172a] hover:bg-[#131d33] border ${isPinned ? 'border-amber-500/50 bg-gradient-to-r from-amber-950/20 via-[#0f172a] to-[#0f172a]' : 'border-slate-800 hover:border-slate-700'} hover:border-l-4 hover:border-l-${theme.accent} rounded-xl p-3 sm:p-3.5 flex items-center justify-between gap-3 transition-all duration-200 active:scale-[0.99] shadow-sm">
+          
+          <div onclick="openFolder('${escapedCat}')" class="flex items-center gap-3 min-w-0 flex-1 cursor-pointer">
+            <div class="w-9 h-9 rounded-lg ${theme.iconBg} border flex items-center justify-center shrink-0 ${theme.iconColor} group-hover:scale-105 transition">
+              <svg class="w-4.5 h-4.5" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M19.5 21a3 3 0 003-3v-4.5a3 3 0 00-3-3h-1.5V9a3 3 0 00-3-3h-4.636a3 3 0 01-2.121-.879L6.879 3.757A3 3 0 004.757 3H3a3 3 0 00-3 3v12a3 3 0 003 3h16.5z" />
               </svg>
             </div>
 
-          </button>
-        `;
-      }).join("");
+            <div class="min-w-0 flex-1">
+              <div class="flex items-center gap-2">
+                <h3 class="text-sm sm:text-base font-bold text-white group-hover:text-sky-300 transition truncate">
+                  ${displayName}
+                </h3>
+                ${isPinned ? `
+                  <span class="inline-flex items-center gap-0.5 text-[10px] font-semibold text-amber-400 bg-amber-950/70 border border-amber-800/80 px-1.5 py-0.5 rounded-md">
+                    📌 ${dict.pinned}
+                  </span>
+                ` : ''}
+              </div>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
+            <span class="text-xs font-mono px-2 py-0.5 sm:py-1 rounded-lg bg-slate-900 border border-slate-800 text-slate-300">
+              ${count} ${count === 1 ? dict.file : dict.files}
+            </span>
+
+            <button 
+              type="button" 
+              onclick="event.stopPropagation(); toggleFolderStar('${escapedCat}', event)"
+              title="${isPinned ? dict.unpinTooltip : dict.pinTooltip}"
+              class="p-1.5 rounded-lg text-slate-400 hover:text-amber-400 hover:bg-slate-800 transition active:scale-90">
+              <svg class="w-4 h-4 ${isPinned ? 'text-amber-400 fill-current' : 'text-slate-500 hover:text-amber-400'}" fill="${isPinned ? 'currentColor' : 'none'}" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+              </svg>
+            </button>
+
+            <button 
+              type="button" 
+              onclick="openFolder('${escapedCat}')"
+              class="p-1 text-slate-500 group-hover:text-sky-400 transition cursor-pointer">
+              <svg class="w-4 h-4 sm:w-5 sm:h-5 rtl:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+              </svg>
+            </button>
+          </div>
+
+        </div>
+      `;
     }
 
-    // Open a specific folder (Displays its documents in card view)
-    function openFolder(categoryEncoded) {
+    function openFolder(categoryEncoded, pushHistory = true) {
       const category = decodeURIComponent(categoryEncoded);
       activeFolder = category;
+
+      const searchView = document.getElementById("search-results-view");
+      const searchInput = document.getElementById("doc-search-input");
+      if (searchView) searchView.classList.add("hidden");
+      if (searchInput && searchInput.value) {
+        searchInput.value = "";
+        document.getElementById("clear-search-btn")?.classList.add("hidden");
+      }
 
       const foldersView = document.getElementById("folders-directory-view");
       const folderDocsView = document.getElementById("folder-docs-view");
@@ -929,19 +1901,25 @@
 
       renderFolderDocuments(category);
 
-      // Update URL hash for folder deep linking
-      const folderHash = category === "all" ? "#all" : `#folder/${encodeURIComponent(category.toLowerCase())}`;
-      if (window.location.hash !== folderHash && !currentDocument) {
-        window.history.pushState(null, "", folderHash);
+      const folderHash = category === "all" ? "#all" : (category === "starred" ? "#starred" : `#folder/${encodeURIComponent(category.toLowerCase())}`);
+      if (pushHistory && !currentDocument) {
+        window.history.pushState({ view: 'folder', folder: category }, '', folderHash);
       }
 
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
-    // Return back to the Folders Directory View
-    function backToFolders(e) {
+    function backToFolders(e, pushHistory = true) {
       if (e) e.preventDefault();
       activeFolder = null;
+
+      const searchView = document.getElementById("search-results-view");
+      const searchInput = document.getElementById("doc-search-input");
+      if (searchView) searchView.classList.add("hidden");
+      if (searchInput && searchInput.value) {
+        searchInput.value = "";
+        document.getElementById("clear-search-btn")?.classList.add("hidden");
+      }
 
       const foldersView = document.getElementById("folders-directory-view");
       const folderDocsView = document.getElementById("folder-docs-view");
@@ -949,15 +1927,89 @@
       if (folderDocsView) folderDocsView.classList.add("hidden");
       if (foldersView) foldersView.classList.remove("hidden");
 
-      // Reset hash if not viewing a doc
-      if (!currentDocument && window.location.hash) {
-        window.history.pushState(null, "", window.location.pathname + window.location.search);
+      if (pushHistory && !currentDocument) {
+        window.history.pushState({ view: 'root' }, '', window.location.pathname + window.location.search);
       }
 
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
-    // Render documents inside the selected folder
+    // ==========================================================
+    // COMPACT DOCUMENT CARD RENDERER (ONE-TAP & 2-3 LINES MAX)
+    // ==========================================================
+
+    function renderCompactDocCard(doc, showFolderPill = false) {
+      const sizeLabel = formatBytes(doc.size);
+      const isDocStarred = starredPaths.has(doc.path);
+      const isOfflineReady = cachedDocPaths.has(doc.path);
+      const escapedPath = encodeURIComponent(doc.path);
+      const escapedCat = encodeURIComponent(doc.category);
+      const escapedSlug = encodeURIComponent(doc.slug);
+      const docTheme = getCategoryTheme(doc.category);
+      const dict = I18N[currentLang];
+
+      return `
+        <div 
+          role="button" 
+          tabindex="0" 
+          onclick="openDocumentViewer('${escapedCat}', '${escapedSlug}')"
+          onkeydown="if(event.key==='Enter'||event.key===' ')openDocumentViewer('${escapedCat}', '${escapedSlug}')"
+          onmouseenter="prefetchDocument('${escapedPath}')"
+          ontouchstart="prefetchDocument('${escapedPath}')"
+          class="doc-card group relative bg-[#0f172a] hover:bg-[#131d33] border border-slate-800 hover:border-sky-500/50 rounded-xl p-3.5 sm:p-4 flex flex-col justify-between transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-sky-500/5 cursor-pointer select-none active:scale-[0.99] outline-none focus-visible:border-sky-400">
+          
+          <div>
+            ${showFolderPill ? `
+              <div class="mb-2">
+                <span class="inline-flex items-center text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full border ${docTheme.badge}">
+                  ${formatCategoryName(doc.category)}
+                </span>
+              </div>
+            ` : ''}
+
+            <!-- Flexible Multi-line Title (1 to 3 Lines Max with Word-Break) -->
+            <h3 
+              class="text-sm sm:text-[15px] font-bold text-white group-hover:text-sky-300 transition leading-snug clamp-title-3"
+              style="display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis; word-break: break-word;">
+              ${doc.title}
+            </h3>
+          </div>
+
+          <!-- Compact Bottom Metadata Row: Size, Offline Ready Badge, & Star Button -->
+          <div class="mt-3 pt-2.5 border-t border-slate-800/80 flex items-center justify-between gap-2">
+            <div class="flex items-center gap-2 min-w-0 flex-wrap">
+              <span class="text-[11px] font-mono text-slate-400 shrink-0">
+                ${sizeLabel || 'HTML'}
+              </span>
+
+              <div id="offline-badge-${escapedPath}">
+                ${isOfflineReady ? `
+                  <span class="inline-flex items-center gap-1 text-[10px] font-mono font-medium text-emerald-400 bg-emerald-950/70 border border-emerald-800/80 px-1.5 py-0.5 rounded-full" title="Saved offline on this device">
+                    <svg class="w-2.5 h-2.5 text-emerald-400 shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                    </svg>
+                    ${dict.offlineReady}
+                  </span>
+                ` : ''}
+              </div>
+            </div>
+
+            <!-- Path-Specific Star Favorite Toggle Button -->
+            <button 
+              type="button" 
+              onclick="event.stopPropagation(); toggleStar('${escapedPath}', event)"
+              title="${isDocStarred ? 'Remove Star' : 'Star this document'}"
+              class="p-1 -mr-1 rtl:-mr-0 rtl:-ml-1 rounded-lg text-slate-400 hover:text-amber-400 transition active:scale-90 hover:bg-slate-800/80">
+              <svg class="w-4 h-4 ${isDocStarred ? 'text-amber-400 fill-current' : 'hover:fill-amber-400/20'}" fill="${isDocStarred ? 'currentColor' : 'none'}" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+              </svg>
+            </button>
+          </div>
+
+        </div>
+      `;
+    }
+
     function renderFolderDocuments(category) {
       const activeHeader = document.getElementById("active-folder-header");
       const countBadge = document.getElementById("folder-files-count-badge");
@@ -965,14 +2017,21 @@
       const emptyState = document.getElementById("empty-state");
 
       const isAll = category === "all";
-      const filtered = isAll
-        ? allDocuments
-        : allDocuments.filter(d => d.category.toLowerCase() === category.toLowerCase());
+      const isStarred = category === "starred";
+      const dict = I18N[currentLang];
 
-      const theme = isAll ? CATEGORY_THEMES.default : getCategoryTheme(category);
-      const displayName = isAll ? "All Documents" : formatCategoryName(category);
+      let filtered = [];
+      if (isStarred) {
+        filtered = allDocuments.filter(d => starredPaths.has(d.path));
+      } else if (isAll) {
+        filtered = allDocuments;
+      } else {
+        filtered = allDocuments.filter(d => d.category.toLowerCase() === category.toLowerCase());
+      }
 
-      // Update Header Breadcrumb
+      const theme = isStarred ? CATEGORY_THEMES.starred : (isAll ? CATEGORY_THEMES.default : getCategoryTheme(category));
+      const displayName = isStarred ? dict.starredNotes : (isAll ? dict.allDocuments : formatCategoryName(category));
+
       if (activeHeader) {
         activeHeader.innerHTML = `
           <div class="w-6 h-6 rounded-md ${theme.iconBg} border flex items-center justify-center shrink-0 ${theme.iconColor}">
@@ -985,7 +2044,7 @@
       }
 
       if (countBadge) {
-        countBadge.textContent = `${filtered.length} ${filtered.length === 1 ? 'document' : 'documents'}`;
+        countBadge.textContent = `${filtered.length} ${filtered.length === 1 ? dict.file : dict.files}`;
       }
 
       if (!container) return;
@@ -995,67 +2054,25 @@
         if (emptyState) {
           emptyState.classList.remove("hidden");
           const msg = document.getElementById("empty-state-message");
-          if (msg) msg.textContent = `No HTML documents were discovered in folder "${displayName}".`;
+          if (msg) {
+            msg.textContent = isStarred 
+              ? dict.noStarredNotes
+              : (currentLang === "ar" ? `لا توجد ملفات في مجلد "${displayName}".` : `No HTML documents were discovered in folder "${displayName}".`);
+          }
         }
         return;
       }
 
       if (emptyState) emptyState.classList.add("hidden");
 
-      container.innerHTML = filtered.map(doc => {
-        const docTheme = getCategoryTheme(doc.category);
-        const sizeLabel = formatBytes(doc.size);
-
-        return `
-          <div class="group relative bg-[#0f172a] hover:bg-[#131d33] border border-slate-800 hover:border-sky-500/50 rounded-xl p-4 sm:p-5 flex flex-col justify-between transition-all duration-200 hover:-translate-y-1 hover:shadow-xl hover:shadow-sky-500/5">
-            <div>
-              <!-- Category Pill & Extension -->
-              <div class="flex items-center justify-between mb-2.5 sm:mb-3">
-                <span class="inline-flex items-center text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full border ${docTheme.badge}">
-                  ${formatCategoryName(doc.category)}
-                </span>
-                <span class="text-[11px] font-mono text-slate-400 group-hover:text-slate-300">
-                  .HTML
-                </span>
-              </div>
-
-              <!-- Human-Readable Document Title -->
-              <h3 class="text-sm sm:text-base font-bold text-white group-hover:text-sky-300 transition line-clamp-2 leading-snug">
-                ${doc.title}
-              </h3>
-
-              <!-- Raw Filename / Path -->
-              <p class="text-xs font-mono text-slate-400 mt-2 truncate group-hover:text-slate-400" title="${doc.name}">
-                ${doc.name}
-              </p>
-            </div>
-
-            <!-- Card Bottom Bar: Metadata + Direct Read Button -->
-            <div class="mt-4 sm:mt-5 pt-3.5 border-t border-slate-800/80 flex items-center justify-between gap-3">
-              <span class="text-[11px] font-mono text-slate-400">
-                ${sizeLabel || 'HTML Doc'}
-              </span>
-
-              <button 
-                type="button" 
-                onclick="openDocumentViewer('${encodeURIComponent(doc.category)}', '${encodeURIComponent(doc.slug)}')"
-                class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-sky-500/10 text-sky-400 hover:bg-sky-500 hover:text-slate-950 border border-sky-500/30 transition active:scale-95 shadow-sm">
-                <span>Read Doc</span>
-                <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                </svg>
-              </button>
-            </div>
-          </div>
-        `;
-      }).join("");
+      container.innerHTML = filtered.map(doc => renderCompactDocCard(doc, isAll)).join("");
     }
 
     // ==========================================================
-    // IN-APP DOCUMENT VIEWER LOGIC (NO SIDE GAPS / NO TOP VOID)
+    // IN-APP DOCUMENT VIEWER LOGIC & READING PROGRESS BAR
     // ==========================================================
 
-    async function openDocumentViewer(categoryEncoded, slugEncoded) {
+    async function openDocumentViewer(categoryEncoded, slugEncoded, pushHistory = true) {
       const category = decodeURIComponent(categoryEncoded).toLowerCase();
       const slug = decodeURIComponent(slugEncoded);
 
@@ -1065,7 +2082,7 @@
       }
 
       if (!doc) {
-        showToast("Document not found in list.");
+        showToast(currentLang === "ar" ? "الملف غير موجود في القائمة." : "Document not found in list.");
         return;
       }
 
@@ -1073,6 +2090,11 @@
       activeFolder = doc.category;
       currentZoom = 1.0;
       updateZoomLevelDisplay();
+
+      saveLastOpenedDoc(doc);
+
+      const progressBar = document.getElementById("reading-progress-bar");
+      if (progressBar) progressBar.style.width = "0%";
 
       const viewerView = document.getElementById("viewer-view");
       const titleEl = document.getElementById("viewer-doc-title");
@@ -1093,13 +2115,13 @@
       categoryBadge.textContent = formatCategoryName(doc.category);
       categoryBadge.className = `hidden md:inline-block text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full border ${theme.badge} shrink-0`;
 
-      // Update URL Hash Deep Route
+      updateViewerStarButton();
+
       const targetHash = `#${encodeURIComponent(doc.category.toLowerCase())}/${encodeURIComponent(doc.slug)}`;
-      if (window.location.hash !== targetHash) {
-        window.history.pushState(null, "", targetHash);
+      if (pushHistory) {
+        window.history.pushState({ view: 'doc', category: doc.category, slug: doc.slug }, '', targetHash);
       }
 
-      // Show viewer & lock body scroll
       viewerView.classList.remove("hidden");
       document.body.style.overflow = "hidden";
       if (loader) loader.classList.remove("hidden", "opacity-0");
@@ -1108,30 +2130,30 @@
     }
 
     async function loadIframeContent(doc, iframe, loader) {
-      const offlineDocKey = `aihub_doc_${doc.category}_${doc.slug}`;
+      const offlineDocKey = `aihub_doc_path_${encodeURIComponent(doc.path)}`;
 
       try {
-        // Check offline LocalStorage / CacheStorage first if offline
-        if (!navigator.onLine) {
-          const cachedHtml = localStorage.getItem(offlineDocKey);
-          if (cachedHtml) {
-            iframe.srcdoc = cachedHtml;
-            attachIframeListeners(iframe, loader);
-            return;
-          }
+        const cachedHtml = localStorage.getItem(offlineDocKey);
+        if (cachedHtml) {
+          iframe.srcdoc = cachedHtml;
+          attachIframeListeners(iframe, loader);
+          cachedDocPaths.add(doc.path);
+          updateOfflineReadyBadgeForDoc(doc.path);
+          return;
         }
 
-        // Strategy A: If remote raw URL is present, fetch text and inject srcdoc
-        if (doc.downloadUrl) {
-          const response = await fetch(doc.downloadUrl);
+        if (doc.downloadUrl || doc.download_url) {
+          const fetchUrl = doc.downloadUrl || doc.download_url;
+          const response = await fetch(fetchUrl);
           if (response.ok) {
             const htmlText = await response.text();
-            // Permanently cache document offline in LocalStorage and CacheStorage
             try {
               localStorage.setItem(offlineDocKey, htmlText);
+              cachedDocPaths.add(doc.path);
+              updateOfflineReadyBadgeForDoc(doc.path);
               if ('caches' in window) {
                 const c = await caches.open('ai-hub-docs-v1');
-                c.put(doc.downloadUrl, new Response(htmlText, { headers: { 'Content-Type': 'text/html' } }));
+                c.put(fetchUrl, new Response(htmlText, { headers: { 'Content-Type': 'text/html' } }));
               }
             } catch (e) {}
 
@@ -1141,30 +2163,37 @@
           }
         }
 
-        // Strategy B: Direct relative URL
         const contentUrl = doc.localUrl || `./content/${encodeURIComponent(doc.category)}/${encodeURIComponent(doc.name)}`;
         
         try {
           const localRes = await fetch(contentUrl);
           if (localRes.ok) {
             const htmlText = await localRes.text();
-            try { localStorage.setItem(offlineDocKey, htmlText); } catch (e) {}
+            try { 
+              localStorage.setItem(offlineDocKey, htmlText); 
+              cachedDocPaths.add(doc.path);
+              updateOfflineReadyBadgeForDoc(doc.path);
+              if ('caches' in window) {
+                const c = await caches.open('ai-hub-docs-v1');
+                c.put(contentUrl, new Response(htmlText, { headers: { 'Content-Type': 'text/html' } }));
+              }
+            } catch (e) {}
             iframe.srcdoc = htmlText;
             attachIframeListeners(iframe, loader);
             return;
           }
         } catch (fetchErr) {}
 
-        // Strategy C: iframe.src fallback
         iframe.removeAttribute("srcdoc");
         iframe.src = contentUrl;
         attachIframeListeners(iframe, loader);
 
       } catch (err) {
-        console.warn("Iframe loading fallback:", err);
+        console.warn("Iframe loading note:", err);
         const cachedHtml = localStorage.getItem(offlineDocKey);
         if (cachedHtml) {
           iframe.srcdoc = cachedHtml;
+          cachedDocPaths.add(doc.path);
         } else {
           iframe.removeAttribute("srcdoc");
           iframe.src = doc.localUrl || `./content/${encodeURIComponent(doc.category)}/${encodeURIComponent(doc.name)}`;
@@ -1186,10 +2215,7 @@
           const iDoc = iframe.contentDocument || iframe.contentWindow.document;
           const iWin = iframe.contentWindow;
 
-          // Adapt styles for high contrast & ensure clean padding under floating bar
           adaptIframeThemeSafeguard(iDoc);
-
-          // Apply direct internal zoom
           applyDirectZoomToIframe();
 
           if (iWin) {
@@ -1201,6 +2227,11 @@
             iDoc.addEventListener("click", revealToolbarOnTap);
             iDoc.addEventListener("touchstart", revealToolbarOnTap, { passive: true });
           }
+
+          if (currentDocument && currentDocument.path) {
+            restoreDocumentScrollPosition(currentDocument.path, iWin, iDoc);
+          }
+
         } catch (e) {
           console.warn("Iframe setup note:", e);
         }
@@ -1212,7 +2243,50 @@
     }
 
     // ==========================================================
-    // THEME & VIEWPORT SAFEGUARD
+    // REMEMBER & RESTORE SCROLL POSITION ENGINE
+    // ==========================================================
+
+    let scrollSaveDebounceTimer = null;
+
+    function saveDocumentScrollPosition(docPath, ratio) {
+      if (!docPath) return;
+      clearTimeout(scrollSaveDebounceTimer);
+      scrollSaveDebounceTimer = setTimeout(() => {
+        try {
+          localStorage.setItem(`aihub_scroll_${encodeURIComponent(docPath)}`, ratio.toFixed(4));
+        } catch (e) {}
+      }, 150);
+    }
+
+    function restoreDocumentScrollPosition(docPath, iWin, iDoc) {
+      if (!docPath) return;
+      try {
+        const saved = localStorage.getItem(`aihub_scroll_${encodeURIComponent(docPath)}`);
+        if (!saved) return;
+        const ratio = parseFloat(saved);
+        if (isNaN(ratio) || ratio <= 0.02) return;
+
+        const executeScroll = () => {
+          try {
+            if (!iWin) return;
+            const docEl = iDoc ? (iDoc.documentElement || iDoc.body) : null;
+            const scrollH = docEl ? (docEl.scrollHeight || 0) : 0;
+            const clientH = iWin.innerHeight || 0;
+            const maxScroll = Math.max(0, scrollH - clientH);
+            if (maxScroll > 30) {
+              const targetY = Math.round(maxScroll * ratio);
+              iWin.scrollTo({ top: targetY, behavior: 'smooth' });
+            }
+          } catch (e) {}
+        };
+
+        setTimeout(executeScroll, 160);
+        setTimeout(executeScroll, 420);
+      } catch (e) {}
+    }
+
+    // ==========================================================
+    // THEME & VIEWPORT SAFEGUARD (Dynamic 100% Fluid Width Stretch)
     // ==========================================================
 
     function adaptIframeThemeSafeguard(iDoc) {
@@ -1224,7 +2298,6 @@
 
         const isTransparent = compBg === "transparent" || compBg === "rgba(0, 0, 0, 0)";
 
-        // Check text brightness
         let isDarkText = false;
         const rgbMatch = compColor.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/);
         if (rgbMatch) {
@@ -1244,37 +2317,103 @@
           body.style.color = "#e2e8f0";
         }
 
-        // Add comfortable top padding so initial document title sits gracefully beneath the frosted bar
         const currentPadTop = parseInt(window.getComputedStyle(body).paddingTop) || 0;
         if (currentPadTop < 50) {
           body.style.paddingTop = "3.8rem";
         }
 
-        // Ensure 100% full width and no horizontal void
-        iDoc.documentElement.style.width = "100%";
-        body.style.width = "100%";
-        body.style.maxWidth = "100%";
-      } catch (err) {
-        console.warn("Theme safeguard note:", err);
-      }
+        // Inject Dynamic Responsive 100% Fluid Width & Clamping Styles inside Iframe
+        let responsiveStyle = iDoc.getElementById("ai-hub-responsive-rules");
+        if (!responsiveStyle) {
+          responsiveStyle = iDoc.createElement("style");
+          responsiveStyle.id = "ai-hub-responsive-rules";
+          responsiveStyle.textContent = `
+            html, body {
+              overflow-x: hidden !important;
+              width: 100% !important;
+              max-width: 100% !important;
+              margin: 0 !important;
+              padding: 0.75rem !important;
+              padding-top: 4.2rem !important;
+              box-sizing: border-box !important;
+              -webkit-text-size-adjust: 100% !important;
+            }
+            * {
+              box-sizing: border-box !important;
+            }
+            /* 100% Fluid Dynamic Stretch: Eliminate Empty Side Margins When Zooming Out */
+            main, article, .content-card, .container, .page-wrapper, .document-container, .notion-page, #content, div.content, body > div, .card, .wrapper {
+              width: 100% !important;
+              max-width: 100% !important;
+              min-width: 0 !important;
+              margin-left: 0 !important;
+              margin-right: 0 !important;
+              box-sizing: border-box !important;
+            }
+            .katex-display {
+              display: block !important;
+              width: 100% !important;
+              max-width: 100% !important;
+              overflow-x: auto !important;
+              overflow-y: hidden !important;
+              text-align: center !important;
+              -webkit-overflow-scrolling: touch !important;
+              margin: 1rem 0 !important;
+            }
+            table {
+              display: block !important;
+              width: 100% !important;
+              max-width: 100% !important;
+              overflow-x: auto !important;
+              -webkit-overflow-scrolling: touch !important;
+              margin: 1rem 0 !important;
+            }
+            pre, code {
+              white-space: pre-wrap !important;
+              word-break: break-word !important;
+              overflow-x: auto !important;
+            }
+            img, svg, canvas, iframe {
+              max-width: 100% !important;
+              height: auto !important;
+            }
+          `;
+          iDoc.head.appendChild(responsiveStyle);
+        }
+      } catch (err) {}
     }
 
     // ==========================================================
-    // AUTO-HIDE TOOLBAR & SCROLL-TO-TOP HANDLERS
+    // VIEWER SCROLLING & AUTO-HIDE TOOLBAR
     // ==========================================================
 
     function handleIframeScroll() {
       const iframe = document.getElementById("reader-iframe");
       const toolbar = document.getElementById("viewer-toolbar");
+      const progressBar = document.getElementById("reading-progress-bar");
       const scrollTopBtn = document.getElementById("scroll-top-btn");
       if (!iframe || !toolbar) return;
 
       try {
         const iWin = iframe.contentWindow;
-        const iDoc = iframe.contentDocument;
-        const currentScrollY = iWin.scrollY || iWin.pageYOffset || (iDoc && iDoc.documentElement ? iDoc.documentElement.scrollTop : 0) || 0;
+        const iDoc = iframe.contentDocument || iWin.document;
+        if (!iWin || !iDoc) return;
 
-        // Toggle Floating Scroll-to-Top Button (> 250px)
+        const currentScrollY = iWin.scrollY || iDoc.documentElement.scrollTop || iDoc.body.scrollTop || 0;
+        const scrollHeight = iDoc.documentElement.scrollHeight || iDoc.body.scrollHeight || 1;
+        const clientHeight = iWin.innerHeight || 1;
+        
+        const maxScroll = Math.max(1, scrollHeight - clientHeight);
+        if (progressBar) {
+          const percent = Math.min(100, Math.max(0, (currentScrollY / maxScroll) * 100));
+          progressBar.style.width = `${percent}%`;
+        }
+
+        if (currentDocument && currentDocument.path && maxScroll > 15) {
+          const ratio = Math.min(1, Math.max(0, currentScrollY / maxScroll));
+          saveDocumentScrollPosition(currentDocument.path, ratio);
+        }
+
         if (scrollTopBtn) {
           if (currentScrollY > 250) {
             scrollTopBtn.classList.remove("opacity-0", "pointer-events-none", "translate-y-4");
@@ -1285,7 +2424,6 @@
           }
         }
 
-        // Auto-Hide on Downward Scroll past 60px; Reveal on Upward Scroll
         if (currentScrollY > 60 && currentScrollY > lastScrollY + 6) {
           if (!isToolbarHidden) {
             toolbar.classList.add("-translate-y-full");
@@ -1330,180 +2468,203 @@
       revealToolbarOnTap();
     }
 
-    function closeDocumentViewer() {
+    function closeDocumentViewer(pushHistory = true) {
       const viewerView = document.getElementById("viewer-view");
       const iframe = document.getElementById("reader-iframe");
       
       viewerView.classList.add("hidden");
       document.body.style.overflow = "";
       if (iframe) iframe.src = "about:blank";
-      
-      const previousDoc = currentDocument;
+
       currentDocument = null;
 
-      // Restore folder view url hash
-      if (previousDoc && previousDoc.category) {
-        window.history.pushState(null, "", `#folder/${encodeURIComponent(previousDoc.category.toLowerCase())}`);
-      } else {
-        window.history.pushState(null, "", window.location.pathname + window.location.search);
-      }
+      renderContinueStudyingCard();
 
-      if (document.fullscreenElement) {
-        document.exitFullscreen().catch(() => {});
+      if (pushHistory) {
+        if (activeFolder) {
+          const folderHash = activeFolder === "all" ? "#all" : (activeFolder === "starred" ? "#starred" : `#folder/${encodeURIComponent(activeFolder.toLowerCase())}`);
+          window.history.pushState({ view: 'folder', folder: activeFolder }, '', folderHash);
+        } else {
+          window.history.pushState({ view: 'root' }, '', window.location.pathname + window.location.search);
+        }
       }
     }
 
     // ==========================================================
-    // DIRECT ZOOM ENGINE (NO EMPTY SIDE MARGINS / NO VOIDS)
+    // DYNAMIC IFRAME STRETCH & DIRECT BODY-LEVEL ZOOM ENGINE
     // ==========================================================
-
-    function updateZoomLevelDisplay() {
-      const label = document.getElementById("zoom-level-label");
-      if (label) {
-        label.textContent = `${Math.round(currentZoom * 100)}%`;
-      }
-    }
 
     function applyDirectZoomToIframe() {
-      updateZoomLevelDisplay();
       const iframe = document.getElementById("reader-iframe");
       if (!iframe) return;
 
       try {
-        const iDoc = iframe.contentDocument || (iframe.contentWindow && iframe.contentWindow.document);
-        if (iDoc && iDoc.body) {
-          // Native clean zoom on body content — zero side margins, layout stays 100% full width
+        const iDoc = iframe.contentDocument || iframe.contentWindow.document;
+        if (!iDoc || !iDoc.body) return;
+
+        // Apply zoom directly to iframe body
+        if ('zoom' in iDoc.body.style) {
           iDoc.body.style.zoom = currentZoom;
-          iDoc.documentElement.style.zoom = currentZoom;
-          iDoc.documentElement.style.width = "100%";
+          // Fluid compensation width: eliminates side empty whitespace when zooming out (<100%)
+          if (currentZoom < 1.0) {
+            const stretchPercent = (100 / currentZoom).toFixed(2);
+            iDoc.body.style.width = `${stretchPercent}%`;
+            iDoc.body.style.maxWidth = `${stretchPercent}%`;
+          } else {
+            iDoc.body.style.width = "100%";
+            iDoc.body.style.maxWidth = "100%";
+          }
+        } else {
+          iDoc.body.style.fontSize = `${currentZoom * 100}%`;
           iDoc.body.style.width = "100%";
+          iDoc.body.style.maxWidth = "100%";
         }
-      } catch (err) {
-        console.warn("Direct zoom note:", err);
+        
+        iDoc.body.style.margin = "0";
+        iDoc.body.style.boxSizing = "border-box";
+        iDoc.documentElement.style.width = "100%";
+        iDoc.documentElement.style.maxWidth = "100%";
+        iDoc.documentElement.style.margin = "0";
+
+        // Dynamically enforce 100% full screen utilization on all container wrappers
+        const wrappers = iDoc.querySelectorAll('main, article, .content-card, .container, .page-wrapper, .document-container, .notion-page, #content, div.content, body > div, .card, .wrapper');
+        wrappers.forEach(el => {
+          el.style.setProperty('width', '100%', 'important');
+          el.style.setProperty('max-width', '100%', 'important');
+          el.style.setProperty('margin-left', '0px', 'important');
+          el.style.setProperty('margin-right', '0px', 'important');
+        });
+      } catch (e) {
+        console.warn("Direct zoom note:", e);
       }
     }
 
+    function updateZoomLevelDisplay() {
+      const zoomText = document.getElementById("zoom-level-text");
+      if (zoomText) {
+        zoomText.textContent = `${Math.round(currentZoom * 100)}%`;
+      }
+      applyDirectZoomToIframe();
+    }
+
     function zoomIn() {
-      if (currentZoom < 2.0) {
-        currentZoom = Math.min(2.0, +(currentZoom + 0.1).toFixed(2));
-        applyDirectZoomToIframe();
+      if (currentZoom < 2.5) {
+        currentZoom = parseFloat((currentZoom + 0.1).toFixed(2));
+        updateZoomLevelDisplay();
       }
     }
 
     function zoomOut() {
-      if (currentZoom > 0.5) {
-        currentZoom = Math.max(0.5, +(currentZoom - 0.1).toFixed(2));
-        applyDirectZoomToIframe();
+      if (currentZoom > 0.6) {
+        currentZoom = parseFloat((currentZoom - 0.1).toFixed(2));
+        updateZoomLevelDisplay();
       }
     }
 
     function zoomReset() {
       currentZoom = 1.0;
-      applyDirectZoomToIframe();
+      updateZoomLevelDisplay();
     }
-
-    // ==========================================================
-    // FULLSCREEN & DEEP LINK SHARING
-    // ==========================================================
 
     function toggleFullScreen() {
-      const viewer = document.getElementById("viewer-view");
-      const expandIcon = document.getElementById("fullscreen-icon-expand");
-      const compressIcon = document.getElementById("fullscreen-icon-compress");
-
+      const viewerView = document.getElementById("viewer-view");
       if (!document.fullscreenElement) {
-        viewer.requestFullscreen().catch(err => {
-          showToast("Fullscreen request denied: " + err.message);
+        viewerView?.requestFullscreen().catch(err => {
+          showToast(currentLang === "ar" ? "وضع ملء الشاشة غير مدعوم." : "Fullscreen not supported or blocked.");
         });
-        if (expandIcon) expandIcon.classList.add("hidden");
-        if (compressIcon) compressIcon.classList.remove("hidden");
       } else {
         document.exitFullscreen().catch(() => {});
-        if (expandIcon) expandIcon.classList.remove("hidden");
-        if (compressIcon) compressIcon.classList.add("hidden");
       }
     }
 
-    document.addEventListener("fullscreenchange", () => {
-      const expandIcon = document.getElementById("fullscreen-icon-expand");
-      const compressIcon = document.getElementById("fullscreen-icon-compress");
-      if (!document.fullscreenElement) {
-        if (expandIcon) expandIcon.classList.remove("hidden");
-        if (compressIcon) compressIcon.classList.add("hidden");
-      }
-    });
-
-    async function copyDirectLink() {
+    function copyDirectLink() {
       if (!currentDocument) return;
-      const shareUrl = `${window.location.origin}${window.location.pathname}#${encodeURIComponent(currentDocument.category.toLowerCase())}/${encodeURIComponent(currentDocument.slug)}`;
+      const targetHash = `#${encodeURIComponent(currentDocument.category.toLowerCase())}/${encodeURIComponent(currentDocument.slug)}`;
+      const fullUrl = window.location.origin + window.location.pathname + targetHash;
+      
+      navigator.clipboard.writeText(fullUrl).then(() => {
+        showToast(currentLang === "ar" ? "تم نسخ الرابط المباشر إلى الحافظة!" : "Direct note link copied to clipboard!");
+      }).catch(() => {
+        prompt("Copy direct link:", fullUrl);
+      });
+    }
 
-      try {
-        await navigator.clipboard.writeText(shareUrl);
-        showToast("Copied link! Classmates can open directly.");
-      } catch (err) {
-        const textarea = document.createElement("textarea");
-        textarea.value = shareUrl;
-        document.body.appendChild(textarea);
-        textarea.select();
-        document.execCommand("copy");
-        document.body.removeChild(textarea);
-        showToast("Direct link copied to clipboard!");
+    function applyUpdateAndReload() {
+      if (swWaitingWorker) {
+        swWaitingWorker.postMessage({ type: 'SKIP_WAITING' });
       }
+      try {
+        const cacheKey = getCacheKey(currentUsername, currentRepo);
+        localStorage.removeItem(cacheKey);
+      } catch (e) {}
+      window.location.reload();
     }
 
     // ==========================================================
-    // DEEP ROUTING: HASH CHANGE LISTENER
+    // ROUTING & BROWSER HISTORY SYNCHRONIZATION
     // ==========================================================
 
     function handleInitialHash() {
-      const hash = window.location.hash.replace(/^#/, "");
+      const hash = window.location.hash.replace(/^#\/?/, "");
       if (!hash) return;
 
-      // Case 1: Folder deep link (e.g. #all, #folder/sheets, #folder/math%202)
       if (hash === "all") {
-        openFolder("all");
+        openFolder("all", false);
+        return;
+      }
+      if (hash === "starred") {
+        openFolder("starred", false);
         return;
       }
       if (hash.startsWith("folder/")) {
-        const folderName = decodeURIComponent(hash.replace(/^folder\//, ""));
-        openFolder(folderName);
+        const cat = decodeURIComponent(hash.replace("folder/", ""));
+        openFolder(cat, false);
         return;
       }
 
-      // Case 2: Document deep link (e.g. #sheets/thermo-sheet-1)
-      const parts = hash.split("/").filter(Boolean);
+      const parts = hash.split("/");
       if (parts.length >= 2) {
-        const category = decodeURIComponent(parts[0]);
-        const slug = decodeURIComponent(parts[1]);
-        openDocumentViewer(category, slug);
-      } else if (parts.length === 1) {
-        const single = decodeURIComponent(parts[0]);
-        // Check if it's a category
-        const isCat = getUniqueCategories().some(c => c.toLowerCase() === single.toLowerCase());
-        if (isCat) {
-          openFolder(single);
-        } else {
-          const match = allDocuments.find(d => d.slug === single || d.name === single);
-          if (match) {
-            openDocumentViewer(match.category, match.slug);
-          }
+        const category = parts[0];
+        const slug = parts.slice(1).join("/");
+        openDocumentViewer(category, slug, false);
+      } else if (parts.length === 1 && parts[0]) {
+        const doc = allDocuments.find(d => d.slug === parts[0] || d.name === parts[0]);
+        if (doc) {
+          openDocumentViewer(encodeURIComponent(doc.category), encodeURIComponent(doc.slug), false);
         }
       }
     }
 
-    window.addEventListener("hashchange", () => {
-      const hash = window.location.hash.replace(/^#/, "");
-      if (!hash) {
-        if (currentDocument) closeDocumentViewer();
-        if (activeFolder) backToFolders();
-      } else {
-        handleInitialHash();
+    window.addEventListener("popstate", (e) => {
+      if (currentDocument) {
+        closeDocumentViewer(false);
+        if (activeFolder) {
+          openFolder(activeFolder, false);
+        } else {
+          backToFolders(null, false);
+        }
+        return;
       }
+
+      if (activeFolder) {
+        backToFolders(null, false);
+        return;
+      }
+
+      handleInitialHash();
     });
 
-    // Keyboard Shortcuts (Esc to close viewer or return to folders, +/- to zoom)
+    window.addEventListener("hashchange", () => {
+      handleInitialHash();
+    });
+
     window.addEventListener("keydown", (e) => {
       if (e.key === "Escape") {
+        const searchInput = document.getElementById("doc-search-input");
+        if (searchInput && searchInput.value) {
+          clearSearch();
+          return;
+        }
         if (currentDocument) {
           closeDocumentViewer();
         } else if (activeFolder) {
@@ -1534,7 +2695,7 @@
       if (!navigator.onLine) {
         offlinePill.classList.remove("hidden");
         offlinePill.classList.add("flex");
-        showToast("Offline Mode active. Reading from local cache.");
+        showToast(currentLang === "ar" ? "وضع عدم الاتصال نشط. القراءة من الذاكرة المحلية." : "Offline Mode active. Reading from local cache.");
       } else {
         offlinePill.classList.add("hidden");
         offlinePill.classList.remove("flex");
@@ -1587,9 +2748,13 @@
       if (!('serviceWorker' in navigator)) return;
 
       const swScript = `
-        const CACHE_NAME = 'ai-hub-summary-v4';
+        const CACHE_NAME = 'ai-hub-summary-v10';
         const STATIC_ASSETS = [
           './',
+          './favicon.svg',
+          './icon-192.svg',
+          './icon-512.svg',
+          './manifest.json',
           'https://cdn.tailwindcss.com'
         ];
 
@@ -1615,6 +2780,12 @@
           );
         });
 
+        self.addEventListener('message', (event) => {
+          if (event.data && event.data.type === 'SKIP_WAITING') {
+            self.skipWaiting();
+          }
+        });
+
         self.addEventListener('fetch', (event) => {
           if (event.request.method !== 'GET') return;
           const url = new URL(event.request.url);
@@ -1624,7 +2795,7 @@
               try {
                 const response = await fetch(event.request);
                 if (response && response.status === 200) {
-                  if (url.pathname.endsWith('.html') || url.hostname.includes('tailwind') || url.hostname.includes('github') || url.pathname.includes('/content/')) {
+                  if (url.pathname.endsWith('.html') || url.pathname.endsWith('.svg') || url.pathname.endsWith('.json') || url.hostname.includes('tailwind') || url.hostname.includes('github') || url.pathname.includes('/content/')) {
                     cache.put(event.request, response.clone()).catch(() => {});
                   }
                 }
@@ -1642,9 +2813,26 @@
       try {
         const blob = new Blob([swScript], { type: 'application/javascript' });
         const swUrl = URL.createObjectURL(blob);
-        navigator.serviceWorker.register(swUrl).catch(e => {
+        navigator.serviceWorker.register(swUrl).then(registration => {
+          if (registration.waiting) {
+            swWaitingWorker = registration.waiting;
+          }
+
+          registration.addEventListener('updatefound', () => {
+            const newWorker = registration.installing;
+            if (newWorker) {
+              newWorker.addEventListener('statechange', () => {
+                if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                  swWaitingWorker = newWorker;
+                }
+              });
+            }
+          });
+        }).catch(e => {
           console.warn("SW registration:", e);
         });
+
+        navigator.serviceWorker.addEventListener('controllerchange', () => {});
       } catch (err) {
         console.warn("Service worker init:", err);
       }
@@ -1655,13 +2843,21 @@
     // ==========================================================
 
     document.addEventListener("DOMContentLoaded", () => {
-      // Header Refresh Button
+      document.getElementById("lang-toggle-btn")?.addEventListener("click", toggleLanguage);
+
       document.getElementById("refresh-btn")?.addEventListener("click", () => {
         loadDocuments(true);
       });
 
-      // Viewer Toolbar Buttons
-      document.getElementById("viewer-back-btn")?.addEventListener("click", closeDocumentViewer);
+      const searchInput = document.getElementById("doc-search-input");
+      if (searchInput) {
+        searchInput.addEventListener("input", handleSearchInput);
+      }
+
+      document.getElementById("viewer-back-btn")?.addEventListener("click", () => closeDocumentViewer());
+      document.getElementById("viewer-star-btn")?.addEventListener("click", (e) => {
+        if (currentDocument) toggleStar(currentDocument.path, e);
+      });
       document.getElementById("zoom-in-btn")?.addEventListener("click", zoomIn);
       document.getElementById("zoom-out-btn")?.addEventListener("click", zoomOut);
       document.getElementById("zoom-reset-btn")?.addEventListener("click", zoomReset);
@@ -1669,13 +2865,13 @@
       document.getElementById("copy-direct-link-btn")?.addEventListener("click", copyDirectLink);
       document.getElementById("scroll-top-btn")?.addEventListener("click", scrollToTop);
 
-      // Check Network Status
+      initToastSwipeGesture();
       updateOnlineStatus();
 
-      // Initialize Documents
+      applyLanguage(currentLang);
       loadDocuments(false);
+      renderContinueStudyingCard();
 
-      // Initialize PWA Service Worker & Install Prompt
       initInlineServiceWorker();
       initPwaInstallPrompt();
     });

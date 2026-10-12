@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#080c18" />
+      <stop offset="100%" stop-color="#03050a" />
+    </linearGradient>
+
+    <linearGradient id="blueGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#3b82f6" />
+      <stop offset="45%" stop-color="#2563eb" />
+      <stop offset="100%" stop-color="#1d4ed8" />
+    </linearGradient>
+
+    <filter id="squircleGlow" x="-25%" y="-25%" width="150%" height="150%">
+      <feGaussianBlur stdDeviation="18" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+
+    <filter id="bookGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="0" stdDeviation="3.5" flood-color="#ffffff" flood-opacity="0.4" />
+    </filter>
+  </defs>
+
+  <!-- Deep Canvas Backdrop -->
+  <rect width="512" height="512" rx="72" fill="url(#bgGrad)" />
+
+  <!-- Ambient Blue Halo Glow -->
+  <rect x="126" y="66" width="260" height="260" rx="76" fill="#2563eb" opacity="0.45" filter="url(#squircleGlow)" />
+
+  <!-- Royal Blue Squircle -->
+  <rect x="126" y="66" width="260" height="260" rx="76" fill="url(#blueGrad)" />
+
+  <!-- Open White Book Icon -->
+  <g filter="url(#bookGlow)" stroke="#ffffff" stroke-width="12" stroke-linecap="round" stroke-linejoin="round" fill="none">
+    <!-- Left Outer Flap -->
+    <path d="M 188 182 L 188 261 C 188 266 191 269 196 269 L 204 269" />
+    
+    <!-- Right Outer Flap -->
+    <path d="M 324 182 L 324 261 C 324 266 321 269 316 269 L 308 269" />
+
+    <!-- Left Open Page -->
+    <path d="M 256 172 C 236 159 213 162 203 167 L 203 256 C 215 251 236 249 256 261 Z" />
+
+    <!-- Right Open Page -->
+    <path d="M 256 172 C 276 159 299 162 309 167 L 309 256 C 297 251 276 249 256 261 Z" />
+  </g>
+
+  <!-- Center Bottom Spine Node -->
+  <circle cx="256" cy="266" r="7.5" fill="#ffffff" />
+
+  <!-- AI HUB SUMMARY Typography -->
+  <text x="256" y="415" 
+        text-anchor="middle" 
+        fill="#ffffff" 
+        font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', Roboto, sans-serif" 
+        font-weight="800" 
+        font-size="34" 
+        letter-spacing="2">AI HUB SUMMARY</text>
+</svg>
