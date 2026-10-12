@@ -1,46 +1,70 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192" width="192" height="192">
   <defs>
+    <!-- Background Gradient -->
     <linearGradient id="bgGrad192" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#080c18" />
-      <stop offset="100%" stop-color="#03050a" />
+      <stop offset="0%" stop-color="#070b14" />
+      <stop offset="50%" stop-color="#0a1020" />
+      <stop offset="100%" stop-color="#05080f" />
     </linearGradient>
-    <linearGradient id="blueGrad192" x1="0%" y1="0%" x2="0%" y2="100%">
+
+    <!-- Squircle Vibrant Blue Gradient -->
+    <linearGradient id="squircleGrad192" x1="0%" y1="0%" x2="0%" y2="100%">
       <stop offset="0%" stop-color="#3b82f6" />
-      <stop offset="45%" stop-color="#2563eb" />
+      <stop offset="40%" stop-color="#2563eb" />
       <stop offset="100%" stop-color="#1d4ed8" />
     </linearGradient>
-    <filter id="squircleGlow192" x="-25%" y="-25%" width="150%" height="150%">
-      <feGaussianBlur stdDeviation="7" result="blur" />
+
+    <!-- Outer Glow -->
+    <filter id="haloGlow192" x="-25%" y="-25%" width="150%" height="150%">
+      <feGaussianBlur stdDeviation="9" result="blur" />
       <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+
+    <!-- Icon Soft Drop Shadow -->
+    <filter id="bookShadow192" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="1" stdDeviation="2" flood-color="#000000" flood-opacity="0.3" />
+    </filter>
+
+    <!-- High-Contrast Lettering Glow -->
+    <filter id="textGlow192" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="1" stdDeviation="1.5" flood-color="#000000" flood-opacity="0.5" />
     </filter>
   </defs>
 
-  <!-- Deep Canvas Backdrop -->
-  <rect width="192" height="192" rx="28" fill="url(#bgGrad192)" />
+  <!-- Dark Canvas Base (Full 192x192) -->
+  <rect width="192" height="192" fill="url(#bgGrad192)" />
 
-  <!-- Ambient Blue Halo Glow -->
-  <rect x="47" y="24" width="98" height="98" rx="28" fill="#2563eb" opacity="0.45" filter="url(#squircleGlow192)" />
+  <!-- Ambient Blue Halo Backlight -->
+  <rect x="36" y="18" width="120" height="120" rx="34" fill="#2563eb" opacity="0.4" filter="url(#haloGlow192)" />
 
-  <!-- Royal Blue Squircle -->
-  <rect x="47" y="24" width="98" height="98" rx="28" fill="url(#blueGrad192)" />
+  <!-- Main Royal-Blue Squircle with Luminous Border -->
+  <rect x="36" y="18" width="120" height="120" rx="34" fill="url(#squircleGrad192)" stroke="#60a5fa" stroke-width="1.2" stroke-opacity="0.6" />
 
-  <!-- Open White Book Icon -->
-  <g stroke="#ffffff" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" fill="none">
-    <path d="M 70 68 L 70 97 C 70 99 71 100 73 100 L 76 100" />
-    <path d="M 122 68 L 122 97 C 122 99 121 100 119 100 L 116 100" />
-    <path d="M 96 64 C 88 59 80 60 76 62 L 76 96 C 80 94 88 93 96 98 Z" />
-    <path d="M 96 64 C 104 59 112 60 116 62 L 116 96 C 112 94 104 93 96 98 Z" />
+  <!-- Crisp White Open Book Icon Inside Squircle -->
+  <g filter="url(#bookShadow192)" stroke="#ffffff" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round" fill="none">
+    <!-- Left Bookmark / Outer Flap -->
+    <path d="M 64 70 L 64 104 C 64 106 65 108 67 108 L 72 108" />
+    
+    <!-- Right Bookmark / Outer Flap -->
+    <path d="M 128 70 L 128 104 C 128 106 127 108 125 108 L 120 108" />
+
+    <!-- Left Open Leaf -->
+    <path d="M 96 66 C 86 60 75 62 70 64 L 70 103 C 76 100 86 100 96 105 Z" fill="rgba(255,255,255,0.08)" />
+
+    <!-- Right Open Leaf -->
+    <path d="M 96 66 C 106 60 117 62 122 64 L 122 103 C 116 100 106 100 96 105 Z" fill="rgba(255,255,255,0.08)" />
   </g>
 
-  <!-- Center Bottom Spine Node -->
-  <circle cx="96" cy="100" r="3" fill="#ffffff" />
+  <!-- Center Spine Dot -->
+  <circle cx="96" cy="107.5" r="3" fill="#ffffff" />
 
-  <!-- Typography -->
-  <text x="96" y="156" 
+  <!-- Bold Custom Lettering: AI HUB SUMMARY -->
+  <text x="96" y="162" 
         text-anchor="middle" 
         fill="#ffffff" 
+        filter="url(#textGlow192)"
         font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', Roboto, sans-serif" 
-        font-weight="800" 
-        font-size="12.5" 
-        letter-spacing="0.8">AI HUB SUMMARY</text>
+        font-weight="900" 
+        font-size="12.8" 
+        letter-spacing="0.9">AI HUB SUMMARY</text>
 </svg>
