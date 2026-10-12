@@ -430,9 +430,7 @@
         <h2 class="text-xs font-bold uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
           <span id="subject-folders-heading-text">Subject Folders</span>
         </h2>
-        <span id="folders-count-label" class="text-xs font-mono text-slate-400">
-          Scanning...
-        </span>
+        <span id="folders-count-label" class="text-xs font-mono text-slate-400"></span>
       </div>
 
       <!-- Vertical Folders List Container (Google Drive Style List) -->
@@ -1605,45 +1603,59 @@
     // (Dual-Strategy: Fast Static index.json -> Graceful API Fallback)
     // ==========================================================
 
-    async function loadDocuments(forceRefresh = false) {
-      const refreshIcon = document.getElementById("refresh-icon");
-      if (refreshIcon) refreshIcon.classList.add("animate-spin");
+    // Flag to ensure initial cache boot runs only once
+    let isInitialBootComplete = false;
+
+    // Fast-path 0ms synchronous boot from LocalStorage cache
+    function bootCacheFirstUI() {
+      if (isInitialBootComplete) return;
 
       const cacheKey = getCacheKey(currentUsername, currentRepo);
-      const cached = localStorage.getItem(cacheKey);
+      let loadedFromCache = false;
 
-      let hasRenderedFromCache = false;
-      let cachedDocsSnapshot = [];
-
-      if (!forceRefresh && cached) {
-        try {
+      try {
+        const cached = localStorage.getItem(cacheKey);
+        if (cached) {
           const parsed = JSON.parse(cached);
           if (Array.isArray(parsed.documents) && parsed.documents.length > 0) {
             allDocuments = parsed.documents.map(inflateDocument);
-            cachedDocsSnapshot = allDocuments.slice();
             discoveredCategories = parsed.categories && parsed.categories.length > 0
               ? parsed.categories
               : Array.from(new Set(allDocuments.map(d => d.category)));
-            hasRenderedFromCache = true;
-            renderUI();
-            handleInitialHash();
+            loadedFromCache = true;
           }
-        } catch (e) {
-          console.warn("Cached catalog parse note:", e);
         }
+      } catch (e) {
+        console.warn("Fast-boot catalog parse note:", e);
       }
 
-      if (!hasRenderedFromCache) {
+      if (!loadedFromCache) {
         fallbackToLocalSamples();
-        cachedDocsSnapshot = allDocuments.slice();
-        renderUI();
-        handleInitialHash();
+      }
+
+      applyLanguage(currentLang);
+      renderUI();
+      syncCachedDocPaths();
+      handleInitialHash();
+
+      isInitialBootComplete = true;
+    }
+
+    // Silent background revalidation (Zero blocking states, zero loading delays)
+    async function revalidateCatalogInBackground(forceRefresh = false) {
+      const refreshIcon = document.getElementById("refresh-icon");
+      if (forceRefresh && refreshIcon) {
+        refreshIcon.classList.add("animate-spin");
       }
 
       if (!navigator.onLine) {
-        if (refreshIcon) refreshIcon.classList.remove("animate-spin");
+        if (forceRefresh && refreshIcon) refreshIcon.classList.remove("animate-spin");
         return;
       }
+
+      const cacheKey = getCacheKey(currentUsername, currentRepo);
+      const previousDocCount = allDocuments.length;
+      const previousPaths = new Set(allDocuments.map(d => d.path));
 
       try {
         let catalogDiscovered = false;
@@ -1748,13 +1760,7 @@
             return;
           }
 
-          if (res.status === 404) {
-            console.warn("GitHub API content/ directory not found (404). Seamlessly using cached study folders.");
-            return;
-          }
-
-          if (!res.ok) {
-            console.warn(`GitHub API responded with status ${res.status}. Seamlessly using cached study folders.`);
+          if (res.status === 404 || !res.ok) {
             return;
           }
 
@@ -1794,7 +1800,7 @@
         }
 
         // --------------------------------------------------------
-        // 3. PERSISTENCE, REHYDRATION & SILENT UI UPDATE
+        // 3. PERSISTENCE, REHYDRATION & SMOOTH DOM UPDATE
         // --------------------------------------------------------
         if (catalogDiscovered && remoteDocs.length > 0) {
           BUNDLED_SAMPLE_DOCS.forEach(sample => {
@@ -1812,35 +1818,42 @@
           });
 
           const inflatedRemoteDocs = remoteDocs.map(inflateDocument);
+          const newlyDiscoveredDocs = inflatedRemoteDocs.filter(d => !previousPaths.has(d.path));
 
-          const newlyDiscoveredDocs = inflatedRemoteDocs.filter(d => 
-            !cachedDocsSnapshot.some(prev => prev.path === d.path)
-          );
+          // Check if data actually changed to avoid superfluous re-renders
+          const hasCatalogChanged = forceRefresh ||
+            inflatedRemoteDocs.length !== previousDocCount ||
+            newlyDiscoveredDocs.length > 0 ||
+            inflatedRemoteDocs.some((d, idx) => !allDocuments[idx] || allDocuments[idx].path !== d.path || allDocuments[idx].size !== d.size);
 
-          allDocuments = inflatedRemoteDocs;
-          discoveredCategories = categoriesFound.length > 0
-            ? categoriesFound
-            : Array.from(new Set(allDocuments.map(d => d.category)));
+          if (hasCatalogChanged) {
+            allDocuments = inflatedRemoteDocs;
+            discoveredCategories = categoriesFound.length > 0
+              ? categoriesFound
+              : Array.from(new Set(allDocuments.map(d => d.category)));
 
-          const sanitizedDocs = allDocuments.map(doc => ({
-            name: doc.name,
-            path: doc.path,
-            download_url: doc.download_url || doc.downloadUrl || "",
-            size: doc.size || 0
-          }));
+            const sanitizedDocs = allDocuments.map(doc => ({
+              name: doc.name,
+              path: doc.path,
+              download_url: doc.download_url || doc.downloadUrl || "",
+              size: doc.size || 0
+            }));
 
-          const cacheData = {
-            timestamp: Date.now(),
-            categories: discoveredCategories,
-            documents: sanitizedDocs
-          };
-          localStorage.setItem(cacheKey, JSON.stringify(cacheData));
+            const cacheData = {
+              timestamp: Date.now(),
+              categories: discoveredCategories,
+              documents: sanitizedDocs
+            };
+            localStorage.setItem(cacheKey, JSON.stringify(cacheData));
 
-          if (newlyDiscoveredDocs.length > 0 && hasRenderedFromCache) {
-            showNewContentToast(newlyDiscoveredDocs[0], newlyDiscoveredDocs.length);
+            if (newlyDiscoveredDocs.length > 0 && isInitialBootComplete) {
+              showNewContentToast(newlyDiscoveredDocs[0], newlyDiscoveredDocs.length);
+            }
+
+            // Smoothly update the DOM without any jarring layout shifts
+            renderUI();
           }
 
-          renderUI();
           if (forceRefresh) {
             showToast(currentLang === "ar" ? "تم تحديث الملفات بنجاح!" : "Fetched latest files from GitHub!");
           }
@@ -1852,6 +1865,14 @@
         if (refreshIcon) refreshIcon.classList.remove("animate-spin");
         syncCachedDocPaths();
       }
+    }
+
+    // Unified loader helper supporting background revalidation
+    function loadDocuments(forceRefresh = false) {
+      if (forceRefresh) {
+        return revalidateCatalogInBackground(true);
+      }
+      return revalidateCatalogInBackground(false);
     }
 
     function fallbackToLocalSamples() {
@@ -2268,8 +2289,22 @@
 
       viewerView.classList.remove("hidden");
       document.body.style.overflow = "hidden";
-      if (loader) loader.classList.remove("hidden", "opacity-0");
 
+      // --------------------------------------------------------
+      // Instant Reader Paint from Storage Cache (0ms perceived latency)
+      // --------------------------------------------------------
+      const offlineDocKey = `aihub_doc_path_${encodeURIComponent(doc.path)}`;
+      const cachedHtml = localStorage.getItem(offlineDocKey);
+      if (cachedHtml) {
+        if (loader) loader.classList.add("hidden", "opacity-0");
+        iframe.srcdoc = cachedHtml;
+        attachIframeListeners(iframe, loader, true);
+        cachedDocPaths.add(doc.path);
+        updateOfflineReadyBadgeForDoc(doc.path);
+        return;
+      }
+
+      if (loader) loader.classList.remove("hidden", "opacity-0");
       loadIframeContent(doc, iframe, loader);
     }
 
@@ -2279,8 +2314,9 @@
       try {
         const cachedHtml = localStorage.getItem(offlineDocKey);
         if (cachedHtml) {
+          if (loader) loader.classList.add("hidden", "opacity-0");
           iframe.srcdoc = cachedHtml;
-          attachIframeListeners(iframe, loader);
+          attachIframeListeners(iframe, loader, true);
           cachedDocPaths.add(doc.path);
           updateOfflineReadyBadgeForDoc(doc.path);
           return;
@@ -2302,7 +2338,7 @@
             } catch (e) {}
 
             iframe.srcdoc = htmlText;
-            attachIframeListeners(iframe, loader);
+            attachIframeListeners(iframe, loader, false);
             return;
           }
         }
@@ -2323,37 +2359,43 @@
               }
             } catch (e) {}
             iframe.srcdoc = htmlText;
-            attachIframeListeners(iframe, loader);
+            attachIframeListeners(iframe, loader, false);
             return;
           }
         } catch (fetchErr) {}
 
         iframe.removeAttribute("srcdoc");
         iframe.src = contentUrl;
-        attachIframeListeners(iframe, loader);
+        attachIframeListeners(iframe, loader, false);
 
       } catch (err) {
         console.warn("Iframe loading note:", err);
         const cachedHtml = localStorage.getItem(offlineDocKey);
         if (cachedHtml) {
+          if (loader) loader.classList.add("hidden", "opacity-0");
           iframe.srcdoc = cachedHtml;
           cachedDocPaths.add(doc.path);
+          attachIframeListeners(iframe, loader, true);
         } else {
           iframe.removeAttribute("srcdoc");
           iframe.src = doc.localUrl || `./content/${encodeURIComponent(doc.category)}/${encodeURIComponent(doc.name)}`;
+          attachIframeListeners(iframe, loader, false);
         }
-        attachIframeListeners(iframe, loader);
       }
     }
 
-    function attachIframeListeners(iframe, loader) {
+    function attachIframeListeners(iframe, loader, isInstant = false) {
       const handleLoad = () => {
-        setTimeout(() => {
-          if (loader) {
-            loader.classList.add("opacity-0");
-            setTimeout(() => loader.classList.add("hidden"), 200);
+        if (loader) {
+          if (isInstant) {
+            loader.classList.add("hidden", "opacity-0");
+          } else {
+            setTimeout(() => {
+              loader.classList.add("opacity-0");
+              setTimeout(() => loader.classList.add("hidden"), 160);
+            }, 60);
           }
-        }, 120);
+        }
 
         try {
           const iDoc = iframe.contentDocument || iframe.contentWindow.document;
@@ -3130,14 +3172,18 @@
     }
 
     // ==========================================================
-    // INITIALIZATION ON DOM READY
+    // INITIALIZATION & INSTANT CACHE-FIRST BOOT ENGINE
     // ==========================================================
 
-    document.addEventListener("DOMContentLoaded", () => {
+    // 1. Immediately paint folders and document tree from cache (0ms perceived latency)
+    bootCacheFirstUI();
+
+    // 2. Wire user actions, offline status, gestures and background tasks
+    function setupAppEventListeners() {
       document.getElementById("lang-toggle-btn")?.addEventListener("click", toggleLanguage);
 
       document.getElementById("refresh-btn")?.addEventListener("click", () => {
-        loadDocuments(true);
+        revalidateCatalogInBackground(true);
       });
 
       const searchInput = document.getElementById("doc-search-input");
@@ -3165,13 +3211,19 @@
       initToastSwipeGesture();
       updateOnlineStatus();
 
-      applyLanguage(currentLang);
-      loadDocuments(false);
-      renderContinueStudyingCard();
-
       initInlineServiceWorker();
       initPwaInstallPrompt();
-    });
+    }
+
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", () => {
+        setupAppEventListeners();
+        revalidateCatalogInBackground(false);
+      });
+    } else {
+      setupAppEventListeners();
+      revalidateCatalogInBackground(false);
+    }
   </script>
 </body>
 </html>
