@@ -1,70 +1,96 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192" width="192" height="192">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
   <defs>
-    <!-- Background Gradient -->
-    <linearGradient id="bgGrad192" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#070b14" />
-      <stop offset="50%" stop-color="#0a1020" />
-      <stop offset="100%" stop-color="#05080f" />
+    <!-- Background Obsidian Gradient -->
+    <radialGradient id="canvasGlow" cx="50%" cy="50%" r="65%">
+      <stop offset="0%" stop-color="#0a1533" />
+      <stop offset="45%" stop-color="#060b1a" />
+      <stop offset="100%" stop-color="#020408" />
+    </radialGradient>
+
+    <!-- Vibrant Royal-Blue Squircle Gradient -->
+    <linearGradient id="squircleBody" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#2d68f8" />
+      <stop offset="25%" stop-color="#2055e8" />
+      <stop offset="65%" stop-color="#1945cf" />
+      <stop offset="100%" stop-color="#1436a8" />
     </linearGradient>
 
-    <!-- Squircle Vibrant Blue Gradient -->
-    <linearGradient id="squircleGrad192" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" stop-color="#3b82f6" />
-      <stop offset="40%" stop-color="#2563eb" />
-      <stop offset="100%" stop-color="#1d4ed8" />
+    <!-- Glowing Cyan/Light-Blue Rim -->
+    <linearGradient id="rimGlow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#93c5fd" stop-opacity="0.9" />
+      <stop offset="50%" stop-color="#3b82f6" stop-opacity="0.6" />
+      <stop offset="100%" stop-color="#1d4ed8" stop-opacity="0.4" />
     </linearGradient>
 
-    <!-- Outer Glow -->
-    <filter id="haloGlow192" x="-25%" y="-25%" width="150%" height="150%">
-      <feGaussianBlur stdDeviation="9" result="blur" />
-      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    <!-- Atmospheric Outer Halo Filters -->
+    <filter id="outerBloom" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="36" result="blur" />
     </filter>
-
-    <!-- Icon Soft Drop Shadow -->
-    <filter id="bookShadow192" x="-20%" y="-20%" width="140%" height="140%">
-      <feDropShadow dx="0" dy="1" stdDeviation="2" flood-color="#000000" flood-opacity="0.3" />
+    <filter id="coreHalo" x="-25%" y="-25%" width="150%" height="150%">
+      <feGaussianBlur stdDeviation="16" result="blur2" />
     </filter>
-
-    <!-- High-Contrast Lettering Glow -->
-    <filter id="textGlow192" x="-20%" y="-20%" width="140%" height="140%">
-      <feDropShadow dx="0" dy="1" stdDeviation="1.5" flood-color="#000000" flood-opacity="0.5" />
+    
+    <!-- Element Drop Shadows -->
+    <filter id="elementShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#000000" flood-opacity="0.4" />
     </filter>
   </defs>
 
-  <!-- Dark Canvas Base (Full 192x192) -->
-  <rect width="192" height="192" fill="url(#bgGrad192)" />
+  <!-- Deep Obsidian Canvas Background -->
+  <rect width="512" height="512" fill="url(#canvasGlow)" />
 
-  <!-- Ambient Blue Halo Backlight -->
-  <rect x="36" y="18" width="120" height="120" rx="34" fill="#2563eb" opacity="0.4" filter="url(#haloGlow192)" />
+  <!-- Outer Neon Blue Ambient Glow Bloom -->
+  <rect x="68" y="68" width="376" height="376" rx="90" fill="#2563eb" opacity="0.45" filter="url(#outerBloom)" />
+  <rect x="66" y="66" width="380" height="380" rx="92" fill="#60a5fa" opacity="0.3" filter="url(#coreHalo)" />
 
-  <!-- Main Royal-Blue Squircle with Luminous Border -->
-  <rect x="36" y="18" width="120" height="120" rx="34" fill="url(#squircleGrad192)" stroke="#60a5fa" stroke-width="1.2" stroke-opacity="0.6" />
+  <!-- Main Royal Blue Squircle -->
+  <rect x="68" y="68" width="376" height="376" rx="90" fill="url(#squircleBody)" />
 
-  <!-- Crisp White Open Book Icon Inside Squircle -->
-  <g filter="url(#bookShadow192)" stroke="#ffffff" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round" fill="none">
-    <!-- Left Bookmark / Outer Flap -->
-    <path d="M 64 70 L 64 104 C 64 106 65 108 67 108 L 72 108" />
-    
-    <!-- Right Bookmark / Outer Flap -->
-    <path d="M 128 70 L 128 104 C 128 106 127 108 125 108 L 120 108" />
+  <!-- Subtle Top Gloss Specular Highlight -->
+  <path d="M 68 158 C 68 108 108 68 158 68 L 354 68 C 404 68 444 108 444 158 L 444 205 C 330 170 182 170 68 205 Z" fill="#ffffff" opacity="0.07" />
 
-    <!-- Left Open Leaf -->
-    <path d="M 96 66 C 86 60 75 62 70 64 L 70 103 C 76 100 86 100 96 105 Z" fill="rgba(255,255,255,0.08)" />
+  <!-- Luminous Rim Stroke -->
+  <rect x="68" y="68" width="376" height="376" rx="90" fill="none" stroke="url(#rimGlow)" stroke-width="2.75" />
 
-    <!-- Right Open Leaf -->
-    <path d="M 96 66 C 106 60 117 62 122 64 L 122 103 C 116 100 106 100 96 105 Z" fill="rgba(255,255,255,0.08)" />
+  <!-- Vector Group with Shadow: Open Book & Typography -->
+  <g filter="url(#elementShadow)">
+    <!-- Open Book Icon (Centered horizontally at x=256) -->
+    <g transform="translate(256, 192)">
+      <!-- Left Page (Solid Crisp White) -->
+      <path d="M -7 -22 C -38 -34 -80 -30 -105 -19 C -111 -16 -115 -10 -115 -3 L -115 48 C -115 56 -108 62 -100 60 C -76 52 -38 50 -7 60 Z" 
+            fill="#ffffff" />
+      
+      <!-- Right Page (Solid Crisp White) -->
+      <path d="M 7 -22 C 38 -34 80 -30 105 -19 C 111 -16 115 -10 115 -3 L 115 48 C 115 56 108 62 100 60 C 76 52 38 50 7 60 Z" 
+            fill="#ffffff" />
+      
+      <!-- Center Book Spine Gap -->
+      <path d="M 0 -18 L 0 58" stroke="#1d4ed8" stroke-width="4.5" stroke-linecap="round" />
+      
+      <!-- Subtle Page Fanning Accents -->
+      <path d="M -102 12 C -78 4 -40 4 -15 12" stroke="#2563eb" stroke-width="2.5" stroke-linecap="round" fill="none" opacity="0.35" />
+      <path d="M 102 12 C 78 4 40 4 15 12" stroke="#2563eb" stroke-width="2.5" stroke-linecap="round" fill="none" opacity="0.35" />
+      
+      <path d="M -102 28 C -78 20 -40 20 -15 28" stroke="#2563eb" stroke-width="2.5" stroke-linecap="round" fill="none" opacity="0.35" />
+      <path d="M 102 28 C 78 20 40 20 15 28" stroke="#2563eb" stroke-width="2.5" stroke-linecap="round" fill="none" opacity="0.35" />
+    </g>
+
+    <!-- Bold Lettering Line 1: AI HUB -->
+    <text x="256" y="332"
+          text-anchor="middle"
+          fill="#ffffff"
+          font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Inter', Helvetica, Arial, sans-serif"
+          font-weight="900"
+          font-size="44"
+          letter-spacing="2.5">AI HUB</text>
+
+    <!-- Bold Lettering Line 2: SUMMARY -->
+    <text x="256" y="375"
+          text-anchor="middle"
+          fill="#ffffff"
+          font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Inter', Helvetica, Arial, sans-serif"
+          font-weight="800"
+          font-size="22"
+          letter-spacing="6">SUMMARY</text>
   </g>
-
-  <!-- Center Spine Dot -->
-  <circle cx="96" cy="107.5" r="3" fill="#ffffff" />
-
-  <!-- Bold Custom Lettering: AI HUB SUMMARY -->
-  <text x="96" y="162" 
-        text-anchor="middle" 
-        fill="#ffffff" 
-        filter="url(#textGlow192)"
-        font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', Roboto, sans-serif" 
-        font-weight="900" 
-        font-size="12.8" 
-        letter-spacing="0.9">AI HUB SUMMARY</text>
 </svg>
