@@ -1,0 +1,1137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fluid and Thermal Systems — Complete Lectures & Solved Problems</title>
+  <!-- KaTeX Libraries -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+  <style>
+    :root {
+      --bg-base: #090d13;
+      --bg-card: #111722;
+      --bg-code: #0b1017;
+      --border-card: #1f2937;
+      --cyan: #38bdf8;
+      --emerald: #34d399;
+      --amber: #fbbf24;
+      --purple: #c084fc;
+      --rose: #f43f5e;
+      --text-main: #e2e8f0;
+      --text-muted: #94a3b8;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      width: 100% !important;
+      max-width: 100% !important;
+      overflow-x: hidden !important;
+      background-color: var(--bg-base);
+      color: var(--text-main);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      line-height: 1.6;
+      padding-bottom: 70px;
+    }
+    .container {
+      width: 100% !important;
+      max-width: 960px !important;
+      margin: 0 auto !important;
+      padding: 14px 10px !important;
+    }
+    .lecture-switch-wrapper {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 12px;
+      position: sticky;
+      top: 6px;
+      z-index: 1002;
+      background: rgba(9, 13, 19, 0.95);
+      backdrop-filter: blur(14px);
+      padding: 6px;
+      border-radius: 12px;
+      border: 1px solid var(--border-card);
+    }
+    .lecture-tab {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 8px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 800;
+      cursor: pointer;
+      color: var(--text-muted);
+      background: #111722;
+      border: 1px solid #1e293b;
+      transition: all 0.2s ease;
+      text-align: center;
+    }
+    .lecture-tab.active {
+      background: rgba(56, 189, 248, 0.15);
+      border-color: var(--cyan);
+      color: var(--cyan);
+      box-shadow: 0 0 14px rgba(56, 189, 248, 0.25);
+    }
+    .header {
+      padding: 10px 0 16px 0;
+      border-bottom: 1px solid var(--border-card);
+      margin-bottom: 18px;
+    }
+    .header-badge {
+      display: inline-block;
+      background: rgba(56, 189, 248, 0.12);
+      color: var(--cyan);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      padding: 4px 10px;
+      border-radius: 9999px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .header h1 {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 6px;
+    }
+    .header p {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+    }
+    .view-panel { display: none; }
+    .view-panel.active-panel { display: block; }
+    .global-toggle-bar {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 16px;
+      background: rgba(255, 255, 255, 0.03);
+      padding: 10px 14px;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+    .global-toggle-bar button {
+      flex: 1;
+      padding: 8px 12px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      border-radius: 6px;
+      cursor: pointer;
+      border: 1px solid #1e293b;
+      background: #111722;
+      color: #cbd5e1;
+    }
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-card);
+      border-radius: 10px;
+      margin-bottom: 20px;
+      overflow: hidden;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.4);
+    }
+    .card-header {
+      background: rgba(255, 255, 255, 0.02);
+      border-bottom: 1px solid var(--border-card);
+      padding: 10px 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .prob-tag { font-weight: 800; font-size: 0.9rem; color: var(--cyan); }
+    .card-body { padding: 14px 12px; display: flex; flex-direction: column; gap: 12px; }
+    .question-prompt {
+      background: rgba(56, 189, 248, 0.05);
+      border-left: 3px solid var(--cyan);
+      padding: 10px 12px;
+      font-size: 0.86rem;
+      color: #f1f5f9;
+      border-radius: 0 6px 6px 0;
+      line-height: 1.5;
+    }
+    .sol-toggle-btn {
+      background: rgba(56, 189, 248, 0.12);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      color: var(--cyan);
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .sol-toggle-btn.active {
+      background: rgba(244, 63, 94, 0.15);
+      border-color: var(--rose);
+      color: var(--rose);
+    }
+    .solution-content { display: none; }
+    .solution-content.show { display: flex; flex-direction: column; gap: 10px; }
+    .step-block {
+      background: var(--bg-code);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 8px;
+      padding: 12px 14px;
+      font-size: 0.85rem;
+      line-height: 1.6;
+      width: 100%;
+      overflow-x: auto !important;
+      -webkit-overflow-scrolling: touch;
+    }
+    .step-label {
+      font-size: 0.75rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+      letter-spacing: 0.04em;
+    }
+    .label-blue { color: var(--cyan); }
+    .label-amber { color: var(--amber); }
+    .label-green { color: var(--emerald); }
+    .label-purple { color: var(--purple); }
+    .result-badge {
+      display: inline-block;
+      background: rgba(52, 211, 153, 0.1);
+      border: 1px solid rgba(52, 211, 153, 0.25);
+      color: var(--emerald);
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-weight: 800;
+      font-size: 0.88rem;
+    }
+    .katex-display {
+      overflow-x: auto !important;
+      overflow-y: hidden !important;
+      padding: 4px 0 !important;
+      margin: 6px 0 !important;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <div class="lecture-switch-wrapper">
+      <div id="tab-lec-1" class="lecture-tab active" onclick="switchLec(1)">Lecture 1</div>
+      <div id="tab-lec-2" class="lecture-tab" onclick="switchLec(2)">Lecture 2</div>
+      <div id="tab-lec-3" class="lecture-tab" onclick="switchLec(3)">Lecture 3</div>
+      <div id="tab-lec-4" class="lecture-tab" onclick="switchLec(4)">Lecture 4</div>
+    </div>
+
+    <div class="header">
+      <span class="header-badge" id="header-badge">LECTURE 1 • SOLVED EXAMPLES</span>
+      <h1 id="header-title">Chapter 1: Density, Specific Weight & Specific Gravity</h1>
+      <p id="header-desc">Step-by-step engineering solutions with horizontal math fractions and full English steps.</p>
+    </div>
+
+    <!-- LECTURE 1 PANEL -->
+    <div id="lec1-panel" class="view-panel active-panel">
+      <div class="global-toggle-bar">
+        <button onclick="toggleAll('lec1-panel', true)">👁️ Show All Solutions</button>
+        <button onclick="toggleAll('lec1-panel', false)">🙈 Hide All Solutions</button>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <span class="prob-tag">Example 1: Liquid Properties (Slide 20)</span>
+          <button class="sol-toggle-btn" onclick="toggleSol(this)">👁️ Show Solution</button>
+        </div>
+        <div class="card-body">
+          <div class="question-prompt">
+            Calculate the specific weight ($w$), mass density ($\rho$), specific volume ($v$), and specific gravity ($S$) of a liquid having a volume of $V = 6\text{ m}^3$ and a total weight of $W = 44\text{ kN}$.
+          </div>
+          <div class="solution-content">
+            <div class="step-block">
+              <div class="step-label label-blue">Step 1: Given Parameters</div>
+              <div>Volume: $V = 6\text{ m}^3$</div>
+              <div>Weight: $W = 44\text{ kN} = 44000\text{ N}$</div>
+              <div>Gravitational acceleration: $g = 9.81\text{ m/s}^2$</div>
+              <div>Water reference density: $\rho_{water} = 1000\text{ kg/m}^3$</div>
+            </div>
+            <div class="step-block">
+              <div class="step-label label-amber">Step 2: Specific Weight ($w$)</div>
+              <div>Formula: $$w = \frac{W}{V}$$</div>
+              <div>Calculation: $$w = \frac{44\text{ kN}}{6\text{ m}^3} = 7.333\text{ kN/m}^3 = 7333.33\text{ N/m}^3$$</div>
+              <div>Final Result: <span class="result-badge">$w = 7.333\text{ kN/m}^3$</span></div>
+            </div>
+            <div class="step-block">
+              <div class="step-label label-purple">Step 3: Mass Density ($\rho$)</div>
+              <div>Formula: $$\rho = \frac{w}{g}$$</div>
+              <div>Calculation: $$\rho = \frac{7333.33\text{ N/m}^3}{9.81\text{ m/s}^2} = 747.54\text{ kg/m}^3$$</div>
+              <div>Final Result: <span class="result-badge">$\rho = 747.5\text{ kg/m}^3$</span></div>
+            </div>
+            <div class="step-block">
+              <div class="step-label label-green">Step 4: Specific Volume ($v$) & Specific Gravity ($S$)</div>
+              <div>$$v = \frac{1}{\rho} = \frac{1}{747.54\text{ kg/m}^3} = 0.001338\text{ m}^3/\text{kg}$$</div>
+              <div>$$S = \frac{\rho}{\rho_{water}} = \frac{747.54}{1000} = 0.747$$</div>
+              <div>Final Results: <span class="result-badge">$v = 0.00134\text{ m}^3/\text{kg}$</span> and <span class="result-badge">$SG = 0.747$</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <span class="prob-tag">Example 2: Petrol Density & Weight (Slide 20)</span>
+          <button class="sol-toggle-btn" onclick="toggleSol(this)">👁️ Show Solution</button>
+        </div>
+        <div class="card-body">
+          <div class="question-prompt">
+            Calculate the density ($\rho$), specific weight ($w$), and total weight ($W$) of one liter of petrol having a specific gravity of $S = 0.7$.
+          </div>
+          <div class="solution-content">
+            <div class="step-block">
+              <div class="step-label label-blue">Step 1: Given Data & Unit Conversions</div>
+              <div>Volume: $$V = 1\text{ L} = \frac{1000}{10^6}\text{ m}^3 = 0.001\text{ m}^3$$</div>
+              <div>Specific gravity: $S = 0.7$</div>
+            </div>
+            <div class="step-block">
+              <div class="step-label label-amber">Step 2: Density ($\rho$) & Specific Weight ($w$)</div>
+              <div>$$\rho = S \cdot \rho_{water} = 0.7 \cdot 1000 = 700\text{ kg/m}^3$$</div>
+              <div>$$w = \rho \cdot g = 700 \cdot 9.81 = 6867\text{ N/m}^3$$</div>
+              <div>Results: <span class="result-badge">$\rho = 700\text{ kg/m}^3$</span> and <span class="result-badge">$w = 6867\text{ N/m}^3$</span></div>
+            </div>
+            <div class="step-block">
+              <div class="step-label label-green">Step 3: Total Weight ($W$)</div>
+              <div>$$W = w \cdot V = 6867\text{ N/m}^3 \cdot 0.001\text{ m}^3 = 6.867\text{ N}$$</div>
+              <div>Final Result: <span class="result-badge">$W = 6.867\text{ N}$</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LECTURE 2 PANEL -->
+    <div id="lec2-panel" class="view-panel">
+      <div class="global-toggle-bar">
+        <button onclick="toggleAll('lec2-panel', true)">👁️ Show All Solutions</button>
+        <button onclick="toggleAll('lec2-panel', false)">🙈 Hide All Solutions</button>
+      </div>
+
+      <!-- Ex 1 -->
+      <div class="card">
+        <div class="card-header">
+          <span class="prob-tag">Example 1: Vertical Piston Force Balance (Slide 4)</span>
+          <button class="sol-toggle-btn" onclick="toggleSol(this)">👁️ Show Solution</button>
+        </div>
+        <div class="card-body">
+          <div class="question-prompt">
+            A vertical cylinder-piston assembly contains gas. Piston mass plus load is $20\text{ kg}$. If $P_{atm} = 0.1\text{ MPa}$ and piston area is $10\text{ cm}^2$, calculate absolute and gauge gas pressures.
+          </div>
+          <div class="solution-content">
+            <div class="step-block">
+              <div class="step-label label-blue">Step 1: Given Data</div>
+              <div>Mass: $m = 20\text{ kg}$, $P_{atm} = 0.1\text{ MPa} = 100000\text{ Pa}$</div>
+              <div>Area: $$A_p = 10\text{ cm}^2 = \frac{10}{10^4}\text{ m}^2 = 0.001\text{ m}^2$$</div>
+            </div>
+            <div class="step-block">
+              <div class="step-label label-amber">Step 2: Force Equilibrium & Absolute Pressure</div>
+              <div>$$P_{abs} \cdot A_p = P_{atm} \cdot A_p + m \cdot g$$</div>
+              <div>$$P_{abs} = P_{atm} + \frac{m \cdot g}{A_p} = 100000 + \frac{20 \cdot 9.81}{0.001} = 296200\text{ Pa}$$</div>
+              <div>Result: <span class="result-badge">$P_{abs} = 296.2\text{ kPa} = 0.2962\text{ MPa}$</span></div>
+            </div>
+            <div class="step-block">
+              <div class="step-label label-green">Step 3: Gauge Pressure</div>
+              <div>$$P_{gage} = \frac{m \cdot g}{A_p} = \frac{20 \cdot 9.81}{0.001} = 196200\text{ Pa} = 196.2\text{ kPa}$$</div>
+              <div>Result: <span class="result-badge">$P_{gage} = 196.2\text{ kPa}$</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ex 2 -->
+      <div class="card">
+        <div class="card-header">
+          <span class="prob-tag">Example 2: Piston Device with Spring (Slide 5)</span>
+          <button class="sol-toggle-btn" onclick="toggleSol(this)">👁️ Show Solution</button>
+        </div>
+        <div class="card-body">
+          <div class="question-prompt">
+            Piston mass is $3.2\text{ kg}$, area is $35\text{ cm}^2$. A spring exerts a force of $150\text{ N}$ downwards. Atmospheric pressure is $95\text{ kPa}$. Find internal cylinder pressure.
+          </div>
+          <div class="solution-content">
+            <div class="step-block">
+              <div class="step-label label-blue">Step 1: Force Equilibrium</div>
+              <div>$$P \cdot A = P_{atm} \cdot A + m_p \cdot g + F_{spring}$$</div>
+              <div>$$P = P_{atm} + \frac{m_p \cdot g + F_{spring}}{A}$$</div>
+            </div>
+            <div class="step-block">
+              <div class="step-label label-green">Step 2: Substitution & Calculation</div>
+              <div>$$P = 95\text{ kPa} + \frac{(3.2 \cdot 9.81) + 150}{0.0035 \cdot 1000}\text{ kPa} = 95 + \frac{181.392}{3.5} = 146.83\text{ kPa}$$</div>
+              <div>Final Result: <span class="result-badge">$P = 147\text{ kPa}$</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ex 3 -->
+      <div class="card">
+        <div class="card-header">
+          <span class="prob-tag">Example 3: $CO_2$ Specific Gas Constant & Heats (Slide 17)</span>
+          <button class="sol-toggle-btn" onclick="toggleSol(this)">👁️ Show Solution</button>
+        </div>
+        <div class="card-body">
+          <div class="question-prompt">
+            Relative molecular mass of $CO_2$ is $44\text{ kg/kmol}$. Specific heat ratio is $\gamma = 1.3$. Calculate $R$, $C_v$, and $C_p$.
+          </div>
+          <div class="solution-content">
+            <div class="step-block">
+              <div class="step-label label-blue">Step 1: Specific Gas Constant ($R$)</div>
+              <div>$$R = \frac{\bar{R}}{M} = \frac{8.314}{44} = 0.18895\text{ kJ/(kg}\cdot\text{K)}$$</div>
+              <div>Result: <span class="result-badge">$R = 0.189\text{ kJ/(kg}\cdot\text{K)}$</span></div>
+            </div>
+            <div class="step-block">
+              <div class="step-label label-green">Step 2: Specific Heats ($C_v$ and $C_p$)</div>
+              <div>$$C_v = \frac{R}{\gamma - 1} = \frac{0.189}{1.3 - 1} = 0.63\text{ kJ/(kg}\cdot\text{K)}$$</div>
+              <div>$$C_p = \gamma \cdot C_v = 1.3 \cdot 0.63 = 0.819\text{ kJ/(kg}\cdot\text{K)}$$</div>
+              <div>Results: <span class="result-badge">$C_v = 0.63\text{ kJ/(kg}\cdot\text{K)}$</span> and <span class="result-badge">$C_p = 0.819\text{ kJ/(kg}\cdot\text{K)}$</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ex 4 -->
+      <div class="card">
+        <div class="card-header">
+          <span class="prob-tag">Example 4: Air Heating in Rigid Vessel (Slide 18)</span>
+          <button class="sol-toggle-btn" onclick="toggleSol(this)">👁️ Show Solution</button>
+        </div>
+        <div class="card-body">
+          <div class="question-prompt">
+            $10\text{ kg}$ air heated in rigid vessel from $20^\circ\text{C}$ to $100^\circ\text{C}$. Given $\gamma = 1.4$ and $R = 0.287\text{ kJ/(kg}\cdot\text{K)}$. Calculate $C_p, C_v, \Delta U, \Delta H$.
+          </div>
+          <div class="solution-content">
+            <div class="step-block">
+              <div class="step-label label-blue">Step 1: Specific Heats</div>
+              <div>$$C_v = \frac{R}{\gamma - 1} = \frac{0.287}{1.4 - 1} = 0.7175\text{ kJ/(kg}\cdot\text{K)}$$</div>
+              <div>$$C_p = C_v + R = 0.7175 + 0.287 = 1.0045\text{ kJ/(kg}\cdot\text{K)}$$</div>
+            </div>
+            <div class="step-block">
+              <div class="step-label label-green">Step 2: Energy & Enthalpy Changes</div>
+              <div>$$\Delta U = m \cdot C_v \cdot (T_2 - T_1) = 10 \cdot 0.7175 \cdot 80 = 574\text{ kJ}$$</div>
+              <div>$$\Delta H = m \cdot C_p \cdot (T_2 - T_1) = 10 \cdot 1.0045 \cdot 80 = 803.6\text{ kJ}$$</div>
+              <div>Results: <span class="result-badge">$\Delta U = 574\text{ kJ}$</span> and <span class="result-badge">$\Delta H = 803.6\text{ kJ}$</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ex 5 -->
+      <div class="card">
+        <div class="card-header">
+          <span class="prob-tag">Example 5: Tire Pressure & Temperature (Slide 11)</span>
+          <button class="sol-toggle-btn" onclick="toggleSol(this)">👁️ Show Solution</button>
+        </div>
+        <div class="card-body">
+          <div class="question-prompt">
+            Tire gauge pressure rises from $210\text{ kPa}$ to $220\text{ kPa}$ at $P_{atm} = 95\text{ kPa}$. Initial temperature is $25^\circ\text{C}$. Find final air temperature.
+          </div>
+          <div class="solution-content">
+            <div class="step-block">
+              <div class="step-label label-blue">Step 1: Absolute State Values</div>
+              <div>$$P_1 = 210 + 95 = 305\text{ kPa}, \quad P_2 = 220 + 95 = 315\text{ kPa}$$</div>
+              <div>$$T_1 = 25 + 273.15 = 298.15\text{ K}$$</div>
+            </div>
+            <div class="step-block">
+              <div class="step-label label-green">Step 2: Final Temperature at Constant Volume</div>
+              <div>$$\frac{P_1}{T_1} = \frac{P_2}{T_2} \implies T_2 = T_1 \cdot \left(\frac{P_2}{P_1}\right) = 298.15 \cdot \left(\frac{315}{305}\right) = 307.9\text{ K}$$</div>
+              <div>Final Result: <span class="result-badge">$T_2 = 34.8^\circ\text{C} \quad (307.8\text{ K})$</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ex 6 -->
+      <div class="card">
+        <div class="card-header">
+          <span class="prob-tag">Example 6: Two Tanks Mixing to Equilibrium (Slide 11)</span>
+          <button class="sol-toggle-btn" onclick="toggleSol(this)">👁️ Show Solution</button>
+        </div>
+        <div class="card-body">
+          <div class="question-prompt">
+            Tank A: $2\text{ kg}$ CO at $77^\circ\text{C}, 0.7\text{ bar}$. Tank B: $8\text{ kg}$ CO at $27^\circ\text{C}, 1.2\text{ bar}$. Mixing equilibrium is $42^\circ\text{C}$. Find final pressure $P_2$.
+          </div>
+          <div class="solution-content">
+            <div class="step-block">
+              <div class="step-label label-blue">Step 1: Individual Tank Volumes</div>
+              <div>$$V_A = \frac{m_A \cdot R \cdot T_A}{P_A} = \frac{2 \cdot 0.29683 \cdot 350}{70} = 2.9683\text{ m}^3$$</div>
+              <div>$$V_B = \frac{m_B \cdot R \cdot T_B}{P_B} = \frac{8 \cdot 0.29683 \cdot 300}{120} = 5.9366\text{ m}^3$$</div>
+              <div>$$V_{total} = V_A + V_B = 8.9049\text{ m}^3$$</div>
+            </div>
+            <div class="step-block">
+              <div class="step-label label-green">Step 2: Final Pressure</div>
+              <div>$$P_2 = \frac{m_{total} \cdot R \cdot T_2}{V_{total}} = \frac{10 \cdot 0.29683 \cdot 315}{8.9049} = 105.02\text{ kPa}$$</div>
+              <div>Final Result: <span class="result-badge">$P_2 = 105\text{ kPa} = 1.05\text{ bar}$</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ex 7 -->
+      <div class="card">
+        <div class="card-header">
+          <span class="prob-tag">Example 7: Engine Compression Ratio (Slide 12)</span>
+          <button class="sol-toggle-btn" onclick="toggleSol(this)">👁️ Show Solution</button>
+        </div>
+        <div class="card-body">
+          <div class="question-prompt">
+            Engine compression ratio is $15 \text{ to } 1$. Initial state is $100\text{ kPa}$ and $30^\circ\text{C}$. Find final pressure when temperature reaches $980^\circ\text{C}$.
+          </div>
+          <div class="solution-content">
+            <div class="step-block">
+              <div class="step-label label-green">Step-by-Step Calculation</div>
+              <div>$$\frac{V_1}{V_2} = 15, \quad T_1 = 303\text{ K}, \quad T_2 = 1253\text{ K}$$</div>
+              <div>$$P_2 = P_1 \cdot \left(\frac{V_1}{V_2}\right) \cdot \left(\frac{T_2}{T_1}\right) = 100 \cdot (15) \cdot \left(\frac{1253}{303}\right) = 6203\text{ kPa}$$</div>
+              <div>Final Result: <span class="result-badge">$P_2 = 6203\text{ kPa} = 62.03\text{ bar}$</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ex 8 -->
+      <div class="card">
+        <div class="card-header">
+          <span class="prob-tag">Example 8 / Ex 10: Rigid Tank Oxygen Cooling (Slide 13)</span>
+          <button class="sol-toggle-btn" onclick="toggleSol(this)">👁️ Show Solution</button>
+        </div>
+        <div class="card-body">
+          <div class="question-prompt">
+            $0.5\text{ kg}$ $O_2$ in rigid tank initially at $4\text{ MPa}$ and $180\text{ K}$. Cooled until pressure drops to $3.3\text{ MPa}$. Find tank volume and final temperature.
+          </div>
+          <div class="solution-content">
+            <div class="step-block">
+              <div class="step-label label-blue">Step 1: Volume Calculation</div>
+              <div>$$V = \frac{m \cdot R_{O_2} \cdot T_1}{P_1} = \frac{0.5 \cdot 0.25983 \cdot 180}{4000} = 0.005846\text{ m}^3$$</div>
+              <div>Result: <span class="result-badge">$V = 0.00585\text{ m}^3$</span></div>
+            </div>
+            <div class="step-block">
+              <div class="step-label label-green">Step 2: Final Temperature ($T_2$)</div>
+              <div>$$T_2 = T_1 \cdot \left(\frac{P_2}{P_1}\right) = 180 \cdot \left(\frac{3.3}{4.0}\right) = 148.5\text{ K}$$</div>
+              <div>Final Result: <span class="result-badge">$T_2 = 148.5\text{ K} \approx 147\text{ K}$</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ex 9 -->
+      <div class="card">
+        <div class="card-header">
+          <span class="prob-tag">Example 9 / Ex 11: Perfect Gas Expansion (Slide 14)</span>
+          <button class="sol-toggle-btn" onclick="toggleSol(this)">👁️ Show Solution</button>
+        </div>
+        <div class="card-body">
+          <div class="question-prompt">
+            Gas of mass $0.01\text{ kg}$ occupies $V_1 = 0.003\text{ m}^3$ at $7\text{ bar}, 131^\circ\text{C}$. Expands to $1\text{ bar}, 0.02\text{ m}^3$. Calculate $R$, $M$, and $T_2$.
+          </div>
+          <div class="solution-content">
+            <div class="step-block">
+              <div class="step-label label-blue">Step 1: Gas Constant ($R$) and Molar Mass ($M$)</div>
+              <div>$$R = \frac{P_1 \cdot V_1}{m \cdot T_1} = \frac{700 \cdot 0.003}{0.01 \cdot 404.15} = 0.5196\text{ kJ/(kg}\cdot\text{K)}$$</div>
+              <div>$$M = \frac{\bar{R}}{R} = \frac{8.314}{0.5196} = 16.0\text{ kg/kmol}$$</div>
+            </div>
+            <div class="step-block">
+              <div class="step-label label-green">Step 2: Final Temperature ($T_2$)</div>
+              <div>$$T_2 = \frac{P_2 \cdot V_2}{m \cdot R} = \frac{100 \cdot 0.02}{0.01 \cdot 0.5196} = 384.9\text{ K} = 111.8^\circ\text{C}$$</div>
+              <div>Final Result: <span class="result-badge">$T_2 = 111.8^\circ\text{C}$</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ex 10 -->
+      <div class="card">
+        <div class="card-header">
+          <span class="prob-tag">Example 10 / Ex 9: Process Enthalpy Decrease (Slide 19)</span>
+          <button class="sol-toggle-btn" onclick="toggleSol(this)">👁️ Show Solution</button>
+        </div>
+        <div class="card-body">
+          <div class="question-prompt">
+            Gas at $P_1 = 510\text{ kPa}, V_1 = 142\text{ L}$ goes to $P_2 = 170\text{ kPa}, V_2 = 275\text{ L}$. Enthalpy decreases by $65\text{ kJ}$. $C_v = 0.718\text{ kJ/(kg}\cdot\text{K)}$. Find $\Delta U, C_p, R$.
+          </div>
+          <div class="solution-content">
+            <div class="step-block">
+              <div class="step-label label-blue">Step 1: Internal Energy Change ($\Delta U$)</div>
+              <div>$$\Delta H = \Delta U + (P_2 V_2 - P_1 V_1)$$</div>
+              <div>$$-65 = \Delta U + (170 \cdot 0.275) - (510 \cdot 0.142) = \Delta U - 25.67$$</div>
+              <div>$$\Delta U = -65 + 25.67 = -39.33\text{ kJ}$$</div>
+              <div>Result: <span class="result-badge">$\Delta U = -39.33\text{ kJ}$</span></div>
+            </div>
+            <div class="step-block">
+              <div class="step-label label-green">Step 2: Specific Heats ($C_p$) and Gas Constant ($R$)</div>
+              <div>$$m \cdot \Delta T = \frac{\Delta U}{C_v} = \frac{-39.33}{0.718} = -54.777$$</div>
+              <div>$$C_p = \frac{\Delta H}{m \cdot \Delta T} = \frac{-65}{-54.777} = 1.187\text{ kJ/(kg}\cdot\text{K)}$$</div>
+              <div>$$R = C_p - C_v = 1.187 - 0.718 = 0.469\text{ kJ/(kg}\cdot\text{K)}$$</div>
+              <div>Results: <span class="result-badge">$C_p = 1.187\text{ kJ/(kg}\cdot\text{K)}$</span> and <span class="result-badge">$R = 0.469\text{ kJ/(kg}\cdot\text{K)}$</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ex 11 -->
+      <div class="card">
+        <div class="card-header">
+          <span class="prob-tag">Example 11 / Ex 7: Real Gas $CO_2$ Tank & Error (Slide 22)</span>
+          <button class="sol-toggle-btn" onclick="toggleSol(this)">👁️ Show Solution</button>
+        </div>
+        <div class="card-body">
+          <div class="question-prompt">
+            A $200\text{-L}$ tank contains $CO_2$ at $2\text{ MPa}$ and $35^\circ\text{C}$. Find actual real mass using compressibility factor $Z$, and find error percentage if ideal gas model is assumed.
+          </div>
+          <div class="solution-content">
+            <div class="step-block">
+              <div class="step-label label-blue">Step 1: Reduced Properties & $Z$ Factor</div>
+              <div>$$P_r = \frac{P}{P_c} = \frac{2}{7.38} = 0.271, \quad T_r = \frac{T}{T_c} = \frac{308}{304.1} = 1.013$$</div>
+              <div>From Generalized Chart: $$Z = 0.90$$</div>
+            </div>
+            <div class="step-block">
+              <div class="step-label label-green">Step 2: Mass Calculation & Percentage Error</div>
+              <div>$$m_{actual} = \frac{P \cdot V}{Z \cdot R \cdot T} = \frac{2000 \cdot 0.2}{0.90 \cdot 0.18892 \cdot 308} = 7.63\text{ kg}$$</div>
+              <div>$$m_{ideal} = \frac{P \cdot V}{R \cdot T} = \frac{400}{0.18892 \cdot 308} = 6.87\text{ kg}$$</div>
+              <div>$$\text{Error \%} = \frac{m_{actual} - m_{ideal}}{m_{actual}} \cdot 100 = \frac{7.63 - 6.87}{7.63} \cdot 100 \approx 10\%$$</div>
+              <div>Results: <span class="result-badge">$m_{actual} = 7.63\text{ kg}$</span> and <span class="result-badge">$\text{Error} = 10\%$</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LECTURE 3 PANEL -->
+    <div id="lec3-panel" class="view-panel">
+      <div class="global-toggle-bar">
+        <button onclick="toggleAll('lec3-panel', true)">👁️ Show All Solutions</button>
+        <button onclick="toggleAll('lec3-panel', false)">🙈 Hide All Solutions</button>
+      </div>
+
+      <!-- Ex 1 -->
+      <div class="card">
+        <div class="card-header">
+          <span class="prob-tag">Example 1: Saturated Liquid Water Tank (Slide 13)</span>
+          <button class="sol-toggle-btn" onclick="toggleSol(this)">👁️ Show Solution</button>
+        </div>
+        <div class="card-body">
+          <div class="question-prompt">
+            Rigid tank contains $50\text{ kg}$ of saturated liquid water at $90^\circ\text{C}$. Determine tank pressure and total tank volume.
+          </div>
+          <div class="solution-content">
+            <div class="step-block">
+              <div class="step-label label-blue">Step 1: Saturation Properties (Table A-4)</div>
+              <div>At $T = 90^\circ\text{C}$:</div>
+              <div>$$P = P_{sat} = 70.183\text{ kPa}$$</div>
+              <div>$$v = v_f = 0.001036\text{ m}^3/\text{kg}$$</div>
+            </div>
+            <div class="step-block">
+              <div class="step-label label-green">Step 2: Tank Volume</div>
+              <div>$$V = m \cdot v_f = 50\text{ kg} \cdot 0.001036\text{ m}^3/\text{kg} = 0.0518\text{ m}^3$$</div>
+              <div>Final Results: <span class="result-badge">$P = 70.183\text{ kPa}$</span> and <span class="result-badge">$V = 0.0518\text{ m}^3$</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ex 2 -->
+      <div class="card">
+        <div class="card-header">
+          <span class="prob-tag">Example 2: Saturated Water Vapor in Cylinder (Slide 14)</span>
+          <button class="sol-toggle-btn" onclick="toggleSol(this)">👁️ Show Solution</button>
+        </div>
+        <div class="card-body">
+          <div class="question-prompt">
+            A piston-cylinder device contains $0.0565\text{ m}^3$ of saturated water vapor at $350\text{ kPa}$. Determine temperature and mass of vapor.
+          </div>
+          <div class="solution-content">
+            <div class="step-block">
+              <div class="step-label label-blue">Step 1: Saturation Properties (Table A-5)</div>
+              <div>At $P = 350\text{ kPa}$:</div>
+              <div>$$T = T_{sat} = 138.86^\circ\text{C}$$</div>
+              <div>$$v_g = 0.52422\text{ m}^3/\text{kg}$$</div>
+            </div>
+            <div class="step-block">
+              <div class="step-label label-green">Step 2: Mass Calculation</div>
+              <div>$$m = \frac{V}{v_g} = \frac{0.0565\text{ m}^3}{0.52422\text{ m}^3/\text{kg}} = 0.1078\text{ kg} \approx 0.1\text{ kg}$$</div>
+              <div>Final Results: <span class="result-badge">$T = 138.86^\circ\text{C}$</span> and <span class="result-badge">$m = 0.1\text{ kg}$</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ex 3 -->
+      <div class="card">
+        <div class="card-header">
+          <span class="prob-tag">Example 3: Complete Vaporization at Constant Pressure (Slide 15)</span>
+          <button class="sol-toggle-btn" onclick="toggleSol(this)">👁️ Show Solution</button>
+        </div>
+        <div class="card-body">
+          <div class="question-prompt">
+            $200\text{ g}$ of saturated liquid water is completely vaporized at constant $P = 100\text{ kPa}$. Find volume change $\Delta V$ and energy transferred $Q$.
+          </div>
+          <div class="solution-content">
+            <div class="step-block">
+              <div class="step-label label-blue">Step 1: Properties at $100\text{ kPa}$ (Table A-5)</div>
+              <div>$$v_f = 0.001043\text{ m}^3/\text{kg}, \quad v_g = 1.6941\text{ m}^3/\text{kg}$$</div>
+              <div>$$v_{fg} = 1.6941 - 0.001043 = 1.6931\text{ m}^3/\text{kg}$$</div>
+              <div>$$h_{fg} = 2257.5\text{ kJ/kg}$$</div>
+            </div>
+            <div class="step-block">
+              <div class="step-label label-green">Step 2: Volume Change and Energy Added</div>
+              <div>$$\Delta V = m \cdot v_{fg} = 0.2\text{ kg} \cdot 1.6931\text{ m}^3/\text{kg} = 0.3386\text{ m}^3$$</div>
+              <div>$$Q = m \cdot h_{fg} = 0.2\text{ kg} \cdot 2257.5\text{ kJ/kg} = 451.5\text{ kJ}$$</div>
+              <div>Final Results: <span class="result-badge">$\Delta V = 0.3386\text{ m}^3$</span> and <span class="result-badge">$Q = 451.5\text{ kJ}$</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ex 4 -->
+      <div class="card">
+        <div class="card-header">
+          <span class="prob-tag">Example 4: Liquid-Vapor Mixture Quality & Volume (Slide 17)</span>
+          <button class="sol-toggle-btn" onclick="toggleSol(this)">👁️ Show Solution</button>
+        </div>
+        <div class="card-body">
+          <div class="question-prompt">
+            A rigid tank has $10\text{ kg}$ water at $90^\circ\text{C}$ ($8\text{ kg}$ liquid, $2\text{ kg}$ vapor). Find tank pressure and volume.
+          </div>
+          <div class="solution-content">
+            <div class="step-block">
+              <div class="step-label label-blue">Step 1: Quality and Saturation Pressure</div>
+              <div>$$x = \frac{m_g}{m_{total}} = \frac{2}{10} = 0.2$$</div>
+              <div>From Table A-4 at $90^\circ\text{C}$: $$P = P_{sat} = 70.183\text{ kPa}$$</div>
+              <div>$$v_f = 0.001036\text{ m}^3/\text{kg}, \quad v_g = 2.3593\text{ m}^3/\text{kg}$$</div>
+            </div>
+            <div class="step-block">
+              <div class="step-label label-green">Step 2: Tank Volume</div>
+              <div>$$V = m_f \cdot v_f + m_g \cdot v_g = (8 \cdot 0.001036) + (2 \cdot 2.3593) = 4.727\text{ m}^3$$</div>
+              <div>Final Results: <span class="result-badge">$P = 70.183\text{ kPa}$</span> and <span class="result-badge">$V = 4.73\text{ m}^3$</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ex 5 -->
+      <div class="card">
+        <div class="card-header">
+          <span class="prob-tag">Example 5: Water Vessel Region Determination (Slide 18)</span>
+          <button class="sol-toggle-btn" onclick="toggleSol(this)">👁️ Show Solution</button>
+        </div>
+        <div class="card-body">
+          <div class="question-prompt">
+            $80\text{-L}$ vessel contains $4\text{ kg}$ water at $175\text{ kPa}$. Determine temperature, quality, enthalpy, and vapor volume.
+          </div>
+          <div class="solution-content">
+            <div class="step-block">
+              <div class="step-label label-blue">Step 1: Specific Volume and Phase Check</div>
+              <div>$$v = \frac{V}{m} = \frac{0.08\text{ m}^3}{4\text{ kg}} = 0.02\text{ m}^3/\text{kg}$$</div>
+              <div>From Table A-5 at $175\text{ kPa}$: $v_f = 0.001057, v_g = 1.0036\text{ m}^3/\text{kg}$.</div>
+              <div>Since $v_f < v < v_g \implies$ Saturated Mixture Region.</div>
+            </div>
+            <div class="step-block">
+              <div class="step-label label-green">Step 2: Property Calculations</div>
+              <div>$$T = T_{sat @ 175\text{ kPa}} = 116.06^\circ\text{C}$$</div>
+              <div>$$x = \frac{v - v_f}{v_g - v_f} = \frac{0.02 - 0.001057}{1.0036 - 0.001057} = 0.0189$$</div>
+              <div>$$h = h_f + x \cdot h_{fg} = 486.97 + (0.0189 \cdot 2213.6) = 528.81\text{ kJ/kg}$$</div>
+              <div>$$V_g = (x \cdot m) \cdot v_g = 0.0756 \cdot 1.0036 = 0.0759\text{ m}^3 = 75.9\text{ L}$$</div>
+              <div>Results: <span class="result-badge">$T = 116.06^\circ\text{C}$</span>, <span class="result-badge">$x = 0.0189$</span>, <span class="result-badge">$h = 528.8\text{ kJ/kg}$</span>, <span class="result-badge">$V_g = 75.9\text{ L}$</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ex 6 -->
+      <div class="card">
+        <div class="card-header">
+          <span class="prob-tag">Example 6: Superheated Vapor Interpolation (Slide 21)</span>
+          <button class="sol-toggle-btn" onclick="toggleSol(this)">👁️ Show Solution</button>
+        </div>
+        <div class="card-body">
+          <div class="question-prompt">
+            Determine temperature of water at $P = 0.5\text{ MPa}$ and $h = 2890\text{ kJ/kg}$.
+          </div>
+          <div class="solution-content">
+            <div class="step-block">
+              <div class="step-label label-blue">Step 1: Check Region</div>
+              <div>From Table A-5 at $0.5\text{ MPa}$: $h_g = 2748.7\text{ kJ/kg}$.</div>
+              <div>Since $h = 2890\text{ kJ/kg} > h_g \implies$ Superheated vapor (Table A-6).</div>
+            </div>
+            <div class="step-block">
+              <div class="step-label label-green">Step 2: Linear Interpolation</div>
+              <div>At $T_1 = 200^\circ\text{C} \implies h_1 = 2855.8\text{ kJ/kg}$</div>
+              <div>At $T_2 = 250^\circ\text{C} \implies h_2 = 2961.0\text{ kJ/kg}$</div>
+              <div>$$\frac{T - 200}{250 - 200} = \frac{2890 - 2855.8}{2961.0 - 2855.8} \implies \frac{T - 200}{50} = \frac{34.2}{105.2} = 0.3251$$</div>
+              <div>$$T = 200 + (50 \cdot 0.3251) = 216.25^\circ\text{C}$$</div>
+              <div>Final Result: <span class="result-badge">$T = 216.3^\circ\text{C}$</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ex 7 -->
+      <div class="card">
+        <div class="card-header">
+          <span class="prob-tag">Example 7: Compressed Liquid Internal Energy (Slide 24)</span>
+          <button class="sol-toggle-btn" onclick="toggleSol(this)">👁️ Show Solution</button>
+        </div>
+        <div class="card-body">
+          <div class="question-prompt">
+            Determine specific internal energy ($u$) of liquid water at $T = 80^\circ\text{C}$ and $P = 5\text{ MPa}$.
+          </div>
+          <div class="solution-content">
+            <div class="step-block">
+              <div class="step-label label-green">Step-by-Step Lookup</div>
+              <div>From Table A-5 at $5\text{ MPa}$: $T_{sat} = 263.99^\circ\text{C}$.</div>
+              <div>Since $T = 80^\circ\text{C} < T_{sat} \implies$ Compressed liquid.</div>
+              <div>From Table A-7 (Compressed Liquid) at $5\text{ MPa}, 80^\circ\text{C}$:</div>
+              <div>$$u = 333.82\text{ kJ/kg}$$</div>
+              <div>Final Result: <span class="result-badge">$u = 333.82\text{ kJ/kg}$</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Master Exercise -->
+      <div class="card">
+        <div class="card-header">
+          <span class="prob-tag">Master Exercise: Missing Properties & Phase Identification (Slide 30)</span>
+          <button class="sol-toggle-btn" onclick="toggleSol(this)">👁️ Show Solution</button>
+        </div>
+        <div class="card-body">
+          <div class="question-prompt">
+            Determine missing properties ($T, P, u, x$) and phase descriptions for water states (a) to (e):
+          </div>
+          <div class="solution-content">
+            <div class="step-block">
+              <div class="step-label label-blue">Results Summary</div>
+              <div style="margin-top: 6px;">
+                &bull; <b>State (a):</b> $P = 200\text{ kPa}, x = 0.6 \implies$ Saturated Mixture: <span class="result-badge">$T = 120.21^\circ\text{C}$</span>, <span class="result-badge">$u = 1719.3\text{ kJ/kg}$</span><br>
+                &bull; <b>State (b):</b> $T = 125^\circ\text{C}, u = 1600\text{ kJ/kg} \implies$ Saturated Mixture: <span class="result-badge">$P = 232.23\text{ kPa}$</span>, <span class="result-badge">$x = 0.535$</span><br>
+                &bull; <b>State (c):</b> $P = 1000\text{ kPa}, u = 2950\text{ kJ/kg} \implies$ Superheated Vapor: <span class="result-badge">$T = 395.2^\circ\text{C}$</span>, $x = \text{N/A}$<br>
+                &bull; <b>State (d):</b> $T = 75^\circ\text{C}, P = 500\text{ kPa} \implies$ Compressed Liquid: <span class="result-badge">$u = 314.0\text{ kJ/kg}$</span>, $x = \text{N/A}$<br>
+                &bull; <b>State (e):</b> $P = 850\text{ kPa}, x = 0.0 \implies$ Saturated Liquid: <span class="result-badge">$T = 172.94^\circ\text{C}$</span>, <span class="result-badge">$u = 731.0\text{ kJ/kg}$</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LECTURE 4 PANEL -->
+    <div id="lec4-panel" class="view-panel">
+      <div class="global-toggle-bar">
+        <button onclick="toggleAll('lec4-panel', true)">👁️ Show All Solutions</button>
+        <button onclick="toggleAll('lec4-panel', false)">🙈 Hide All Solutions</button>
+      </div>
+
+      <!-- Ex 1 -->
+      <div class="card">
+        <div class="card-header">
+          <span class="prob-tag">Example 1: Polytropic Expansion ($PV^2 = C$) (Slide 12)</span>
+          <button class="sol-toggle-btn" onclick="toggleSol(this)">👁️ Show Solution</button>
+        </div>
+        <div class="card-body">
+          <div class="question-prompt">
+            $1\text{ kg}$ fluid expands behind a piston according to $PV^2 = C$ from $P_1 = 20\text{ bar}, V_1 = 0.05\text{ m}^3$ until volume doubles ($V_2 = 0.1\text{ m}^3$). Calculate work done.
+          </div>
+          <div class="solution-content">
+            <div class="step-block">
+              <div class="step-label label-blue">Step 1: Final Pressure Calculation</div>
+              <div>$$P_2 = P_1 \cdot \left(\frac{V_1}{V_2}\right)^2 = 2000\text{ kPa} \cdot \left(\frac{0.05}{0.10}\right)^2 = 500\text{ kPa}$$</div>
+            </div>
+            <div class="step-block">
+              <div class="step-label label-green">Step 2: Work Done</div>
+              <div>$$W_{1-2} = \frac{P_2 \cdot V_2 - P_1 \cdot V_1}{1 - n} = \frac{(500 \cdot 0.10) - (2000 \cdot 0.05)}{1 - 2} = \frac{50 - 100}{-1} = +50\text{ kJ}$$</div>
+              <div>Final Result: <span class="result-badge">$W = +50\text{ kJ}$</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ex 2 -->
+      <div class="card">
+        <div class="card-header">
+          <span class="prob-tag">Example 2: Isothermal Air Compression (Slide 17)</span>
+          <button class="sol-toggle-btn" onclick="toggleSol(this)">👁️ Show Solution</button>
+        </div>
+        <div class="card-body">
+          <div class="question-prompt">
+            Air in cylinder at $V_1 = 0.4\text{ m}^3, P_1 = 100\text{ kPa}, T_0 = 80^\circ\text{C} = \text{const}$ is compressed to $V_2 = 0.1\text{ m}^3$. Find work done.
+          </div>
+          <div class="solution-content">
+            <div class="step-block">
+              <div class="step-label label-green">Step-by-Step Calculation</div>
+              <div>$$W_{1-2} = P_1 \cdot V_1 \cdot \ln\left(\frac{V_2}{V_1}\right) = 100 \cdot 0.4 \cdot \ln\left(\frac{0.1}{0.4}\right) = 40 \cdot \ln(0.25) = -55.45\text{ kJ}$$</div>
+              <div>Final Result: <span class="result-badge">$W = -55.45\text{ kJ}$ (Work done on system)</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ex 3 -->
+      <div class="card">
+        <div class="card-header">
+          <span class="prob-tag">Example 3: Isothermal Compression of Water (Slide 18)</span>
+          <button class="sol-toggle-btn" onclick="toggleSol(this)">👁️ Show Solution</button>
+        </div>
+        <div class="card-body">
+          <div class="question-prompt">
+            Water at $P_1 = 50\text{ kPa}, V_1 = 3\text{ m}^3$ compressed according to $PV = C$ to $P_2 = 1\text{ MPa}$. Find work.
+          </div>
+          <div class="solution-content">
+            <div class="step-block">
+              <div class="step-label label-green">Step-by-Step Calculation</div>
+              <div>$$V_2 = \frac{P_1 \cdot V_1}{P_2} = \frac{50 \cdot 3}{1000} = 0.15\text{ m}^3$$</div>
+              <div>$$W_{1-2} = P_1 \cdot V_1 \cdot \ln\left(\frac{V_2}{V_1}\right) = 150 \cdot \ln\left(\frac{0.15}{3}\right) = 150 \cdot \ln(0.05) = -449.36\text{ kJ}$$</div>
+              <div>Final Result: <span class="result-badge">$W = -449.36\text{ kJ}$</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ex 4 -->
+      <div class="card">
+        <div class="card-header">
+          <span class="prob-tag">Example 4: Isobaric Steam Heating (Slide 20)</span>
+          <button class="sol-toggle-btn" onclick="toggleSol(this)">👁️ Show Solution</button>
+        </div>
+        <div class="card-body">
+          <div class="question-prompt">
+            $4.5\text{ kg}$ steam at $400\text{ kPa}, 150^\circ\text{C}$ heated at constant pressure to $200^\circ\text{C}$. Find boundary work.
+          </div>
+          <div class="solution-content">
+            <div class="step-block">
+              <div class="step-label label-green">Step-by-Step Calculation</div>
+              <div>From Table A-6 at $0.4\text{ MPa}$: $v_1 = 0.47084\text{ m}^3/\text{kg}, v_2 = 0.53422\text{ m}^3/\text{kg}$.</div>
+              <div>$$W_b = m \cdot P \cdot (v_2 - v_1) = 4.5 \cdot 400 \cdot (0.53422 - 0.47084) = 114.1\text{ kJ}$$</div>
+              <div>Final Result: <span class="result-badge">$W_b = 114.1\text{ kJ}$</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ex 5 -->
+      <div class="card">
+        <div class="card-header">
+          <span class="prob-tag">Example 5: Constant Pressure Gas Expansion (Slide 21)</span>
+          <button class="sol-toggle-btn" onclick="toggleSol(this)">👁️ Show Solution</button>
+        </div>
+        <div class="card-body">
+          <div class="question-prompt">
+            Gas expands from $V_1 = 0.15\text{ m}^3$ to $V_2 = 0.36\text{ m}^3$ at constant pressure $P = 0.5\text{ MPa}$. Find work.
+          </div>
+          <div class="solution-content">
+            <div class="step-block">
+              <div class="step-label label-green">Step-by-Step Calculation</div>
+              <div>$$W_{1-2} = P \cdot (V_2 - V_1) = 500\text{ kPa} \cdot (0.36 - 0.15)\text{ m}^3 = 105\text{ kJ}$$</div>
+              <div>Final Result: <span class="result-badge">$W = 105\text{ kJ}$</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ex 6 -->
+      <div class="card">
+        <div class="card-header">
+          <span class="prob-tag">Example 6: Expansion with Paddle Wheel Interaction (Slide 22)</span>
+          <button class="sol-toggle-btn" onclick="toggleSol(this)">👁️ Show Solution</button>
+        </div>
+        <div class="card-body">
+          <div class="question-prompt">
+            Fluid expands from $0.040\text{ m}^3$ to $0.045\text{ m}^3$ at $P = 690\text{ kPa}$. Paddle wheel does $4880\text{ J}$ of work on system. Find piston work and net work.
+          </div>
+          <div class="solution-content">
+            <div class="step-block">
+              <div class="step-label label-green">Step-by-Step Calculation</div>
+              <div>$$W_{piston} = P \cdot (V_2 - V_1) = 690 \cdot (0.045 - 0.040) = +3.45\text{ kJ}$$</div>
+              <div>$$W_{paddle} = -\frac{4880}{1000} = -4.88\text{ kJ}$$</div>
+              <div>$$W_{net} = W_{piston} + W_{paddle} = +3.45 + (-4.88) = -1.43\text{ kJ}$$</div>
+              <div>Final Result: <span class="result-badge">$W_{net} = -1.43\text{ kJ}$</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ex 7 -->
+      <div class="card">
+        <div class="card-header">
+          <span class="prob-tag">Example 7: Cooling in a Rigid Tank (Slide 25)</span>
+          <button class="sol-toggle-btn" onclick="toggleSol(this)">👁️ Show Solution</button>
+        </div>
+        <div class="card-body">
+          <div class="question-prompt">
+            Air in rigid tank cooled from $500\text{ kPa}, 150^\circ\text{C}$ to $400\text{ kPa}, 65^\circ\text{C}$. Find boundary work.
+          </div>
+          <div class="solution-content">
+            <div class="step-block">
+              <div class="step-label label-green">Step-by-Step Evaluation</div>
+              <div>Rigid tank $\implies dV = 0 \implies W = 0\text{ kJ}$.</div>
+              <div>Final Result: <span class="result-badge">$W_b = 0\text{ kJ}$</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ex 8 -->
+      <div class="card">
+        <div class="card-header">
+          <span class="prob-tag">Example 8: Three-Process Thermodynamic Cycle (Slide 27)</span>
+          <button class="sol-toggle-btn" onclick="toggleSol(this)">👁️ Show Solution</button>
+        </div>
+        <div class="card-body">
+          <div class="question-prompt">
+            Fluid undergoes 3-process cycle: (1-2) $PV^2 = C$ expansion from $20\text{ bar}, 0.05\text{ m}^3$ to double volume. (2-3) Constant pressure cooling back to original volume. (3-1) Constant volume heating back to $20\text{ bar}$. Find net work.
+          </div>
+          <div class="solution-content">
+            <div class="step-block">
+              <div class="step-label label-green">Step-by-Step Calculation</div>
+              <div>Process 1-2: $$W_{1-2} = \frac{(500 \cdot 0.10) - (2000 \cdot 0.05)}{1 - 2} = +50\text{ kJ}$$</div>
+              <div>Process 2-3: $$W_{2-3} = 500 \cdot (0.05 - 0.10) = -25\text{ kJ}$$</div>
+              <div>Process 3-1: $$W_{3-1} = 0\text{ kJ}$$</div>
+              <div>Net cycle work: $$W_{net} = 50 + (-25) + 0 = +25\text{ kJ}$$</div>
+              <div>Final Result: <span class="result-badge">$W_{net} = +25\text{ kJ}$</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Assignment Problem 1 -->
+      <div class="card">
+        <div class="card-header">
+          <span class="prob-tag">Assignment Problem 1: Multi-Process Steam States (Slide 30)</span>
+          <button class="sol-toggle-btn" onclick="toggleSol(this)">👁️ Show Solution</button>
+        </div>
+        <div class="card-body">
+          <div class="question-prompt">
+            Water vapor at $P_1 = 0.3\text{ MPa}, T_1 = 300^\circ\text{C}$ (State 1) cooled at constant volume to $T_2 = 200^\circ\text{C}$ (State 2), then compressed isothermally to $P_3 = 2.5\text{ MPa}$ (State 3). Find specific volumes and $x_2$.
+          </div>
+          <div class="solution-content">
+            <div class="step-block">
+              <div class="step-label label-blue">Step 1: State 1 ($P_1 = 0.3\text{ MPa}, T_1 = 300^\circ\text{C}$)</div>
+              <div>From Table A-6: $$v_1 = 0.87535\text{ m}^3/\text{kg}$$</div>
+            </div>
+            <div class="step-block">
+              <div class="step-label label-amber">Step 2: State 2 ($v_2 = v_1 = 0.87535\text{ m}^3/\text{kg}, T_2 = 200^\circ\text{C}$)</div>
+              <div>From Table A-4 at $200^\circ\text{C}$: $v_g = 0.12721\text{ m}^3/\text{kg}$.</div>
+              <div>Since $v_2 > v_g \implies$ Superheated vapor ($x_2$ is not applicable).</div>
+              <div>Table A-6 yields: $$P_2 \approx 0.245\text{ MPa}$$</div>
+            </div>
+            <div class="step-block">
+              <div class="step-label label-green">Step 3: State 3 ($T_3 = 200^\circ\text{C}, P_3 = 2.5\text{ MPa}$)</div>
+              <div>Since $P_3 = 2.5\text{ MPa} > P_{sat @ 200^\circ\text{C}} = 1.554\text{ MPa} \implies$ Compressed liquid.</div>
+              <div>$$v_3 \approx v_{f @ 200^\circ\text{C}} = 0.001157\text{ m}^3/\text{kg}$$</div>
+              <div>Results: <span class="result-badge">$v_1 = v_2 = 0.87535\text{ m}^3/\text{kg}$</span> and <span class="result-badge">$v_3 = 0.001157\text{ m}^3/\text{kg}$</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Assignment Problem 2 -->
+      <div class="card">
+        <div class="card-header">
+          <span class="prob-tag">Assignment Problem 2: Vertical Cylinder with Stops (Slide 30)</span>
+          <button class="sol-toggle-btn" onclick="toggleSol(this)">👁️ Show Solution</button>
+        </div>
+        <div class="card-body">
+          <div class="question-prompt">
+            Air in cylinder with stops: $A = 0.2\text{ m}^2, P_1 = 200\text{ kPa}, T_1 = 500^\circ\text{C} = 773.15\text{ K}$, height $h_1 = 2\text{ m}$. Stops at $h = 1\text{ m}$. Cooled to stops, then further cooled to $20^\circ\text{C} = 293.15\text{ K}$. Find $T$ at stops and final pressure.
+          </div>
+          <div class="solution-content">
+            <div class="step-block">
+              <div class="step-label label-blue">Step 1: Temperature at Stops ($T_2$) (Constant Pressure)</div>
+              <div>$$\frac{V_1}{T_1} = \frac{V_2}{T_2} \implies T_2 = T_1 \cdot \left(\frac{V_2}{V_1}\right) = 773.15 \cdot \left(\frac{0.2}{0.4}\right) = 386.58\text{ K}$$</div>
+              <div>Result: <span class="result-badge">$T_2 = 113.4^\circ\text{C} \quad (386.6\text{ K})$</span></div>
+            </div>
+            <div class="step-block">
+              <div class="step-label label-green">Step 2: Final Pressure ($P_3$) (Constant Volume)</div>
+              <div>$$\frac{P_2}{T_2} = \frac{P_3}{T_3} \implies P_3 = P_2 \cdot \left(\frac{T_3}{T_2}\right) = 200 \cdot \left(\frac{293.15}{386.58}\right) = 151.66\text{ kPa}$$</div>
+              <div>Result: <span class="result-badge">$P_3 = 151.7\text{ kPa}$</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    function switchLec(num) {
+      for (let i = 1; i <= 4; i++) {
+        const tab = document.getElementById('tab-lec-' + i);
+        const panel = document.getElementById('lec' + i + '-panel');
+        if (tab) tab.classList.remove('active');
+        if (panel) panel.classList.remove('active-panel');
+      }
+
+      const activeTab = document.getElementById('tab-lec-' + num);
+      const activePanel = document.getElementById('lec' + num + '-panel');
+      if (activeTab) activeTab.classList.add('active');
+      if (activePanel) activePanel.classList.add('active-panel');
+
+      const badge = document.getElementById('header-badge');
+      const title = document.getElementById('header-title');
+      const desc = document.getElementById('header-desc');
+
+      if (num === 1) {
+        badge.innerText = "LECTURE 1 • SOLVED EXAMPLES";
+        title.innerText = "Chapter 1: Density, Specific Weight & Specific Gravity";
+        desc.innerText = "Step-by-step engineering solutions with horizontal math fractions and full English steps.";
+      } else if (num === 2) {
+        badge.innerText = "LECTURE 2 • ALL 11 SOLVED EXAMPLES";
+        title.innerText = "Chapter 2: Ideal Gas Relations, Force Balances & Real Gas Model";
+        desc.innerText = "Comprehensive coverage of all 11 worked problems from Lecture 2 slides.";
+      } else if (num === 3) {
+        badge.innerText = "LECTURE 3 • CHAPTER 2 (PURE SUBSTANCES & STEAM TABLES)";
+        title.innerText = "Chapter 2: Pure Substances, Phase Change & Steam Tables";
+        desc.innerText = "Comprehensive coverage of all Lecture 3 worked examples and table lookup procedures.";
+      } else if (num === 4) {
+        badge.innerText = "LECTURE 4 • CHAPTER 3 (ENERGY TRANSFER BY HEAT & WORK)";
+        title.innerText = "Chapter 3: Work, Heat & 5 Thermodynamic Processes";
+        desc.innerText = "Complete step-by-step solutions for all 8 lecture examples and both assignment problems.";
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function toggleSol(btn) {
+      const card = btn.closest('.card');
+      const content = card.querySelector('.solution-content');
+      if (content.classList.contains('show')) {
+        content.classList.remove('show');
+        btn.classList.remove('active');
+        btn.innerText = "👁️ Show Solution";
+      } else {
+        content.classList.add('show');
+        btn.classList.add('active');
+        btn.innerText = "🙈 Hide Solution";
+      }
+    }
+
+    function toggleAll(panelId, show) {
+      const panel = document.getElementById(panelId);
+      const buttons = panel.querySelectorAll('.sol-toggle-btn');
+      const contents = panel.querySelectorAll('.solution-content');
+
+      contents.forEach((content, i) => {
+        if (show) {
+          content.classList.add('show');
+          buttons[i].classList.add('active');
+          buttons[i].innerText = "🙈 Hide Solution";
+        } else {
+          content.classList.remove('show');
+          buttons[i].classList.remove('active');
+          buttons[i].innerText = "👁️ Show Solution";
+        }
+      });
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+      if (typeof renderMathInElement === 'function') {
+        renderMathInElement(document.body, {
+          delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "$", right: "$", display: false}
+          ],
+          throwOnError: false
+        });
+      }
+    });
+  </script>
+</body>
+</html>
