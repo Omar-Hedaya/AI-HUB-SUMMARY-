@@ -1,15 +1,33 @@
 {
   "categories": [
-    "Math 2"
+    "Fluid and Thermal Systems",
+    "Math 2",
+    "Thermo"
   ],
   "documents": [
+    {
+      "name": "Thermo Lectures solved examples.html",
+      "title": "Thermo Lectures solved examples",
+      "category": "Fluid and Thermal Systems",
+      "path": "content/Fluid and Thermal Systems/Thermo Lectures solved examples.html"
+    },
+    {
+      "name": "Thermo Lectures summary.html",
+      "title": "Thermo Lectures summary",
+      "category": "Fluid and Thermal Systems",
+      "path": "content/Fluid and Thermal Systems/Thermo Lectures summary.html"
+    },
     {
       "name": "All Math 2 (Lectures Summary + Sheets Answers).html",
       "title": "All Math 2 (Lectures Summary + Sheets Answers)",
       "category": "Math 2",
-      "slug": "all-math-2-lectures-summary-sheets-answers",
-      "path": "content/Math 2/All Math 2 (Lectures Summary + Sheets Answers).html",
-      "size": 544621
+      "path": "content/Math 2/All Math 2 (Lectures Summary + Sheets Answers).html"
+    },
+    {
+      "name": "oooooooo.html",
+      "title": "oooooooo",
+      "category": "Math 2",
+      "path": "content/Math 2/oooooooo.html"
     }
   ]
 }
