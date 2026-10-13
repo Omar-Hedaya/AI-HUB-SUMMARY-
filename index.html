@@ -941,8 +941,27 @@
       }
     };
 
-    // Baseline Document Library (Empty - purely loaded dynamically from GitHub)
-    const BUNDLED_SAMPLE_DOCS = [];
+    // Baseline Document Library (Bundled local study materials)
+    const BUNDLED_SAMPLE_DOCS = [
+      {
+        name: "All Math 2 (Lectures Summary + Sheets Answers).html",
+        title: "All Math 2 (Lectures Summary + Sheets Answers)",
+        category: "Math 2",
+        slug: "all-math-2-lectures-summary-sheets-answers",
+        path: "content/Math 2/All Math 2 (Lectures Summary + Sheets Answers).html",
+        download_url: "/content/Math%202/All%20Math%202%20(Lectures%20Summary%20+%20Sheets%20Answers).html",
+        size: 544621
+      },
+      {
+        name: "oooooooo.html",
+        title: "الورقة 2A — حلول امتحانية مشروحة بالكامل (ترجمة عربية)",
+        category: "Math 2",
+        slug: "math-2-paper-2a-exam-solutions",
+        path: "content/Math 2/oooooooo.html",
+        download_url: "/content/Math%202/oooooooo.html",
+        size: 555207
+      }
+    ];
 
     // ==========================================================
     // UTILITY FUNCTIONS & LANGUAGE SWITCHER
@@ -1609,22 +1628,32 @@
         let categoriesFound = [];
 
         // --------------------------------------------------------
-        // 1. PRIMARY STRATEGY: Static index.json from Raw GitHub CDN
+        // 1. PRIMARY STRATEGY: Static index.json (Local bundle first, Raw GitHub CDN fallback)
         // (Bypasses all GitHub API rate limits, ultra-fast 1-request load)
         // --------------------------------------------------------
         const staticIndexUrl = `https://raw.githubusercontent.com/${currentUsername}/${currentRepo}/${GITHUB_BRANCH}/index.json`;
         try {
-          let staticRes = await fetch(staticIndexUrl, { cache: forceRefresh ? "reload" : "no-cache" });
-          
-          // If remote 404, check if a local index.json is bundled in the app
-          if (!staticRes.ok && window.location.origin) {
+          // Priority Fetching Safeguard: strictly prioritize index.json first (local bundle or static CDN)
+          let staticRes = null;
+          try {
+            const localRes = await fetch("./index.json", { cache: forceRefresh ? "reload" : "no-cache" });
+            if (localRes.ok) staticRes = localRes;
+          } catch (e) {}
+
+          if (!staticRes || !staticRes.ok) {
             try {
-              const localRes = await fetch("./index.json");
-              if (localRes.ok) staticRes = localRes;
+              const rootRes = await fetch("/index.json", { cache: forceRefresh ? "reload" : "no-cache" });
+              if (rootRes.ok) staticRes = rootRes;
             } catch (e) {}
           }
 
-          if (staticRes.ok) {
+          if (!staticRes || !staticRes.ok) {
+            try {
+              staticRes = await fetch(staticIndexUrl, { cache: forceRefresh ? "reload" : "no-cache" });
+            } catch (e) {}
+          }
+
+          if (staticRes && staticRes.ok) {
             const rawData = await staticRes.json();
             let rawDocsList = [];
             let customCategories = [];
@@ -1670,9 +1699,12 @@
                 const downloadUrl = item.download_url || item.downloadUrl || `https://raw.githubusercontent.com/${currentUsername}/${currentRepo}/${GITHUB_BRANCH}/${docPath}`;
                 return {
                   name: docName,
+                  title: item.title || formatTitle(docName),
                   path: docPath,
                   category: item.category || extractCategoryFromPath(docPath),
+                  slug: item.slug || generateSlug(docName),
                   download_url: downloadUrl,
+                  downloadUrl: downloadUrl,
                   size: item.size || 0
                 };
               });
@@ -1860,8 +1892,8 @@
     }
 
     function fallbackToLocalSamples() {
-      allDocuments = [];
-      discoveredCategories = [];
+      allDocuments = BUNDLED_SAMPLE_DOCS.map(inflateDocument).filter(Boolean);
+      discoveredCategories = Array.from(new Set(allDocuments.map(d => d.category)));
     }
 
     // ==========================================================
@@ -2308,23 +2340,25 @@
 
         if (doc.downloadUrl || doc.download_url) {
           const fetchUrl = doc.downloadUrl || doc.download_url;
-          const response = await fetch(fetchUrl);
-          if (response.ok) {
-            const htmlText = await response.text();
-            try {
-              localStorage.setItem(offlineDocKey, htmlText);
-              cachedDocPaths.add(doc.path);
-              updateOfflineReadyBadgeForDoc(doc.path);
-              if ('caches' in window) {
-                const c = await caches.open('ai-hub-docs-v1');
-                c.put(fetchUrl, new Response(htmlText, { headers: { 'Content-Type': 'text/html' } }));
-              }
-            } catch (e) {}
+          try {
+            const response = await fetch(fetchUrl);
+            if (response && response.ok) {
+              const htmlText = await response.text();
+              try {
+                localStorage.setItem(offlineDocKey, htmlText);
+                cachedDocPaths.add(doc.path);
+                updateOfflineReadyBadgeForDoc(doc.path);
+                if ('caches' in window) {
+                  const c = await caches.open('ai-hub-docs-v1');
+                  c.put(fetchUrl, new Response(htmlText, { headers: { 'Content-Type': 'text/html' } }));
+                }
+              } catch (e) {}
 
-            iframe.srcdoc = htmlText;
-            attachIframeListeners(iframe, loader, false);
-            return;
-          }
+              iframe.srcdoc = htmlText;
+              attachIframeListeners(iframe, loader, false);
+              return;
+            }
+          } catch (fetchErr) {}
         }
 
         const contentUrl = doc.localUrl || `./content/${encodeURIComponent(doc.category)}/${encodeURIComponent(doc.name)}`;
