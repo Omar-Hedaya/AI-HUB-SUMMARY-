@@ -2512,21 +2512,23 @@
               width: 100% !important;
               max-width: 100% !important;
               margin: 0 !important;
-              padding: 0.75rem !important;
-              padding-top: 4.2rem !important;
+              padding: 0 !important;
+              padding-top: 4rem !important; /* Keep top clearance for the toolbar */
               box-sizing: border-box !important;
               -webkit-text-size-adjust: 100% !important;
             }
             * {
               box-sizing: border-box !important;
             }
-            /* 100% Fluid Dynamic Stretch: Eliminate Empty Side Margins When Zooming Out */
-            main, article, .content-card, .container, .page-wrapper, .document-container, .notion-page, #content, div.content, body > div, .card, .wrapper {
+            /* Remove excessive inner padding from containers while maintaining clean text spacing */
+            main, article, .content-card, .container, .page-wrapper, .document-container, .wrapper, body > div, .notion-page, #content, div.content, .card {
               width: 100% !important;
               max-width: 100% !important;
               min-width: 0 !important;
               margin-left: 0 !important;
               margin-right: 0 !important;
+              padding-left: 0.5rem !important;
+              padding-right: 0.5rem !important;
               box-sizing: border-box !important;
             }
             .katex-display {
