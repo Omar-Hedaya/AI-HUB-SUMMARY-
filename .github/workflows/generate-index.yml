@@ -1,0 +1,33 @@
+name: Auto Generate Index Catalog
+
+on:
+  push:
+    paths:
+      - 'content/**'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-index:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Generate index.json
+        run: node scripts/build-index.cjs
+
+      - name: Commit and Push Updated index.json
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add index.json public/index.json
+          git commit -m "chore: auto-update index.json catalog [skip ci]" || echo "No changes to commit"
+          git push
