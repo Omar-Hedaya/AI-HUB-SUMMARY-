@@ -1,0 +1,1579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fluid and Thermal Systems — Complete Lectures & Examples Portal — Dr. Ashraf Elsayed</title>
+  <!-- KaTeX for ultra-fast, lightweight performance -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+  <style>
+    :root {
+      --bg-base: #090d13;
+      --bg-card: #111722;
+      --bg-code: #0b1017;
+      --border-card: #1f2937;
+      --cyan: #38bdf8;
+      --emerald: #34d399;
+      --amber: #fbbf24;
+      --purple: #c084fc;
+      --rose: #f43f5e;
+      --text-main: #e2e8f0;
+      --text-muted: #94a3b8;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      width: 100% !important;
+      max-width: 100% !important;
+      overflow-x: hidden !important;
+      position: relative !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      background-color: var(--bg-base);
+      color: var(--text-main);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.6;
+      -webkit-text-size-adjust: 100%;
+      padding-bottom: 70px;
+    }
+    .container {
+      width: 100% !important;
+      max-width: 960px !important;
+      margin: 0 auto !important;
+      padding: 14px 10px !important;
+      box-sizing: border-box;
+      overflow-x: hidden !important;
+    }
+
+    /* Top Lecture Switcher Bar (Lecture 1, 2, 3, 4) */
+    .lecture-switch-wrapper {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 8px;
+      position: sticky;
+      top: 6px;
+      z-index: 1002;
+      background: rgba(9, 13, 19, 0.95);
+      backdrop-filter: blur(14px);
+      padding: 6px;
+      border-radius: 12px;
+      border: 1px solid var(--border-card);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
+    }
+    .lecture-tab {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 10px 12px;
+      border-radius: 8px;
+      font-size: 0.88rem;
+      font-weight: 800;
+      cursor: pointer;
+      color: var(--text-muted);
+      background: #111722;
+      border: 1px solid #1e293b;
+      transition: all 0.2s ease;
+      user-select: none;
+      text-align: center;
+    }
+    .lecture-tab:hover {
+      color: #fff;
+      border-color: rgba(56, 189, 248, 0.4);
+    }
+    .lecture-tab.active {
+      background: rgba(56, 189, 248, 0.15);
+      border-color: var(--cyan);
+      color: var(--cyan);
+      box-shadow: 0 0 14px rgba(56, 189, 248, 0.25);
+    }
+
+    /* Sub-navigation Bar */
+    .nav-tabs-wrapper {
+      position: sticky;
+      top: 62px;
+      z-index: 1000;
+      background: rgba(9, 13, 19, 0.95);
+      backdrop-filter: blur(12px);
+      padding: 6px 8px;
+      border-radius: 12px;
+      border: 1px solid var(--border-card);
+      margin-bottom: 18px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .nav-tabs-wrapper::-webkit-scrollbar { display: none; }
+    .nav-tabs {
+      display: flex;
+      gap: 6px;
+      width: 100%;
+      min-width: min-content;
+    }
+    .tab-btn {
+      flex: 1;
+      padding: 8px 12px;
+      background: #111722;
+      border: 1px solid #1e293b;
+      color: var(--text-muted);
+      border-radius: 8px;
+      font-weight: 800;
+      font-size: 0.8rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      user-select: none;
+      white-space: nowrap;
+    }
+    .tab-btn:hover {
+      color: #fff;
+      border-color: rgba(56, 189, 248, 0.4);
+    }
+    .tab-btn.active {
+      background: rgba(56, 189, 248, 0.15);
+      border-color: var(--cyan);
+      color: var(--cyan);
+      box-shadow: 0 0 12px rgba(56, 189, 248, 0.2);
+    }
+    .tab-btn.all-parts-btn {
+      background: rgba(52, 211, 153, 0.12);
+      border-color: rgba(52, 211, 153, 0.35);
+      color: var(--emerald);
+    }
+    .tab-btn.all-parts-btn.active {
+      background: rgba(52, 211, 153, 0.22);
+      border-color: var(--emerald);
+      color: #fff;
+      box-shadow: 0 0 14px rgba(52, 211, 153, 0.3);
+    }
+
+    /* Header */
+    .header {
+      padding: 10px 0 16px 0;
+      border-bottom: 1px solid var(--border-card);
+      margin-bottom: 18px;
+    }
+    .header-badge {
+      display: inline-block;
+      background: rgba(56, 189, 248, 0.12);
+      color: var(--cyan);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      padding: 4px 10px;
+      border-radius: 9999px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .header h1 {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 6px;
+      line-height: 1.3;
+      word-break: break-word;
+    }
+    .header p {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+
+    /* Views */
+    .view-panel {
+      display: none;
+      animation: fadeIn 0.25s ease-in-out;
+    }
+    .view-panel.active-panel {
+      display: block;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Lecture Headings */
+    .lecture-content-wrapper h2 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #fff;
+      padding: 12px 18px;
+      border-radius: 8px;
+      margin-top: 1.2rem;
+      margin-bottom: 1.2rem;
+      box-shadow: 0 4px 18px rgba(0,0,0,0.5);
+      border: 1px solid rgba(255,255,255,0.12);
+    }
+    .lecture-content-wrapper h2.purple  { background: linear-gradient(90deg, #3b0764, #0f172a); border-left: 6px solid var(--purple); }
+    .lecture-content-wrapper h2.emerald { background: linear-gradient(90deg, #064e3b, #0f172a); border-left: 6px solid var(--emerald); }
+    .lecture-content-wrapper h2.blue    { background: linear-gradient(90deg, #0c4a6e, #0f172a); border-left: 6px solid var(--cyan); }
+    .lecture-content-wrapper h2.orange  { background: linear-gradient(90deg, #7c2d12, #0f172a); border-left: 6px solid var(--amber); }
+    .lecture-content-wrapper h2.teal    { background: linear-gradient(90deg, #134e4a, #0f172a); border-left: 6px solid var(--emerald); }
+    .lecture-content-wrapper h2.pink    { background: linear-gradient(90deg, #831843, #0f172a); border-left: 6px solid var(--rose); }
+
+    /* Tables */
+    .table-scroll-container {
+      width: 100% !important;
+      max-width: 100% !important;
+      overflow-x: auto !important;
+      overflow-y: hidden !important;
+      -webkit-overflow-scrolling: touch !important;
+      margin: 1rem 0 1.5rem 0 !important;
+      border: 1px solid #1e293b !important;
+      border-radius: 10px !important;
+      background: var(--bg-card) !important;
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.45) !important;
+      contain: paint !important;
+      box-sizing: border-box !important;
+    }
+    .scroll-hint {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      font-size: 0.76rem;
+      color: var(--cyan);
+      background: rgba(56, 189, 248, 0.08);
+      padding: 7px 12px;
+      text-align: center;
+      border-bottom: 1px solid #1e293b;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      user-select: none;
+    }
+    table {
+      width: 100% !important;
+      min-width: 720px !important;
+      border-collapse: collapse !important;
+      background: var(--bg-card) !important;
+      border: none !important;
+      margin: 0 !important;
+      table-layout: auto !important;
+    }
+    th {
+      background: #1e293b !important;
+      color: var(--cyan) !important;
+      font-weight: 700 !important;
+      font-size: 0.88rem !important;
+      padding: 12px 14px !important;
+      border: 1px solid #334155 !important;
+      text-align: left !important;
+      white-space: nowrap !important;
+    }
+    td {
+      padding: 12px 14px !important;
+      border: 1px solid #1e293b !important;
+      color: #e2e8f0 !important;
+      font-size: 0.88rem !important;
+      vertical-align: top !important;
+      text-align: left !important;
+      line-height: 1.6 !important;
+    }
+    td:nth-child(1) { font-weight: 600 !important; min-width: 170px !important; color: #f1f5f9 !important; }
+    td:nth-child(2) { min-width: 250px !important; color: #38bdf8 !important; white-space: nowrap !important; }
+    td:nth-child(3) { min-width: 280px !important; color: #cbd5e1 !important; line-height: 1.6 !important; }
+    tr:nth-child(even) td { background: #0b1120 !important; }
+    tr:hover td { background: #162036 !important; }
+
+    /* Callout Boxes */
+    .callout {
+      background: #0d1527;
+      border: 1px solid #334155;
+      border-radius: 8px;
+      padding: 1.1rem 1.4rem;
+      margin: 1.2rem 0 2rem 0;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+      word-break: break-word;
+    }
+    .callout.purple { border-left: 5px solid var(--purple); }
+    .callout.blue   { border-left: 5px solid var(--cyan); }
+    .callout.orange { border-left: 5px solid var(--amber); }
+    .callout.green  { border-left: 5px solid var(--emerald); }
+    .callout.teal   { border-left: 5px solid var(--emerald); }
+    .callout.pink   { border-left: 5px solid var(--rose); }
+    .callout h4 {
+      margin: 0 0 8px 0;
+      font-size: 0.98rem;
+      font-weight: 700;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .callout ul {
+      margin: 0;
+      padding-left: 1.3rem;
+      color: #cbd5e1;
+      font-size: 0.9rem;
+      line-height: 1.6;
+    }
+    .callout li { margin-bottom: 6px; }
+
+    /* Cards & Steps (Used for Solved Problems) */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-card);
+      border-radius: 10px;
+      margin-bottom: 16px;
+      overflow: hidden;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.4);
+      width: 100%;
+      box-sizing: border-box;
+    }
+    .card-header {
+      background: rgba(255, 255, 255, 0.02);
+      border-bottom: 1px solid var(--border-card);
+      padding: 9px 12px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 6px;
+    }
+    .prob-tag {
+      font-weight: 800;
+      font-size: 0.88rem;
+      color: var(--cyan);
+      white-space: nowrap;
+    }
+    .card-body {
+      padding: 12px 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      width: 100%;
+    }
+    .question-prompt {
+      background: rgba(56, 189, 248, 0.05);
+      border-left: 3px solid var(--cyan);
+      padding: 8px 10px;
+      font-size: 0.84rem;
+      color: #f1f5f9;
+      border-radius: 0 6px 6px 0;
+      line-height: 1.45;
+    }
+    .step-block {
+      background: var(--bg-code);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 8px;
+      padding: 9px 11px;
+      font-size: 0.84rem;
+      line-height: 1.6;
+    }
+    .step-label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+      letter-spacing: 0.03em;
+    }
+    .label-blue { color: var(--cyan); }
+    .label-amber { color: var(--amber); }
+    .label-green { color: var(--emerald); }
+    .label-purple { color: var(--purple); }
+    .result-badge {
+      display: inline-block;
+      background: rgba(52, 211, 153, 0.1);
+      border: 1px solid rgba(52, 211, 153, 0.25);
+      color: var(--emerald);
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-weight: 700;
+      font-size: 0.85rem;
+    }
+
+    /* Toggle Buttons */
+    .sol-toggle-btn {
+      background: rgba(56, 189, 248, 0.12);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      color: var(--cyan);
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .sol-toggle-btn:hover {
+      background: rgba(56, 189, 248, 0.25);
+      color: #fff;
+    }
+    .sol-toggle-btn.active {
+      background: rgba(244, 63, 94, 0.15);
+      border-color: var(--rose);
+      color: var(--rose);
+    }
+    .solution-content {
+      display: none;
+      animation: fadeIn 0.3s ease-in-out;
+    }
+    .solution-content.show {
+      display: block;
+    }
+    .global-toggle-bar {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 14px;
+      background: rgba(255, 255, 255, 0.03);
+      padding: 8px 12px;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+    .global-toggle-bar button {
+      padding: 6px 12px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      border-radius: 6px;
+      cursor: pointer;
+      border: 1px solid #1e293b;
+      background: #111722;
+      color: #cbd5e1;
+      transition: all 0.2s ease;
+    }
+    .global-toggle-bar button:hover {
+      border-color: var(--cyan);
+      color: #fff;
+    }
+
+    @media (max-width: 640px) {
+      .nav-tabs-wrapper { top: 58px; }
+      .lecture-tab { font-size: 0.82rem; padding: 8px 6px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <!-- Top Lecture Selector (Lectures 1, 2, 3, 4 in Rectangles) -->
+    <div class="lecture-switch-wrapper">
+      <div id="lec-tab-1" class="lecture-tab active" onclick="switchLectureGroup(1)">Lecture 1</div>
+      <div id="lec-tab-2" class="lecture-tab" onclick="switchLectureGroup(2)">Lecture 2</div>
+      <div id="lec-tab-3" class="lecture-tab" onclick="switchLectureGroup(3)">Lecture 3</div>
+      <div id="lec-tab-4" class="lecture-tab" onclick="switchLectureGroup(4)">Lecture 4 (Ch. 3)</div>
+    </div>
+
+    <!-- Sub-navigation Bar for Lecture 1 -->
+    <div class="nav-tabs-wrapper" id="subnav-wrapper-1">
+      <div class="nav-tabs">
+        <div id="part-btn-1-0" class="tab-btn all-parts-btn" onclick="showLec1Part(0)">All Parts (كل الأجزاء)</div>
+        <div id="part-btn-1-1" class="tab-btn active" onclick="showLec1Part(1)">Part 1: Energy & Units</div>
+        <div id="part-btn-1-2" class="tab-btn" onclick="showLec1Part(2)">Part 2: Systems & Bounds</div>
+        <div id="part-btn-1-3" class="tab-btn" onclick="showLec1Part(3)">Part 3: Properties & Density</div>
+        <div id="part-btn-1-4" class="tab-btn" onclick="showLec1Part(4)">Part 4: Pressure Analysis</div>
+        <div id="part-btn-1-5" class="tab-btn" onclick="showLec1Part(5)">Part 5: Temp & 0th Law</div>
+        <div id="part-btn-1-6" class="tab-btn" onclick="showLec1Part(6)">Part 6: Energy Forms (U,H,S)</div>
+        <div id="part-btn-1-7" class="tab-btn" onclick="showLec1Part(7)">Part 7: States & Cycles</div>
+        <div id="part-btn-1-8" class="tab-btn" onclick="showLec1Part(8)">Solved Examples</div>
+      </div>
+    </div>
+
+    <!-- Sub-navigation Bar for Lecture 2 -->
+    <div class="nav-tabs-wrapper" id="subnav-wrapper-2" style="display: none;">
+      <div class="nav-tabs">
+        <div id="part-btn-2-0" class="tab-btn all-parts-btn" onclick="showLec2Part(0)">All Parts (كل الأجزاء)</div>
+        <div id="part-btn-2-1" class="tab-btn active" onclick="showLec2Part(1)">Part 1: Working Substance</div>
+        <div id="part-btn-2-2" class="tab-btn" onclick="showLec2Part(2)">Part 2: Ideal Gas Equation</div>
+        <div id="part-btn-2-3" class="tab-btn" onclick="showLec2Part(3)">Part 3: Specific Heats & Joule</div>
+        <div id="part-btn-2-4" class="tab-btn" onclick="showLec2Part(4)">Part 4: Real Gas & Compressibility Z</div>
+        <div id="part-btn-2-5" class="tab-btn" onclick="showLec2Part(5)">Part 5: Generalized Chart & Critical</div>
+        <div id="part-btn-2-6" class="tab-btn" onclick="showLec2Part(6)">Part 6: Force Balance & Piston</div>
+        <div id="part-btn-2-7" class="tab-btn" onclick="showLec2Part(7)">Solved Examples (11 Examples)</div>
+      </div>
+    </div>
+
+    <!-- Sub-navigation Bar for Lecture 3 -->
+    <div class="nav-tabs-wrapper" id="subnav-wrapper-3" style="display: none;">
+      <div class="nav-tabs">
+        <div id="part-btn-3-0" class="tab-btn all-parts-btn" onclick="showLec3Part(0)">All Parts (كل الأجزاء)</div>
+        <div id="part-btn-3-1" class="tab-btn active" onclick="showLec3Part(1)">Part 1: Pure Substance & Phases</div>
+        <div id="part-btn-3-2" class="tab-btn" onclick="showLec3Part(2)">Part 2: Phase Change & Diagrams</div>
+        <div id="part-btn-3-3" class="tab-btn" onclick="showLec3Part(3)">Part 3: Saturated Water Tables</div>
+        <div id="part-btn-3-4" class="tab-btn" onclick="showLec3Part(4)">Part 4: Wet Mixture & Quality (x)</div>
+        <div id="part-btn-3-5" class="tab-btn" onclick="showLec3Part(5)">Part 5: Superheated Vapor Tables</div>
+        <div id="part-btn-3-6" class="tab-btn" onclick="showLec3Part(6)">Part 6: Compressed Liquid Tables</div>
+        <div id="part-btn-3-7" class="tab-btn" onclick="showLec3Part(7)">Part 7: Steam Table Lookup Guide</div>
+        <div id="part-btn-3-8" class="tab-btn" onclick="showLec3Part(8)">Solved Examples & Exercises</div>
+      </div>
+    </div>
+
+    <!-- Sub-navigation Bar for Lecture 4 (Chapter 3) -->
+    <div class="nav-tabs-wrapper" id="subnav-wrapper-4" style="display: none;">
+      <div class="nav-tabs">
+        <div id="part-btn-4-0" class="tab-btn all-parts-btn" onclick="showLec4Part(0)">All Parts (كل الأجزاء)</div>
+        <div id="part-btn-4-1" class="tab-btn active" onclick="showLec4Part(1)">Part 1: Heat Transfer</div>
+        <div id="part-btn-4-2" class="tab-btn" onclick="showLec4Part(2)">Part 2: Work Transfer</div>
+        <div id="part-btn-4-3" class="tab-btn" onclick="showLec4Part(3)">Part 3: Boundary Work</div>
+        <div id="part-btn-4-4" class="tab-btn" onclick="showLec4Part(4)">Part 4: Polytropic & Isentropic</div>
+        <div id="part-btn-4-5" class="tab-btn" onclick="showLec4Part(5)">Part 5: Isothermal & Isobaric</div>
+        <div id="part-btn-4-6" class="tab-btn" onclick="showLec4Part(6)">Part 6: Isochoric & Process Summary</div>
+        <div id="part-btn-4-7" class="tab-btn" onclick="showLec4Part(7)">Solved Examples & Assignment</div>
+      </div>
+    </div>
+
+    <!-- Page Header -->
+    <div class="header">
+      <span class="header-badge" id="header-badge">FLUID AND THERMAL SYSTEMS • LECTURE 1 SUMMARIES</span>
+      <h1 id="page-main-title">Part 1: Thermodynamics, Energy & Units — Complete Summary & Laws</h1>
+      <p id="page-main-desc">Prepared strictly according to <b>Dr. Ashraf Elsayed's</b> syllabus (Faculty of Engineering at Shoubra, Benha University): Fundamentals of Energy, Conservation, Dimensions, and SI Conversion Standards.</p>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- LECTURE 1 CONTAINER -->
+    <!-- ============================================================ -->
+    <div id="lec1-container">
+      <div id="part-view-1-1" class="view-panel active-panel">
+        <div class="lecture-content-wrapper">
+          <h2 class="purple">Part 1: Introduction, Energy & Unit Systems</h2>
+          <div class="table-scroll-container">
+            <div class="scroll-hint">👈 اسحب الجدول أفقياً لتصفح كامل القوانين والوصف 👉</div>
+            <table>
+              <thead>
+                <tr><th style="width:26%">Concept / Topic</th><th style="width:36%">Formula / Equation</th><th>Description & Key Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>Thermodynamics Definition</td><td>Greek: <i>therme</i> (Heat) + <i>dynamis</i> (Power)</td><td>Science dealing with energy conversion from one form to another and substance properties.</td></tr>
+                <tr><td>Total Energy ($E$)</td><td>$E = U + KE + PE$</td><td>Sum of macroscopic ($KE = \frac{1}{2}mV^2$, $PE = mgz$) and microscopic internal energy ($U$).</td></tr>
+                <tr><td>Conservation of Energy (1st Law)</td><td>$E_{in} - E_{out} = \Delta E_{system}$</td><td>Energy cannot be created or destroyed; it merely changes from one form to another.</td></tr>
+                <tr><td>Force Secondary Law</td><td>$F = m \cdot a = m \cdot g$</td><td>$1\text{ N} = 1\text{ kg}\cdot\text{m/s}^2$. In English system, $\text{lb}_f$ is base unit ($1\text{ lb}_f = 4.448\text{ N}$).</td></tr>
+                <tr><td>Work / Energy Unit</td><td>$1\text{ J} = 1\text{ N}\cdot\text{m} = 1\text{ kg}\cdot\text{m}^2/\text{s}^2$</td><td>$1\text{ MJ} = 10^3\text{ kJ} = 10^6\text{ J}$. In English: $1\text{ Btu} = 1055\text{ J}$.</td></tr>
+                <tr><td>Power Unit (Watt)</td><td>$\dot{W} = \frac{W}{\Delta t} \implies 1\text{ W} = 1\text{ J/s}$</td><td>Rate of energy transfer per unit time ($1\text{ MW} = 10^3\text{ kW} = 10^6\text{ W}$).</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="callout purple">
+            <h4>📌 Essential Key Rules for Part 1</h4>
+            <ul>
+              <li><b>Primary Dimensions:</b> Mass ($m$), Length ($L$), Time ($t$), and Temperature ($T$) are base units in SI.</li>
+              <li><b>Dimensional Homogeneity:</b> Every additive term in any equation must possess strictly identical physical units.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div id="part-view-1-2" class="view-panel">
+        <div class="lecture-content-wrapper">
+          <h2 class="blue">Part 2: Thermodynamic Systems & Boundaries</h2>
+          <div class="table-scroll-container">
+            <div class="scroll-hint">👈 اسحب الجدول أفقياً لتصفح كامل القوانين والوصف 👉</div>
+            <table>
+              <thead>
+                <tr><th style="width:26%">Concept / Topic</th><th style="width:36%">Formula / Equation</th><th>Description & Key Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>Closed System (Control Mass)</td><td>$\Delta m = 0 \quad (m = \text{const})$</td><td>No mass can cross boundary. Energy (heat $Q$ and work $W$) can cross boundary freely.</td></tr>
+                <tr><td>Open System (Control Volume)</td><td>$\Delta m \ne 0 \text{ and } \Delta E \ne 0$</td><td>Selected volume in space where both mass and energy cross the control surface.</td></tr>
+                <tr><td>Isolated System</td><td>$\Delta m = 0, \quad Q = 0, \quad W = 0$</td><td>Exchanges neither mass nor energy with surroundings.</td></tr>
+                <tr><td>Pure Substance</td><td>Homogeneous & Invariable Composition</td><td>Chemical composition remains identical across all parts and phases (water, steam).</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div id="part-view-1-3" class="view-panel">
+        <div class="lecture-content-wrapper">
+          <h2 class="orange">Part 3: Properties of a System, Density & Specifics</h2>
+          <div class="table-scroll-container">
+            <div class="scroll-hint">👈 اسحب الجدول أفقياً لتصفح كامل القوانين والوصف 👉</div>
+            <table>
+              <thead>
+                <tr><th style="width:26%">Concept / Topic</th><th style="width:36%">Formula / Equation</th><th>Description & Key Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>Intensive Properties</td><td>Independent of mass ($m^0$)</td><td>Temperature ($T$), Pressure ($P$), Density ($\rho$).</td></tr>
+                <tr><td>Extensive Properties</td><td>Dependent on mass / size ($m^1$)</td><td>Total Mass ($m$), Total Volume ($V$), Total Energy ($E$).</td></tr>
+                <tr><td>Density ($\rho$)</td><td>$\rho = \frac{m}{V} \quad [\text{kg/m}^3]$</td><td>Mass per unit volume. For water at $4^\circ\text{C}$: $\rho_{H_2O} = 1000\text{ kg/m}^3$.</td></tr>
+                <tr><td>Specific Volume ($v$)</td><td>$v = \frac{V}{m} = \frac{1}{\rho} \quad [\text{m}^3/\text{kg}]$</td><td>Volume occupied per unit mass; reciprocal of density.</td></tr>
+                <tr><td>Specific Gravity ($SG$)</td><td>$SG = \frac{\rho}{\rho_{H_2O\text{ at }4^\circ\text{C}}} = \frac{w}{w_{water}}$</td><td>Dimensionless ratio comparing fluid density to standard water density.</td></tr>
+                <tr><td>Specific Weight ($w$)</td><td>$w = \gamma_s = \rho \cdot g \quad [\text{N/m}^3]$</td><td>Weight of a unit volume. For water: $w = 1000 \times 9.81 = 9810\text{ N/m}^3$.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div id="part-view-1-4" class="view-panel">
+        <div class="lecture-content-wrapper">
+          <h2 class="teal">Part 4: Pressure Concepts & Manometry</h2>
+          <div class="table-scroll-container">
+            <div class="scroll-hint">👈 اسحب الجدول أفقياً لتصفح كامل القوانين والوصف 👉</div>
+            <table>
+              <thead>
+                <tr><th style="width:26%">Concept / Topic</th><th style="width:36%">Formula / Equation</th><th>Description & Key Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>Pressure Definition</td><td>$P = \frac{F_n}{A} \quad [\text{N/m}^2 \equiv \text{Pa}]$</td><td>Normal compressive force exerted by a fluid per unit contact surface area.</td></tr>
+                <tr><td>Standard Atmosphere</td><td>$1\text{ atm} = 101,325\text{ Pa} = 101.325\text{ kPa}$</td><td>$= 1.01325\text{ bar} = 760\text{ mmHg} = 760\text{ Torr} = 14.696\text{ psi}$.</td></tr>
+                <tr><td>Gage Pressure ($P_{gage}$)</td><td>$P_{gage} = P_{abs} - P_{atm}$</td><td>Difference between absolute pressure and local atmospheric pressure.</td></tr>
+                <tr><td>Vacuum Pressure ($P_{vac}$)</td><td>$P_{vac} = P_{atm} - P_{abs}$</td><td>Pressure below atmospheric level measured by vacuum gages.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div id="part-view-1-5" class="view-panel">
+        <div class="lecture-content-wrapper">
+          <h2 class="pink">Part 5: Temperature & The Zeroth Law</h2>
+          <div class="table-scroll-container">
+            <div class="scroll-hint">👈 اسحب الجدول أفقياً لتصفح كامل القوانين والوصف 👉</div>
+            <table>
+              <thead>
+                <tr><th style="width:26%">Concept / Topic</th><th style="width:36%">Formula / Equation</th><th>Description & Key Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>The Zeroth Law</td><td>If $T_1 = T_3$ and $T_2 = T_3 \implies T_1 = T_2$</td><td>Basis for all temperature measurements; thermometer acts as body 3.</td></tr>
+                <tr><td>Kelvin Absolute Scale</td><td>$T(\text{K}) = T(^\circ\text{C}) + 273.15$</td><td>Fundamental SI absolute temperature scale ($0\text{ K} = -273.15^\circ\text{C}$).</td></tr>
+                <tr><td>Fahrenheit Scale</td><td>$T(^\circ\text{F}) = 1.8 \cdot T(^\circ\text{C}) + 32$</td><td>Ice point $32^\circ\text{F}$, Steam point $212^\circ\text{F}$.</td></tr>
+                <tr><td>Rankine Absolute Scale</td><td>$T(\text{R}) = T(^\circ\text{F}) + 459.67 = 1.8 \cdot T(\text{K})$</td><td>Absolute English scale ($0\text{ R} = -459.67^\circ\text{F}$).</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div id="part-view-1-6" class="view-panel">
+        <div class="lecture-content-wrapper">
+          <h2 class="purple">Part 6: Microscopic Energy, Enthalpy & Entropy</h2>
+          <div class="table-scroll-container">
+            <div class="scroll-hint">👈 اسحب الجدول أفقياً لتصفح كامل القوانين والوصف 👉</div>
+            <table>
+              <thead>
+                <tr><th style="width:26%">Concept / Topic</th><th style="width:36%">Formula / Equation</th><th>Description & Key Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>Internal Energy ($U$)</td><td>$u = \frac{U}{m} \quad [\text{kJ/kg}]$</td><td>Sum of microscopic molecular kinetic, chemical, and binding energies.</td></tr>
+                <tr><td>Enthalpy ($H$)</td><td>$H = U + P \cdot V \quad [\text{kJ}]$</td><td>Internal energy plus flow work ($PV$); specific enthalpy: $h = u + Pv$.</td></tr>
+                <tr><td>Entropy ($S$)</td><td>$s = \frac{S}{m} \quad [\text{kJ/(kg}\cdot\text{K)}]$</td><td>Measure of microscopic molecular disorder in a system.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div id="part-view-1-7" class="view-panel">
+        <div class="lecture-content-wrapper">
+          <h2 class="blue">Part 7: States, Processes, Equilibrium & Cycles</h2>
+          <div class="table-scroll-container">
+            <div class="scroll-hint">👈 اسحب الجدول أفقياً لتصفح كامل القوانين والوصف 👉</div>
+            <table>
+              <thead>
+                <tr><th style="width:26%">Concept / Topic</th><th style="width:36%">Formula / Equation</th><th>Description & Key Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>Thermodynamic Equilibrium</td><td>Thermal + Mechanical + Chemical</td><td>State of balance where no spontaneous change occurs without external agency.</td></tr>
+                <tr><td>Thermodynamic Cycle</td><td>$\text{State}_{initial} \equiv \text{State}_{final}$</td><td>Sequence of processes returning system to initial state ($\Delta \text{Property} = 0 \implies Q_{net} = W_{net}$).</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div id="part-view-1-8" class="view-panel">
+        <div class="lecture-content-wrapper">
+          <h2 class="emerald">Lecture 1 Solved Examples</h2>
+          <div class="global-toggle-bar">
+            <button onclick="toggleAllSolutionsInContainer('part-view-1-8', true)">👁️ إظهار كل الحلول</button>
+            <button onclick="toggleAllSolutionsInContainer('part-view-1-8', false)">🙈 إخفاء كل الحلول (لتختبر نفسك)</button>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <span class="prob-tag">Problem 1: Liquid Properties Calculation</span>
+              <button class="sol-toggle-btn" onclick="toggleCardSolution(this)">👁️ إظهار الحل / Show Solution</button>
+            </div>
+            <div class="card-body">
+              <div class="question-prompt">Volume $V = 6\text{ m}^3$, Weight $W = 44\text{ kN}$. Calculate specific weight ($w$), mass density ($\rho$), specific volume ($v$), and specific gravity ($S$).</div>
+              <div class="solution-content">
+                <div class="step-block">
+                  <div class="step-label label-blue">الخطوة 1: حساب الوزن النوعي (Specific Weight $w$)</div>
+                  <div>القانون: $$w = \frac{W}{V}$$</div>
+                  <div>التعويض: $$w = \frac{44\text{ kN}}{6\text{ m}^3} = 7.333\text{ kN/m}^3$$</div>
+                  <div>النتيجة: <span class="result-badge">$w = 7.333\text{ kN/m}^3 = 7333\text{ N/m}^3$</span></div>
+                </div>
+                <div class="step-block">
+                  <div class="step-label label-amber">الخطوة 2: حساب الكثافة الكتلية (Density $\rho$)</div>
+                  <div>القانون: $$\rho = \frac{w}{g}$$</div>
+                  <div>التعويض: $$\rho = \frac{7333.33\text{ N/m}^3}{9.81\text{ m/s}^2} = 747.54\text{ kg/m}^3$$</div>
+                  <div>النتيجة: <span class="result-badge">$\rho = 747.5\text{ kg/m}^3$</span></div>
+                </div>
+                <div class="step-block">
+                  <div class="step-label label-purple">الخطوة 3: حساب الحجم النوعي (Specific Volume $v$)</div>
+                  <div>القانون: $$v = \frac{1}{\rho}$$</div>
+                  <div>التعويض: $$v = \frac{1}{747.54\text{ kg/m}^3} = 0.001338\text{ m}^3/\text{kg}$$</div>
+                  <div>النتيجة: <span class="result-badge">$v = 0.00134\text{ m}^3/\text{kg}$</span></div>
+                </div>
+                <div class="step-block">
+                  <div class="step-label label-green">الخطوة 4: حساب الوزن النوعي النسبي (Specific Gravity $S$)</div>
+                  <div>القانون: $$S = \frac{\rho}{\rho_{water}}$$</div>
+                  <div>التعويض: $$S = \frac{747.54}{1000} = 0.747$$</div>
+                  <div>النتيجة: <span class="result-badge">$SG = 0.747$</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <span class="prob-tag">Problem 2: Petrol Weight Calculation</span>
+              <button class="sol-toggle-btn" onclick="toggleCardSolution(this)">👁️ إظهار الحل / Show Solution</button>
+            </div>
+            <div class="card-body">
+              <div class="question-prompt">Volume $V = 1\text{ liter} = 0.001\text{ m}^3$, Specific gravity $SG = 0.7$. Calculate $\rho$, $w$, and total weight $W$.</div>
+              <div class="solution-content">
+                <div class="step-block">
+                  <div class="step-label label-blue">الخطوة 1: حساب الكثافة ($\rho$)</div>
+                  <div>القانون: $$\rho = SG \cdot \rho_{water}$$</div>
+                  <div>التعويض: $$\rho = 0.7 \times 1000 = 700\text{ kg/m}^3$$</div>
+                  <div>النتيجة: <span class="result-badge">$\rho = 700\text{ kg/m}^3$</span></div>
+                </div>
+                <div class="step-block">
+                  <div class="step-label label-amber">الخطوة 2: حساب الوزن النوعي ($w$)</div>
+                  <div>القانون: $$w = \rho \cdot g$$</div>
+                  <div>التعويض: $$w = 700 \times 9.81 = 6867\text{ N/m}^3$$</div>
+                  <div>النتيجة: <span class="result-badge">$w = 6867\text{ N/m}^3$</span></div>
+                </div>
+                <div class="step-block">
+                  <div class="step-label label-green">الخطوة 3: حساب الوزن الإجمالي ($W$)</div>
+                  <div>القانون: $$W = w \cdot V$$</div>
+                  <div>التعويض: $$W = 6867\text{ N/m}^3 \times 0.001\text{ m}^3 = 6.867\text{ N}$$</div>
+                  <div>النتيجة: <span class="result-badge">$W = 6.867\text{ N}$</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- LECTURE 2 CONTAINER -->
+    <!-- ============================================================ -->
+    <div id="lec2-container" style="display: none;">
+      <div id="part-view-2-1" class="view-panel">
+        <div class="lecture-content-wrapper">
+          <h2 class="purple">Part 1: Working Substance & Three Primary Phases</h2>
+          <div class="table-scroll-container">
+            <div class="scroll-hint">👈 اسحب الجدول أفقياً لتصفح كامل القوانين والوصف 👉</div>
+            <table>
+              <thead>
+                <tr><th style="width:26%">Concept / Topic</th><th style="width:36%">Formula / Equation</th><th>Description & Key Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>Working Substance</td><td>Thermodynamic medium</td><td>The substance through which energy is exchanged (steam in turbines, air-fuel mixture in engines).</td></tr>
+                <tr><td>Solid Phase</td><td>Lattice pattern</td><td>Molecules arranged in a fixed 3D pattern with large attractive intermolecular forces.</td></tr>
+                <tr><td>Liquid Phase</td><td>Translational & rotational</td><td>Molecules rotate and translate freely; intermolecular forces are weaker than solids.</td></tr>
+                <tr><td>Gas Phase</td><td>Random chaotic collisions</td><td>Molecules are far apart with negligible molecular order, continually colliding.</td></tr>
+                <tr><td>Models of Working Substance</td><td>3 Core Models</td><td>(1) Ideal Gas Model, (2) Real Gas Model, (3) Pure Substance Model.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div id="part-view-2-2" class="view-panel">
+        <div class="lecture-content-wrapper">
+          <h2 class="blue">Part 2: Ideal Gas Equation of State</h2>
+          <div class="table-scroll-container">
+            <div class="scroll-hint">👈 اسحب الجدول أفقياً لتصفح كامل القوانين والوصف 👉</div>
+            <table>
+              <thead>
+                <tr><th style="width:26%">Concept / Topic</th><th style="width:36%">Formula / Equation</th><th>Description & Key Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>Ideal Gas Law</td><td>$PV = mRT$</td><td>$P$ in $\text{Pa}$, $V$ in $\text{m}^3$, $m$ in $\text{kg}$, $T$ in $\text{K}$, $R$ in $\text{J/(kg}\cdot\text{K)}$.</td></tr>
+                <tr><td>Specific Volume Form</td><td>$Pv = RT$</td><td>$v = \frac{V}{m} \quad [\text{m}^3/\text{kg}]$ is specific volume.</td></tr>
+                <tr><td>Density Form</td><td>$P = \rho RT$</td><td>$\rho = \frac{1}{v} \quad [\text{kg/m}^3]$ is density.</td></tr>
+                <tr><td>Gas Constant ($R$)</td><td>$R = \frac{\bar{R}}{M} = \frac{R_u}{M}$</td><td>Universal gas constant $\bar{R} = 8.314\text{ kJ/(kmol}\cdot\text{K)}$; $M$ is molar mass.</td></tr>
+                <tr><td>Change of State</td><td>$\frac{P_1 V_1}{T_1} = \frac{P_2 V_2}{T_2}$</td><td>Applies for a fixed mass of ideal gas between state 1 and state 2.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div id="part-view-2-3" class="view-panel">
+        <div class="lecture-content-wrapper">
+          <h2 class="orange">Part 3: Specific Heats, Joule's Law & Enthalpy</h2>
+          <div class="table-scroll-container">
+            <div class="scroll-hint">👈 اسحب الجدول أفقياً لتصفح كامل القوانين والوصف 👉</div>
+            <table>
+              <thead>
+                <tr><th style="width:26%">Concept / Topic</th><th style="width:36%">Formula / Equation</th><th>Description & Key Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>$C_v$ (Constant Volume)</td><td>$C_v = \frac{R}{\gamma - 1}$</td><td>Energy required to raise unit mass temperature by $1^\circ\text{C}$ at constant volume.</td></tr>
+                <tr><td>$C_p$ (Constant Pressure)</td><td>$C_p = \frac{\gamma R}{\gamma - 1}$</td><td>Energy required to raise unit mass temperature by $1^\circ\text{C}$ at constant pressure.</td></tr>
+                <tr><td>Mayer's Relation</td><td>$C_p = C_v + R$</td><td>Connects specific heats and gas constant for ideal gases.</td></tr>
+                <tr><td>Specific Heat Ratio</td><td>$\gamma = \frac{C_p}{C_v}$</td><td>$\gamma = 1.4$ for air and diatomic gases; $\gamma = 1.667$ for monatomic gases.</td></tr>
+                <tr><td>Joule's Law ($\Delta U$)</td><td>$\Delta U = m C_v (T_2 - T_1)$</td><td>Internal energy of an ideal gas depends <b>only on temperature</b>.</td></tr>
+                <tr><td>Enthalpy ($\Delta H$)</td><td>$\Delta H = m C_p (T_2 - T_1)$</td><td>Enthalpy of an ideal gas depends <b>only on temperature</b>.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div id="part-view-2-4" class="view-panel">
+        <div class="lecture-content-wrapper">
+          <h2 class="teal">Part 4: Real Gas Model & Compressibility Factor ($Z$)</h2>
+          <div class="table-scroll-container">
+            <div class="scroll-hint">👈 اسحب الجدول أفقياً لتصفح كامل القوانين والوصف 👉</div>
+            <table>
+              <thead>
+                <tr><th style="width:26%">Concept / Topic</th><th style="width:36%">Formula / Equation</th><th>Description & Key Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>Real Gas Definition</td><td>Finite volume & intermolecular forces</td><td>Significant deviation from ideal gas behavior at high pressure or low temperature.</td></tr>
+                <tr><td>Compressibility Factor ($Z$)</td><td>$Z = \frac{P v}{R T} = \frac{V_{actual}}{V_{ideal}}$</td><td>$Z = 1$ for ideal gases; $Z \ne 1$ for real gases.</td></tr>
+                <tr><td>Real Gas Equation</td><td>$P V = Z m R T \implies m = \frac{PV}{ZRT}$</td><td>State equation incorporating compressibility correction factor $Z$.</td></tr>
+                <tr><td>Percentage Error</td><td>$\text{Error \%} = \frac{|m_{actual} - m_{ideal}|}{m_{actual}} \times 100$</td><td>Quantifies deviation caused by assuming ideal gas behavior.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div id="part-view-2-5" class="view-panel">
+        <div class="lecture-content-wrapper">
+          <h2 class="pink">Part 5: Generalized Chart & Critical Constants</h2>
+          <div class="table-scroll-container">
+            <div class="scroll-hint">👈 اسحب الجدول أفقياً لتصفح كامل القوانين والوصف 👉</div>
+            <table>
+              <thead>
+                <tr><th style="width:26%">Concept / Topic</th><th style="width:36%">Formula / Equation</th><th>Description & Key Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>Reduced Pressure ($P_r$)</td><td>$P_r = \frac{P_{given}}{P_c}$</td><td>Normalized pressure relative to critical pressure $P_c$.</td></tr>
+                <tr><td>Reduced Temperature ($T_r$)</td><td>$T_r = \frac{T_{given}}{T_c}$</td><td>Normalized temperature in Kelvin relative to critical temperature $T_c$.</td></tr>
+                <tr><td>Corresponding States</td><td>$Z = f(P_r, T_r)$</td><td>Compressibility factor is determined from chart at the intersection of $P_r$ and $T_r$.</td></tr>
+                <tr><td>$CO_2$ Critical Point</td><td>$P_c = 7.38\text{ MPa}, \quad T_c = 304.1\text{ K}$</td><td>$R = 0.18892\text{ kJ/(kg}\cdot\text{K)}$.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div id="part-view-2-6" class="view-panel">
+        <div class="lecture-content-wrapper">
+          <h2 class="blue">Part 6: Mechanical Force Balances on Pistons</h2>
+          <div class="table-scroll-container">
+            <div class="scroll-hint">👈 اسحب الجدول أفقياً لتصفح كامل القوانين والوصف 👉</div>
+            <table>
+              <thead>
+                <tr><th style="width:26%">Concept / Topic</th><th style="width:36%">Formula / Equation</th><th>Description & Key Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>Piston Force Balance</td><td>$P \cdot A = P_{atm} \cdot A + m \cdot g$</td><td>Enclosed gas pressure balances atmospheric pressure plus piston weight.</td></tr>
+                <tr><td>Piston with Spring Force</td><td>$P \cdot A = P_{atm} \cdot A + m \cdot g + F_{spring}$</td><td>Accounts for additional downward spring compression force $F_{spring}$.</td></tr>
+                <tr><td>Internal Pressure Formula</td><td>$P = P_{atm} + \frac{m \cdot g + F_{spring}}{A}$</td><td>Formula for internal cylinder pressure in piston-spring systems.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div id="part-view-2-7" class="view-panel">
+        <div class="lecture-content-wrapper">
+          <h2 class="emerald">Lecture 2 Solved Examples (Complete 11 Worked Problems)</h2>
+          <div class="global-toggle-bar">
+            <button onclick="toggleAllSolutionsInContainer('part-view-2-7', true)">👁️ إظهار كل الحلول</button>
+            <button onclick="toggleAllSolutionsInContainer('part-view-2-7', false)">🙈 إخفاء كل الحلول (لتختبر نفسك)</button>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <span class="prob-tag">Example 1: Piston Force Balance</span>
+              <button class="sol-toggle-btn" onclick="toggleCardSolution(this)">👁️ إظهار الحل / Show Solution</button>
+            </div>
+            <div class="card-body">
+              <div class="question-prompt">$m = 20\text{ kg}, P_{atm} = 0.1\text{ MPa}, A = 10\text{ cm}^2 = 0.001\text{ m}^2$. Find $P_{abs}$ and $P_{gage}$.</div>
+              <div class="solution-content">
+                <div class="step-block">
+                  <div class="step-label label-blue">الخطوة 1: قانون اتزان القوى على المكبس</div>
+                  <div>القانون: $$P_{abs} \cdot A = P_{atm} \cdot A + m \cdot g \implies P_{abs} = P_{atm} + \frac{m \cdot g}{A}$$</div>
+                  <div>التعويض: $$P_{abs} = 100\text{ kPa} + \frac{20 \times 9.81}{0.001 \times 10^3}\text{ kPa} = 100 + 196.2 = 296.2\text{ kPa}$$</div>
+                  <div>النتيجة: <span class="result-badge">$P_{abs} = 296.2\text{ kPa} = 0.2962\text{ MPa}$</span></div>
+                </div>
+                <div class="step-block">
+                  <div class="step-label label-green">الخطوة 2: حساب الضغط المقاس ($P_{gage}$)</div>
+                  <div>القانون: $$P_{gage} = \frac{m \cdot g}{A} = \frac{20 \times 9.81}{0.001 \times 10^3} = 196.2\text{ kPa}$$</div>
+                  <div>النتيجة: <span class="result-badge">$P_{gage} = 196.2\text{ kPa}$</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <span class="prob-tag">Example 2: Piston with Compressed Spring</span>
+              <button class="sol-toggle-btn" onclick="toggleCardSolution(this)">👁️ إظهار الحل / Show Solution</button>
+            </div>
+            <div class="card-body">
+              <div class="question-prompt">$m_p = 3.2\text{ kg}, A = 35\text{ cm}^2 = 35 \times 10^{-4}\text{ m}^2, F_{spring} = 150\text{ N}, P_{atm} = 95\text{ kPa}$. Find internal pressure $P$.</div>
+              <div class="solution-content">
+                <div class="step-block">
+                  <div class="step-label label-amber">خطوات الحل:</div>
+                  <div>القانون: $$P = P_{atm} + \frac{m_p \cdot g + F_{spring}}{A}$$</div>
+                  <div>التعويض: $$P = 95\text{ kPa} + \frac{(3.2 \times 9.81) + 150}{35 \times 10^{-4} \times 1000}\text{ kPa} = 95 + \frac{181.39}{3.5} = 95 + 51.83 = 146.8\text{ kPa}$$</div>
+                  <div>النتيجة: <span class="result-badge">$P = 147\text{ kPa}$</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- LECTURE 3 CONTAINER (PURE SUBSTANCES & STEAM TABLES) -->
+    <!-- ============================================================ -->
+    <div id="lec3-container" style="display: none;">
+      <div id="part-view-3-1" class="view-panel">
+        <div class="lecture-content-wrapper">
+          <h2 class="purple">Part 1: Pure Substance Concept & Heat Types</h2>
+          <div class="table-scroll-container">
+            <div class="scroll-hint">👈 اسحب الجدول أفقياً لتصفح كامل القوانين والوصف 👉</div>
+            <table>
+              <thead>
+                <tr><th style="width:26%">Concept / Topic</th><th style="width:36%">Formula / Equation</th><th>Description & Key Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>Pure Substance</td><td>Fixed chemical composition throughout</td><td>Chemical composition is invariable across all phases (water, nitrogen).</td></tr>
+                <tr><td>Sensible Heat ($Q_s$)</td><td>$Q_s = m \cdot c \cdot \Delta T$</td><td>Thermal energy associated with temperature change at constant phase.</td></tr>
+                <tr><td>Latent Heat ($Q_l$)</td><td>$Q_l = m \cdot h_{fg}$</td><td>Thermal energy associated with phase change at constant saturation temperature ($T_{sat}$).</td></tr>
+                <tr><td>Saturation Temperature ($T_{sat}$)</td><td>$T_{sat} = f(P)$</td><td>Boiling temperature at given pressure. Water boils at $100^\circ\text{C}$ only at $1\text{ atm}$.</td></tr>
+                <tr><td>Saturation Pressure ($P_{sat}$)</td><td>$P_{sat} = f(T)$</td><td>Pressure at which phase change occurs at given temperature.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div id="part-view-3-2" class="view-panel">
+        <div class="lecture-content-wrapper">
+          <h2 class="blue">Part 2: Liquid-Vapor Phase Change & Property Diagrams</h2>
+          <div class="table-scroll-container">
+            <div class="scroll-hint">👈 اسحب الجدول أفقياً لتصفح كامل القوانين والوصف 👉</div>
+            <table>
+              <thead>
+                <tr><th style="width:26%">Concept / Topic</th><th style="width:36%">Formula / Equation</th><th>Description & Key Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>Compressed Liquid</td><td>$T < T_{sat} \quad \text{or} \quad P > P_{sat}$</td><td>Water in liquid phase not on the verge of boiling.</td></tr>
+                <tr><td>Saturated Liquid</td><td>$T = T_{sat}, \quad x = 0, \quad v = v_f$</td><td>Liquid on the verge of vaporization.</td></tr>
+                <tr><td>Saturated Mixture</td><td>$T = T_{sat}, \quad v_f < v < v_g, \quad 0 < x < 1$</td><td>Liquid and vapor coexist in equilibrium.</td></tr>
+                <tr><td>Saturated Vapor</td><td>$T = T_{sat}, \quad x = 1, \quad v = v_g$</td><td>Vapor on the verge of condensation.</td></tr>
+                <tr><td>Superheated Vapor</td><td>$T > T_{sat} \quad \text{or} \quad P < P_{sat}$</td><td>Single-phase vapor region ($v > v_g$).</td></tr>
+                <tr><td>Critical Point of Water</td><td>$P_{cr} = 22.06\text{ MPa}, \ T_{cr} = 373.95^\circ\text{C}$</td><td>Point where saturated liquid and saturated vapor states merge ($v_{cr} = 0.003106\text{ m}^3/\text{kg}$).</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div id="part-view-3-3" class="view-panel">
+        <div class="lecture-content-wrapper">
+          <h2 class="orange">Part 3: Saturated Water Tables (A-4 & A-5)</h2>
+          <div class="table-scroll-container">
+            <div class="scroll-hint">👈 اسحب الجدول أفقياً لتصفح كامل القوانين والوصف 👉</div>
+            <table>
+              <thead>
+                <tr><th style="width:26%">Concept / Topic</th><th style="width:36%">Formula / Equation</th><th>Description & Key Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>Table A-4 (Temperature Entry)</td><td>$T \longrightarrow P_{sat}, v_f, v_g, u_f, h_f, h_{fg}, h_g$</td><td>Used when temperature is given.</td></tr>
+                <tr><td>Table A-5 (Pressure Entry)</td><td>$P \longrightarrow T_{sat}, v_f, v_g, u_f, h_f, h_{fg}, h_g$</td><td>Used when pressure is given.</td></tr>
+                <tr><td>Enthalpy of Vaporization ($h_{fg}$)</td><td>$h_{fg} = h_g - h_f \quad [\text{kJ/kg}]$</td><td>Latent heat required to vaporize $1\text{ kg}$ of saturated liquid.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div id="part-view-3-4" class="view-panel">
+        <div class="lecture-content-wrapper">
+          <h2 class="teal">Part 4: Saturated Liquid-Vapor Mixture & Quality ($x$)</h2>
+          <div class="table-scroll-container">
+            <div class="scroll-hint">👈 اسحب الجدول أفقياً لتصفح كامل القوانين والوصف 👉</div>
+            <table>
+              <thead>
+                <tr><th style="width:26%">Concept / Topic</th><th style="width:36%">Formula / Equation</th><th>Description & Key Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>Quality ($x$) Definition</td><td>$x = \frac{m_{vapor}}{m_{total}} = \frac{m_g}{m_f + m_g}$</td><td>Mass fraction of vapor in wet mixture ($0 \le x \le 1$).</td></tr>
+                <tr><td>Specific Volume of Mixture</td><td>$v = v_f + x \cdot v_{fg} = (1 - x)v_f + x v_g$</td><td>Average volume property of saturated mixture.</td></tr>
+                <tr><td>Enthalpy of Mixture</td><td>$h = h_f + x \cdot h_{fg} = (1 - x)h_f + x h_g$</td><td>Average enthalpy property of saturated mixture.</td></tr>
+                <tr><td>Calculating Quality</td><td>$x = \frac{v - v_f}{v_{fg}} = \frac{h - h_f}{h_{fg}} = \frac{u - u_f}{u_{fg}}$</td><td>Formula to locate state within the wet saturation dome.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div id="part-view-3-5" class="view-panel">
+        <div class="lecture-content-wrapper">
+          <h2 class="pink">Part 5: Superheated Vapor Tables (Table A-6)</h2>
+          <div class="table-scroll-container">
+            <div class="scroll-hint">👈 اسحب الجدول أفقياً لتصفح كامل القوانين والوصف 👉</div>
+            <table>
+              <thead>
+                <tr><th style="width:26%">Concept / Topic</th><th style="width:36%">Formula / Equation</th><th>Description & Key Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>Superheated Criteria</td><td>$T > T_{sat}, \ v > v_g, \ u > u_g, \ h > h_g$</td><td>Conditions confirming superheated vapor state at specified pressure.</td></tr>
+                <tr><td>Linear Interpolation Formula</td><td>$y = y_1 + \frac{x - x_1}{x_2 - x_1}(y_2 - y_1)$</td><td>Used when values fall between tabulated rows or columns.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div id="part-view-3-6" class="view-panel">
+        <div class="lecture-content-wrapper">
+          <h2 class="purple">Part 6: Compressed Liquid Tables (Table A-7)</h2>
+          <div class="table-scroll-container">
+            <div class="scroll-hint">👈 اسحب الجدول أفقياً لتصفح كامل القوانين والوصف 👉</div>
+            <table>
+              <thead>
+                <tr><th style="width:26%">Concept / Topic</th><th style="width:36%">Formula / Equation</th><th>Description & Key Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>Compressed Criteria</td><td>$P > P_{sat}, \ T < T_{sat}, \ v < v_f, \ h < h_f$</td><td>Conditions confirming subcooled liquid state.</td></tr>
+                <tr><td>Saturated Liquid Approximation</td><td>$v \approx v_f @ T, \ u \approx u_f @ T, \ h \approx h_f @ T$</td><td>Used when Table A-7 is unavailable ($P < 5\text{ MPa}$).</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div id="part-view-3-7" class="view-panel">
+        <div class="lecture-content-wrapper">
+          <h2 class="blue">Part 7: Systematic Steam Table Lookup Guide</h2>
+          <div class="table-scroll-container">
+            <div class="scroll-hint">👈 اسحب الجدول أفقياً لتصفح كامل القوانين والوصف 👉</div>
+            <table>
+              <thead>
+                <tr><th style="width:26%">Given Pair</th><th style="width:36%">Decision Rule</th><th>Target Table & Outcome</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>Given $P$ and $T$</td><td>Compare $T$ with $T_{sat} @ P$:<br>&bull; $T > T_{sat} \implies$ Superheated<br>&bull; $T = T_{sat} \implies$ Saturated<br>&bull; $T < T_{sat} \implies$ Compressed Liquid</td><td>Superheated: Table A-6.<br>Compressed Liquid: Table A-7 (or Sat Liquid @ $T$).</td></tr>
+                <tr><td>Given $P$ and $v$ (or $u, h$)</td><td>Compare with $v_f$ and $v_g$ at given $P$:<br>&bull; $v < v_f \implies$ Compressed Liquid<br>&bull; $v_f \le v \le v_g \implies$ Saturated Mixture<br>&bull; $v > v_g \implies$ Superheated Vapor</td><td>For Mixture: $x = \frac{v - v_f}{v_{fg}}$, $T = T_{sat}$.<br>For Superheated: Go to Table A-6 at $P$ and $v$.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div id="part-view-3-8" class="view-panel">
+        <div class="lecture-content-wrapper">
+          <h2 class="emerald">Lecture 3 Solved Examples & Comprehensive Exercise</h2>
+          <div class="global-toggle-bar">
+            <button onclick="toggleAllSolutionsInContainer('part-view-3-8', true)">👁️ إظهار كل الحلول</button>
+            <button onclick="toggleAllSolutionsInContainer('part-view-3-8', false)">🙈 إخفاء كل الحلول (لتختبر نفسك)</button>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <span class="prob-tag">Example 1: Saturated Liquid Water Tank</span>
+              <button class="sol-toggle-btn" onclick="toggleCardSolution(this)">👁️ إظهار الحل / Show Solution</button>
+            </div>
+            <div class="card-body">
+              <div class="question-prompt">Rigid tank contains $50\text{ kg}$ of saturated liquid water at $90^\circ\text{C}$. Determine tank pressure and volume.</div>
+              <div class="solution-content">
+                <div class="step-block">
+                  <div class="step-label label-blue">الخطوة 1: استخراج الضغط المشبع من جدول A-4</div>
+                  <div>عند $T = 90^\circ\text{C}$ نجد: $$P = P_{sat} = 70.183\text{ kPa}$$</div>
+                  <div>النتيجة: <span class="result-badge">$P = 70.183\text{ kPa}$</span></div>
+                </div>
+                <div class="step-block">
+                  <div class="step-label label-green">الخطوة 2: حساب الحجم الكلي للخزان ($V$)</div>
+                  <div>الحجم النوعي للسائل: $v = v_f = 0.001036\text{ m}^3/\text{kg}$</div>
+                  <div>الحجم الكلي: $$V = m \cdot v_f = 50\text{ kg} \times 0.001036\text{ m}^3/\text{kg} = 0.0518\text{ m}^3$$</div>
+                  <div>النتيجة: <span class="result-badge">$V = 0.0518\text{ m}^3$</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- LECTURE 4 CONTAINER (CHAPTER 3: ENERGY TRANSFER BY HEAT & WORK) -->
+    <!-- ============================================================ -->
+    <div id="lec4-container" style="display: none;">
+      <div id="part-view-4-1" class="view-panel">
+        <div class="lecture-content-wrapper">
+          <h2 class="purple">Part 1: Energy Transfer by Heat ($Q$)</h2>
+          <div class="table-scroll-container">
+            <div class="scroll-hint">👈 اسحب الجدول أفقياً لتصفح كامل القوانين والوصف 👉</div>
+            <table>
+              <thead>
+                <tr><th style="width:26%">Concept / Topic</th><th style="width:36%">Formula / Equation</th><th>Description & Key Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>Heat Definition ($Q$)</td><td>Form of energy transferred via $\Delta T$</td><td>Energy exchanged between two systems solely driven by temperature difference.</td></tr>
+                <tr><td>Heat Driving Force</td><td>Direction: Higher $T \longrightarrow$ Lower $T$</td><td>Heat transfer ceases when thermal equilibrium is established ($T_1 = T_2 \implies Q = 0$).</td></tr>
+                <tr><td>Adiabatic Process</td><td>$Q = 0 \quad (\text{No heat transfer})$</td><td>Occurs if system is well insulated or both systems are at the identical temperature.</td></tr>
+                <tr><td>Specific Heat Transfer ($q$)</td><td>$q = \frac{Q}{m} \quad [\text{kJ/kg}]$</td><td>Amount of heat transferred per unit mass of the working substance.</td></tr>
+                <tr><td>Rate of Heat Transfer ($\dot{Q}$)</td><td>$\dot{Q} = \frac{Q}{\Delta t} \quad [\text{kJ/s} \equiv \text{kW}]$</td><td>Heat transfer per unit time (heat power).</td></tr>
+                <tr><td>Sign Convention for Heat</td><td>$Q_{in} > 0 \ (+), \quad Q_{out} < 0 \ (-)$</td><td>Heat added to the system is POSITIVE; heat released/rejected is NEGATIVE.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div id="part-view-4-2" class="view-panel">
+        <div class="lecture-content-wrapper">
+          <h2 class="blue">Part 2: Energy Transfer by Work ($W$)</h2>
+          <div class="table-scroll-container">
+            <div class="scroll-hint">👈 اسحب الجدول أفقياً لتصفح كامل القوانين والوصف 👉</div>
+            <table>
+              <thead>
+                <tr><th style="width:26%">Concept / Topic</th><th style="width:36%">Formula / Equation</th><th>Description & Key Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>Mechanical Work ($W$)</td><td>$W = F \times \text{distance} \quad [\text{kJ}]$</td><td>Energy transfer associated with a force acting through a distance.</td></tr>
+                <tr><td>Specific Work ($w$)</td><td>$w = \frac{W}{m} \quad [\text{kJ/kg}]$</td><td>Work performed per unit mass of the system.</td></tr>
+                <tr><td>Power ($\dot{W}$)</td><td>$\dot{W} = \frac{W}{\Delta t} \quad [\text{kJ/s} \equiv \text{kW}]$</td><td>Rate of doing work per unit time ($1\text{ MW} = 1000\text{ kW}$).</td></tr>
+                <tr><td>Sign Convention for Work</td><td>$W_{out} > 0 \ (+), \quad W_{in} < 0 \ (-)$</td><td>Work done BY the system (expansion) is POSITIVE; work done ON system (compression) is NEGATIVE.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div id="part-view-4-3" class="view-panel">
+        <div class="lecture-content-wrapper">
+          <h2 class="orange">Part 3: Moving Boundary Work for Closed Systems</h2>
+          <div class="table-scroll-container">
+            <div class="scroll-hint">👈 اسحب الجدول أفقياً لتصفح كامل القوانين والوصف 👉</div>
+            <table>
+              <thead>
+                <tr><th style="width:26%">Concept / Topic</th><th style="width:36%">Formula / Equation</th><th>Description & Key Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>Differential Work ($dW$)</td><td>$dW = F \cdot dx = (P \cdot A) \cdot dx = P \cdot dV$</td><td>Work done when piston moves differential distance $dx$ under absolute internal pressure $P$.</td></tr>
+                <tr><td>Total Boundary Work ($W_{1-2}$)</td><td>$W_{1-2} = \int_{1}^{2} P \, dV \quad [\text{kJ}]$</td><td>Integration of moving boundary work from initial volume $V_1$ to final volume $V_2$.</td></tr>
+                <tr><td>Area on $P-V$ Diagram</td><td>$\text{Area under curve} = W_b$</td><td>The area under the process curve on a $P-V$ diagram equals the magnitude of moving boundary work.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div id="part-view-4-4" class="view-panel">
+        <div class="lecture-content-wrapper">
+          <h2 class="teal">Part 4: Polytropic & Isentropic Processes</h2>
+          <div class="table-scroll-container">
+            <div class="scroll-hint">👈 اسحب الجدول أفقياً لتصفح كامل القوانين والوصف 👉</div>
+            <table>
+              <thead>
+                <tr><th style="width:26%">Concept / Topic</th><th style="width:36%">Formula / Equation</th><th>Description & Key Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>Polytropic Process Law</td><td>$P V^n = C \implies P_1 V_1^n = P_2 V_2^n$</td><td>Models actual expansion and compression processes with polytropic index $n$ and friction.</td></tr>
+                <tr><td>Polytropic Work Formula</td><td>$W_{1-2} = \frac{P_2 V_2 - P_1 V_1}{1 - n} = \frac{m R (T_2 - T_1)}{1 - n}$</td><td>Moving boundary work for a closed system undergoing a polytropic process ($n \ne 1$).</td></tr>
+                <tr><td>Isentropic Process Law</td><td>$P V^\gamma = C \quad (n = \gamma = k)$</td><td>Ideal reversible adiabatic process ($Q = 0$ and no friction, $S_1 = S_2$).</td></tr>
+                <tr><td>Isentropic Work Formula</td><td>$W_{1-2} = \frac{P_2 V_2 - P_1 V_1}{1 - \gamma} = \frac{m R (T_2 - T_1)}{1 - \gamma}$</td><td>Work done during reversible adiabatic expansion/compression.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div id="part-view-4-5" class="view-panel">
+        <div class="lecture-content-wrapper">
+          <h2 class="pink">Part 5: Isothermal & Isobaric Processes</h2>
+          <div class="table-scroll-container">
+            <div class="scroll-hint">👈 اسحب الجدول أفقياً لتصفح كامل القوانين والوصف 👉</div>
+            <table>
+              <thead>
+                <tr><th style="width:26%">Concept / Topic</th><th style="width:36%">Formula / Equation</th><th>Description & Key Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>Isothermal Process Law</td><td>$T = C \implies P V = C \quad (n = 1)$</td><td>Process occurring at strictly constant temperature. $P_1 V_1 = P_2 V_2$.</td></tr>
+                <tr><td>Isothermal Work Formula</td><td>$W_{1-2} = P_1 V_1 \ln\left(\frac{V_2}{V_1}\right) = m R T \ln\left(\frac{P_1}{P_2}\right)$</td><td>Boundary work for constant-temperature process ($V_2/V_1 = P_1/P_2$).</td></tr>
+                <tr><td>Isobaric Process Law</td><td>$P = C \implies \frac{V_1}{T_1} = \frac{V_2}{T_2} \quad (n = 0)$</td><td>Process occurring at strictly constant pressure (freely floating weighted piston).</td></tr>
+                <tr><td>Isobaric Work Formula</td><td>$W_{1-2} = P \cdot (V_2 - V_1) = m P (v_2 - v_1)$</td><td>Work is simply pressure times volume change: rectangular area on $P-V$ diagram.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div id="part-view-4-6" class="view-panel">
+        <div class="lecture-content-wrapper">
+          <h2 class="blue">Part 6: Isochoric Process & Complete Process Summary</h2>
+          <div class="table-scroll-container">
+            <div class="scroll-hint">👈 اسحب الجدول أفقياً لتصفح كامل القوانين والوصف 👉</div>
+            <table>
+              <thead>
+                <tr><th style="width:22%">Process Type</th><th style="width:16%">Index ($n$)</th><th style="width:26%">$P-V-T$ State Relation</th><th>Boundary Work Formula ($W_{1-2}$)</th></tr>
+              </thead>
+              <tbody>
+                <tr><td><b>Isobaric</b> (Const $P$)</td><td>$n = 0$</td><td>$\frac{V_2}{V_1} = \frac{T_2}{T_1}, \ P_1 = P_2$</td><td><span class="result-badge">$W = P(V_2 - V_1)$</span></td></tr>
+                <tr><td><b>Isothermal</b> (Const $T$)</td><td>$n = 1$</td><td>$P_1 V_1 = P_2 V_2, \ T_1 = T_2$</td><td><span class="result-badge">$W = P_1 V_1 \ln\left(\frac{V_2}{V_1}\right)$</span></td></tr>
+                <tr><td><b>Polytropic</b> (Actual)</td><td>$n$</td><td>$P_1 V_1^n = P_2 V_2^n$</td><td><span class="result-badge">$W = \frac{P_2 V_2 - P_1 V_1}{1 - n}$</span></td></tr>
+                <tr><td><b>Isentropic</b> (Reversible Ad.)</td><td>$n = \gamma$</td><td>$P_1 V_1^\gamma = P_2 V_2^\gamma$</td><td><span class="result-badge">$W = \frac{P_2 V_2 - P_1 V_1}{1 - \gamma}$</span></td></tr>
+                <tr><td><b>Isochoric</b> (Const $V$)</td><td>$n = \infty$</td><td>$\frac{P_2}{P_1} = \frac{T_2}{T_1}, \ V_1 = V_2$</td><td><span class="result-badge">$W = 0 \quad (\Delta V = 0)$</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div id="part-view-4-7" class="view-panel">
+        <div class="lecture-content-wrapper">
+          <h2 class="emerald">Lecture 4 Solved Examples & Assignment Problems</h2>
+          <div class="global-toggle-bar">
+            <button onclick="toggleAllSolutionsInContainer('part-view-4-7', true)">👁️ إظهار كل الحلول</button>
+            <button onclick="toggleAllSolutionsInContainer('part-view-4-7', false)">🙈 إخفاء كل الحلول (لتختبر نفسك)</button>
+          </div>
+
+          <!-- Assignment Problem 1 -->
+          <div class="card">
+            <div class="card-header">
+              <span class="prob-tag">Assignment Problem 1: Multi-Process Steam States</span>
+              <button class="sol-toggle-btn" onclick="toggleCardSolution(this)">👁️ إظهار الحل / Show Solution</button>
+            </div>
+            <div class="card-body">
+              <div class="question-prompt">
+                <b>مسألة الواجب 1:</b> Water vapor initially at $P_1 = 0.3\text{ MPa}$ and $T_1 = 300^\circ\text{C}$ (State 1) is contained within a piston-cylinder assembly. The water is cooled at a constant volume until its temperature reaches $T_2 = 200^\circ\text{C}$ (State 2). The water is then compressed at a constant temperature to a state where the pressure is $P_3 = 2.5\text{ MPa}$ (State 3).<br>
+                <b>المطلوب:</b> (a) Locate states 1, 2, and 3 on the $T-v$ and $P-v$ diagrams. (b) Determine the specific volume at states 1, 2, and 3, and the quality $x_2$ at state 2.
+              </div>
+              <div class="solution-content">
+                <div class="step-block">
+                  <div class="step-label label-blue">الخطوة 1: تحديد الحالة الأولى (State 1: $P_1 = 0.3\text{ MPa}, T_1 = 300^\circ\text{C}$)</div>
+                  <div>&bull; من جدول الضغط (Table A-5) عند ضغط $P = 0.3\text{ MPa}$، نجد أن درجة حرارة التشبع: $T_{sat} = 133.52^\circ\text{C}$.</div>
+                  <div>&bull; بما أن درجة الحرارة المعطاة $T_1 = 300^\circ\text{C} > T_{sat}$، إذن الحالة <b>بخار محمص (Superheated Vapor)</b>.</div>
+                  <div>&bull; من جدول البخار المحمص (Table A-6) عند $P = 0.3\text{ MPa}$ و $T = 300^\circ\text{C}$ نجد الحجم النوعي مباشرة:</div>
+                  <div style="margin-top: 4px;"><span class="result-badge">$v_1 = 0.87535\text{ m}^3/\text{kg}$</span></div>
+                </div>
+
+                <div class="step-block">
+                  <div class="step-label label-amber">الخطوة 2: تحديد الحالة الثانية (State 2: تبريد بثبوت الحجم $v_2 = v_1$ إلى $T_2 = 200^\circ\text{C}$)</div>
+                  <div>&bull; العملية من 1 إلى 2 تمت بثبوت الحجم: $v_2 = v_1 = 0.87535\text{ m}^3/\text{kg}$ عند درجة حرارة $T_2 = 200^\circ\text{C}$.</div>
+                  <div>&bull; نذهب لجدول درجات الحرارة (Table A-4) عند $T = 200^\circ\text{C}$ لنقارن الحجم بالقيم الحرجة:</div>
+                  <div style="margin-left: 12px;">
+                    - حجم السائل المشبع: $v_f = 0.001157\text{ m}^3/\text{kg}$<br>
+                    - حجم البخار المشبع: $v_g = 0.12721\text{ m}^3/\text{kg}$
+                  </div>
+                  <div>&bull; نلاحظ أن: $v_2 = 0.87535\text{ m}^3/\text{kg} > v_g = 0.12721\text{ m}^3/\text{kg}$.</div>
+                  <div>&bull; الاستنتاج: الحالة 2 ما زالت في منطقة <b>البخار المحمص (Superheated Vapor)</b> ولم تدخل منطقة الخليط المشبع!</div>
+                  <div style="margin-top: 4px;">
+                    &bull; الحجم النوعي: <span class="result-badge">$v_2 = 0.87535\text{ m}^3/\text{kg}$</span><br>
+                    &bull; نسبة الجفاف ($x_2$): <span class="result-badge">غير معرّفة (Not Applicable) لأن الحالة بخار محمص $100\%$</span><br>
+                    &bull; الضغط $P_2$: من جدول A-6 عند $T = 200^\circ\text{C}$ بالاستكمال نجد $P_2 \approx 0.245\text{ MPa}$.
+                  </div>
+                </div>
+
+                <div class="step-block">
+                  <div class="step-label label-purple">الخطوة 3: تحديد الحالة الثالثة (State 3: انضغاط بثبوت الحرارة $T_3 = 200^\circ\text{C}$ إلى $P_3 = 2.5\text{ MPa}$)</div>
+                  <div>&bull; عند درجة حرارة $T_3 = 200^\circ\text{C}$، ضغط التشبع المقابل هو: $P_{sat} = 1.554\text{ MPa}$.</div>
+                  <div>&bull; بما أن الضغط المعطى $P_3 = 2.5\text{ MPa} > P_{sat} = 1.554\text{ MPa}$، إذن تحول الماء إلى <b>سائل مضغوط (Compressed / Subcooled Liquid)</b>.</div>
+                  <div>&bull; بما أن الضغط أقل من $5\text{ MPa}$ ولا توجد له جداول سائل مضغوط خاصة، نطبق تقريب السائل المشبع عند درجة الحرارة:</div>
+                  <div>$$v_3 \approx v_f @ 200^\circ\text{C} = 0.001157\text{ m}^3/\text{kg}$$</div>
+                  <div style="margin-top: 4px;"><span class="result-badge">$v_3 = 0.001157\text{ m}^3/\text{kg}$</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Assignment Problem 2 -->
+          <div class="card">
+            <div class="card-header">
+              <span class="prob-tag">Assignment Problem 2: Vertical Cylinder with Stops</span>
+              <button class="sol-toggle-btn" onclick="toggleCardSolution(this)">👁️ إظهار الحل / Show Solution</button>
+            </div>
+            <div class="card-body">
+              <div class="question-prompt">
+                <b>مسألة الواجب 2:</b> Air is contained in a vertical cylinder fitted with a frictionless piston and a set of stops. The piston cross-sectional area is $A = 0.2\text{ m}^2$, and the air inside is initially at $P_1 = 200\text{ kPa}$ and $T_1 = 500^\circ\text{C} = 773.15\text{ K}$. Initial height $h_1 = 2\text{ m}$ (initial volume $V_1 = A \cdot h_1 = 0.4\text{ m}^3$). The air is cooled as a result of heat transfer to surroundings.<br>
+                <b>المطلوب:</b><br>
+                (a) What is the temperature of the air inside the cylinder when the piston reaches the stops at height $h_{stops} = 1\text{ m}$?<br>
+                (b) The cooling is now continued until the temperature reaches $T_3 = 20^\circ\text{C} = 293.15\text{ K}$, what is the pressure at this final state?
+              </div>
+              <div class="solution-content">
+                <div class="step-block">
+                  <div class="step-label label-blue">الخطوة 1: المعطيات وتحديد مسار العمليات</div>
+                  <div>&bull; مساحة مقطع المكبس: $A = 0.2\text{ m}^2$</div>
+                  <div>&bull; الحالة الابتدائية 1: $P_1 = 200\text{ kPa}, \quad T_1 = 500 + 273.15 = 773.15\text{ K}, \quad V_1 = 0.2 \times 2 = 0.4\text{ m}^3$</div>
+                  <div>&bull; المرحلة الأولى (1 إلى 2): المكبس يتحرك بحرية لأسفل، إذن <b>الضغط ثابت (Isobaric Cooling)</b>: $P_2 = P_1 = 200\text{ kPa}$ حتى يستقر على الصدادات (Stops) عند ارتفاع $h_2 = 1\text{ m} \implies V_2 = 0.2 \times 1 = 0.2\text{ m}^3$.</div>
+                  <div>&bull; المرحلة الثانية (2 إلى 3): المكبس مثبت على الصدادات لا يمكنه النزول، إذن <b>الحجم ثابت (Isochoric Cooling)</b>: $V_3 = V_2 = 0.2\text{ m}^3$ حتى تبرد درجة الحرارة إلى $T_3 = 20 + 273.15 = 293.15\text{ K}$.</div>
+                </div>
+
+                <div class="step-block">
+                  <div class="step-label label-amber">المطلوب (a): درجة الحرارة عندما يلامس المكبس الصدادات ($T_2$)</div>
+                  <div>&bull; طالما أن المكبس يتحرك بحرية، فإن العملية تتم بثبوت الضغط ($P = \text{const}$):</div>
+                  <div>$$\frac{V_1}{T_1} = \frac{V_2}{T_2}$$</div>
+                  <div>&bull; نعزل $T_2$ ونعوض بالقيم:</div>
+                  <div>$$T_2 = T_1 \cdot \left(\frac{V_2}{V_1}\right) = 773.15 \cdot \left(\frac{0.2}{0.4}\right) = 773.15 \cdot 0.5 = 386.58\text{ K}$$</div>
+                  <div>&bull; بالدرجات المئوية: $T_2 = 386.58 - 273.15 = 113.43^\circ\text{C}$</div>
+                  <div style="margin-top: 4px;"><span class="result-badge">$T_{stops} = 386.6\text{ K} \quad (113.4^\circ\text{C})$</span></div>
+                </div>
+
+                <div class="step-block">
+                  <div class="step-label label-green">المطلوب (b): الضغط النهائي عند تبريد الهواء إلى $20^\circ\text{C}$ ($P_3$)</div>
+                  <div>&bull; بعد استقرار المكبس على الصدادات، يصبح الحجم ثابتاً تماماً ($V = \text{const}$):</div>
+                  <div>$$\frac{P_2}{T_2} = \frac{P_3}{T_3}$$</div>
+                  <div>&bull; نعزل $P_3$ ونعوض بالقيم المطلقة:</div>
+                  <div>$$P_3 = P_2 \cdot \left(\frac{T_3}{T_2}\right) = 200\text{ kPa} \cdot \left(\frac{293.15\text{ K}}{386.58\text{ K}}\right)$$</div>
+                  <div>$$P_3 = 200 \times 0.7583 = 151.66\text{ kPa}$$</div>
+                  <div style="margin-top: 4px;"><span class="result-badge">$P_{final} = 151.7\text{ kPa}$</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    let currentLec = 1;
+    let currentLec1Part = 1;
+    let currentLec2Part = 1;
+    let currentLec3Part = 1;
+    let currentLec4Part = 1;
+
+    const lec1Titles = [
+      "Lecture 1: Complete Overview (All Parts)",
+      "Part 1: Thermodynamics, Energy & Units — Complete Summary & Laws",
+      "Part 2: Thermodynamic Systems & Boundaries — Complete Summary & Laws",
+      "Part 3: Properties of a System, Density & Specifics — Complete Summary & Laws",
+      "Part 4: Pressure Concepts & Manometry — Complete Summary & Laws",
+      "Part 5: Temperature & The Zeroth Law — Complete Summary & Laws",
+      "Part 6: Microscopic Energy, Enthalpy & Entropy — Complete Summary & Laws",
+      "Part 7: States, Processes, Equilibrium & Cycles — Complete Summary & Laws",
+      "Lecture 1: Solved Examples & Practical Applications"
+    ];
+
+    const lec2Titles = [
+      "Lecture 2: Complete Overview (All Parts)",
+      "Part 1: Working Substance & Three Primary Phases — Complete Summary & Laws",
+      "Part 2: Ideal Gas Equation of State — Complete Summary & Laws",
+      "Part 3: Specific Heats, Joule's Law & Enthalpy — Complete Summary & Laws",
+      "Part 4: Real Gas Model & Compressibility Factor (Z) — Complete Summary & Laws",
+      "Part 5: Generalized Chart & Critical Constants — Complete Summary & Laws",
+      "Part 6: Force Balance on Piston-Cylinders — Complete Summary & Laws",
+      "Lecture 2: Complete Solved Examples (11 Worked Problems)"
+    ];
+
+    const lec3Titles = [
+      "Lecture 3: Complete Overview (All Parts)",
+      "Part 1: Pure Substance Concept & Heat Types — Complete Summary & Laws",
+      "Part 2: Liquid-Vapor Phase Change & Property Diagrams — Complete Summary & Laws",
+      "Part 3: Saturated Water Tables (A-4 & A-5) — Complete Summary & Laws",
+      "Part 4: Saturated Liquid-Vapor Mixture & Quality (x) — Complete Summary & Laws",
+      "Part 5: Superheated Vapor Tables (Table A-6) — Complete Summary & Laws",
+      "Part 6: Compressed Liquid Tables (Table A-7) — Complete Summary & Laws",
+      "Part 7: Systematic Steam Table Lookup Guide — Complete Summary & Laws",
+      "Lecture 3: Solved Examples & Comprehensive Exercise"
+    ];
+
+    const lec4Titles = [
+      "Lecture 4 (Chapter 3): Complete Overview (All Parts)",
+      "Part 1: Energy Transfer by Heat (Q) — Complete Summary & Laws",
+      "Part 2: Energy Transfer by Work (W) — Complete Summary & Laws",
+      "Part 3: Moving Boundary Work in Closed Systems — Complete Summary & Laws",
+      "Part 4: Polytropic & Isentropic Thermodynamic Processes — Complete Summary & Laws",
+      "Part 5: Isothermal & Isobaric Processes — Complete Summary & Laws",
+      "Part 6: Isochoric Process & Complete 5-Process Work Summary",
+      "Lecture 4: Solved Examples & Multi-Process Problems (8 Problems + Assignment)"
+    ];
+
+    function showLec1Part(num) {
+      currentLec1Part = num;
+      document.getElementById('header-badge').innerText = (num === 8) ? "FLUID AND THERMAL SYSTEMS • SOLVED ENGINEERING EXAMPLES" : "FLUID AND THERMAL SYSTEMS • LECTURE 1 SUMMARIES";
+      document.getElementById('page-main-title').innerText = lec1Titles[num];
+
+      for (let i = 0; i <= 8; i++) {
+        const b = document.getElementById('part-btn-1-' + i);
+        if (b) b.classList.remove('active');
+      }
+      const activeBtn = document.getElementById('part-btn-1-' + num);
+      if (activeBtn) activeBtn.classList.add('active');
+
+      for (let i = 1; i <= 8; i++) {
+        const p = document.getElementById('part-view-1-' + i);
+        if (p) {
+          if (num === 0) p.classList.add('active-panel');
+          else p.classList.remove('active-panel');
+        }
+      }
+
+      if (num !== 0) {
+        const activePart = document.getElementById('part-view-1-' + num);
+        if (activePart) activePart.classList.add('active-panel');
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function showLec2Part(num) {
+      currentLec2Part = num;
+      document.getElementById('header-badge').innerText = (num === 7) ? "FLUID AND THERMAL SYSTEMS • LECTURE 2 SOLVED EXAMPLES" : "FLUID AND THERMAL SYSTEMS • LECTURE 2 SUMMARIES";
+      document.getElementById('page-main-title').innerText = lec2Titles[num];
+
+      for (let i = 0; i <= 7; i++) {
+        const b = document.getElementById('part-btn-2-' + i);
+        if (b) b.classList.remove('active');
+      }
+      const activeBtn = document.getElementById('part-btn-2-' + num);
+      if (activeBtn) activeBtn.classList.add('active');
+
+      for (let i = 1; i <= 7; i++) {
+        const p = document.getElementById('part-view-2-' + i);
+        if (p) {
+          if (num === 0) p.classList.add('active-panel');
+          else p.classList.remove('active-panel');
+        }
+      }
+
+      if (num !== 0) {
+        const activePart = document.getElementById('part-view-2-' + num);
+        if (activePart) activePart.classList.add('active-panel');
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function showLec3Part(num) {
+      currentLec3Part = num;
+      document.getElementById('header-badge').innerText = (num === 8) ? "FLUID AND THERMAL SYSTEMS • LECTURE 3 SOLVED EXAMPLES" : "FLUID AND THERMAL SYSTEMS • LECTURE 3 SUMMARIES";
+      document.getElementById('page-main-title').innerText = lec3Titles[num];
+
+      for (let i = 0; i <= 8; i++) {
+        const b = document.getElementById('part-btn-3-' + i);
+        if (b) b.classList.remove('active');
+      }
+      const activeBtn = document.getElementById('part-btn-3-' + num);
+      if (activeBtn) activeBtn.classList.add('active');
+
+      for (let i = 1; i <= 8; i++) {
+        const p = document.getElementById('part-view-3-' + i);
+        if (p) {
+          if (num === 0) p.classList.add('active-panel');
+          else p.classList.remove('active-panel');
+        }
+      }
+
+      if (num !== 0) {
+        const activePart = document.getElementById('part-view-3-' + num);
+        if (activePart) activePart.classList.add('active-panel');
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function showLec4Part(num) {
+      currentLec4Part = num;
+      document.getElementById('header-badge').innerText = (num === 7) ? "FLUID AND THERMAL SYSTEMS • CHAPTER 3 SOLVED EXAMPLES" : "FLUID AND THERMAL SYSTEMS • CHAPTER 3 (HEAT & WORK)";
+      document.getElementById('page-main-title').innerText = lec4Titles[num];
+
+      for (let i = 0; i <= 7; i++) {
+        const b = document.getElementById('part-btn-4-' + i);
+        if (b) b.classList.remove('active');
+      }
+      const activeBtn = document.getElementById('part-btn-4-' + num);
+      if (activeBtn) activeBtn.classList.add('active');
+
+      for (let i = 1; i <= 7; i++) {
+        const p = document.getElementById('part-view-4-' + i);
+        if (p) {
+          if (num === 0) p.classList.add('active-panel');
+          else p.classList.remove('active-panel');
+        }
+      }
+
+      if (num !== 0) {
+        const activePart = document.getElementById('part-view-4-' + num);
+        if (activePart) activePart.classList.add('active-panel');
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function switchLectureGroup(lecNum) {
+      currentLec = lecNum;
+      for (let l = 1; l <= 4; l++) {
+        const tab = document.getElementById('lec-tab-' + l);
+        const sub = document.getElementById('subnav-wrapper-' + l);
+        const cont = document.getElementById('lec' + l + '-container');
+        if (tab) tab.classList.remove('active');
+        if (sub) sub.style.display = 'none';
+        if (cont) cont.style.display = 'none';
+      }
+
+      const activeTab = document.getElementById('lec-tab-' + lecNum);
+      const activeSub = document.getElementById('subnav-wrapper-' + lecNum);
+      const activeCont = document.getElementById('lec' + lecNum + '-container');
+
+      if (activeTab) activeTab.classList.add('active');
+      if (activeSub) activeSub.style.display = 'block';
+      if (activeCont) activeCont.style.display = 'block';
+
+      if (lecNum === 1) showLec1Part(currentLec1Part);
+      else if (lecNum === 2) showLec2Part(currentLec2Part);
+      else if (lecNum === 3) showLec3Part(currentLec3Part);
+      else if (lecNum === 4) showLec4Part(currentLec4Part);
+    }
+
+    /* Solution Toggle Functions */
+    function toggleCardSolution(btn) {
+      const card = btn.closest('.card');
+      const sol = card.querySelector('.solution-content');
+      if (sol.classList.contains('show')) {
+        sol.classList.remove('show');
+        btn.classList.remove('active');
+        btn.innerHTML = '👁️ إظهار الحل / Show Solution';
+      } else {
+        sol.classList.add('show');
+        btn.classList.add('active');
+        btn.innerHTML = '🙈 إخفاء الحل / Hide Solution';
+      }
+    }
+
+    function toggleAllSolutionsInContainer(containerId, show) {
+      const container = document.getElementById(containerId);
+      if (!container) return;
+      const buttons = container.querySelectorAll('.sol-toggle-btn');
+      const solutions = container.querySelectorAll('.solution-content');
+
+      solutions.forEach((sol, idx) => {
+        const btn = buttons[idx];
+        if (show) {
+          sol.classList.add('show');
+          if (btn) {
+            btn.classList.add('active');
+            btn.innerHTML = '🙈 إخفاء الحل / Hide Solution';
+          }
+        } else {
+          sol.classList.remove('show');
+          if (btn) {
+            btn.classList.remove('active');
+            btn.innerHTML = '👁️ إظهار الحل / Show Solution';
+          }
+        }
+      });
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+      if (typeof renderMathInElement === 'function') {
+        renderMathInElement(document.body, {
+          delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "$", right: "$", display: false}
+          ],
+          throwOnError: false
+        });
+      }
+    });
+  </script>
+</body>
+</html>
