@@ -1606,25 +1606,27 @@
         // 1. PRIMARY STRATEGY: Static index.json (Local bundle first, Raw GitHub CDN fallback)
         // (Bypasses all GitHub API rate limits, ultra-fast 1-request load)
         // --------------------------------------------------------
-        const staticIndexUrl = `https://raw.githubusercontent.com/${currentUsername}/${currentRepo}/${GITHUB_BRANCH}/index.json`;
+        const ts = Date.now();
+        const staticIndexUrl = `https://raw.githubusercontent.com/${currentUsername}/${currentRepo}/${GITHUB_BRANCH}/index.json?v=${ts}`;
         try {
           // Priority Fetching Safeguard: strictly prioritize index.json first (local bundle or static CDN)
           let staticRes = null;
+          const fetchOptions = { cache: forceRefresh ? "no-store" : "no-cache" };
           try {
-            const localRes = await fetch("./index.json", { cache: forceRefresh ? "reload" : "no-cache" });
+            const localRes = await fetch(`./index.json?v=${ts}`, fetchOptions);
             if (localRes.ok) staticRes = localRes;
           } catch (e) {}
 
           if (!staticRes || !staticRes.ok) {
             try {
-              const rootRes = await fetch("/index.json", { cache: forceRefresh ? "reload" : "no-cache" });
+              const rootRes = await fetch(`/index.json?v=${ts}`, fetchOptions);
               if (rootRes.ok) staticRes = rootRes;
             } catch (e) {}
           }
 
           if (!staticRes || !staticRes.ok) {
             try {
-              staticRes = await fetch(staticIndexUrl, { cache: forceRefresh ? "reload" : "no-cache" });
+              staticRes = await fetch(staticIndexUrl, fetchOptions);
             } catch (e) {}
           }
 
@@ -1858,10 +1860,36 @@
       }
     }
 
+    // Explicit Check Updates handler with full cache purge
+    async function checkForUpdates(forceRefresh = true) {
+      if (forceRefresh) {
+        try {
+          // Explicitly clear all cached document contents from localStorage
+          const keysToRemove = [];
+          for (let i = 0; i < localStorage.length; i++) {
+            const key = localStorage.key(i);
+            if (key && key.startsWith("aihub_doc_path_")) {
+              keysToRemove.push(key);
+            }
+          }
+          keysToRemove.forEach(k => localStorage.removeItem(k));
+          cachedDocPaths.clear();
+          if ('caches' in window) {
+            try {
+              await caches.delete('ai-hub-docs-v1');
+            } catch (ce) {}
+          }
+        } catch (e) {
+          console.warn("Cache purge note:", e);
+        }
+      }
+      return revalidateCatalogInBackground(forceRefresh);
+    }
+
     // Unified loader helper supporting background revalidation
     function loadDocuments(forceRefresh = false) {
       if (forceRefresh) {
-        return revalidateCatalogInBackground(true);
+        return checkForUpdates(true);
       }
       return revalidateCatalogInBackground(false);
     }
@@ -2283,6 +2311,7 @@
 
       // --------------------------------------------------------
       // Instant Reader Paint from Storage Cache (0ms perceived latency)
+      // + Immediate Background Network Revalidation (?v=... & no-store)
       // --------------------------------------------------------
       const offlineDocKey = `aihub_doc_path_${encodeURIComponent(doc.path)}`;
       const cachedHtml = localStorage.getItem(offlineDocKey);
@@ -2292,6 +2321,9 @@
         attachIframeListeners(iframe, loader, true);
         cachedDocPaths.add(doc.path);
         updateOfflineReadyBadgeForDoc(doc.path);
+
+        // Immediately trigger background network fetch with timestamp cache-buster & cache: no-store
+        revalidateDocumentContentInBackground(doc, iframe, cachedHtml);
         return;
       }
 
@@ -2299,64 +2331,127 @@
       loadIframeContent(doc, iframe, loader);
     }
 
+    // Helper to open document directly via document object
+    async function loadDocument(doc) {
+      if (!doc) return;
+      return openDocumentViewer(encodeURIComponent(doc.category), encodeURIComponent(doc.slug || doc.name));
+    }
+
+    async function fetchFreshDocumentHtml(doc) {
+      if (!doc) return null;
+      const ts = Date.now();
+      const urlsToTry = [];
+
+      // Priority 1: Local content relative URLs
+      const encodedCat = encodeURIComponent(doc.category);
+      const encodedName = encodeURIComponent(doc.name);
+      urlsToTry.push(`./content/${encodedCat}/${encodedName}?v=${ts}`);
+      urlsToTry.push(`/content/${encodedCat}/${encodedName}?v=${ts}`);
+
+      if (doc.path) {
+        const cleanPath = doc.path.replace(/^\/+/, '');
+        urlsToTry.push(`./${cleanPath}?v=${ts}`);
+        urlsToTry.push(`/${cleanPath}?v=${ts}`);
+      }
+
+      if (doc.localUrl) {
+        const sep = doc.localUrl.includes('?') ? '&' : '?';
+        urlsToTry.push(`${doc.localUrl}${sep}v=${ts}`);
+      }
+
+      // Priority 2: Remote download URL (CDN / GitHub Raw)
+      const remoteUrl = doc.downloadUrl || doc.download_url;
+      if (remoteUrl) {
+        const sep = remoteUrl.includes('?') ? '&' : '?';
+        urlsToTry.push(`${remoteUrl}${sep}v=${ts}`);
+      }
+
+      // Priority 3: Fallback raw GitHub URL constructor
+      if (currentUsername && currentRepo && doc.path) {
+        urlsToTry.push(`https://raw.githubusercontent.com/${currentUsername}/${currentRepo}/${GITHUB_BRANCH}/${doc.path}?v=${ts}`);
+      }
+
+      for (const url of urlsToTry) {
+        try {
+          const res = await fetch(url, { cache: 'no-store' });
+          if (res && res.ok) {
+            const text = await res.text();
+            if (text && text.trim().length > 30) {
+              return text;
+            }
+          }
+        } catch (fetchErr) {}
+      }
+      return null;
+    }
+
+    async function revalidateDocumentContentInBackground(doc, iframe, currentRenderedHtml) {
+      if (!doc || !iframe) return;
+      try {
+        const freshHtml = await fetchFreshDocumentHtml(doc);
+        if (freshHtml && freshHtml.length > 30 && freshHtml !== currentRenderedHtml) {
+          const offlineDocKey = `aihub_doc_path_${encodeURIComponent(doc.path)}`;
+          try {
+            localStorage.setItem(offlineDocKey, freshHtml);
+            cachedDocPaths.add(doc.path);
+            updateOfflineReadyBadgeForDoc(doc.path);
+            if ('caches' in window) {
+              const c = await caches.open('ai-hub-docs-v1');
+              const fetchUrl = doc.downloadUrl || doc.download_url || `./content/${encodeURIComponent(doc.category)}/${encodeURIComponent(doc.name)}`;
+              c.put(fetchUrl, new Response(freshHtml, { headers: { 'Content-Type': 'text/html' } }));
+            }
+          } catch (storageErr) {}
+
+          // Silently update the iframe srcdoc if this document is still open
+          if (currentDocument && (currentDocument.path === doc.path || currentDocument.slug === doc.slug)) {
+            const iWin = iframe.contentWindow;
+            const iDoc = iframe.contentDocument || iWin?.document;
+            const prevScrollTop = iWin?.pageYOffset || iDoc?.documentElement?.scrollTop || 0;
+
+            iframe.srcdoc = freshHtml;
+            attachIframeListeners(iframe, null, true);
+
+            // Preserve scroll position so reading isn't interrupted
+            setTimeout(() => {
+              try {
+                const refreshedWin = iframe.contentWindow;
+                if (refreshedWin && prevScrollTop > 0) {
+                  refreshedWin.scrollTo({ top: prevScrollTop, behavior: 'instant' });
+                }
+              } catch (scErr) {}
+            }, 50);
+          }
+        }
+      } catch (err) {
+        console.warn("Background document revalidation note:", err);
+      }
+    }
+
     async function loadIframeContent(doc, iframe, loader) {
       const offlineDocKey = `aihub_doc_path_${encodeURIComponent(doc.path)}`;
 
       try {
-        const cachedHtml = localStorage.getItem(offlineDocKey);
-        if (cachedHtml) {
-          if (loader) loader.classList.add("hidden", "opacity-0");
-          iframe.srcdoc = cachedHtml;
-          attachIframeListeners(iframe, loader, true);
-          cachedDocPaths.add(doc.path);
-          updateOfflineReadyBadgeForDoc(doc.path);
+        // Direct network fetch with cache: 'no-store' and store in localStorage
+        const htmlText = await fetchFreshDocumentHtml(doc);
+        if (htmlText) {
+          try {
+            localStorage.setItem(offlineDocKey, htmlText);
+            cachedDocPaths.add(doc.path);
+            updateOfflineReadyBadgeForDoc(doc.path);
+            if ('caches' in window) {
+              const c = await caches.open('ai-hub-docs-v1');
+              const fetchUrl = doc.downloadUrl || doc.download_url || `./content/${encodeURIComponent(doc.category)}/${encodeURIComponent(doc.name)}`;
+              c.put(fetchUrl, new Response(htmlText, { headers: { 'Content-Type': 'text/html' } }));
+            }
+          } catch (e) {}
+
+          iframe.srcdoc = htmlText;
+          attachIframeListeners(iframe, loader, false);
           return;
         }
 
-        if (doc.downloadUrl || doc.download_url) {
-          const fetchUrl = doc.downloadUrl || doc.download_url;
-          try {
-            const response = await fetch(fetchUrl);
-            if (response && response.ok) {
-              const htmlText = await response.text();
-              try {
-                localStorage.setItem(offlineDocKey, htmlText);
-                cachedDocPaths.add(doc.path);
-                updateOfflineReadyBadgeForDoc(doc.path);
-                if ('caches' in window) {
-                  const c = await caches.open('ai-hub-docs-v1');
-                  c.put(fetchUrl, new Response(htmlText, { headers: { 'Content-Type': 'text/html' } }));
-                }
-              } catch (e) {}
-
-              iframe.srcdoc = htmlText;
-              attachIframeListeners(iframe, loader, false);
-              return;
-            }
-          } catch (fetchErr) {}
-        }
-
-        const contentUrl = doc.localUrl || `./content/${encodeURIComponent(doc.category)}/${encodeURIComponent(doc.name)}`;
-        
-        try {
-          const localRes = await fetch(contentUrl);
-          if (localRes.ok) {
-            const htmlText = await localRes.text();
-            try { 
-              localStorage.setItem(offlineDocKey, htmlText); 
-              cachedDocPaths.add(doc.path);
-              updateOfflineReadyBadgeForDoc(doc.path);
-              if ('caches' in window) {
-                const c = await caches.open('ai-hub-docs-v1');
-                c.put(contentUrl, new Response(htmlText, { headers: { 'Content-Type': 'text/html' } }));
-              }
-            } catch (e) {}
-            iframe.srcdoc = htmlText;
-            attachIframeListeners(iframe, loader, false);
-            return;
-          }
-        } catch (fetchErr) {}
-
+        // Direct src fallback if text fetch couldn't be loaded into srcdoc
+        const contentUrl = doc.localUrl || `./content/${encodeURIComponent(doc.category)}/${encodeURIComponent(doc.name)}?v=${Date.now()}`;
         iframe.removeAttribute("srcdoc");
         iframe.src = contentUrl;
         attachIframeListeners(iframe, loader, false);
@@ -2501,8 +2596,8 @@
           body.style.paddingTop = "5rem";
         }
         const currentPadBottom = parseInt(window.getComputedStyle(body).paddingBottom) || 0;
-        if (currentPadBottom < 90) {
-          body.style.paddingBottom = "6rem";
+        if (currentPadBottom < 110) {
+          body.style.paddingBottom = "7rem";
         }
 
         // Inject Dynamic Responsive 100% Fluid Width & Clamping Styles inside Iframe
@@ -2525,7 +2620,7 @@
               margin-top: 0 !important;
               padding: 0 !important;
               padding-top: 5rem !important; /* Ensures complete clearance under the fixed top bar */
-              padding-bottom: 6rem !important; /* Generous clearance at the bottom */
+              padding-bottom: 7rem !important; /* Generous clearance at the bottom */
               box-sizing: border-box !important;
               -webkit-text-size-adjust: 100% !important;
             }
@@ -3062,7 +3157,7 @@
       document.getElementById("lang-toggle-btn")?.addEventListener("click", toggleLanguage);
 
       document.getElementById("refresh-btn")?.addEventListener("click", () => {
-        revalidateCatalogInBackground(true);
+        checkForUpdates(true);
       });
 
       const searchInput = document.getElementById("doc-search-input");
