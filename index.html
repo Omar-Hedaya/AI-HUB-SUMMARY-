@@ -2568,6 +2568,10 @@
             h1, h2, h3, h4, [id^="aihub-heading-"] {
               scroll-margin-top: 5.5rem !important;
             }
+            /* Push any fixed/sticky headers or sub-navbars inside the document below the 65px reader toolbar */
+            .top-navbar, [class*="navbar"], [class*="nav-tabs"], header.sticky {
+              top: 72px !important;
+            }
           `;
       } catch (err) {}
     }
