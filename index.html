@@ -811,6 +811,18 @@
     let starredFolders = new Set();// Set of pinned/starred folder names (stored in lowercase)
     const prefetchedUrls = new Set(); // Set of URLs already prefetched
 
+    // Global reactive state accessor for documents and categories
+    const state = {
+      get documents() { return allDocuments; },
+      set documents(val) { allDocuments = val; },
+      get categories() { return discoveredCategories; },
+      set categories(val) { discoveredCategories = val; },
+      get currentDocument() { return currentDocument; },
+      set currentDocument(val) { currentDocument = val; },
+      get activeFolder() { return activeFolder; },
+      set activeFolder(val) { activeFolder = val; }
+    };
+
     // Auto-hide toolbar state
     let lastScrollY = 0;
     let isToolbarHidden = false;
@@ -837,6 +849,7 @@
 
     // Synchronize Cached Document Paths from LocalStorage and CacheStorage
     function syncCachedDocPaths() {
+      cachedDocPaths.clear();
       for (let i = 0; i < localStorage.length; i++) {
         const key = localStorage.key(i);
         if (key && key.startsWith('aihub_doc_path_')) {
@@ -844,6 +857,8 @@
           cachedDocPaths.add(docPath);
         }
       }
+
+      updateOfflineReadyBadges();
 
       if ('caches' in window) {
         caches.open('ai-hub-docs-v1').then(cache => {
@@ -1809,9 +1824,11 @@
 
           if (hasCatalogChanged) {
             allDocuments = inflatedRemoteDocs;
+            state.documents = allDocuments;
             discoveredCategories = categoriesFound.length > 0
               ? categoriesFound
               : Array.from(new Set(allDocuments.map(d => d.category)));
+            state.categories = discoveredCategories;
 
             const sanitizedDocs = allDocuments.map(doc => ({
               name: doc.name,
@@ -1827,29 +1844,47 @@
             };
             localStorage.setItem(cacheKey, JSON.stringify(cacheData));
 
+            // Smart Differential Sync: Only remove orphaned cache keys for deleted documents
+            const validPaths = new Set();
+            allDocuments.forEach(d => {
+              if (d.path) validPaths.add(d.path);
+              if (d.name && d.category) validPaths.add(`content/${d.category}/${d.name}`);
+            });
+
+            try {
+              const orphanedKeys = [];
+              for (let i = 0; i < localStorage.length; i++) {
+                const k = localStorage.key(i);
+                if (k && k.startsWith("aihub_doc_path_")) {
+                  const storedPath = decodeURIComponent(k.replace("aihub_doc_path_", ""));
+                  const isOrphan = !validPaths.has(storedPath) &&
+                    !allDocuments.some(d => d.path === storedPath || d.name === storedPath.split("/").pop());
+                  if (isOrphan) {
+                    orphanedKeys.push(k);
+                    cachedDocPaths.delete(storedPath);
+                  }
+                }
+              }
+              orphanedKeys.forEach(k => localStorage.removeItem(k));
+            } catch (orphanErr) {
+              console.warn("Orphan cache cleanup note:", orphanErr);
+            }
+
             if (newlyDiscoveredDocs.length > 0 && isInitialBootComplete) {
               showNewContentToast(newlyDiscoveredDocs[0], newlyDiscoveredDocs.length);
             }
 
-            // Smoothly update the DOM without any jarring layout shifts
+            syncCachedDocPaths();
             renderUI();
           }
 
           if (forceRefresh) {
             showToast(currentLang === "ar" ? "تم تحديث الملفات بنجاح!" : "Fetched latest files from GitHub!");
           }
-        } else if (forceRefresh) {
-          // Force refresh completed but no files returned from GitHub
-          allDocuments = [];
-          discoveredCategories = [];
-          const cacheData = {
-            timestamp: Date.now(),
-            categories: [],
-            documents: []
-          };
-          localStorage.setItem(cacheKey, JSON.stringify(cacheData));
+        } else if (forceRefresh && allDocuments.length === 0) {
+          // Force refresh completed but no files returned from GitHub and none in memory
           renderUI();
-          showToast(currentLang === "ar" ? "تم تحديث الملفات بنجاح!" : "Fetched latest files from GitHub!");
+          showToast(currentLang === "ar" ? "لا توجد ملفات متوفرة" : "No files found on GitHub");
         }
 
       } catch (error) {
@@ -1857,33 +1892,164 @@
       } finally {
         if (refreshIcon) refreshIcon.classList.remove("animate-spin");
         syncCachedDocPaths();
+        updateOfflineReadyBadges();
       }
     }
 
-    // Explicit Check Updates handler with full cache purge
+    // Smart Differential Sync: Catalog update & orphan cache purge without wiping downloaded documents
     async function checkForUpdates(forceRefresh = true) {
-      if (forceRefresh) {
-        try {
-          // Explicitly clear all cached document contents from localStorage
-          const keysToRemove = [];
-          for (let i = 0; i < localStorage.length; i++) {
-            const key = localStorage.key(i);
-            if (key && key.startsWith("aihub_doc_path_")) {
-              keysToRemove.push(key);
+      const refreshIcon = document.getElementById("refresh-icon");
+      if (refreshIcon) refreshIcon.classList.add("animate-spin");
+
+      if (!navigator.onLine) {
+        if (refreshIcon) refreshIcon.classList.remove("animate-spin");
+        showToast(currentLang === "ar" ? "لا يوجد اتصال بالإنترنت" : "No internet connection");
+        return;
+      }
+
+      const ts = Date.now();
+      const urlsToTry = [
+        `./index.json?t=${ts}`,
+        `/index.json?t=${ts}`,
+        `https://raw.githubusercontent.com/${currentUsername}/${currentRepo}/${GITHUB_BRANCH}/index.json?t=${ts}`
+      ];
+
+      try {
+        let indexData = null;
+        for (const url of urlsToTry) {
+          try {
+            const res = await fetch(url, { cache: 'no-store' });
+            if (res && res.ok) {
+              indexData = await res.json();
+              if (indexData) break;
+            }
+          } catch (e) {}
+        }
+
+        if (indexData) {
+          let rawDocsList = [];
+          let customCategories = [];
+
+          if (Array.isArray(indexData)) {
+            rawDocsList = indexData;
+          } else if (indexData && typeof indexData === "object") {
+            if (Array.isArray(indexData.documents)) {
+              rawDocsList = indexData.documents;
+            } else if (Array.isArray(indexData.files)) {
+              rawDocsList = indexData.files;
+            } else {
+              for (const [folderKey, items] of Object.entries(indexData)) {
+                if (Array.isArray(items)) {
+                  items.forEach(item => {
+                    if (typeof item === "object" && item !== null) {
+                      if (!item.category) item.category = folderKey;
+                      rawDocsList.push(item);
+                    } else if (typeof item === "string") {
+                      rawDocsList.push({
+                        name: item,
+                        category: folderKey,
+                        path: `content/${folderKey}/${item}`
+                      });
+                    }
+                  });
+                }
+              }
+            }
+
+            if (Array.isArray(indexData.categories)) {
+              customCategories = indexData.categories;
+            } else if (Array.isArray(indexData.folders)) {
+              customCategories = indexData.folders;
             }
           }
-          keysToRemove.forEach(k => localStorage.removeItem(k));
-          cachedDocPaths.clear();
-          if ('caches' in window) {
+
+          if (rawDocsList.length > 0) {
+            const remoteDocs = rawDocsList.map(item => {
+              const docName = item.name || (item.path ? item.path.split("/").pop() : "document.html");
+              const docPath = item.path || (item.category ? `content/${item.category}/${docName}` : docName);
+              const downloadUrl = item.download_url || item.downloadUrl || `https://raw.githubusercontent.com/${currentUsername}/${currentRepo}/${GITHUB_BRANCH}/${docPath}`;
+              return {
+                name: docName,
+                title: item.title || formatTitle(docName),
+                path: docPath,
+                category: item.category || "General",
+                download_url: downloadUrl,
+                downloadUrl: downloadUrl,
+                size: item.size || 0,
+                type: "file"
+              };
+            });
+
+            const inflatedRemoteDocs = remoteDocs.map(inflateDocument).filter(Boolean);
+            allDocuments = inflatedRemoteDocs;
+            state.documents = allDocuments;
+            discoveredCategories = customCategories.length > 0
+              ? customCategories
+              : Array.from(new Set(allDocuments.map(d => d.category)));
+            state.categories = discoveredCategories;
+
+            // Update stored catalog cache
+            const cacheKey = getCacheKey(currentUsername, currentRepo);
+            const sanitizedDocs = allDocuments.map(doc => ({
+              name: doc.name,
+              path: doc.path,
+              download_url: doc.download_url || doc.downloadUrl || "",
+              size: doc.size || 0
+            }));
+            localStorage.setItem(cacheKey, JSON.stringify({
+              timestamp: Date.now(),
+              categories: discoveredCategories,
+              documents: sanitizedDocs
+            }));
+
+            // Smart Differential Sync:
+            // Retain existing offline files: Do NOT call localStorage.clear() or mass-delete aihub_doc_path_ keys!
+            // Only remove orphaned cache: If a file path previously cached in localStorage
+            // is no longer present in the updated index.json (i.e. deleted from GitHub), delete only that specific key.
+            const validPaths = new Set();
+            allDocuments.forEach(d => {
+              if (d.path) validPaths.add(d.path);
+              if (d.name && d.category) validPaths.add(`content/${d.category}/${d.name}`);
+            });
+
             try {
-              await caches.delete('ai-hub-docs-v1');
-            } catch (ce) {}
+              const orphanedKeys = [];
+              for (let i = 0; i < localStorage.length; i++) {
+                const k = localStorage.key(i);
+                if (k && k.startsWith("aihub_doc_path_")) {
+                  const storedPath = decodeURIComponent(k.replace("aihub_doc_path_", ""));
+                  const isOrphan = !validPaths.has(storedPath) &&
+                    !allDocuments.some(d => d.path === storedPath || d.name === storedPath.split("/").pop());
+                  if (isOrphan) {
+                    orphanedKeys.push(k);
+                    cachedDocPaths.delete(storedPath);
+                  }
+                }
+              }
+              orphanedKeys.forEach(k => localStorage.removeItem(k));
+            } catch (orphanErr) {
+              console.warn("Orphan cache cleanup note:", orphanErr);
+            }
+
+            // Sync cached paths and re-render the folder/document list
+            // All remaining downloaded files keep their "Offline Ready" badges intact!
+            syncCachedDocPaths();
+            renderUI();
+            showToast(currentLang === "ar" ? "تم تحديث الملفات بنجاح!" : "Fetched latest files from GitHub!");
+            return;
           }
-        } catch (e) {
-          console.warn("Cache purge note:", e);
         }
+
+        // Fallback to revalidateCatalogInBackground if direct fetch didn't return documents
+        await revalidateCatalogInBackground(forceRefresh);
+      } catch (err) {
+        console.warn("checkForUpdates error:", err);
+        await revalidateCatalogInBackground(forceRefresh);
+      } finally {
+        if (refreshIcon) refreshIcon.classList.remove("animate-spin");
+        syncCachedDocPaths();
+        updateOfflineReadyBadges();
       }
-      return revalidateCatalogInBackground(forceRefresh);
     }
 
     // Unified loader helper supporting background revalidation
@@ -2125,7 +2291,7 @@
     function renderCompactDocCard(doc, showFolderPill = false) {
       const sizeLabel = formatBytes(doc.size);
       const isDocStarred = starredPaths.has(doc.path);
-      const isOfflineReady = cachedDocPaths.has(doc.path);
+      const isOfflineReady = cachedDocPaths.has(doc.path) || !!localStorage.getItem(`aihub_doc_path_${encodeURIComponent(doc.path)}`);
       const escapedPath = encodeURIComponent(doc.path);
       const escapedCat = encodeURIComponent(doc.category);
       const escapedSlug = encodeURIComponent(doc.slug);
@@ -2350,6 +2516,8 @@
 
       if (doc.path) {
         const cleanPath = doc.path.replace(/^\/+/, '');
+        urlsToTry.push(`./${encodeURI(cleanPath)}?v=${ts}`);
+        urlsToTry.push(`/${encodeURI(cleanPath)}?v=${ts}`);
         urlsToTry.push(`./${cleanPath}?v=${ts}`);
         urlsToTry.push(`/${cleanPath}?v=${ts}`);
       }
@@ -2368,6 +2536,7 @@
 
       // Priority 3: Fallback raw GitHub URL constructor
       if (currentUsername && currentRepo && doc.path) {
+        urlsToTry.push(`https://raw.githubusercontent.com/${currentUsername}/${currentRepo}/${GITHUB_BRANCH}/${encodeURI(doc.path)}?v=${ts}`);
         urlsToTry.push(`https://raw.githubusercontent.com/${currentUsername}/${currentRepo}/${GITHUB_BRANCH}/${doc.path}?v=${ts}`);
       }
 
