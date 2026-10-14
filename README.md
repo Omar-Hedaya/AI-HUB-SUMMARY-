@@ -5,7 +5,6 @@
 <p align="center">
   <img src="https://img.shields.io/badge/Status-Active%20&%20Running-success?style=for-the-badge&logo=appveyor" alt="Status">
   <img src="https://img.shields.io/badge/Platform-PWA%20%2F%20Mobile%20First-blue?style=for-the-badge&logo=pwa" alt="PWA">
-  <img src="https://img.shields.io/badge/Hosting-Vercel%20%2F%20GitHub-orange?style=for-the-badge&logo=vercel" alt="Vercel">
 </p>
 
 ### **The Ultimate Student Study Reader & Notes PWA**  
