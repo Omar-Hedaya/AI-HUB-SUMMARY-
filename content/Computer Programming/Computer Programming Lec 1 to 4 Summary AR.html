@@ -1,0 +1,1557 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>البرمجة المهيكلة بلغة C++ — ملخص المحاضرات الأربع والمرجع الشامل</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #030712;
+      --card-bg: rgba(13, 23, 42, 0.88);
+      --card-alt: #070d1d;
+      --terminal-bg: #010409;
+      --text-body: #d5e0ee;
+      --text-muted: #8899ac;
+      --cyan: #38bdf8;
+      --green: #34d399;
+      --purple: #c084fc;
+      --amber: #fbbf24;
+      --rose: #fb7185;
+      --border: rgba(56, 189, 248, 0.22);
+      --border-bright: rgba(56, 189, 248, 0.55);
+      --font-mono: "Fira Code", "JetBrains Mono", Consolas, monospace;
+      --font-sans: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
+
+      /* C++ Syntax Tokens */
+      --syn-keyword: #f472b6;
+      --syn-directive: #c084fc;
+      --syn-header: #38bdf8;
+      --syn-string: #4ade80;
+      --syn-io: #fbbf24;
+      --syn-type: #67e8f9;
+      --syn-number: #f97316;
+      --syn-comment: #64748b;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      padding: 14px 12px 85px;
+      color: var(--text-body);
+      background-color: var(--bg);
+      background-image:
+        linear-gradient(to right, rgba(56, 189, 248, 0.05) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(56, 189, 248, 0.05) 1px, transparent 1px),
+        radial-gradient(circle at 50% 0%, rgba(56, 189, 248, 0.12), transparent 70%);
+      background-size: 32px 32px, 32px 32px, auto;
+      font-family: var(--font-sans);
+      line-height: 1.62;
+      font-size: 0.88rem;
+    }
+
+    main {
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    /* Fixed Top Navbar with Hide-on-Scroll */
+    .top-navbar {
+      position: fixed;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 1000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      max-width: calc(100vw - 18px);
+      width: max-content;
+      background: rgba(11, 18, 34, 0.92);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--border-bright);
+      border-radius: 9999px;
+      padding: 4px 6px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.65);
+      transition: top 0.3s ease, opacity 0.3s ease;
+      direction: rtl;
+    }
+
+    .top-navbar.nav-hidden {
+      top: -70px;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .nav-tabs {
+      display: flex;
+      gap: 4px;
+      align-items: center;
+      overflow-x: auto;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+      max-width: 100%;
+    }
+
+    .nav-tabs::-webkit-scrollbar { display: none; }
+
+    .nav-btn {
+      background: transparent;
+      border: 1px solid transparent;
+      color: #94a3b8;
+      font-family: var(--font-sans);
+      font-size: 0.77rem;
+      font-weight: 600;
+      padding: 5px 13px;
+      border-radius: 9999px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .nav-btn:hover {
+      color: #fff;
+      background: rgba(56, 189, 248, 0.1);
+    }
+
+    .nav-btn.active {
+      color: #030712;
+      background: var(--cyan);
+      font-weight: 700;
+      border-color: var(--cyan);
+      box-shadow: 0 0 14px rgba(56, 189, 248, 0.55);
+    }
+
+    .nav-btn .full-label { display: inline; }
+    .nav-btn .short-label { display: none; }
+
+    @media (max-width: 640px) {
+      .nav-btn {
+        padding: 5px 10px;
+        font-size: 0.72rem;
+      }
+      .nav-btn .full-label { display: none; }
+      .nav-btn .short-label { display: inline; }
+    }
+
+    .lecture-view {
+      display: none;
+      padding-top: 50px;
+    }
+
+    .lecture-view.active {
+      display: block;
+      animation: fadeIn 0.22s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    header {
+      position: relative;
+      background: rgba(15, 23, 42, 0.95);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border-bright);
+      border-radius: 12px;
+      padding: 16px 20px;
+      margin-bottom: 16px;
+      box-shadow: 0 0 35px rgba(56, 189, 248, 0.1);
+    }
+
+    h1 {
+      margin: 0 0 4px;
+      color: #ffffff;
+      font-family: var(--font-sans);
+      font-size: clamp(1.1rem, 2.8vw, 1.38rem);
+      font-weight: 700;
+      line-height: 1.35;
+      text-align: right;
+    }
+
+    header p {
+      margin: 0;
+      font-size: 0.84rem;
+      color: var(--text-muted);
+      font-family: var(--font-sans);
+    }
+
+    .quick-jump-bar {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      scrollbar-width: none;
+      padding-bottom: 4px;
+      margin-bottom: 16px;
+      direction: rtl;
+    }
+
+    .quick-jump-bar::-webkit-scrollbar { display: none; }
+
+    .jump-pill {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid rgba(56, 189, 248, 0.18);
+      padding: 3px 9px;
+      border-radius: 16px;
+      text-decoration: none;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+      direction: ltr;
+    }
+
+    .jump-pill:hover {
+      color: var(--cyan);
+      border-color: var(--cyan);
+      background: rgba(56, 189, 248, 0.1);
+    }
+
+    .section-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 18px 20px;
+      margin: 16px 0;
+      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.4);
+    }
+
+    h2 {
+      font-family: var(--font-sans);
+      color: var(--cyan);
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin: 0 0 10px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      text-align: right;
+    }
+
+    h2::before {
+      content: "#";
+      color: #0284c7;
+      margin-left: 4px;
+      font-family: var(--font-mono);
+    }
+
+    h3 {
+      font-family: var(--font-sans);
+      color: var(--text-body);
+      font-size: 0.92rem;
+      font-weight: 700;
+      margin: 14px 0 6px;
+    }
+
+    p {
+      margin: 6px 0;
+      color: var(--text-body);
+      font-size: 0.88rem;
+      font-family: var(--font-sans);
+    }
+
+    p strong { color: #ffffff; }
+
+    ul, ol {
+      margin: 6px 0 10px;
+      padding-right: 22px;
+      padding-left: 0;
+      color: var(--text-body);
+      font-size: 0.86rem;
+      font-family: var(--font-sans);
+    }
+
+    li { margin-bottom: 4px; }
+
+    .tag {
+      font-family: var(--font-mono);
+      font-size: 0.76rem;
+      background: rgba(56, 189, 248, 0.14);
+      color: var(--cyan);
+      padding: 1px 6px;
+      border-radius: 4px;
+      border: 1px solid rgba(56, 189, 248, 0.28);
+      display: inline-block;
+      direction: ltr;
+      unicode-bidi: embed;
+    }
+
+    .hud-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: var(--font-mono);
+      font-size: 0.71rem;
+      font-weight: 700;
+      color: var(--green);
+      letter-spacing: 0.08em;
+      margin: 14px 0 6px;
+      direction: ltr;
+    }
+
+    .hud-label::before {
+      content: "▶";
+      font-size: 0.62rem;
+    }
+
+    .key-points {
+      background: rgba(3, 10, 24, 0.65);
+      border-right: 3px solid var(--purple);
+      border-left: none;
+      border-radius: 6px;
+      padding: 10px 14px;
+      margin: 10px 0 12px;
+      font-size: 0.85rem;
+      font-family: var(--font-sans);
+    }
+
+    .alert-box {
+      background: rgba(251, 113, 133, 0.07);
+      border: 1px solid rgba(251, 113, 133, 0.28);
+      border-right: 3px solid var(--rose);
+      border-left: none;
+      border-radius: 6px;
+      padding: 10px 14px;
+      margin: 10px 0;
+      color: #fecdd3;
+      font-size: 0.84rem;
+      font-family: var(--font-sans);
+    }
+
+    .alert-box strong {
+      color: #ffe4e6;
+      display: block;
+      margin-bottom: 3px;
+      font-family: var(--font-sans);
+    }
+
+    .given-code {
+      margin: 8px 0 12px;
+      padding: 10px 14px;
+      background: #060c18;
+      border: 1px solid #1e2d42;
+      border-left: 3px solid var(--cyan);
+      border-right: none;
+      border-radius: 6px;
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      line-height: 1.55;
+      color: #cbd5e1;
+      direction: ltr;
+      text-align: left;
+      overflow-x: auto;
+    }
+
+    .table-wrapper {
+      overflow-x: auto;
+      margin: 12px 0 14px;
+      border: 1px solid #1e293b;
+      border-radius: 8px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.82rem;
+      text-align: right;
+      font-family: var(--font-sans);
+    }
+
+    th {
+      background: #090e1a;
+      color: var(--cyan);
+      font-family: var(--font-sans);
+      font-weight: 600;
+      padding: 8px 10px;
+      border-bottom: 1px solid #1e293b;
+      white-space: nowrap;
+    }
+
+    td {
+      padding: 7px 10px;
+      border-bottom: 1px solid rgba(30, 41, 59, 0.5);
+      color: #cbd5e1;
+      font-family: var(--font-sans);
+    }
+
+    tr:nth-child(even) { background: rgba(15, 23, 42, 0.4); }
+
+    .code-container {
+      margin-top: 10px;
+      border: 1px solid #334155;
+      border-radius: 9px;
+      overflow: hidden;
+      background: var(--terminal-bg);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+      direction: ltr;
+      text-align: left;
+    }
+
+    .terminal-header {
+      background: #0b1120;
+      border-bottom: 1px solid #1e293b;
+      padding: 8px 13px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      direction: ltr;
+    }
+
+    .terminal-dots { display: flex; gap: 5px; }
+    .dot { width: 9px; height: 9px; border-radius: 50%; }
+    .dot.red { background: #ef4444; }
+    .dot.yellow { background: #f59e0b; }
+    .dot.green { background: #10b981; }
+
+    .terminal-title {
+      font-family: var(--font-mono);
+      font-size: 0.76rem;
+      color: #94a3b8;
+    }
+
+    .copy-btn {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid #475569;
+      color: #f1f5f9;
+      font-family: var(--font-sans);
+      font-size: 0.7rem;
+      font-weight: 600;
+      padding: 3px 8px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .copy-btn:hover {
+      color: #fff;
+      border-color: #38bdf8;
+      background: rgba(56, 189, 248, 0.15);
+    }
+
+    pre {
+      margin: 0;
+      padding: 16px 18px;
+      background: var(--terminal-bg);
+      font-family: var(--font-mono);
+      font-size: 13.5px;
+      line-height: 1.65;
+      direction: ltr;
+      text-align: left;
+      overflow-x: auto;
+      tab-size: 4;
+    }
+
+    code { font-family: inherit; }
+
+    /* Syntax Tokens */
+    .k-dir { color: var(--syn-directive); font-weight: 600; }
+    .k-hdr { color: var(--syn-header); }
+    .k-word { color: var(--syn-keyword); font-weight: 600; }
+    .k-type { color: var(--syn-type); }
+    .k-str { color: var(--syn-string); }
+    .k-io { color: var(--syn-io); }
+    .k-num { color: var(--syn-number); }
+    .k-op { color: #38bdf8; }
+    .k-cmt { color: var(--syn-comment); font-style: italic; }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin: 10px 0;
+    }
+
+    @media (max-width: 680px) {
+      .grid-2 { grid-template-columns: 1fr; }
+    }
+
+    .scroll-top-btn {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      z-index: 999;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: rgba(11, 18, 34, 0.85);
+      backdrop-filter: blur(8px);
+      border: 1px solid var(--border-bright);
+      color: var(--cyan);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.25s ease;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+      font-family: var(--font-sans);
+    }
+
+    .scroll-top-btn.visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .scroll-top-btn:hover {
+      background: var(--cyan);
+      color: #030712;
+      box-shadow: 0 0 14px rgba(56, 189, 248, 0.6);
+      transform: translateY(-2px);
+    }
+
+    @media (max-width: 600px) {
+      body { padding: 10px 8px 45px; }
+      .section-card { padding: 14px 12px; }
+      pre { font-size: 12.5px; padding: 14px 12px; }
+      .scroll-top-btn { bottom: 16px; left: 16px; width: 36px; height: 36px; }
+    }
+  </style>
+</head>
+<body>
+
+<main>
+  <!-- Fixed Top Navbar with Hide-on-Scroll -->
+  <nav class="top-navbar" id="topNav">
+    <div class="nav-tabs">
+      <button class="nav-btn active" onclick="switchTab('lec1', this)">
+        <span class="full-label">المحاضرة 1: المقدمة</span>
+        <span class="short-label">محاضرة 1</span>
+      </button>
+      <button class="nav-btn" onclick="switchTab('lec2', this)">
+        <span class="full-label">المحاضرة 2: المعاملات</span>
+        <span class="short-label">محاضرة 2</span>
+      </button>
+      <button class="nav-btn" onclick="switchTab('lec3', this)">
+        <span class="full-label">المحاضرة 3: هياكل الاختيار</span>
+        <span class="short-label">محاضرة 3</span>
+      </button>
+      <button class="nav-btn" onclick="switchTab('lec4', this)">
+        <span class="full-label">المحاضرة 4: التكرار والدوران</span>
+        <span class="short-label">محاضرة 4</span>
+      </button>
+      <button class="nav-btn" onclick="switchTab('cheatsheet', this)">
+        <span class="full-label">⚡ ورقة المراجعة السريعة</span>
+        <span class="short-label">⚡ الملخص</span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ==================== LECTURE 1 ==================== -->
+  <div id="lec1" class="lecture-view active">
+    <header>
+      <h1>1. مقدمة إلى البرمجة بلغة C++ (Introduction to C++)</h1>
+      <p>هيكل البرنامج، المتغيرات، الثوابت، قواعد تسمية المعرفات، أنواع البيانات، ومجاري الإدخال والإخراج القياسية.</p>
+    </header>
+
+    <div class="quick-jump-bar">
+      <a href="#lec1-structure" class="jump-pill"># الهيكل_البنائي</a>
+      <a href="#lec1-comments" class="jump-pill"># التعليقات</a>
+      <a href="#lec1-variables" class="jump-pill"># المتغيرات_والثوابت</a>
+      <a href="#lec1-types" class="jump-pill"># أنواع_البيانات_والإدخال</a>
+    </div>
+
+    <div class="alert-box">
+      <strong>فخاخ امتحانية شائعة // نقاط هامة جداً:</strong>
+      1. متغيرات الثوابت <span class="tag">const</span> <strong>يجب تهيئتها وإعطاؤها قيمة لحظة الإعلان عنها مباشرة</strong>؛ فكتابة <span class="tag">const int x; x = 5;</span> تؤدي إلى خطأ ترجمة (Compiler Error).<br>
+      2. المتغيرات التي تبدأ بأرقام (مثل <span class="tag">10rate</span>) أو تحتوي على شرطة عادية (<span class="tag">shoubra-faculty</span>) أو مسافات هي أسماء غير صالحة برمجياً (Invalid Identifiers).
+    </div>
+
+    <section class="section-card" id="lec1-structure">
+      <h2>1.1 الهيكل البنائي والتشريحي لبرنامج C++</h2>
+      <p>يتكون أي برنامج قياسي مكتوب بلغة C++ من مكونات بنائية أساسية لا غنى عنها:</p>
+      <ul>
+        <li><strong>توجيهات ما قبل المعالجة (Preprocessor Directives):</strong> أسطر تبدأ بعلامة <span class="tag">#</span>، مثل <span class="tag">#include &lt;iostream&gt;</span>، ترشد المعالج المسبق لتضمين ترويسات الإدخال والإخراج القياسية قبل الترجمة.</li>
+        <li><strong>الدالة الرئيسية <span class="tag">main()</span>:</strong> نقطة انطلاق وبدء تنفيذ البرنامج الإلزامية التي يبدأ التحكم عندها دائماً، ويجب أن تُرجع قيمة عددية صحيحة (<span class="tag">int</span>).</li>
+        <li><strong>جملة الإرجاع <span class="tag">return 0;</span>:</strong> تُنهي تنفيذ الدالة الرئيسية وترسل إشارة إلى نظام التشغيل بأن البرنامج انتهى بنجاح وبشكل طبيعي.</li>
+        <li><strong>الفاصلة المنقوطة <span class="tag">;</span>:</strong> علامة الترقيم الإلزامية التي تختم كل جملة برمجية تنفيذية (Statement).</li>
+      </ul>
+
+      <div class="hud-label">SAMPLE CODE // FIRST PROGRAM</div>
+      <div class="code-container">
+        <div class="terminal-header">
+          <div class="terminal-dots"><div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div></div>
+          <span class="terminal-title">welcome.cpp</span>
+          <button class="copy-btn" onclick="copyCode(this)">نسخ الكود</button>
+        </div>
+        <pre><code><span class="k-dir">#include</span> <span class="k-hdr">&lt;iostream&gt;</span>
+<span class="k-word">using namespace</span> std;
+
+<span class="k-type">int</span> main() {
+    <span class="k-io">cout</span> <span class="k-op">&lt;&lt;</span> <span class="k-str">"Welcome to C++!\n"</span>;
+    <span class="k-word">return</span> <span class="k-num">0</span>;
+}</code></pre>
+      </div>
+    </section>
+
+    <section class="section-card" id="lec1-comments">
+      <h2>1.2 التعليقات في C++ (Comments)</h2>
+      <p>التعليقات عبارة عن جمل غير تنفيذية يتجاهلها المترجم كلياً، وتُستخدم فقط للتوثيق وتسهيل قراءة الكود:</p>
+      <ul>
+        <li><strong>تعليق السطر الواحد (Single-Line Comment):</strong> يبدأ بالعلامة <span class="tag">//</span> ويتجاهل المترجم ما تبقى من ذلك السطر.</li>
+        <li><strong>التعليق متعدد الأسطر (Block Comment):</strong> يبدأ بالعلامة <span class="tag">/*</span> وينتهي بالعلامة <span class="tag">*/</span>، ويمكن أن يمتد لعدة أسطر.</li>
+      </ul>
+    </section>
+
+    <section class="section-card" id="lec1-variables">
+      <h2>1.3 المتغيرات، المعرفات، والثوابت (Variables, Identifiers &amp; Constants)</h2>
+      <p><strong>المتغير (Variable):</strong> موقع محجوز في ذاكرة الحاسوب لتخزين قيمة يمكن تعديلها وتغييرها أثناء تنفيذ البرنامج.</p>
+
+      <h3>قواعد تسمية المعرفات (Identifier Naming Rules):</h3>
+      <ol>
+        <li>تتكون فقط من الحروف (كبيرة وصغيرة)، الأرقام، والشرطة السفلية <span class="tag">_</span>.</li>
+        <li><strong>يجب أن تبدأ بحرف أو بشرطة سفلية</strong> (ممنوع منعاً باتاً أن تبدأ برقم).</li>
+        <li>لا يمكن أن تحتوي على مسافات فارغة أو رموز وعلامات خاصة (<span class="tag">#</span>, <span class="tag">-</span>, <span class="tag">!</span>, <span class="tag">$</span>, <span class="tag">%</span>).</li>
+        <li>لا يجوز أن تكون كلمة محجوزة من الكلمات المفتاحية للغة (<span class="tag">int</span>, <span class="tag">class</span>, <span class="tag">cin</span>, <span class="tag">return</span>).</li>
+      </ol>
+
+      <h3>طرق الإعلان عن الثوابت (Constants):</h3>
+      <ul>
+        <li>باستخدام المعالج المسبق: <span class="tag">#define PI 3.14</span> (بدون فاصلة منقوطة وبدون علامة =).</li>
+        <li>باستخدام الكلمة المفتاحية: <span class="tag">const float PI = 3.14;</span> (التهيئة بقيمة أولية إلزامية عند التعريف).</li>
+      </ul>
+    </section>
+
+    <section class="section-card" id="lec1-types">
+      <h2>1.4 أنواع البيانات ومجاري الإدخال والإخراج القياسية</h2>
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>فئة النوع</th>
+              <th>الكلمات المفتاحية</th>
+              <th>الوصف والاستخدام</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="tag">الأعداد الصحيحة</span></td>
+              <td>short, int, long</td>
+              <td>أعداد صحيحة بدون أجزاء كسرية أو فواصل عشرية.</td>
+            </tr>
+            <tr>
+              <td><span class="tag">الأعداد العشرية (الحقيقية)</span></td>
+              <td>float, double, long double</td>
+              <td>أعداد بكسور عشرية وبمستويات دقة متفاوتة.</td>
+            </tr>
+            <tr>
+              <td><span class="tag">الحروف</span></td>
+              <td>char</td>
+              <td>حرف واحد أو رمز فردي محاط بعلامتي اقتباس مفردتين مثل 'A'.</td>
+            </tr>
+            <tr>
+              <td><span class="tag">السلاسل النصية</span></td>
+              <td>string</td>
+              <td>سلسلة من المحارف والكلمات والجمل النصية.</td>
+            </tr>
+            <tr>
+              <td><span class="tag">القيم المنطقية</span></td>
+              <td>bool</td>
+              <td>قيم الصواب والخطأ المنطقية: true (تُعامل كرقم 1) أو false (تُعامل كرقم 0).</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p><strong>إعادة تسمية الأنواع باستخدام <span class="tag">typedef</span>:</strong></p>
+      <div class="given-code">
+typedef int number;<br>
+number distance = 150; // المتغير 'distance' نوعه في الأصل عدد صحيح int
+      </div>
+
+      <h3>معاملات التدفق ورموز الهروب (Escape Sequences):</h3>
+      <ul>
+        <li><span class="tag">cout &lt;&lt;</span> : معامل الإقحام (Insertion Operator) لعرض وطباعة البيانات على الشاشة.</li>
+        <li><span class="tag">cin &gt;&gt;</span> : معامل الاستخراج (Extraction Operator) لقراءة الإدخال من لوحة المفاتيح وتخزينه في المتغيرات.</li>
+        <li><span class="tag">\n</span> : محرف سطر جديد (Newline).</li>
+        <li><span class="tag">\t</span> : مسافة جدولة أفقية (Tab stop).</li>
+        <li><span class="tag">endl</span> : إدراج سطر جديد مع تفريغ الذاكرة المؤقتة لمجرى الإخراج (Flushes output buffer).</li>
+      </ul>
+    </section>
+  </div>
+
+  <!-- ==================== LECTURE 2 ==================== -->
+  <div id="lec2" class="lecture-view">
+    <header>
+      <h1>2. المعاملات والتعبيرات في C++ (Operators &amp; Expressions)</h1>
+      <p>أسبقية العمليات الحسابية، التراكم والإسناد، الزيادة والنقصان، المعاملات المنطقية، ومفهوم Lvalues مقابل Rvalues.</p>
+    </header>
+
+    <div class="quick-jump-bar">
+      <a href="#lec2-precedence" class="jump-pill"># أسبقية_المعاملات</a>
+      <a href="#lec2-increment" class="jump-pill"># الزيادة_والنقصان</a>
+      <a href="#lec2-logical" class="jump-pill"># العمليات_المنطقية</a>
+      <a href="#lec2-traps" class="jump-pill"># فخ_المساواة</a>
+      <a href="#lec2-lvalues" class="jump-pill"># Lvalues_مقابل_Rvalues</a>
+    </div>
+
+    <div class="alert-box">
+      <strong>فخاخ امتحانية شائعة // نقاط هامة جداً:</strong>
+      1. حاصل قسمة عددين صحيحين <span class="tag">31 / 3</span> ينتج <span class="tag">10</span> فقط (مع بتر وحذف الأرقام العشرية بالكامل)، وليس <span class="tag">10.333</span>!<br>
+      2. معامل باقي القسمة <span class="tag">%</span> يعمل <strong>فقط وحصرياً مع الأعداد الصحيحة</strong>؛ وتطبيقه على أعداد كسرية يؤدي إلى خطأ ترجمة فوري.
+    </div>
+
+    <section class="section-card" id="lec2-precedence">
+      <h2>2.1 المعاملات الحسابية وقواعد الأسبقية (Precedence)</h2>
+      <p>المعاملات الحسابية القياسية: الجمع (<span class="tag">+</span>)، الطرح (<span class="tag">-</span>)، الضرب (<span class="tag">*</span>)، القسمة (<span class="tag">/</span>)، وباقي القسمة (<span class="tag">%</span>):</p>
+
+      <h3>تسلسل ترتيب أسبقية العمليات:</h3>
+      <ol>
+        <li>الأقواس <span class="tag">()</span>: تُنفذ أولاً دائماً، بدءاً من الأقواس الداخلية نحو الخارجية.</li>
+        <li>عمليات الضرب والقسمة وباقي القسمة (<span class="tag">*</span>, <span class="tag">/</span>, <span class="tag">%</span>): تُنفذ ثانياً، من اليسار إلى اليمين.</li>
+        <li>عمليات الجمع والطرح (<span class="tag">+</span>, <span class="tag">-</span>): تُنفذ أخيراً، من اليسار إلى اليمين.</li>
+      </ol>
+    </section>
+
+    <section class="section-card" id="lec2-increment">
+      <h2>2.2 معاملات الزيادة والنقصان (Increment &amp; Decrement)</h2>
+      <p>اختصارات الإسناد التراكمي: <span class="tag">c += 3</span> تكافئ تماماً <span class="tag">c = c + 3</span>.</p>
+
+      <h3>الفرق بين الزيادة القبلية والزيادة البعدية (Prefix vs Postfix):</h3>
+      <div class="key-points">
+        <ul>
+          <li><strong>الزيادة القبلية (<span class="tag">++x</span>):</strong> يُزاد المتغير أولاً، ثم تُستخدم القيمة الجديدة المحدثة في باقي أجزاء التعبير الحالي.</li>
+          <li><strong>الزيادة البعدية (<span class="tag">x++</span>):</strong> تُستخدم القيمة الحالية أولاً في التعبير، ثم تتم زيادة المتغير بواحد بعد الانتهاء.</li>
+          <li>عند كتابة المتغير كجملة برمجية مستقلة بذاتها (مثل <span class="tag">++c;</span> مقابل <span class="tag">c++;</span>)، يعطي الاثنان نفس النتيجة النهائية تماماً.</li>
+        </ul>
+      </div>
+
+      <div class="hud-label">TRACE EXAMPLE // PRE VS POST</div>
+      <div class="code-container">
+        <div class="terminal-header">
+          <div class="terminal-dots"><div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div></div>
+          <span class="terminal-title">inc_trace.cpp</span>
+          <button class="copy-btn" onclick="copyCode(this)">نسخ الكود</button>
+        </div>
+        <pre><code><span class="k-dir">#include</span> <span class="k-hdr">&lt;iostream&gt;</span>
+<span class="k-word">using namespace</span> std;
+
+<span class="k-type">int</span> main() {
+    <span class="k-type">int</span> c = <span class="k-num">5</span>;
+    <span class="k-io">cout</span> <span class="k-op">&lt;&lt;</span> ++c <span class="k-op">&lt;&lt;</span> <span class="k-io">endl</span>; <span class="k-cmt">// يطبع 6 (تتم الزيادة فوراً قبل الطباعة)</span>
+    <span class="k-io">cout</span> <span class="k-op">&lt;&lt;</span> c++ <span class="k-op">&lt;&lt;</span> <span class="k-io">endl</span>; <span class="k-cmt">// يطبع 6 (تُطبع القيمة الحالية ثم تصبح c = 7)</span>
+    <span class="k-io">cout</span> <span class="k-op">&lt;&lt;</span> c <span class="k-op">&lt;&lt;</span> <span class="k-io">endl</span>;   <span class="k-cmt">// يطبع 7</span>
+    <span class="k-word">return</span> <span class="k-num">0</span>;
+}</code></pre>
+      </div>
+    </section>
+
+    <section class="section-card" id="lec2-logical">
+      <h2>2.3 معاملات المقارنة والمعاملات المنطقية (Relational &amp; Logical)</h2>
+      <p>تنتج معاملات المقارنة قيماً منطقية: إما صواب <span class="tag">true</span> (1) أو خطأ <span class="tag">false</span> (0):</p>
+      <ul>
+        <li>المقارنة: <span class="tag">&gt;</span>, <span class="tag">&lt;</span>, <span class="tag">&gt;=</span>, <span class="tag">&lt;=</span>, <span class="tag">==</span>, <span class="tag">!=</span>.</li>
+        <li>المنطقية: <span class="tag">&amp;&amp;</span> (و - AND)، <span class="tag">||</span> (أو - OR)، <span class="tag">!</span> (نفي - NOT).</li>
+      </ul>
+
+      <h3>تقييم الدائرة القصيرة (Short-Circuit Evaluation):</h3>
+      <p>تقوم C++ بتحسين التقييم المنطقي عبر التوقف مبكراً بمجرد ضمان النتيجة النهائية وحسمها قطيعاً:</p>
+      <ul>
+        <li>في معامل <span class="tag">&amp;&amp;</span>: إذا كان الطرف الأيسر <span class="tag">false</span>، <strong>لا يتم تقييم الطرف الأيمن مطلقاً</strong> (لأن الناتج الكلي حتماً false).</li>
+        <li>في معامل <span class="tag">||</span>: إذا كان الطرف الأيسر <span class="tag">true</span>، <strong>لا يتم تقييم الطرف الأيمن مطلقاً</strong> (لأن الناتج الكلي حتماً true).</li>
+      </ul>
+    </section>
+
+    <section class="section-card" id="lec2-traps">
+      <h2>2.4 الخلط الكارثي بين علامة المساواة (==) والإسناد (=)</h2>
+      <div class="alert-box">
+        <strong>خطأ منطقي فادح وصامت:</strong><br>
+        كتابة <span class="tag">if (payCode = 4)</span> بدلاً من <span class="tag">if (payCode == 4)</span> تُسند القيمة 4 إلى <span class="tag">payCode</span>. ولأن القيمة 4 غير صفرية، تعتبرها C++ قيمة صائبة (True) دائماً، مما يؤدي لتنفيذ جسم الشرط دون أي تحذير من المترجم!
+      </div>
+    </section>
+
+    <section class="section-card" id="lec2-lvalues">
+      <h2>2.5 مفهوم Lvalues مقابل Rvalues</h2>
+      <ul>
+        <li><strong>قيم الطرف الأيسر (Lvalues):</strong> تعبيرات يمكن أن تقع على <em>الطرف الأيسر</em> من معادلة الإسناد. وهي تشير إلى مواقع ذاكرة فعلية ومستمرة قابلة للتعديل وتملك عنواناً (مثل المتغيرات: <span class="tag">x = 4;</span>).</li>
+        <li><strong>قيم الطرف الأيمن (Rvalues):</strong> تعبيرات يمكن أن تقع <em>فقط على الطرف الأيمن</em> من معادلة الإسناد. وهي تمثل قيماً مؤقتة أو حسابات لحظية أو ثوابت عددية (مثل الأرقام: لا يمكن كتابة <span class="tag">4 = x;</span>).</li>
+        <li><strong>القاعدة الذهبية:</strong> <em>يمكن استخدام Lvalues كـ Rvalues، لكن لا يمكن استخدام Rvalues كـ Lvalues أبداً!</em></li>
+      </ul>
+    </section>
+  </div>
+
+  <!-- ==================== LECTURE 3 ==================== -->
+  <div id="lec3" class="lecture-view">
+    <header>
+      <h1>3. هياكل التحكم والاختيار (Control Structures: Selection)</h1>
+      <p>منطق اتخاذ القرار: if، if/else، المعامل الثلاثي، التفرع المتداخل، بنية switch، وتصنيف الأخطاء البرمجية.</p>
+    </header>
+
+    <div class="quick-jump-bar">
+      <a href="#lec3-if" class="jump-pill"># if_و_ifelse</a>
+      <a href="#lec3-ternary" class="jump-pill"># المعامل_الثلاثي</a>
+      <a href="#lec3-errors" class="jump-pill"># تصنيف_الأخطاء</a>
+      <a href="#lec3-switch" class="jump-pill"># بنية_switch</a>
+    </div>
+
+    <div class="alert-box">
+      <strong>فخاخ امتحانية شائعة // نقاط هامة جداً:</strong>
+      1. في جملة <span class="tag">switch</span>، المتغير أو التعبير المفحوص <strong>يجب أن يكون من نوع صحيح متكامل (int أو char فقط)</strong>، ولا يقبل الأنواع العشرية <span class="tag">float</span> أو <span class="tag">double</span> أو السلاسل النصية <span class="tag">string</span>.<br>
+      2. نسيان جملة <span class="tag">break</span> يتسبب في ظاهرة السقوط الحر (Fall-through)، مما يؤدي لتنفيذ جميع الحالات التالية دون فحص شروطها حتى الوصول لأول break.
+    </div>
+
+    <section class="section-card" id="lec3-if">
+      <h2>3.1 هياكل الاختيار if و if/else</h2>
+      <p>في لغة C++، أي قيمة غير صفرية تُعامل كـ <strong>True (صواب)</strong>، والقيمة صفر وحدها تُعامل كـ <strong>False (خطأ)</strong>.</p>
+      <div class="key-points">
+        <strong>الجمل المركبة والأقواس المعقوفة (Compound Statements):</strong><br>
+        عند احتواء كتلة <span class="tag">if</span> أو <span class="tag">else</span> على أكثر من جملة برمجية واحدة، <strong>يجب حصرها إلزامياً داخل أقواس معقوفة <span class="tag">{ }</span></strong>. فبدون الأقواس، تنتمي الجملة الأولى فقط للشرط، بينما تُنفذ الجمل اللاحقة في جميع الأحوال دون قيد.
+      </div>
+    </section>
+
+    <section class="section-card" id="lec3-ternary">
+      <h2>3.2 المعامل الشرطي الثلاثي (Ternary Operator ?:)</h2>
+      <p>صيغة مختصرة بديلة لجمل if/else البسيطة: <span class="tag">الشرط ? القيمة_إذا_تحقق : القيمة_إذا_لم_يتحقق;</span></p>
+      <div class="given-code">
+cout &lt;&lt; (grade &gt;= 60 ? "Passed" : "Failed");
+      </div>
+    </section>
+
+    <section class="section-card" id="lec3-errors">
+      <h2>3.3 التصنيف الشامل لأنواع الأخطاء البرمجية</h2>
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>فئة الخطأ</th>
+              <th>وقت الاكتشاف</th>
+              <th>النتيجة والسلوك</th>
+              <th>أمثلة شائعة</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong style="color:var(--rose)">أخطاء الصياغة (Syntax Errors)</strong></td>
+              <td>وقت الترجمة (Compile Time)</td>
+              <td>يكتشفها المترجم؛ يفشل البرنامج في التحول إلى ملف تنفيذي ويعطي رسائل خطأ.</td>
+              <td>نسيان الفاصلة المنقوطة <span class="tag">;</span>، أخطاء إملائية في الكلمات المفتاحية (<span class="tag">cot</span>)، أقواس غير مغلقة.</td>
+            </tr>
+            <tr>
+              <td><strong style="color:var(--amber)">أخطاء منطقية غير قاتلة (Non-fatal Logic Errors)</strong></td>
+              <td>وقت التشغيل (Runtime)</td>
+              <td>يعمل البرنامج حتى نهايته بشكل طبيعي، ولكنه يُخرج <strong>نتائج وحسابات خاطئة أو غير مقصودة</strong>.</td>
+              <td>استخدام <span class="tag">=</span> بدلاً من <span class="tag">==</span>، أو حساب المتوسط بشكل خاطئ <span class="tag">a+b/2</span> بدل <span class="tag">(a+b)/2</span>.</td>
+            </tr>
+            <tr>
+              <td><strong style="color:var(--rose)">أخطاء منطقية قاتلة (Fatal Logic Errors)</strong></td>
+              <td>وقت التشغيل (Runtime)</td>
+              <td><strong>يتوقف البرنامج عن العمل فجأة وينهار (Crashes)</strong> قبل إتمام باقي الأوامر.</td>
+              <td>القسمة على صفر (<span class="tag">x / 0</span>)، أو استدعاء تكراري لانهائي يستنزف مساحة الذاكرة (Stack Overflow).</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="section-card" id="lec3-switch">
+      <h2>3.4 بنية الاختيار المتعدد switch</h2>
+      <p>تُعد البديل الأنسب والأنظف عند مقارنة قيمة متغير صحيح واحد مقابل عدة قيم ثابتة بدلاً من سلاسل <span class="tag">else if</span> الطويلة:</p>
+
+      <div class="hud-label">COMPLETE EXAMPLE // DAYS IN MONTH WITH LEAP YEAR</div>
+      <div class="code-container">
+        <div class="terminal-header">
+          <div class="terminal-dots"><div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div></div>
+          <span class="terminal-title">days_in_month.cpp</span>
+          <button class="copy-btn" onclick="copyCode(this)">نسخ الكود</button>
+        </div>
+        <pre><code><span class="k-dir">#include</span> <span class="k-hdr">&lt;iostream&gt;</span>
+<span class="k-word">using namespace</span> std;
+
+<span class="k-type">int</span> main() {
+    <span class="k-type">int</span> month, year;
+    <span class="k-io">cout</span> <span class="k-op">&lt;&lt;</span> <span class="k-str">"Enter month number (1-12): "</span>;
+    <span class="k-io">cin</span> <span class="k-op">&gt;&gt;</span> month;
+
+    <span class="k-word">switch</span> (month) {
+        <span class="k-word">case</span> <span class="k-num">1</span>: <span class="k-word">case</span> <span class="k-num">3</span>: <span class="k-word">case</span> <span class="k-num">5</span>: <span class="k-word">case</span> <span class="k-num">7</span>:
+        <span class="k-word">case</span> <span class="k-num">8</span>: <span class="k-word">case</span> <span class="k-num">10</span>: <span class="k-word">case</span> <span class="k-num">12</span>:
+            <span class="k-io">cout</span> <span class="k-op">&lt;&lt;</span> <span class="k-str">"31 days"</span> <span class="k-op">&lt;&lt;</span> <span class="k-io">endl</span>;
+            <span class="k-word">break</span>;
+        <span class="k-word">case</span> <span class="k-num">4</span>: <span class="k-word">case</span> <span class="k-num">6</span>: <span class="k-word">case</span> <span class="k-num">9</span>: <span class="k-word">case</span> <span class="k-num">11</span>:
+            <span class="k-io">cout</span> <span class="k-op">&lt;&lt;</span> <span class="k-str">"30 days"</span> <span class="k-op">&lt;&lt;</span> <span class="k-io">endl</span>;
+            <span class="k-word">break</span>;
+        <span class="k-word">case</span> <span class="k-num">2</span>:
+            <span class="k-io">cout</span> <span class="k-op">&lt;&lt;</span> <span class="k-str">"Enter year: "</span>;
+            <span class="k-io">cin</span> <span class="k-op">&gt;&gt;</span> year;
+            <span class="k-word">if</span> ((year % <span class="k-num">4</span> == <span class="k-num">0</span> &amp;&amp; year % <span class="k-num">100</span> != <span class="k-num">0</span>) || (year % <span class="k-num">400</span> == <span class="k-num">0</span>))
+                <span class="k-io">cout</span> <span class="k-op">&lt;&lt;</span> <span class="k-str">"29 days (Leap year)"</span> <span class="k-op">&lt;&lt;</span> <span class="k-io">endl</span>;
+            <span class="k-word">else</span>
+                <span class="k-io">cout</span> <span class="k-op">&lt;&lt;</span> <span class="k-str">"28 days (Normal year)"</span> <span class="k-op">&lt;&lt;</span> <span class="k-io">endl</span>;
+            <span class="k-word">break</span>;
+        <span class="k-word">default</span>:
+            <span class="k-io">cout</span> <span class="k-op">&lt;&lt;</span> <span class="k-str">"Invalid month number!"</span> <span class="k-op">&lt;&lt;</span> <span class="k-io">endl</span>;
+    }
+    <span class="k-word">return</span> <span class="k-num">0</span>;
+}</code></pre>
+      </div>
+    </section>
+  </div>
+
+  <!-- ==================== LECTURE 4 (ITERATION) ==================== -->
+  <div id="lec4" class="lecture-view">
+    <header>
+      <h1>4. هياكل التحكم والتكرار (Iteration &amp; Loops)</h1>
+      <p>بُنى التكرار: for، while، do/while، المقارنة بين break و continue، وأنماط الحلقات التكرارية المتداخلة.</p>
+    </header>
+
+    <div class="quick-jump-bar">
+      <a href="#lec4-constructs" class="jump-pill"># أنواع_الحلقات</a>
+      <a href="#lec4-for" class="jump-pill"># حلقة_for</a>
+      <a href="#lec4-while" class="jump-pill"># حلقة_while</a>
+      <a href="#lec4-dowhile" class="jump-pill"># حلقة_do_while</a>
+      <a href="#lec4-break-continue" class="jump-pill"># break_مقابل_continue</a>
+      <a href="#lec4-nested" class="jump-pill"># الحلقات_المتداخلة</a>
+    </div>
+
+    <div class="alert-box">
+      <strong>فخاخ امتحانية شائعة // خاصة بحلقات التكرار:</strong>
+      1. <strong>الفاصلة المنقوطة الخاطئة:</strong> كتابة <span class="tag">for(int i=0; i&lt;5; i++); { cout &lt;&lt; i; }</span> تُنشئ حلقة بجسم فارغ! تدور الحلقة 5 مرات دون فعل شيء، ثم تُنفذ الأقواس مرة واحدة فقط بقيمة <span class="tag">i = 5</span>.<br>
+      2. <strong>فاصلة do/while المنقوطة:</strong> بخلاف حلقاتي <span class="tag">while</span> و <span class="tag">for</span>، فإن حلقة <span class="tag">do { ... } while(cond);</span> <strong>تتطلب إلزامياً فاصلة منقوطة في نهايتها</strong>.<br>
+      3. <strong>أمر continue في حلقة while:</strong> تنفيذ <span class="tag">continue</span> داخل حلقة <span class="tag">while</span> يقفز مباشرة إلى فحص الشرط في الأعلى، <em>مما يتجاوز خطوة تحديث العداد في الأسفل</em>، ويؤدي غالباً إلى <strong>حلقة تكرار لانهائية (Infinite Loop)</strong>!
+    </div>
+
+    <section class="section-card" id="lec4-constructs">
+      <h2>4.1 بُنى التكرار الثلاث في C++</h2>
+      <p>تتيح الحلقات التكرارية إعادة تنفيذ التعليمات طالما ظل شرط الاستمرارية صائباً (<span class="tag">true</span>):</p>
+      <ul>
+        <li><strong>حلقة <span class="tag">for</span>:</strong> تكرار مضبوط بالعداد (Counter-controlled)، وهي الأنسب عندما يكون عدد مرات التكرار معلوماً بدقة مسبقاً قبل بدء الحلقة.</li>
+        <li><strong>حلقة <span class="tag">while</span>:</strong> تكرار مضبوط بالشرط يفحص الشرط قبل كل دورة (Pre-test)، ويمكن ألا تُنفذ ولا مرة واحدة إطلاقاً (0 مرات).</li>
+        <li><strong>حلقة <span class="tag">do/while</span>:</strong> تكرار مفحوص لاحقاً (Post-test) يفحص شرط الاستمرار <em>بعد</em> تنفيذ جسم الحلقة، مما يضمن <strong>تنفيذها مرة واحدة على الأقل</strong>.</li>
+      </ul>
+    </section>
+
+    <section class="section-card" id="lec4-for">
+      <h2>4.2 بنية حلقة التكرار for</h2>
+      <p>تجمع صيغة for القياسية بين التهيئة الأولية، فحص شرط الاستمرار، وخطوة التحديث داخل سطر واحد منظم:</p>
+      <div class="given-code">
+for ( ForInit ; LoopContinuationTest ; PostExpression ) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;ActionStatements;<br>
+}
+      </div>
+
+      <h3>ترتيب خطوات التنفيذ في حلقة for:</h3>
+      <ol>
+        <li><strong>التهيئة الأولية (<span class="tag">ForInit</span>):</strong> تُنفذ مرة واحدة فقط عند بداية انطلاق الحلقة.</li>
+        <li><strong>فحص الشرط (<span class="tag">ForExpr</span>):</strong> يُفحص قبل بداية كل دورة؛ إذا كان <span class="tag">true</span> يُنفذ جسم الحلقة، وإذا كان <span class="tag">false</span> تنتهي الحلقة فوراً.</li>
+        <li><strong>تنفيذ الأوامر (Action Body):</strong> الأوامر البرمجية داخل جسم الحلقة.</li>
+        <li><strong>تعبير التحديث (<span class="tag">PostExpr</span>):</strong> يُنفذ <em>بعد اكتمال</em> جسم الحلقة (عادة زيادة أو نقصان العداد).</li>
+        <li>يعود المسار إلى الخطوة رقم 2 وتتكرر العملية.</li>
+      </ol>
+
+      <div class="key-points">
+        <strong>معامل الفاصلة في حلقة for:</strong><br>
+        يمكن استخدام الفاصلة العادية لدمج عدة متغيرات في خطوتي التهيئة والتحديث:<br>
+        <span class="tag">for (int i = 0, j = 0; j + i &lt;= 10; j++, i++)</span>
+      </div>
+
+      <div class="hud-label">SAMPLE CODE // FOR LOOP SUMMATIONS</div>
+      <div class="code-container">
+        <div class="terminal-header">
+          <div class="terminal-dots"><div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div></div>
+          <span class="terminal-title">for_examples.cpp</span>
+          <button class="copy-btn" onclick="copyCode(this)">نسخ الكود</button>
+        </div>
+        <pre><code><span class="k-dir">#include</span> <span class="k-hdr">&lt;iostream&gt;</span>
+<span class="k-word">using namespace</span> std;
+
+<span class="k-type">int</span> main() {
+    <span class="k-cmt">// 1. جمع الأعداد الزوجية من 0 حتى 100</span>
+    <span class="k-type">int</span> evenSum = <span class="k-num">0</span>;
+    <span class="k-word">for</span> (<span class="k-type">int</span> i = <span class="k-num">0</span>; i &lt;= <span class="k-num">100</span>; i += <span class="k-num">2</span>) {
+        evenSum += i;
+    }
+    <span class="k-io">cout</span> <span class="k-op">&lt;&lt;</span> <span class="k-str">"Even Sum = "</span> <span class="k-op">&lt;&lt;</span> evenSum <span class="k-op">&lt;&lt;</span> <span class="k-io">endl</span>; <span class="k-cmt">// الناتج: 2550</span>
+
+    <span class="k-cmt">// 2. طباعة حرف محدد N من المرات</span>
+    <span class="k-type">char</span> ch = <span class="k-str">'*'</span>;
+    <span class="k-type">int</span> n = <span class="k-num">5</span>;
+    <span class="k-word">for</span> (<span class="k-type">int</span> i = <span class="k-num">0</span>; i &lt; n; i++) {
+        <span class="k-io">cout</span> <span class="k-op">&lt;&lt;</span> ch;
+    }
+    <span class="k-io">cout</span> <span class="k-op">&lt;&lt;</span> <span class="k-io">endl</span>;
+    <span class="k-word">return</span> <span class="k-num">0</span>;
+}</code></pre>
+      </div>
+    </section>
+
+    <section class="section-card" id="lec4-while">
+      <h2>4.3 بنية حلقة التكرار while</h2>
+      <p>تستمر حلقة <span class="tag">while</span> في التكرار طالما كان شرط الاستمرار صائباً (<span class="tag">true</span>). وإذا كان الشرط خاطئاً من البداية، فلن يُنفذ جسم الحلقة إطلاقاً (0 مرات).</p>
+
+      <div class="hud-label">SAMPLE CODE // WHILE LOOP FACTORIAL &amp; ACCUMULATOR</div>
+      <div class="code-container">
+        <div class="terminal-header">
+          <div class="terminal-dots"><div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div></div>
+          <span class="terminal-title">factorial.cpp</span>
+          <button class="copy-btn" onclick="copyCode(this)">نسخ الكود</button>
+        </div>
+        <pre><code><span class="k-dir">#include</span> <span class="k-hdr">&lt;iostream&gt;</span>
+<span class="k-word">using namespace</span> std;
+
+<span class="k-type">int</span> main() {
+    <span class="k-type">int</span> n, fact = <span class="k-num">1</span>;
+    <span class="k-io">cout</span> <span class="k-op">&lt;&lt;</span> <span class="k-str">"Enter a positive integer: "</span>;
+    <span class="k-io">cin</span> <span class="k-op">&gt;&gt;</span> n;
+
+    <span class="k-type">int</span> temp = n;
+    <span class="k-word">while</span> (temp &gt; <span class="k-num">0</span>) {
+        fact = fact * temp;
+        temp--;
+    }
+    <span class="k-io">cout</span> <span class="k-op">&lt;&lt;</span> <span class="k-str">"Factorial of "</span> <span class="k-op">&lt;&lt;</span> n <span class="k-op">&lt;&lt;</span> <span class="k-str">" is "</span> <span class="k-op">&lt;&lt;</span> fact <span class="k-op">&lt;&lt;</span> <span class="k-io">endl</span>;
+    <span class="k-word">return</span> <span class="k-num">0</span>;
+}</code></pre>
+      </div>
+
+      <div class="key-points">
+        <strong>تحويل حلقة for إلى حلقة while:</strong><br>
+        كل حلقة <span class="tag">for (init; cond; inc) { body; }</span> يمكن كتابتها بدقة هكذا:<br>
+        <span class="tag">init; while (cond) { body; inc; }</span>
+      </div>
+    </section>
+
+    <section class="section-card" id="lec4-dowhile">
+      <h2>4.4 بنية حلقة التكرار do/while</h2>
+      <p>تفحص حلقة <span class="tag">do/while</span> شرطها <em>بعد</em> تنفيذ الأوامر، ولذلك فهي <strong>تضمن التنفيذ مرة واحدة على الأقل</strong> حتى وإن كان الشرط خاطئاً من البداية.</p>
+      <div class="given-code">
+do {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;statement(s);<br>
+} while ( condition ); // انتبه للفاصلة المنقوطة الإلزامية في النهاية!
+      </div>
+
+      <div class="hud-label">SAMPLE CODE // DO-WHILE COUNTER</div>
+      <div class="code-container">
+        <div class="terminal-header">
+          <div class="terminal-dots"><div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div></div>
+          <span class="terminal-title">dowhile_counter.cpp</span>
+          <button class="copy-btn" onclick="copyCode(this)">نسخ الكود</button>
+        </div>
+        <pre><code><span class="k-dir">#include</span> <span class="k-hdr">&lt;iostream&gt;</span>
+<span class="k-word">using namespace</span> std;
+
+<span class="k-type">int</span> main() {
+    <span class="k-type">int</span> counter = <span class="k-num">1</span>;
+    <span class="k-word">do</span> {
+        <span class="k-io">cout</span> <span class="k-op">&lt;&lt;</span> counter <span class="k-op">&lt;&lt;</span> <span class="k-str">" "</span>;
+    } <span class="k-word">while</span> (++counter &lt;= <span class="k-num">10</span>);
+    <span class="k-io">cout</span> <span class="k-op">&lt;&lt;</span> <span class="k-io">endl</span>;
+    <span class="k-word">return</span> <span class="k-num">0</span>;
+}</code></pre>
+      </div>
+    </section>
+
+    <section class="section-card" id="lec4-break-continue">
+      <h2>4.5 أوامر القفز: break مقابل continue</h2>
+      <div class="grid-2">
+        <div style="background:var(--card-alt); border:1px solid rgba(56,189,248,0.2); border-radius:8px; padding:12px;">
+          <h3 style="margin-top:0; color:var(--rose);">جملة break</h3>
+          <p>تُسبب <strong>خروجاً فورياً</strong> من حلقة <span class="tag">while</span> أو <span class="tag">for</span> أو <span class="tag">do/while</span> أو هيكل <span class="tag">switch</span>، وينتقل التنفيذ إلى أول جملة تلي الهيكل مباشرة.</p>
+        </div>
+        <div style="background:var(--card-alt); border:1px solid rgba(56,189,248,0.2); border-radius:8px; padding:12px;">
+          <h3 style="margin-top:0; color:var(--green);">جملة continue</h3>
+          <p>تقوم <strong>بتخطي باقي التعليمات المتبقية</strong> في الدورة الحالية فقط، وتنتقل فوراً إلى الدورة التالية من الحلقة التكرارية.</p>
+        </div>
+      </div>
+
+      <h3>الفارق الجوهري في سلوك continue:</h3>
+      <ul>
+        <li><strong>في حلقة <span class="tag">for</span>:</strong> تقوم <span class="tag">continue</span> بتنفيذ <em>خطوة التحديث/الزيادة أولاً</em>، ثم تنتقل لفحص شرط الاستمرار.</li>
+        <li><strong>في حلقتي <span class="tag">while</span> و <span class="tag">do/while</span>:</strong> تقفز <span class="tag">continue</span> <em>مباشرة لفحص شرط الدورة</em> متجاوزة أي خطوة لتحديث العداد بأسفل الحلقة.</li>
+      </ul>
+
+      <div class="hud-label">SAMPLE CODE // BREAK AND CONTINUE IN ACTION</div>
+      <div class="code-container">
+        <div class="terminal-header">
+          <div class="terminal-dots"><div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div></div>
+          <span class="terminal-title">jump_statements.cpp</span>
+          <button class="copy-btn" onclick="copyCode(this)">نسخ الكود</button>
+        </div>
+        <pre><code><span class="k-dir">#include</span> <span class="k-hdr">&lt;iostream&gt;</span>
+<span class="k-word">using namespace</span> std;
+
+<span class="k-type">int</span> main() {
+    <span class="k-cmt">// 1. استخدام break: إنهاء مبكر عند إدخال المستخدم للرقم 0</span>
+    <span class="k-type">int</span> sum = <span class="k-num">0</span>, val;
+    <span class="k-word">for</span> (<span class="k-type">int</span> i = <span class="k-num">0</span>; i &lt; <span class="k-num">5</span>; i++) {
+        <span class="k-io">cin</span> <span class="k-op">&gt;&gt;</span> val;
+        <span class="k-word">if</span> (val == <span class="k-num">0</span>) <span class="k-word">break</span>; <span class="k-cmt">// الخروج الفوري من الحلقة</span>
+        sum += val;
+    }
+
+    <span class="k-cmt">// 2. استخدام continue: تخطي الأرقام التي تقبل القسمة على 4</span>
+    <span class="k-word">for</span> (<span class="k-type">int</span> count = <span class="k-num">0</span>; count &lt;= <span class="k-num">12</span>; ++count) {
+        <span class="k-word">if</span> (count % <span class="k-num">4</span> == <span class="k-num">0</span>) <span class="k-word">continue</span>; <span class="k-cmt">// تخطي مضاعفات الرقم 4</span>
+        <span class="k-io">cout</span> <span class="k-op">&lt;&lt;</span> count <span class="k-op">&lt;&lt;</span> <span class="k-str">" "</span>;         <span class="k-cmt">// يطبع: 1 2 3 5 6 7 9 10 11</span>
+    }
+    <span class="k-io">cout</span> <span class="k-op">&lt;&lt;</span> <span class="k-io">endl</span>;
+    <span class="k-word">return</span> <span class="k-num">0</span>;
+}</code></pre>
+      </div>
+    </section>
+
+    <section class="section-card" id="lec4-nested">
+      <h2>4.6 الحلقات التكرارية المتداخلة والأنماط (Nested Loops)</h2>
+      <p>تُسمى الحلقة الموجودة داخل جسم حلقة أخرى بـ <strong>الحلقة المتداخلة</strong>. ومقابل كل دورة واحدة للحلقة الخارجية، تُنفذ الحلقة الداخلية جميع دوراتها بالكامل من البداية وحتى النهاية.</p>
+
+      <div class="hud-label">PATTERN 1 // 5x5 SQUARE GRID OF STARS</div>
+      <div class="code-container">
+        <div class="terminal-header">
+          <div class="terminal-dots"><div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div></div>
+          <span class="terminal-title">pattern_square.cpp</span>
+          <button class="copy-btn" onclick="copyCode(this)">نسخ الكود</button>
+        </div>
+        <pre><code><span class="k-word">for</span> (<span class="k-type">int</span> i = <span class="k-num">1</span>; i &lt;= <span class="k-num">5</span>; i++) {
+    <span class="k-word">for</span> (<span class="k-type">int</span> j = <span class="k-num">1</span>; j &lt;= <span class="k-num">5</span>; j++) {
+        <span class="k-io">cout</span> <span class="k-op">&lt;&lt;</span> <span class="k-str">"*"</span>;
+    }
+    <span class="k-io">cout</span> <span class="k-op">&lt;&lt;</span> <span class="k-io">endl</span>;
+}
+<span class="k-cmt">/* المخرجات:
+*****
+*****
+*****
+*****
+*****
+*/</span></code></pre>
+      </div>
+
+      <div class="hud-label">PATTERN 2 // RIGHT TRIANGLE (j &lt;= i)</div>
+      <div class="code-container">
+        <div class="terminal-header">
+          <div class="terminal-dots"><div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div></div>
+          <span class="terminal-title">pattern_triangle.cpp</span>
+          <button class="copy-btn" onclick="copyCode(this)">نسخ الكود</button>
+        </div>
+        <pre><code><span class="k-word">for</span> (<span class="k-type">int</span> i = <span class="k-num">1</span>; i &lt;= <span class="k-num">5</span>; i++) {
+    <span class="k-word">for</span> (<span class="k-type">int</span> j = <span class="k-num">1</span>; j &lt;= i; j++) {
+        <span class="k-io">cout</span> <span class="k-op">&lt;&lt;</span> <span class="k-str">"*"</span>;
+    }
+    <span class="k-io">cout</span> <span class="k-op">&lt;&lt;</span> <span class="k-io">endl</span>;
+}
+<span class="k-cmt">/* المخرجات:
+*
+**
+***
+****
+*****
+*/</span></code></pre>
+      </div>
+
+      <div class="hud-label">PATTERN 3 // NUMBER LADDERS (PRINTING i vs PRINTING j)</div>
+      <div class="grid-2">
+        <div class="code-container">
+          <div class="terminal-header"><span class="terminal-title">طباعة مؤشر الصف (i)</span></div>
+          <pre><code><span class="k-word">for</span> (<span class="k-type">int</span> i = <span class="k-num">1</span>; i &lt;= <span class="k-num">5</span>; i++) {
+    <span class="k-word">for</span> (<span class="k-type">int</span> j = <span class="k-num">1</span>; j &lt;= i; j++)
+        <span class="k-io">cout</span> <span class="k-op">&lt;&lt;</span> i;
+    <span class="k-io">cout</span> <span class="k-op">&lt;&lt;</span> <span class="k-io">endl</span>;
+}
+<span class="k-cmt">/* المخرجات:
+1
+22
+333
+4444
+55555
+*/</span></code></pre>
+        </div>
+        <div class="code-container">
+          <div class="terminal-header"><span class="terminal-title">طباعة مؤشر العمود (j)</span></div>
+          <pre><code><span class="k-word">for</span> (<span class="k-type">int</span> i = <span class="k-num">1</span>; i &lt;= <span class="k-num">5</span>; i++) {
+    <span class="k-word">for</span> (<span class="k-type">int</span> j = <span class="k-num">1</span>; j &lt;= i; j++)
+        <span class="k-io">cout</span> <span class="k-op">&lt;&lt;</span> j;
+    <span class="k-io">cout</span> <span class="k-op">&lt;&lt;</span> <span class="k-io">endl</span>;
+}
+<span class="k-cmt">/* المخرجات:
+1
+12
+123
+1234
+12345
+*/</span></code></pre>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- ==================== CHEAT SHEET ==================== -->
+  <div id="cheatsheet" class="lecture-view">
+    <header>
+      <h1>⚡ ورقة المراجعة السريعة ليلة الامتحان (C++ Rapid Cheat Sheet)</h1>
+      <p>جداول مرجعية سريعة لترتيب أسبقية المعاملات، مقارنة الحلقات التكرارية، سلوك جمل القفز، تصنيف الأخطاء، وقواعد المعرفات.</p>
+    </header>
+
+    <div class="quick-jump-bar">
+      <a href="#cs-precedence" class="jump-pill"># جدول_الأسبقية</a>
+      <a href="#cs-loops-compare" class="jump-pill"># مقارنة_الحلقات</a>
+      <a href="#cs-break-continue" class="jump-pill"># break_و_continue</a>
+      <a href="#cs-datatypes" class="jump-pill"># أنواع_البيانات</a>
+      <a href="#cs-rules" class="jump-pill"># قواعد_المعرفات</a>
+      <a href="#cs-errors-summary" class="jump-pill"># تصنيف_الأخطاء</a>
+    </div>
+
+    <section class="section-card" id="cs-precedence">
+      <h2>1. التسلسل الهرمي الكامل لأسبقية واتجاه تقييم المعاملات</h2>
+      <p>مرتبة تنازلياً من الأعلى أولوية (التي تُنفذ أولاً) إلى الأدنى أولوية، مع اتجاه التقييم والربط (Associativity):</p>
+      
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>المستوى</th>
+              <th>المعاملات</th>
+              <th>الفئة / الوصف</th>
+              <th>اتجاه التقييم (Associativity)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong style="color:var(--cyan)">1 (الأعلى)</strong></td>
+              <td><span class="tag">()</span> <span class="tag">[]</span></td>
+              <td>الأقواس، محددات المصفوفات، واستدعاء الدوال</td>
+              <td>من اليسار إلى اليمين (L &rarr; R)</td>
+            </tr>
+            <tr>
+              <td><strong style="color:var(--cyan)">2</strong></td>
+              <td><span class="tag">++</span> <span class="tag">--</span> <span class="tag">!</span> <span class="tag">+</span> <span class="tag">-</span> <span class="tag">sizeof</span></td>
+              <td>المعاملات الأحادية القبلية، النفي، والإشارات</td>
+              <td><strong style="color:var(--amber)">من اليمين إلى اليسار (R &rarr; L)</strong></td>
+            </tr>
+            <tr>
+              <td><strong style="color:var(--cyan)">3</strong></td>
+              <td><span class="tag">*</span> <span class="tag">/</span> <span class="tag">%</span></td>
+              <td>الضرب، القسمة، وباقي القسمة (Multiplication / Division / Modulo)</td>
+              <td>من اليسار إلى اليمين (L &rarr; R)</td>
+            </tr>
+            <tr>
+              <td><strong style="color:var(--cyan)">4</strong></td>
+              <td><span class="tag">+</span> <span class="tag">-</span></td>
+              <td>الجمع والطرح (Addition / Subtraction)</td>
+              <td>من اليسار إلى اليمين (L &rarr; R)</td>
+            </tr>
+            <tr>
+              <td><strong style="color:var(--cyan)">5</strong></td>
+              <td><span class="tag">&lt;</span> <span class="tag">&lt;=</span> <span class="tag">&gt;</span> <span class="tag">&gt;=</span></td>
+              <td>معاملات المقارنة النسبية (Relational)</td>
+              <td>من اليسار إلى اليمين (L &rarr; R)</td>
+            </tr>
+            <tr>
+              <td><strong style="color:var(--cyan)">6</strong></td>
+              <td><span class="tag">==</span> <span class="tag">!=</span></td>
+              <td>معاملات التساوي وعدم التساوي (Equality)</td>
+              <td>من اليسار إلى اليمين (L &rarr; R)</td>
+            </tr>
+            <tr>
+              <td><strong style="color:var(--cyan)">7</strong></td>
+              <td><span class="tag">&amp;&amp;</span></td>
+              <td>المنطقي AND (مع خاصية الدائرة القصيرة Short-Circuit)</td>
+              <td>من اليسار إلى اليمين (L &rarr; R)</td>
+            </tr>
+            <tr>
+              <td><strong style="color:var(--cyan)">8</strong></td>
+              <td><span class="tag">||</span></td>
+              <td>المنطقي OR (مع خاصية الدائرة القصيرة Short-Circuit)</td>
+              <td>من اليسار إلى اليمين (L &rarr; R)</td>
+            </tr>
+            <tr>
+              <td><strong style="color:var(--cyan)">9</strong></td>
+              <td><span class="tag">?:</span></td>
+              <td>المعامل الشرطي الثلاثي (Conditional Ternary)</td>
+              <td><strong style="color:var(--amber)">من اليمين إلى اليسار (R &rarr; L)</strong></td>
+            </tr>
+            <tr>
+              <td><strong style="color:var(--cyan)">10 (الأدنى)</strong></td>
+              <td><span class="tag">=</span> <span class="tag">+=</span> <span class="tag">-=</span> <span class="tag">*=</span> <span class="tag">/=</span> <span class="tag">%=</span></td>
+              <td>معاملات الإسناد والتراكم الحسابي (Assignment)</td>
+              <td><strong style="color:var(--amber)">من اليمين إلى اليسار (R &rarr; L)</strong></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="section-card" id="cs-loops-compare">
+      <h2>2. جدول المقارنة الشامل بين الحلقات التكرارية الثلاث</h2>
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>نوع الحلقة</th>
+              <th>توقيت فحص الشرط</th>
+              <th>الحد الأدنى لعدد مرات التنفيذ</th>
+              <th>فاصلة منقوطة بالنهاية؟</th>
+              <th>الاستخدام الأنسب والأساسي</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="tag">for</span></td>
+              <td>فحص مسبق (Pre-test قبل الدورة)</td>
+              <td>0</td>
+              <td>لا (<span class="tag">for(...) { }</span>)</td>
+              <td>التكرار بعداد معلوم البداية والنهاية مسبقاً.</td>
+            </tr>
+            <tr>
+              <td><span class="tag">while</span></td>
+              <td>فحص مسبق (Pre-test قبل الدورة)</td>
+              <td>0</td>
+              <td>لا (<span class="tag">while(...) { }</span>)</td>
+              <td>التكرار المشروط بقيم متغيرة وحالات غير محسوبة.</td>
+            </tr>
+            <tr>
+              <td><span class="tag">do/while</span></td>
+              <td>فحص لاحق (Post-test بعد الدورة)</td>
+              <td><strong style="color:var(--green)">1 (تنفيذ إلزامي مضمون)</strong></td>
+              <td><strong style="color:var(--rose)">نعم إلزامية (<span class="tag">while(...);</span>)</strong></td>
+              <td>التحقق من صحة مدخلات المستخدم وقوائم الاختيار.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="section-card" id="cs-break-continue">
+      <h2>3. ملخص الفروق السلوكية بين break و continue</h2>
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>الجملة</th>
+              <th>السلوك العام داخل الحلقة</th>
+              <th>الأثر داخل حلقة for</th>
+              <th>الأثر داخل while / do-while</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong style="color:var(--rose)">break</strong></td>
+              <td>إنهاء وخروج فوري ونهائي من الحلقة.</td>
+              <td>القفز مباشرة إلى ما بعد القوس المغلق للحلقة.</td>
+              <td>القفز مباشرة إلى ما بعد القوس المغلق للحلقة.</td>
+            </tr>
+            <tr>
+              <td><strong style="color:var(--green)">continue</strong></td>
+              <td>تخطي ما تبقى من الدورة الحالية فقط.</td>
+              <td>تنفيذ خطوة التحديث (<span class="tag">i++</span>) أولاً ثم فحص الشرط.</td>
+              <td>القفز <em>مباشرة لفحص الشرط</em> دون تنفيذ أي أوامر سفلية.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="section-card" id="cs-datatypes">
+      <h2>4. أنواع البيانات، أحجام الذاكرة، والدقة</h2>
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>النوع</th>
+              <th>الحجم النموذجي</th>
+              <th>الدقة / المدى التقريبي</th>
+              <th>ملاحظات هامة</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="tag">bool</span></td>
+              <td>1 بايت</td>
+              <td>true (1) أو false (0)</td>
+              <td>أي قيمة غير صفرية تُعامل كـ true.</td>
+            </tr>
+            <tr>
+              <td><span class="tag">char</span></td>
+              <td>1 بايت</td>
+              <td>من -128 إلى 127 (رمز ASCII فردي)</td>
+              <td>يُكتب بين علامتي اقتباس مفردتين مثل 'A'.</td>
+            </tr>
+            <tr>
+              <td><span class="tag">short</span></td>
+              <td>2 بايت</td>
+              <td>من -32,768 إلى 32,767</td>
+              <td>عدد صحيح قصير موفر لمساحة الذاكرة.</td>
+            </tr>
+            <tr>
+              <td><span class="tag">int</span></td>
+              <td>4 بايت</td>
+              <td>نحو &plusmn; 2.14 مليار</td>
+              <td>النوع الافتراضي الشائع للأعداد الصحيحة.</td>
+            </tr>
+            <tr>
+              <td><span class="tag">long</span></td>
+              <td>4 أو 8 بايت</td>
+              <td>أعداد صحيحة كبيرة جداً</td>
+              <td>يضمن استيعاب سعة أكبر من int.</td>
+            </tr>
+            <tr>
+              <td><span class="tag">float</span></td>
+              <td>4 بايت</td>
+              <td>دقة ~7 أرقام عشرية</td>
+              <td>عدد حقيقي مفرد الدقة بكسور عشرية.</td>
+            </tr>
+            <tr>
+              <td><span class="tag">double</span></td>
+              <td>8 بايت</td>
+              <td>دقة ~15 رقماً عشرياً</td>
+              <td>النوع الافتراضي للأعداد الكسرية ومزدوج الدقة.</td>
+            </tr>
+            <tr>
+              <td><span class="tag">long double</span></td>
+              <td>8 أو 16 بايت</td>
+              <td>دقة ممتدة فائقة</td>
+              <td>للحسابات الهندسية والعلمية عالية الحساسية.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="section-card" id="cs-rules">
+      <h2>5. القواعد الذهبية لتسمية المعرفات (Valid vs Invalid)</h2>
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>اسم المعرف</th>
+              <th>الحالة</th>
+              <th>السبب والتفسير</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="tag">area</span>, <span class="tag">student_grade</span>, <span class="tag">_counter</span></td>
+              <td><strong style="color:var(--green)">صالح &#10004;</strong></td>
+              <td>يبدأ بحرف أو شرطة سفلية ومكون من أحرف مسموحة فقط.</td>
+            </tr>
+            <tr>
+              <td><span class="tag">10rate</span>, <span class="tag">1233</span></td>
+              <td><strong style="color:var(--rose)">غير صالح &#10008;</strong></td>
+              <td>يبدأ برقم (ممنوع في C++ أن يبدأ المعرف برقم).</td>
+            </tr>
+            <tr>
+              <td><span class="tag">Shoubra faculty</span></td>
+              <td><strong style="color:var(--rose)">غير صالح &#10008;</strong></td>
+              <td>يحتوي على مسافة فاصلة. البديل الصحيح: <span class="tag">Shoubra_faculty</span>.</td>
+            </tr>
+            <tr>
+              <td><span class="tag">shoubra-faculty</span></td>
+              <td><strong style="color:var(--rose)">غير صالح &#10008;</strong></td>
+              <td>يحتوي على شرطة عادية <span class="tag">-</span> يعتبرها المترجم معامل طرح.</td>
+            </tr>
+            <tr>
+              <td><span class="tag">W#d</span>, <span class="tag">pay$</span></td>
+              <td><strong style="color:var(--rose)">غير صالح &#10008;</strong></td>
+              <td>يحتوي على رموز وعلامات خاصة غير مسموح بها (<span class="tag">#</span>, <span class="tag">$</span>).</td>
+            </tr>
+            <tr>
+              <td><span class="tag">int</span>, <span class="tag">return</span>, <span class="tag">switch</span></td>
+              <td><strong style="color:var(--rose)">غير صالح &#10008;</strong></td>
+              <td>كلمات محجوزة مسبقاً للغة البرمجة (Reserved Keywords).</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="section-card" id="cs-errors-summary">
+      <h2>6. ملخص أنواع الأخطاء البرمجية ومصطلحات الامتحان</h2>
+      <div class="key-points">
+        <ul>
+          <li><strong>أخطاء قواعدية (Syntax Errors):</strong> يكتشفها المترجم في <em>مرحلة الترجمة (Compile-time)</em>، وتمنع بناء الملف التنفيذي تماماً (مثل نسيان الفواصل المنقوطة والأخطاء الإملائية).</li>
+          <li><strong>أخطاء منطقية غير قاتلة (Non-Fatal Logic Errors):</strong> تحدث أثناء <em>التشغيل (Runtime)</em>؛ يكتمل البرنامج ولكنه ينتج <em>مخرجات خاطئة</em> (مثل كتابة <span class="tag">if(a = 4)</span>).</li>
+          <li><strong>أخطاء منطقية قاتلة (Fatal Logic Errors):</strong> تحدث أثناء <em>التشغيل (Runtime)</em>؛ <em>ينهار البرنامج ويتوقف فجأة</em> (مثل القسمة على صفر).</li>
+          <li><strong>Lvalue مقابل Rvalue:</strong> الـ Lvalues تقع يسار علامة التساوي وتملك عنواناً دائماً بالذاكرة وتقبل التعديل. الـ Rvalues تقع يميناً وتمثل قيماً لحظية أو ثوابت. <em>يمكن للـ Lvalue أن يعمل كـ Rvalue ولكن ليس العكس!</em></li>
+        </ul>
+      </div>
+    </section>
+  </div>
+
+  <!-- Floating Scroll To Top Button -->
+  <button class="scroll-top-btn" id="scrollTopBtn" onclick="scrollToTop()" title="الرجوع للأعلى">
+    ▲
+  </button>
+</main>
+
+<script>
+  function switchTab(viewId, btn) {
+    document.querySelectorAll('.lecture-view').forEach(v => v.classList.remove('active'));
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+
+    const target = document.getElementById(viewId);
+    if (target) {
+      target.classList.add('active');
+    }
+    btn.classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  let lastScrollTop = 0;
+  const navbar = document.getElementById('topNav');
+  const scrollTopBtn = document.getElementById('scrollTopBtn');
+
+  window.addEventListener('scroll', () => {
+    const currentScroll = window.pageYOffset || document.documentElement.scrollTop;
+    
+    // Auto-hide/show smart navbar on scroll
+    if (currentScroll > lastScrollTop && currentScroll > 60) {
+      navbar.classList.add('nav-hidden');
+    } else {
+      navbar.classList.remove('nav-hidden');
+    }
+    lastScrollTop = currentScroll <= 0 ? 0 : currentScroll;
+
+    // Show floating scroll button
+    if (currentScroll > 300) {
+      scrollTopBtn.classList.add('visible');
+    } else {
+      scrollTopBtn.classList.remove('visible');
+    }
+  }, false);
+
+  function scrollToTop() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function copyCode(btn) {
+    const code = btn.closest('.code-container').querySelector('code').innerText;
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(code).then(() => triggerCopied(btn));
+    } else {
+      const textarea = document.createElement('textarea');
+      textarea.value = code;
+      textarea.style.position = 'fixed';
+      textarea.style.opacity = '0';
+      document.body.appendChild(textarea);
+      textarea.select();
+      try {
+        document.execCommand('copy');
+        triggerCopied(btn);
+      } catch (err) {
+        console.error('Copy failed', err);
+      }
+      document.body.removeChild(textarea);
+    }
+  }
+
+  function triggerCopied(btn) {
+    const originalText = btn.innerText;
+    btn.innerText = 'تم النسخ!';
+    btn.style.color = '#34d399';
+    btn.style.borderColor = '#34d399';
+    setTimeout(() => {
+      btn.innerText = originalText;
+      btn.style.color = '';
+      btn.style.borderColor = '';
+    }, 1800);
+  }
+</script>
+
+</body>
+</html>

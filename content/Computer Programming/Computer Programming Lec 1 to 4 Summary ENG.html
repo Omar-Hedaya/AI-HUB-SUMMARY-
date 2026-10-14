@@ -1,0 +1,1548 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>C++ Structured Programming — Comprehensive Lectures &amp; Reference Guide</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #030712;
+      --card-bg: rgba(13, 23, 42, 0.88);
+      --card-alt: #070d1d;
+      --terminal-bg: #010409;
+      --text-body: #d5e0ee;
+      --text-muted: #8899ac;
+      --cyan: #38bdf8;
+      --green: #34d399;
+      --purple: #c084fc;
+      --amber: #fbbf24;
+      --rose: #fb7185;
+      --border: rgba(56, 189, 248, 0.22);
+      --border-bright: rgba(56, 189, 248, 0.55);
+      --font-mono: "Fira Code", "JetBrains Mono", Consolas, monospace;
+      --font-sans: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
+
+      /* C++ Syntax Tokens */
+      --syn-keyword: #f472b6;
+      --syn-directive: #c084fc;
+      --syn-header: #38bdf8;
+      --syn-string: #4ade80;
+      --syn-io: #fbbf24;
+      --syn-type: #67e8f9;
+      --syn-number: #f97316;
+      --syn-comment: #64748b;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      padding: 14px 12px 85px;
+      color: var(--text-body);
+      background-color: var(--bg);
+      background-image:
+        linear-gradient(to right, rgba(56, 189, 248, 0.05) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(56, 189, 248, 0.05) 1px, transparent 1px),
+        radial-gradient(circle at 50% 0%, rgba(56, 189, 248, 0.12), transparent 70%);
+      background-size: 32px 32px, 32px 32px, auto;
+      font-family: var(--font-sans);
+      line-height: 1.62;
+      font-size: 0.88rem;
+    }
+
+    main {
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    /* Fixed Top Navbar with Hide-on-Scroll */
+    .top-navbar {
+      position: fixed;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 1000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      max-width: calc(100vw - 18px);
+      width: max-content;
+      background: rgba(11, 18, 34, 0.92);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--border-bright);
+      border-radius: 9999px;
+      padding: 4px 6px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.65);
+      transition: top 0.3s ease, opacity 0.3s ease;
+      direction: ltr;
+    }
+
+    .top-navbar.nav-hidden {
+      top: -70px;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .nav-tabs {
+      display: flex;
+      gap: 4px;
+      align-items: center;
+      overflow-x: auto;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+      max-width: 100%;
+    }
+
+    .nav-tabs::-webkit-scrollbar { display: none; }
+
+    .nav-btn {
+      background: transparent;
+      border: 1px solid transparent;
+      color: #94a3b8;
+      font-family: var(--font-sans);
+      font-size: 0.77rem;
+      font-weight: 600;
+      padding: 5px 13px;
+      border-radius: 9999px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .nav-btn:hover {
+      color: #fff;
+      background: rgba(56, 189, 248, 0.1);
+    }
+
+    .nav-btn.active {
+      color: #030712;
+      background: var(--cyan);
+      font-weight: 700;
+      border-color: var(--cyan);
+      box-shadow: 0 0 14px rgba(56, 189, 248, 0.55);
+    }
+
+    .nav-btn .full-label { display: inline; }
+    .nav-btn .short-label { display: none; }
+
+    @media (max-width: 640px) {
+      .nav-btn {
+        padding: 5px 10px;
+        font-size: 0.72rem;
+      }
+      .nav-btn .full-label { display: none; }
+      .nav-btn .short-label { display: inline; }
+    }
+
+    .lecture-view {
+      display: none;
+      padding-top: 50px;
+    }
+
+    .lecture-view.active {
+      display: block;
+      animation: fadeIn 0.22s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    header {
+      position: relative;
+      background: rgba(15, 23, 42, 0.95);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border-bright);
+      border-radius: 12px;
+      padding: 16px 20px;
+      margin-bottom: 16px;
+      box-shadow: 0 0 35px rgba(56, 189, 248, 0.1);
+    }
+
+    h1 {
+      margin: 0 0 4px;
+      color: #ffffff;
+      font-family: var(--font-sans);
+      font-size: clamp(1.1rem, 2.8vw, 1.38rem);
+      font-weight: 700;
+      line-height: 1.35;
+      text-align: left;
+    }
+
+    header p {
+      margin: 0;
+      font-size: 0.84rem;
+      color: var(--text-muted);
+      font-family: var(--font-sans);
+    }
+
+    .quick-jump-bar {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      scrollbar-width: none;
+      padding-bottom: 4px;
+      margin-bottom: 16px;
+      direction: ltr;
+    }
+
+    .quick-jump-bar::-webkit-scrollbar { display: none; }
+
+    .jump-pill {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid rgba(56, 189, 248, 0.18);
+      padding: 3px 9px;
+      border-radius: 16px;
+      text-decoration: none;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+    }
+
+    .jump-pill:hover {
+      color: var(--cyan);
+      border-color: var(--cyan);
+      background: rgba(56, 189, 248, 0.1);
+    }
+
+    .section-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 18px 20px;
+      margin: 16px 0;
+      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.4);
+    }
+
+    h2 {
+      font-family: var(--font-sans);
+      color: var(--cyan);
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin: 0 0 10px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      text-align: left;
+    }
+
+    h2::before {
+      content: "#";
+      color: #0284c7;
+      margin-right: 4px;
+      font-family: var(--font-mono);
+    }
+
+    h3 {
+      font-family: var(--font-sans);
+      color: var(--text-body);
+      font-size: 0.92rem;
+      font-weight: 700;
+      margin: 14px 0 6px;
+    }
+
+    p {
+      margin: 6px 0;
+      color: var(--text-body);
+      font-size: 0.88rem;
+      font-family: var(--font-sans);
+    }
+
+    p strong { color: #ffffff; }
+
+    ul, ol {
+      margin: 6px 0 10px;
+      padding-left: 22px;
+      color: var(--text-body);
+      font-size: 0.86rem;
+      font-family: var(--font-sans);
+    }
+
+    li { margin-bottom: 4px; }
+
+    .tag {
+      font-family: var(--font-mono);
+      font-size: 0.76rem;
+      background: rgba(56, 189, 248, 0.14);
+      color: var(--cyan);
+      padding: 1px 6px;
+      border-radius: 4px;
+      border: 1px solid rgba(56, 189, 248, 0.28);
+      display: inline-block;
+    }
+
+    .hud-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: var(--font-mono);
+      font-size: 0.71rem;
+      font-weight: 700;
+      color: var(--green);
+      letter-spacing: 0.08em;
+      margin: 14px 0 6px;
+    }
+
+    .hud-label::before {
+      content: "▶";
+      font-size: 0.62rem;
+    }
+
+    .key-points {
+      background: rgba(3, 10, 24, 0.65);
+      border-left: 3px solid var(--purple);
+      border-radius: 6px;
+      padding: 10px 14px;
+      margin: 10px 0 12px;
+      font-size: 0.85rem;
+      font-family: var(--font-sans);
+    }
+
+    .alert-box {
+      background: rgba(251, 113, 133, 0.07);
+      border: 1px solid rgba(251, 113, 133, 0.28);
+      border-left: 3px solid var(--rose);
+      border-radius: 6px;
+      padding: 10px 14px;
+      margin: 10px 0;
+      color: #fecdd3;
+      font-size: 0.84rem;
+      font-family: var(--font-sans);
+    }
+
+    .alert-box strong {
+      color: #ffe4e6;
+      display: block;
+      margin-bottom: 3px;
+      font-family: var(--font-sans);
+    }
+
+    .given-code {
+      margin: 8px 0 12px;
+      padding: 10px 14px;
+      background: #060c18;
+      border: 1px solid #1e2d42;
+      border-left: 3px solid var(--cyan);
+      border-radius: 6px;
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      line-height: 1.55;
+      color: #cbd5e1;
+      direction: ltr;
+      text-align: left;
+      overflow-x: auto;
+    }
+
+    .table-wrapper {
+      overflow-x: auto;
+      margin: 12px 0 14px;
+      border: 1px solid #1e293b;
+      border-radius: 8px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.82rem;
+      text-align: left;
+      font-family: var(--font-sans);
+    }
+
+    th {
+      background: #090e1a;
+      color: var(--cyan);
+      font-family: var(--font-sans);
+      font-weight: 600;
+      padding: 8px 10px;
+      border-bottom: 1px solid #1e293b;
+      white-space: nowrap;
+    }
+
+    td {
+      padding: 7px 10px;
+      border-bottom: 1px solid rgba(30, 41, 59, 0.5);
+      color: #cbd5e1;
+      font-family: var(--font-sans);
+    }
+
+    tr:nth-child(even) { background: rgba(15, 23, 42, 0.4); }
+
+    .code-container {
+      margin-top: 10px;
+      border: 1px solid #334155;
+      border-radius: 9px;
+      overflow: hidden;
+      background: var(--terminal-bg);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+      direction: ltr;
+      text-align: left;
+    }
+
+    .terminal-header {
+      background: #0b1120;
+      border-bottom: 1px solid #1e293b;
+      padding: 8px 13px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .terminal-dots { display: flex; gap: 5px; }
+    .dot { width: 9px; height: 9px; border-radius: 50%; }
+    .dot.red { background: #ef4444; }
+    .dot.yellow { background: #f59e0b; }
+    .dot.green { background: #10b981; }
+
+    .terminal-title {
+      font-family: var(--font-mono);
+      font-size: 0.76rem;
+      color: #94a3b8;
+    }
+
+    .copy-btn {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid #475569;
+      color: #f1f5f9;
+      font-family: var(--font-sans);
+      font-size: 0.7rem;
+      font-weight: 600;
+      padding: 3px 8px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .copy-btn:hover {
+      color: #fff;
+      border-color: #38bdf8;
+      background: rgba(56, 189, 248, 0.15);
+    }
+
+    pre {
+      margin: 0;
+      padding: 16px 18px;
+      background: var(--terminal-bg);
+      font-family: var(--font-mono);
+      font-size: 13.5px;
+      line-height: 1.65;
+      direction: ltr;
+      text-align: left;
+      overflow-x: auto;
+      tab-size: 4;
+    }
+
+    code { font-family: inherit; }
+
+    /* Syntax Tokens */
+    .k-dir { color: var(--syn-directive); font-weight: 600; }
+    .k-hdr { color: var(--syn-header); }
+    .k-word { color: var(--syn-keyword); font-weight: 600; }
+    .k-type { color: var(--syn-type); }
+    .k-str { color: var(--syn-string); }
+    .k-io { color: var(--syn-io); }
+    .k-num { color: var(--syn-number); }
+    .k-op { color: #38bdf8; }
+    .k-cmt { color: var(--syn-comment); font-style: italic; }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin: 10px 0;
+    }
+
+    @media (max-width: 680px) {
+      .grid-2 { grid-template-columns: 1fr; }
+    }
+
+    .scroll-top-btn {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 999;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: rgba(11, 18, 34, 0.85);
+      backdrop-filter: blur(8px);
+      border: 1px solid var(--border-bright);
+      color: var(--cyan);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.25s ease;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+      font-family: var(--font-sans);
+    }
+
+    .scroll-top-btn.visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .scroll-top-btn:hover {
+      background: var(--cyan);
+      color: #030712;
+      box-shadow: 0 0 14px rgba(56, 189, 248, 0.6);
+      transform: translateY(-2px);
+    }
+
+    @media (max-width: 600px) {
+      body { padding: 10px 8px 45px; }
+      .section-card { padding: 14px 12px; }
+      pre { font-size: 12.5px; padding: 14px 12px; }
+      .scroll-top-btn { bottom: 16px; right: 16px; width: 36px; height: 36px; }
+    }
+  </style>
+</head>
+<body>
+
+<main>
+  <!-- Fixed Top Navbar with Hide-on-Scroll -->
+  <nav class="top-navbar" id="topNav">
+    <div class="nav-tabs">
+      <button class="nav-btn active" onclick="switchTab('lec1', this)">
+        <span class="full-label">Lecture 1: Intro</span>
+        <span class="short-label">Lec 1</span>
+      </button>
+      <button class="nav-btn" onclick="switchTab('lec2', this)">
+        <span class="full-label">Lecture 2: Operators</span>
+        <span class="short-label">Lec 2</span>
+      </button>
+      <button class="nav-btn" onclick="switchTab('lec3', this)">
+        <span class="full-label">Lecture 3: Selection</span>
+        <span class="short-label">Lec 3</span>
+      </button>
+      <button class="nav-btn" onclick="switchTab('lec4', this)">
+        <span class="full-label">Lecture 4: Iteration</span>
+        <span class="short-label">Lec 4</span>
+      </button>
+      <button class="nav-btn" onclick="switchTab('cheatsheet', this)">
+        <span class="full-label">⚡ Cheat Sheet</span>
+        <span class="short-label">⚡ Sheet</span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ==================== LECTURE 1 ==================== -->
+  <div id="lec1" class="lecture-view active">
+    <header>
+      <h1>1. Introduction to C++ Programming</h1>
+      <p>Program structure, variables, constants, naming identifiers, data types, and standard I/O streams.</p>
+    </header>
+
+    <div class="quick-jump-bar">
+      <a href="#lec1-structure" class="jump-pill"># Structure</a>
+      <a href="#lec1-comments" class="jump-pill"># Comments</a>
+      <a href="#lec1-variables" class="jump-pill"># Variables &amp; Const</a>
+      <a href="#lec1-types" class="jump-pill"># Data Types &amp; I/O</a>
+    </div>
+
+    <div class="alert-box">
+      <strong>EXAM PITFALL // Essential Points:</strong>
+      1. <span class="tag">const</span> variables <strong>must be initialized at declaration</strong>; writing <span class="tag">const int x; x = 5;</span> triggers a compiler error.<br>
+      2. Variables beginning with digits (e.g., <span class="tag">10rate</span>) or containing dashes (<span class="tag">shoubra-faculty</span>) are invalid identifiers.
+    </div>
+
+    <section class="section-card" id="lec1-structure">
+      <h2>1.1 Anatomy of a C++ Program</h2>
+      <p>Every standard C++ program is built from specific foundational components:</p>
+      <ul>
+        <li><strong>Preprocessor Directives:</strong> Lines starting with <span class="tag">#</span>, such as <span class="tag">#include &lt;iostream&gt;</span>, instructing the preprocessor to attach headers for input/output facilities.</li>
+        <li><strong>Main Function <span class="tag">main()</span>:</strong> The designated execution entry point where program control starts. It must return an integer (<span class="tag">int</span>).</li>
+        <li><strong>Return Statement <span class="tag">return 0;</span>:</strong> Exits the function and signals normal program termination back to the operating system.</li>
+        <li><strong>Semicolon <span class="tag">;</span>:</strong> Required punctuation mark terminating every executable statement.</li>
+      </ul>
+
+      <div class="hud-label">SAMPLE CODE // FIRST PROGRAM</div>
+      <div class="code-container">
+        <div class="terminal-header">
+          <div class="terminal-dots"><div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div></div>
+          <span class="terminal-title">welcome.cpp</span>
+          <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+        </div>
+        <pre><code><span class="k-dir">#include</span> <span class="k-hdr">&lt;iostream&gt;</span>
+<span class="k-word">using namespace</span> std;
+
+<span class="k-type">int</span> main() {
+    <span class="k-io">cout</span> <span class="k-op">&lt;&lt;</span> <span class="k-str">"Welcome to C++!\n"</span>;
+    <span class="k-word">return</span> <span class="k-num">0</span>;
+}</code></pre>
+      </div>
+    </section>
+
+    <section class="section-card" id="lec1-comments">
+      <h2>1.2 Comments in C++</h2>
+      <p>Comments are non-executable text statements ignored by the compiler, used strictly for documentation:</p>
+      <ul>
+        <li><strong>Single-Line Comment:</strong> Begins with <span class="tag">//</span> and ignores the remainder of that line.</li>
+        <li><strong>Multiple-Line (Block) Comment:</strong> Starts with <span class="tag">/*</span> and ends with <span class="tag">*/</span>, spanning across multiple lines.</li>
+      </ul>
+    </section>
+
+    <section class="section-card" id="lec1-variables">
+      <h2>1.3 Variables, Identifiers &amp; Constants</h2>
+      <p><strong>Variable:</strong> A named memory location dedicated to holding data that can change during runtime.</p>
+
+      <h3>Identifier Naming Rules:</h3>
+      <ol>
+        <li>Can only contain letters (uppercase and lowercase), digits, and the underscore character <span class="tag">_</span>.</li>
+        <li><strong>Must begin with a letter or an underscore</strong> (never a digit).</li>
+        <li>Cannot contain spaces or special punctuation symbols (<span class="tag">#</span>, <span class="tag">-</span>, <span class="tag">!</span>, <span class="tag">$</span>, <span class="tag">%</span>).</li>
+        <li>Cannot be any of the reserved language keywords (<span class="tag">int</span>, <span class="tag">class</span>, <span class="tag">cin</span>, <span class="tag">return</span>).</li>
+      </ol>
+
+      <h3>Defining Constants:</h3>
+      <ul>
+        <li>Using Preprocessor: <span class="tag">#define PI 3.14</span> (no semicolon).</li>
+        <li>Using Keyword: <span class="tag">const float PI = 3.14;</span> (initialization mandatory).</li>
+      </ul>
+    </section>
+
+    <section class="section-card" id="lec1-types">
+      <h2>1.4 Data Types &amp; Stream I/O</h2>
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Type Class</th>
+              <th>Keywords</th>
+              <th>Description &amp; Use Case</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="tag">Integer</span></td>
+              <td>short, int, long</td>
+              <td>Whole numeric values without fractional parts.</td>
+            </tr>
+            <tr>
+              <td><span class="tag">Floating-point</span></td>
+              <td>float, double, long double</td>
+              <td>Real numbers with decimal fractions across precision levels.</td>
+            </tr>
+            <tr>
+              <td><span class="tag">Character</span></td>
+              <td>char</td>
+              <td>Single character enclosed in single quotes like 'A'.</td>
+            </tr>
+            <tr>
+              <td><span class="tag">String</span></td>
+              <td>string</td>
+              <td>Sequence of characters, text, words, or sentences.</td>
+            </tr>
+            <tr>
+              <td><span class="tag">Boolean</span></td>
+              <td>bool</td>
+              <td>Logical truth values: true (1) or false (0).</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p><strong>Type Renaming with <span class="tag">typedef</span>:</strong></p>
+      <div class="given-code">
+typedef int number;<br>
+number distance = 150; // 'distance' is an integer variable
+      </div>
+
+      <h3>Stream Operators &amp; Escape Sequences:</h3>
+      <ul>
+        <li><span class="tag">cout &lt;&lt;</span> : Stream insertion operator used to push text to the screen.</li>
+        <li><span class="tag">cin &gt;&gt;</span> : Stream extraction operator used to read keyboard input into variables.</li>
+        <li><span class="tag">\n</span> : Newline character (moves cursor to next line).</li>
+        <li><span class="tag">\t</span> : Horizontal tab stop.</li>
+        <li><span class="tag">endl</span> : Inserts newline and flushes the standard output buffer.</li>
+      </ul>
+    </section>
+  </div>
+
+  <!-- ==================== LECTURE 2 ==================== -->
+  <div id="lec2" class="lecture-view">
+    <header>
+      <h1>2. C++ Operators &amp; Expressions</h1>
+      <p>Arithmetic precedence, compound assignment, increment/decrement, logical operations, and Lvalues vs Rvalues.</p>
+    </header>
+
+    <div class="quick-jump-bar">
+      <a href="#lec2-precedence" class="jump-pill"># Precedence</a>
+      <a href="#lec2-increment" class="jump-pill"># ++x vs x++</a>
+      <a href="#lec2-logical" class="jump-pill"># Logic &amp; Short-Circuit</a>
+      <a href="#lec2-traps" class="jump-pill"># Traps: == vs =</a>
+      <a href="#lec2-lvalues" class="jump-pill"># Lvalues &amp; Rvalues</a>
+    </div>
+
+    <div class="alert-box">
+      <strong>EXAM PITFALL // Essential Points:</strong>
+      1. Integer division <span class="tag">31 / 3</span> evaluates to <span class="tag">10</span> (truncating decimals), not <span class="tag">10.333</span>!<br>
+      2. Modulus <span class="tag">%</span> works <strong>only with integers</strong>. Applying it to floating-point numbers triggers a compile-time error.
+    </div>
+
+    <section class="section-card" id="lec2-precedence">
+      <h2>2.1 Arithmetic Operators &amp; Precedence</h2>
+      <p>Standard arithmetic operators: Addition (<span class="tag">+</span>), Subtraction (<span class="tag">-</span>), Multiplication (<span class="tag">*</span>), Division (<span class="tag">/</span>), and Modulo (<span class="tag">%</span>):</p>
+
+      <h3>Operator Precedence Hierarchy:</h3>
+      <ol>
+        <li>Parentheses <span class="tag">()</span>: Evaluated first from innermost to outermost.</li>
+        <li>Multiplicative (<span class="tag">*</span>, <span class="tag">/</span>, <span class="tag">%</span>): Evaluated next, left-to-right.</li>
+        <li>Additive (<span class="tag">+</span>, <span class="tag">-</span>): Evaluated last, left-to-right.</li>
+      </ol>
+    </section>
+
+    <section class="section-card" id="lec2-increment">
+      <h2>2.2 Increment &amp; Decrement Operators</h2>
+      <p>Compound assignment abbreviations: <span class="tag">c += 3</span> is equivalent to <span class="tag">c = c + 3</span>.</p>
+
+      <h3>Prefix vs Postfix Evaluation:</h3>
+      <div class="key-points">
+        <ul>
+          <li><strong>Pre-increment (<span class="tag">++x</span>):</strong> Increments the variable first, then yields the updated value for the rest of the expression.</li>
+          <li><strong>Post-increment (<span class="tag">x++</span>):</strong> Supplies the current value to the expression first, then increments the variable afterwards.</li>
+          <li>When standing alone as a single statement (e.g., <span class="tag">++c;</span> vs <span class="tag">c++;</span>), both produce the exact same final result.</li>
+        </ul>
+      </div>
+
+      <div class="hud-label">TRACE EXAMPLE // PRE VS POST</div>
+      <div class="code-container">
+        <div class="terminal-header">
+          <div class="terminal-dots"><div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div></div>
+          <span class="terminal-title">inc_trace.cpp</span>
+          <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+        </div>
+        <pre><code><span class="k-dir">#include</span> <span class="k-hdr">&lt;iostream&gt;</span>
+<span class="k-word">using namespace</span> std;
+
+<span class="k-type">int</span> main() {
+    <span class="k-type">int</span> c = <span class="k-num">5</span>;
+    <span class="k-io">cout</span> <span class="k-op">&lt;&lt;</span> ++c <span class="k-op">&lt;&lt;</span> <span class="k-io">endl</span>; <span class="k-cmt">// Prints 6 (incremented immediately)</span>
+    <span class="k-io">cout</span> <span class="k-op">&lt;&lt;</span> c++ <span class="k-op">&lt;&lt;</span> <span class="k-io">endl</span>; <span class="k-cmt">// Prints 6 (evaluates current value, then c becomes 7)</span>
+    <span class="k-io">cout</span> <span class="k-op">&lt;&lt;</span> c <span class="k-op">&lt;&lt;</span> <span class="k-io">endl</span>;   <span class="k-cmt">// Prints 7</span>
+    <span class="k-word">return</span> <span class="k-num">0</span>;
+}</code></pre>
+      </div>
+    </section>
+
+    <section class="section-card" id="lec2-logical">
+      <h2>2.3 Relational &amp; Logical Operators</h2>
+      <p>Relational operators yield boolean results: <span class="tag">true</span> (1) or <span class="tag">false</span> (0):</p>
+      <ul>
+        <li>Comparison: <span class="tag">&gt;</span>, <span class="tag">&lt;</span>, <span class="tag">&gt;=</span>, <span class="tag">&lt;=</span>, <span class="tag">==</span>, <span class="tag">!=</span>.</li>
+        <li>Logical: <span class="tag">&amp;&amp;</span> (AND), <span class="tag">||</span> (OR), <span class="tag">!</span> (NOT).</li>
+      </ul>
+
+      <h3>Short-Circuit Evaluation:</h3>
+      <p>C++ optimizes boolean evaluation by stopping early once the outcome is definitively guaranteed:</p>
+      <ul>
+        <li>In <span class="tag">&amp;&amp;</span>: If the left operand is <span class="tag">false</span>, the right operand is <strong>never evaluated</strong> (result is false).</li>
+        <li>In <span class="tag">||</span>: If the left operand is <span class="tag">true</span>, the right operand is <strong>never evaluated</strong> (result is true).</li>
+      </ul>
+    </section>
+
+    <section class="section-card" id="lec2-traps">
+      <h2>2.4 Confusing Equality (==) and Assignment (=)</h2>
+      <div class="alert-box">
+        <strong>CRITICAL LOGICAL BUG:</strong><br>
+        Writing <span class="tag">if (payCode = 4)</span> instead of <span class="tag">if (payCode == 4)</span> assigns 4 to <span class="tag">payCode</span>. Because 4 is non-zero, it evaluates as True in C++, executing the conditional branch unconditionally without any compiler warning!
+      </div>
+    </section>
+
+    <section class="section-card" id="lec2-lvalues">
+      <h2>2.5 Lvalues vs Rvalues</h2>
+      <ul>
+        <li><strong>Lvalues (Left Values):</strong> Expressions that can appear on the <em>left-hand side</em> of an assignment equation. They identify persistent, addressable memory locations whose contents can be modified (e.g. variable names like <span class="tag">x = 4;</span>).</li>
+        <li><strong>Rvalues (Right Values):</strong> Expressions that can <em>only</em> appear on the <em>right-hand side</em> of an assignment equation. They represent temporary values, calculations, or literal constants (e.g. you cannot write <span class="tag">4 = x;</span>).</li>
+        <li><strong>Cardinal Rule:</strong> <em>Lvalues can be used as Rvalues, but Rvalues cannot be used as Lvalues.</em></li>
+      </ul>
+    </section>
+  </div>
+
+  <!-- ==================== LECTURE 3 ==================== -->
+  <div id="lec3" class="lecture-view">
+    <header>
+      <h1>3. Control Structures (Selection)</h1>
+      <p>Decision-making logic: if, if/else, ternary operator, nested branching, switch structures, and error classifications.</p>
+    </header>
+
+    <div class="quick-jump-bar">
+      <a href="#lec3-if" class="jump-pill"># if &amp; if/else</a>
+      <a href="#lec3-ternary" class="jump-pill"># Ternary (?:)</a>
+      <a href="#lec3-errors" class="jump-pill"># Errors Classification</a>
+      <a href="#lec3-switch" class="jump-pill"># switch Structure</a>
+    </div>
+
+    <div class="alert-box">
+      <strong>EXAM PITFALL // Essential Points:</strong>
+      1. In a <span class="tag">switch</span> statement, the tested variable <strong>must be an integral type (int or char)</strong>. It never accepts <span class="tag">float</span>, <span class="tag">double</span>, or <span class="tag">string</span>.<br>
+      2. Omitting a <span class="tag">break</span> statement triggers <strong>fall-through</strong>, executing subsequent case statements unconditionally until the next break is reached.
+    </div>
+
+    <section class="section-card" id="lec3-if">
+      <h2>3.1 The if &amp; if/else Structures</h2>
+      <p>In C++, any non-zero value is treated as <strong>True</strong>, and zero alone is treated as <strong>False</strong>.</p>
+      <div class="key-points">
+        <strong>Compound Statements &amp; Braces:</strong><br>
+        When an <span class="tag">if</span> or <span class="tag">else</span> clause controls multiple statements, they <strong>must be wrapped inside curly braces <span class="tag">{ }</span></strong>. Without braces, only the first statement is conditioned.
+      </div>
+    </section>
+
+    <section class="section-card" id="lec3-ternary">
+      <h2>3.2 Ternary Conditional Operator (?:)</h2>
+      <p>Shorthand for simple if/else branching: <span class="tag">Condition ? Value_If_True : Value_If_False;</span></p>
+      <div class="given-code">
+cout &lt;&lt; (grade &gt;= 60 ? "Passed" : "Failed");
+      </div>
+    </section>
+
+    <section class="section-card" id="lec3-errors">
+      <h2>3.3 Complete Classification of Programming Errors</h2>
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Error Category</th>
+              <th>Detection Timing</th>
+              <th>Consequence / Behavior</th>
+              <th>Examples</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong style="color:var(--rose)">Syntax Errors</strong></td>
+              <td>Compilation Time</td>
+              <td>Caught by compiler; program fails to compile into an executable binary.</td>
+              <td>Missing semicolons <span class="tag">;</span>, misspelled keywords (<span class="tag">cot</span>), unmatched braces <span class="tag">{</span>.</td>
+            </tr>
+            <tr>
+              <td><strong style="color:var(--amber)">Non-fatal Logic Errors</strong></td>
+              <td>Runtime (Execution)</td>
+              <td>The program runs and completes normally, but produces <strong>incorrect or unintended output</strong>.</td>
+              <td>Using <span class="tag">=</span> instead of <span class="tag">==</span>, wrong precedence in averages <span class="tag">a+b/2</span> instead of <span class="tag">(a+b)/2</span>.</td>
+            </tr>
+            <tr>
+              <td><strong style="color:var(--rose)">Fatal Logic Errors</strong></td>
+              <td>Runtime (Execution)</td>
+              <td>The program <strong>crashes or terminates prematurely</strong> before executing subsequent instructions.</td>
+              <td>Division by zero (<span class="tag">x / 0</span>), infinite recursion overflowing stack memory.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="section-card" id="lec3-switch">
+      <h2>3.4 The switch Multiple-Selection Structure</h2>
+      <p>Replaces lengthy chained <span class="tag">else if</span> statements when comparing one integral expression against distinct constant values:</p>
+
+      <div class="hud-label">COMPLETE EXAMPLE // DAYS IN MONTH WITH LEAP YEAR</div>
+      <div class="code-container">
+        <div class="terminal-header">
+          <div class="terminal-dots"><div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div></div>
+          <span class="terminal-title">days_in_month.cpp</span>
+          <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+        </div>
+        <pre><code><span class="k-dir">#include</span> <span class="k-hdr">&lt;iostream&gt;</span>
+<span class="k-word">using namespace</span> std;
+
+<span class="k-type">int</span> main() {
+    <span class="k-type">int</span> month, year;
+    <span class="k-io">cout</span> <span class="k-op">&lt;&lt;</span> <span class="k-str">"Enter month number (1-12): "</span>;
+    <span class="k-io">cin</span> <span class="k-op">&gt;&gt;</span> month;
+
+    <span class="k-word">switch</span> (month) {
+        <span class="k-word">case</span> <span class="k-num">1</span>: <span class="k-word">case</span> <span class="k-num">3</span>: <span class="k-word">case</span> <span class="k-num">5</span>: <span class="k-word">case</span> <span class="k-num">7</span>:
+        <span class="k-word">case</span> <span class="k-num">8</span>: <span class="k-word">case</span> <span class="k-num">10</span>: <span class="k-word">case</span> <span class="k-num">12</span>:
+            <span class="k-io">cout</span> <span class="k-op">&lt;&lt;</span> <span class="k-str">"31 days"</span> <span class="k-op">&lt;&lt;</span> <span class="k-io">endl</span>;
+            <span class="k-word">break</span>;
+        <span class="k-word">case</span> <span class="k-num">4</span>: <span class="k-word">case</span> <span class="k-num">6</span>: <span class="k-word">case</span> <span class="k-num">9</span>: <span class="k-word">case</span> <span class="k-num">11</span>:
+            <span class="k-io">cout</span> <span class="k-op">&lt;&lt;</span> <span class="k-str">"30 days"</span> <span class="k-op">&lt;&lt;</span> <span class="k-io">endl</span>;
+            <span class="k-word">break</span>;
+        <span class="k-word">case</span> <span class="k-num">2</span>:
+            <span class="k-io">cout</span> <span class="k-op">&lt;&lt;</span> <span class="k-str">"Enter year: "</span>;
+            <span class="k-io">cin</span> <span class="k-op">&gt;&gt;</span> year;
+            <span class="k-word">if</span> ((year % <span class="k-num">4</span> == <span class="k-num">0</span> &amp;&amp; year % <span class="k-num">100</span> != <span class="k-num">0</span>) || (year % <span class="k-num">400</span> == <span class="k-num">0</span>))
+                <span class="k-io">cout</span> <span class="k-op">&lt;&lt;</span> <span class="k-str">"29 days (Leap year)"</span> <span class="k-op">&lt;&lt;</span> <span class="k-io">endl</span>;
+            <span class="k-word">else</span>
+                <span class="k-io">cout</span> <span class="k-op">&lt;&lt;</span> <span class="k-str">"28 days (Normal year)"</span> <span class="k-op">&lt;&lt;</span> <span class="k-io">endl</span>;
+            <span class="k-word">break</span>;
+        <span class="k-word">default</span>:
+            <span class="k-io">cout</span> <span class="k-op">&lt;&lt;</span> <span class="k-str">"Invalid month number!"</span> <span class="k-op">&lt;&lt;</span> <span class="k-io">endl</span>;
+    }
+    <span class="k-word">return</span> <span class="k-num">0</span>;
+}</code></pre>
+      </div>
+    </section>
+  </div>
+
+  <!-- ==================== LECTURE 4 (ITERATION) ==================== -->
+  <div id="lec4" class="lecture-view">
+    <header>
+      <h1>4. Control Structures (Iteration / Loops)</h1>
+      <p>Repetition constructs: for, while, do/while, break vs continue statements, and nested loop patterns.</p>
+    </header>
+
+    <div class="quick-jump-bar">
+      <a href="#lec4-constructs" class="jump-pill"># 3 Constructs</a>
+      <a href="#lec4-for" class="jump-pill"># For Loop</a>
+      <a href="#lec4-while" class="jump-pill"># While Loop</a>
+      <a href="#lec4-dowhile" class="jump-pill"># Do/While Loop</a>
+      <a href="#lec4-break-continue" class="jump-pill"># Break vs Continue</a>
+      <a href="#lec4-nested" class="jump-pill"># Nested Patterns</a>
+    </div>
+
+    <div class="alert-box">
+      <strong>EXAM PITFALL // Loops Edition:</strong>
+      1. <strong>Misplaced Semicolon:</strong> Writing <span class="tag">for(int i=0; i&lt;5; i++); { cout &lt;&lt; i; }</span> creates an empty loop body! The loop runs 5 times doing nothing, and the braces execute once afterwards with <span class="tag">i=5</span>.<br>
+      2. <strong>Do/While Semicolon:</strong> Unlike <span class="tag">while</span> and <span class="tag">for</span>, the <span class="tag">do { ... } while(cond);</span> <strong>strictly requires a trailing semicolon</strong>.<br>
+      3. <strong>Continue in While:</strong> In a <span class="tag">while</span> loop, executing <span class="tag">continue</span> jumps directly to the test condition, <em>skipping any increment step placed at the end of the body</em>, often causing an <strong>infinite loop</strong>!
+    </div>
+
+    <section class="section-card" id="lec4-constructs">
+      <h2>4.1 The Three C++ Iterative Constructs</h2>
+      <p>Loops allow repeated execution of code while a continuation test expression remains <span class="tag">true</span>:</p>
+      <ul>
+        <li><strong><span class="tag">for</span> statement:</strong> Counter-controlled repetition, best suited when the exact number of iterations is known before loop execution begins.</li>
+        <li><strong><span class="tag">while</span> statement:</strong> Condition-controlled repetition that pre-tests the condition before each iteration (may execute 0 times).</li>
+        <li><strong><span class="tag">do/while</span> statement:</strong> Post-tested repetition that tests the continuation condition <em>after</em> executing the body, guaranteeing <strong>at least one execution</strong>.</li>
+      </ul>
+    </section>
+
+    <section class="section-card" id="lec4-for">
+      <h2>4.2 The for Repetition Structure</h2>
+      <p>The standard syntax brings initialization, condition testing, and incrementation together into a single line:</p>
+      <div class="given-code">
+for ( ForInit ; LoopContinuationTest ; PostExpression ) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;ActionStatements;<br>
+}
+      </div>
+
+      <h3>Execution Order in a for Loop:</h3>
+      <ol>
+        <li><strong>Initialization (<span class="tag">ForInit</span>):</strong> Evaluated exactly once at the very start of loop execution.</li>
+        <li><strong>Condition (<span class="tag">ForExpr</span>):</strong> Evaluated before each iteration. If <span class="tag">true</span>, the body executes. If <span class="tag">false</span>, the loop terminates.</li>
+        <li><strong>Action Body:</strong> Executes when the condition is true.</li>
+        <li><strong>Post-Expression (<span class="tag">PostExpr</span>):</strong> Evaluated <em>after</em> the body completes (usually incrementing/decrementing the loop counter).</li>
+        <li>Flow loops back to Step 2.</li>
+      </ol>
+
+      <div class="key-points">
+        <strong>Comma Operator in for Loops:</strong><br>
+        Multiple initializations and post-expressions can be chained using commas:<br>
+        <span class="tag">for (int i = 0, j = 0; j + i &lt;= 10; j++, i++)</span>
+      </div>
+
+      <div class="hud-label">SAMPLE CODE // FOR LOOP SUMMATIONS</div>
+      <div class="code-container">
+        <div class="terminal-header">
+          <div class="terminal-dots"><div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div></div>
+          <span class="terminal-title">for_examples.cpp</span>
+          <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+        </div>
+        <pre><code><span class="k-dir">#include</span> <span class="k-hdr">&lt;iostream&gt;</span>
+<span class="k-word">using namespace</span> std;
+
+<span class="k-type">int</span> main() {
+    <span class="k-cmt">// 1. Sum even numbers from 0 to 100</span>
+    <span class="k-type">int</span> evenSum = <span class="k-num">0</span>;
+    <span class="k-word">for</span> (<span class="k-type">int</span> i = <span class="k-num">0</span>; i &lt;= <span class="k-num">100</span>; i += <span class="k-num">2</span>) {
+        evenSum += i;
+    }
+    <span class="k-io">cout</span> <span class="k-op">&lt;&lt;</span> <span class="k-str">"Even Sum = "</span> <span class="k-op">&lt;&lt;</span> evenSum <span class="k-op">&lt;&lt;</span> <span class="k-io">endl</span>; <span class="k-cmt">// 2550</span>
+
+    <span class="k-cmt">// 2. Print user character N times</span>
+    <span class="k-type">char</span> ch = <span class="k-str">'*'</span>;
+    <span class="k-type">int</span> n = <span class="k-num">5</span>;
+    <span class="k-word">for</span> (<span class="k-type">int</span> i = <span class="k-num">0</span>; i &lt; n; i++) {
+        <span class="k-io">cout</span> <span class="k-op">&lt;&lt;</span> ch;
+    }
+    <span class="k-io">cout</span> <span class="k-op">&lt;&lt;</span> <span class="k-io">endl</span>;
+    <span class="k-word">return</span> <span class="k-num">0</span>;
+}</code></pre>
+      </div>
+    </section>
+
+    <section class="section-card" id="lec4-while">
+      <h2>4.3 The while Repetition Structure</h2>
+      <p>A <span class="tag">while</span> loop executes repeatedly as long as the continuation expression evaluates to <span class="tag">true</span>. If initially false, the loop body never runs (0 executions).</p>
+
+      <div class="hud-label">SAMPLE CODE // WHILE LOOP FACTORIAL &amp; ACCUMULATOR</div>
+      <div class="code-container">
+        <div class="terminal-header">
+          <div class="terminal-dots"><div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div></div>
+          <span class="terminal-title">factorial.cpp</span>
+          <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+        </div>
+        <pre><code><span class="k-dir">#include</span> <span class="k-hdr">&lt;iostream&gt;</span>
+<span class="k-word">using namespace</span> std;
+
+<span class="k-type">int</span> main() {
+    <span class="k-type">int</span> n, fact = <span class="k-num">1</span>;
+    <span class="k-io">cout</span> <span class="k-op">&lt;&lt;</span> <span class="k-str">"Enter a positive integer: "</span>;
+    <span class="k-io">cin</span> <span class="k-op">&gt;&gt;</span> n;
+
+    <span class="k-type">int</span> temp = n;
+    <span class="k-word">while</span> (temp &gt; <span class="k-num">0</span>) {
+        fact = fact * temp;
+        temp--;
+    }
+    <span class="k-io">cout</span> <span class="k-op">&lt;&lt;</span> <span class="k-str">"Factorial of "</span> <span class="k-op">&lt;&lt;</span> n <span class="k-op">&lt;&lt;</span> <span class="k-str">" is "</span> <span class="k-op">&lt;&lt;</span> fact <span class="k-op">&lt;&lt;</span> <span class="k-io">endl</span>;
+    <span class="k-word">return</span> <span class="k-num">0</span>;
+}</code></pre>
+      </div>
+
+      <div class="key-points">
+        <strong>Rewriting a for loop as a while loop:</strong><br>
+        <span class="tag">for (init; cond; inc) { body; }</span> translates identically to:<br>
+        <span class="tag">init; while (cond) { body; inc; }</span>
+      </div>
+    </section>
+
+    <section class="section-card" id="lec4-dowhile">
+      <h2>4.4 The do/while Repetition Structure</h2>
+      <p>The <span class="tag">do/while</span> loop tests its condition <em>after</em> executing the body statement(s). Therefore, <strong>it is guaranteed to execute at least once</strong>.</p>
+      <div class="given-code">
+do {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;statement(s);<br>
+} while ( condition ); // Note the required trailing semicolon!
+      </div>
+
+      <div class="hud-label">SAMPLE CODE // DO-WHILE COUNTER</div>
+      <div class="code-container">
+        <div class="terminal-header">
+          <div class="terminal-dots"><div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div></div>
+          <span class="terminal-title">dowhile_counter.cpp</span>
+          <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+        </div>
+        <pre><code><span class="k-dir">#include</span> <span class="k-hdr">&lt;iostream&gt;</span>
+<span class="k-word">using namespace</span> std;
+
+<span class="k-type">int</span> main() {
+    <span class="k-type">int</span> counter = <span class="k-num">1</span>;
+    <span class="k-word">do</span> {
+        <span class="k-io">cout</span> <span class="k-op">&lt;&lt;</span> counter <span class="k-op">&lt;&lt;</span> <span class="k-str">" "</span>;
+    } <span class="k-word">while</span> (++counter &lt;= <span class="k-num">10</span>);
+    <span class="k-io">cout</span> <span class="k-op">&lt;&lt;</span> <span class="k-io">endl</span>;
+    <span class="k-word">return</span> <span class="k-num">0</span>;
+}</code></pre>
+      </div>
+    </section>
+
+    <section class="section-card" id="lec4-break-continue">
+      <h2>4.5 The break and continue Statements</h2>
+      <div class="grid-2">
+        <div style="background:var(--card-alt); border:1px solid rgba(56,189,248,0.2); border-radius:8px; padding:12px;">
+          <h3 style="margin-top:0; color:var(--rose);">The break Statement</h3>
+          <p>Causes an <strong>immediate exit</strong> from a <span class="tag">while</span>, <span class="tag">for</span>, <span class="tag">do/while</span>, or <span class="tag">switch</span> block. Control transfers to the first statement immediately following the enclosing structure.</p>
+        </div>
+        <div style="background:var(--card-alt); border:1px solid rgba(56,189,248,0.2); border-radius:8px; padding:12px;">
+          <h3 style="margin-top:0; color:var(--green);">The continue Statement</h3>
+          <p><strong>Skips the remaining statements</strong> in the current iteration of the loop body and proceeds with the next iteration.</p>
+        </div>
+      </div>
+
+      <h3>Difference in continue Execution:</h3>
+      <ul>
+        <li><strong>In <span class="tag">for</span> loops:</strong> <span class="tag">continue</span> triggers the <em>increment/post-expression step first</em>, then evaluates the continuation test.</li>
+        <li><strong>In <span class="tag">while</span> &amp; <span class="tag">do/while</span> loops:</strong> <span class="tag">continue</span> jumps <em>directly to the continuation test condition</em> without updating statements located lower in the loop body.</li>
+      </ul>
+
+      <div class="hud-label">SAMPLE CODE // BREAK AND CONTINUE IN ACTION</div>
+      <div class="code-container">
+        <div class="terminal-header">
+          <div class="terminal-dots"><div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div></div>
+          <span class="terminal-title">jump_statements.cpp</span>
+          <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+        </div>
+        <pre><code><span class="k-dir">#include</span> <span class="k-hdr">&lt;iostream&gt;</span>
+<span class="k-word">using namespace</span> std;
+
+<span class="k-type">int</span> main() {
+    <span class="k-cmt">// 1. break: early exit when user enters 0</span>
+    <span class="k-type">int</span> sum = <span class="k-num">0</span>, val;
+    <span class="k-word">for</span> (<span class="k-type">int</span> i = <span class="k-num">0</span>; i &lt; <span class="k-num">5</span>; i++) {
+        <span class="k-io">cin</span> <span class="k-op">&gt;&gt;</span> val;
+        <span class="k-word">if</span> (val == <span class="k-num">0</span>) <span class="k-word">break</span>; <span class="k-cmt">// exits loop early</span>
+        sum += val;
+    }
+
+    <span class="k-cmt">// 2. continue: skip numbers divisible by 4</span>
+    <span class="k-word">for</span> (<span class="k-type">int</span> count = <span class="k-num">0</span>; count &lt;= <span class="k-num">12</span>; ++count) {
+        <span class="k-word">if</span> (count % <span class="k-num">4</span> == <span class="k-num">0</span>) <span class="k-word">continue</span>; <span class="k-cmt">// skips multiples of 4</span>
+        <span class="k-io">cout</span> <span class="k-op">&lt;&lt;</span> count <span class="k-op">&lt;&lt;</span> <span class="k-str">" "</span>;         <span class="k-cmt">// prints 1 2 3 5 6 7 9 10 11</span>
+    }
+    <span class="k-io">cout</span> <span class="k-op">&lt;&lt;</span> <span class="k-io">endl</span>;
+    <span class="k-word">return</span> <span class="k-num">0</span>;
+}</code></pre>
+      </div>
+    </section>
+
+    <section class="section-card" id="lec4-nested">
+      <h2>4.6 Nested Control Structures &amp; Patterns</h2>
+      <p>A loop placed inside the body of another loop is called a <strong>nested loop</strong>. For every single iteration of the outer loop, the inner loop executes through all of its iterations from start to finish.</p>
+
+      <div class="hud-label">PATTERN 1 // 5x5 SQUARE GRID OF STARS</div>
+      <div class="code-container">
+        <div class="terminal-header">
+          <div class="terminal-dots"><div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div></div>
+          <span class="terminal-title">pattern_square.cpp</span>
+          <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+        </div>
+        <pre><code><span class="k-word">for</span> (<span class="k-type">int</span> i = <span class="k-num">1</span>; i &lt;= <span class="k-num">5</span>; i++) {
+    <span class="k-word">for</span> (<span class="k-type">int</span> j = <span class="k-num">1</span>; j &lt;= <span class="k-num">5</span>; j++) {
+        <span class="k-io">cout</span> <span class="k-op">&lt;&lt;</span> <span class="k-str">"*"</span>;
+    }
+    <span class="k-io">cout</span> <span class="k-op">&lt;&lt;</span> <span class="k-io">endl</span>;
+}
+<span class="k-cmt">/* Output:
+*****
+*****
+*****
+*****
+*****
+*/</span></code></pre>
+      </div>
+
+      <div class="hud-label">PATTERN 2 // RIGHT TRIANGLE (j &lt;= i)</div>
+      <div class="code-container">
+        <div class="terminal-header">
+          <div class="terminal-dots"><div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div></div>
+          <span class="terminal-title">pattern_triangle.cpp</span>
+          <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+        </div>
+        <pre><code><span class="k-word">for</span> (<span class="k-type">int</span> i = <span class="k-num">1</span>; i &lt;= <span class="k-num">5</span>; i++) {
+    <span class="k-word">for</span> (<span class="k-type">int</span> j = <span class="k-num">1</span>; j &lt;= i; j++) {
+        <span class="k-io">cout</span> <span class="k-op">&lt;&lt;</span> <span class="k-str">"*"</span>;
+    }
+    <span class="k-io">cout</span> <span class="k-op">&lt;&lt;</span> <span class="k-io">endl</span>;
+}
+<span class="k-cmt">/* Output:
+*
+**
+***
+****
+*****
+*/</span></code></pre>
+      </div>
+
+      <div class="hud-label">PATTERN 3 // NUMBER LADDERS (PRINTING i vs PRINTING j)</div>
+      <div class="grid-2">
+        <div class="code-container">
+          <div class="terminal-header"><span class="terminal-title">Printing row index (i)</span></div>
+          <pre><code><span class="k-word">for</span> (<span class="k-type">int</span> i = <span class="k-num">1</span>; i &lt;= <span class="k-num">5</span>; i++) {
+    <span class="k-word">for</span> (<span class="k-type">int</span> j = <span class="k-num">1</span>; j &lt;= i; j++)
+        <span class="k-io">cout</span> <span class="k-op">&lt;&lt;</span> i;
+    <span class="k-io">cout</span> <span class="k-op">&lt;&lt;</span> <span class="k-io">endl</span>;
+}
+<span class="k-cmt">/* Output:
+1
+22
+333
+4444
+55555
+*/</span></code></pre>
+        </div>
+        <div class="code-container">
+          <div class="terminal-header"><span class="terminal-title">Printing column index (j)</span></div>
+          <pre><code><span class="k-word">for</span> (<span class="k-type">int</span> i = <span class="k-num">1</span>; i &lt;= <span class="k-num">5</span>; i++) {
+    <span class="k-word">for</span> (<span class="k-type">int</span> j = <span class="k-num">1</span>; j &lt;= i; j++)
+        <span class="k-io">cout</span> <span class="k-op">&lt;&lt;</span> j;
+    <span class="k-io">cout</span> <span class="k-op">&lt;&lt;</span> <span class="k-io">endl</span>;
+}
+<span class="k-cmt">/* Output:
+1
+12
+123
+1234
+12345
+*/</span></code></pre>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- ==================== CHEAT SHEET ==================== -->
+  <div id="cheatsheet" class="lecture-view">
+    <header>
+      <h1>⚡ C++ Rapid Cheat Sheet &amp; Reference</h1>
+      <p>Quick lookup tables for operator precedence, loop comparisons, jump mechanics, error taxonomy, identifier rules, and syntax blueprints.</p>
+    </header>
+
+    <div class="quick-jump-bar">
+      <a href="#cs-precedence" class="jump-pill"># Precedence Table</a>
+      <a href="#cs-loops-compare" class="jump-pill"># Loop Comparison</a>
+      <a href="#cs-break-continue" class="jump-pill"># Break vs Continue</a>
+      <a href="#cs-datatypes" class="jump-pill"># Data Types &amp; Sizes</a>
+      <a href="#cs-rules" class="jump-pill"># Valid Identifiers</a>
+      <a href="#cs-errors-summary" class="jump-pill"># Error Types</a>
+    </div>
+
+    <section class="section-card" id="cs-precedence">
+      <h2>1. Complete Operator Precedence &amp; Associativity Hierarchy</h2>
+      <p>Ranked from highest priority (evaluated first) to lowest, including associativity direction:</p>
+      
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Level</th>
+              <th>Operators</th>
+              <th>Description / Category</th>
+              <th>Associativity</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong style="color:var(--cyan)">1 (Highest)</strong></td>
+              <td><span class="tag">()</span> <span class="tag">[]</span></td>
+              <td>Parentheses, array subscript, function call</td>
+              <td>Left to Right (L &rarr; R)</td>
+            </tr>
+            <tr>
+              <td><strong style="color:var(--cyan)">2</strong></td>
+              <td><span class="tag">++</span> <span class="tag">--</span> <span class="tag">!</span> <span class="tag">+</span> <span class="tag">-</span> <span class="tag">sizeof</span></td>
+              <td>Unary prefix, logical NOT, unary signs</td>
+              <td><strong style="color:var(--amber)">Right to Left (R &rarr; L)</strong></td>
+            </tr>
+            <tr>
+              <td><strong style="color:var(--cyan)">3</strong></td>
+              <td><span class="tag">*</span> <span class="tag">/</span> <span class="tag">%</span></td>
+              <td>Multiplication, division, modulus</td>
+              <td>Left to Right (L &rarr; R)</td>
+            </tr>
+            <tr>
+              <td><strong style="color:var(--cyan)">4</strong></td>
+              <td><span class="tag">+</span> <span class="tag">-</span></td>
+              <td>Addition and subtraction</td>
+              <td>Left to Right (L &rarr; R)</td>
+            </tr>
+            <tr>
+              <td><strong style="color:var(--cyan)">5</strong></td>
+              <td><span class="tag">&lt;</span> <span class="tag">&lt;=</span> <span class="tag">&gt;</span> <span class="tag">&gt;=</span></td>
+              <td>Relational comparisons</td>
+              <td>Left to Right (L &rarr; R)</td>
+            </tr>
+            <tr>
+              <td><strong style="color:var(--cyan)">6</strong></td>
+              <td><span class="tag">==</span> <span class="tag">!=</span></td>
+              <td>Equality and inequality comparisons</td>
+              <td>Left to Right (L &rarr; R)</td>
+            </tr>
+            <tr>
+              <td><strong style="color:var(--cyan)">7</strong></td>
+              <td><span class="tag">&amp;&amp;</span></td>
+              <td>Logical AND (short-circuiting)</td>
+              <td>Left to Right (L &rarr; R)</td>
+            </tr>
+            <tr>
+              <td><strong style="color:var(--cyan)">8</strong></td>
+              <td><span class="tag">||</span></td>
+              <td>Logical OR (short-circuiting)</td>
+              <td>Left to Right (L &rarr; R)</td>
+            </tr>
+            <tr>
+              <td><strong style="color:var(--cyan)">9</strong></td>
+              <td><span class="tag">?:</span></td>
+              <td>Conditional ternary operator</td>
+              <td><strong style="color:var(--amber)">Right to Left (R &rarr; L)</strong></td>
+            </tr>
+            <tr>
+              <td><strong style="color:var(--cyan)">10 (Lowest)</strong></td>
+              <td><span class="tag">=</span> <span class="tag">+=</span> <span class="tag">-=</span> <span class="tag">*=</span> <span class="tag">/=</span> <span class="tag">%=</span></td>
+              <td>Assignment and compound assignment</td>
+              <td><strong style="color:var(--amber)">Right to Left (R &rarr; L)</strong></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="section-card" id="cs-loops-compare">
+      <h2>2. Loop Constructs Comparison Table</h2>
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Loop Type</th>
+              <th>Evaluation Timing</th>
+              <th>Min Executions</th>
+              <th>Trailing Semicolon</th>
+              <th>Primary Use Case</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="tag">for</span></td>
+              <td>Pre-test (before each iteration)</td>
+              <td>0</td>
+              <td>No (<span class="tag">for(...) { }</span>)</td>
+              <td>Counted iterations with known bounds.</td>
+            </tr>
+            <tr>
+              <td><span class="tag">while</span></td>
+              <td>Pre-test (before each iteration)</td>
+              <td>0</td>
+              <td>No (<span class="tag">while(...) { }</span>)</td>
+              <td>Repetition controlled by dynamic conditions.</td>
+            </tr>
+            <tr>
+              <td><span class="tag">do/while</span></td>
+              <td>Post-test (after each iteration)</td>
+              <td><strong style="color:var(--green)">1 (Guaranteed)</strong></td>
+              <td><strong style="color:var(--rose)">Yes (<span class="tag">while(...);</span>)</strong></td>
+              <td>User input validation, menu prompts.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="section-card" id="cs-break-continue">
+      <h2>3. break vs continue Behavioral Summary</h2>
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Statement</th>
+              <th>Action Inside Loops</th>
+              <th>Effect in for Loop</th>
+              <th>Effect in while / do-while</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong style="color:var(--rose)">break</strong></td>
+              <td>Terminates the loop immediately.</td>
+              <td>Jumps past the loop closing brace.</td>
+              <td>Jumps past the loop closing brace.</td>
+            </tr>
+            <tr>
+              <td><strong style="color:var(--green)">continue</strong></td>
+              <td>Skips the rest of current iteration.</td>
+              <td>Executes increment (<span class="tag">i++</span>), then tests condition.</td>
+              <td>Jumps <em>directly to condition test</em> without running lower statements.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="section-card" id="cs-datatypes">
+      <h2>4. Data Types, Sizes &amp; Memory Specs</h2>
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Type</th>
+              <th>Typical Size</th>
+              <th>Precision / Approximate Range</th>
+              <th>Notes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="tag">bool</span></td>
+              <td>1 Byte</td>
+              <td>true (1) or false (0)</td>
+              <td>Any non-zero value promotes to true.</td>
+            </tr>
+            <tr>
+              <td><span class="tag">char</span></td>
+              <td>1 Byte</td>
+              <td>-128 to 127 (single ASCII character)</td>
+              <td>Written in single quotes like 'A'.</td>
+            </tr>
+            <tr>
+              <td><span class="tag">short</span></td>
+              <td>2 Bytes</td>
+              <td>-32,768 to 32,767</td>
+              <td>Compact signed integer.</td>
+            </tr>
+            <tr>
+              <td><span class="tag">int</span></td>
+              <td>4 Bytes</td>
+              <td>~ &plusmn; 2.14 billion</td>
+              <td>Default integral data type.</td>
+            </tr>
+            <tr>
+              <td><span class="tag">long</span></td>
+              <td>4 or 8 Bytes</td>
+              <td>Large signed integer</td>
+              <td>Ensures higher capacity than short.</td>
+            </tr>
+            <tr>
+              <td><span class="tag">float</span></td>
+              <td>4 Bytes</td>
+              <td>~7 decimal digits of precision</td>
+              <td>Single-precision floating-point.</td>
+            </tr>
+            <tr>
+              <td><span class="tag">double</span></td>
+              <td>8 Bytes</td>
+              <td>~15 decimal digits of precision</td>
+              <td>Standard double-precision float.</td>
+            </tr>
+            <tr>
+              <td><span class="tag">long double</span></td>
+              <td>8 or 16 Bytes</td>
+              <td>Extended precision</td>
+              <td>For intensive scientific computations.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="section-card" id="cs-rules">
+      <h2>5. Golden Rules for Identifiers</h2>
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Identifier Name</th>
+              <th>Status</th>
+              <th>Explanation / Reason</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="tag">area</span>, <span class="tag">student_grade</span>, <span class="tag">_counter</span></td>
+              <td><strong style="color:var(--green)">Valid &#10004;</strong></td>
+              <td>Begins with a letter or underscore, using allowed characters only.</td>
+            </tr>
+            <tr>
+              <td><span class="tag">10rate</span>, <span class="tag">1233</span></td>
+              <td><strong style="color:var(--rose)">Invalid &#10008;</strong></td>
+              <td>Begins with a digit (identifiers must never start with a digit).</td>
+            </tr>
+            <tr>
+              <td><span class="tag">Shoubra faculty</span></td>
+              <td><strong style="color:var(--rose)">Invalid &#10008;</strong></td>
+              <td>Contains a whitespace. Valid fix: <span class="tag">Shoubra_faculty</span>.</td>
+            </tr>
+            <tr>
+              <td><span class="tag">shoubra-faculty</span></td>
+              <td><strong style="color:var(--rose)">Invalid &#10008;</strong></td>
+              <td>Contains a hyphen <span class="tag">-</span>, which the compiler parses as subtraction.</td>
+            </tr>
+            <tr>
+              <td><span class="tag">W#d</span>, <span class="tag">pay$</span></td>
+              <td><strong style="color:var(--rose)">Invalid &#10008;</strong></td>
+              <td>Contains disallowed special characters (<span class="tag">#</span>, <span class="tag">$</span>).</td>
+            </tr>
+            <tr>
+              <td><span class="tag">int</span>, <span class="tag">return</span>, <span class="tag">switch</span></td>
+              <td><strong style="color:var(--rose)">Invalid &#10008;</strong></td>
+              <td>C++ reserved language keywords.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="section-card" id="cs-errors-summary">
+      <h2>6. Programming Errors &amp; Value Rules Summary</h2>
+      <div class="key-points">
+        <ul>
+          <li><strong>Syntax Errors:</strong> Caught at <em>compile-time</em> (missing semicolons, misspelled keywords).</li>
+          <li><strong>Non-Fatal Logic Errors:</strong> Occur at <em>runtime</em>; program runs but produces <em>wrong output</em> (e.g. <span class="tag">if(a=4)</span>).</li>
+          <li><strong>Fatal Logic Errors:</strong> Occur at <em>runtime</em>; program <em>crashes immediately</em> (e.g. dividing by zero).</li>
+          <li><strong>Lvalue vs Rvalue:</strong> Lvalues reside in persistent memory and can be assigned to (left of <span class="tag">=</span>). Rvalues are temporary values/constants (right of <span class="tag">=</span>). <em>Lvalues can act as Rvalues, but not vice versa!</em></li>
+        </ul>
+      </div>
+    </section>
+  </div>
+
+  <!-- Floating Scroll To Top Button -->
+  <button class="scroll-top-btn" id="scrollTopBtn" onclick="scrollToTop()" title="Scroll to top">
+    ▲
+  </button>
+</main>
+
+<script>
+  function switchTab(viewId, btn) {
+    document.querySelectorAll('.lecture-view').forEach(v => v.classList.remove('active'));
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+
+    const target = document.getElementById(viewId);
+    if (target) {
+      target.classList.add('active');
+    }
+    btn.classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  let lastScrollTop = 0;
+  const navbar = document.getElementById('topNav');
+  const scrollTopBtn = document.getElementById('scrollTopBtn');
+
+  window.addEventListener('scroll', () => {
+    const currentScroll = window.pageYOffset || document.documentElement.scrollTop;
+    
+    // Auto-hide/show smart navbar on scroll
+    if (currentScroll > lastScrollTop && currentScroll > 60) {
+      navbar.classList.add('nav-hidden');
+    } else {
+      navbar.classList.remove('nav-hidden');
+    }
+    lastScrollTop = currentScroll <= 0 ? 0 : currentScroll;
+
+    // Show floating scroll button
+    if (currentScroll > 300) {
+      scrollTopBtn.classList.add('visible');
+    } else {
+      scrollTopBtn.classList.remove('visible');
+    }
+  }, false);
+
+  function scrollToTop() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function copyCode(btn) {
+    const code = btn.closest('.code-container').querySelector('code').innerText;
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(code).then(() => triggerCopied(btn));
+    } else {
+      const textarea = document.createElement('textarea');
+      textarea.value = code;
+      textarea.style.position = 'fixed';
+      textarea.style.opacity = '0';
+      document.body.appendChild(textarea);
+      textarea.select();
+      try {
+        document.execCommand('copy');
+        triggerCopied(btn);
+      } catch (err) {
+        console.error('Copy failed', err);
+      }
+      document.body.removeChild(textarea);
+    }
+  }
+
+  function triggerCopied(btn) {
+    const originalText = btn.innerText;
+    btn.innerText = 'Copied!';
+    btn.style.color = '#34d399';
+    btn.style.borderColor = '#34d399';
+    setTimeout(() => {
+      btn.innerText = originalText;
+      btn.style.color = '';
+      btn.style.borderColor = '';
+    }, 1800);
+  }
+</script>
+
+</body>
+</html>
