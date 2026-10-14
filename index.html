@@ -2500,6 +2500,10 @@
         if (currentPadTop < 75) {
           body.style.paddingTop = "5rem";
         }
+        const currentPadBottom = parseInt(window.getComputedStyle(body).paddingBottom) || 0;
+        if (currentPadBottom < 90) {
+          body.style.paddingBottom = "6rem";
+        }
 
         // Inject Dynamic Responsive 100% Fluid Width & Clamping Styles inside Iframe
         let responsiveStyle = iDoc.getElementById("ai-hub-responsive-rules");
@@ -2521,6 +2525,7 @@
               margin-top: 0 !important;
               padding: 0 !important;
               padding-top: 5rem !important; /* Ensures complete clearance under the fixed top bar */
+              padding-bottom: 6rem !important; /* Generous clearance at the bottom */
               box-sizing: border-box !important;
               -webkit-text-size-adjust: 100% !important;
             }
@@ -2571,6 +2576,10 @@
             /* Push any fixed/sticky headers or sub-navbars inside the document below the 65px reader toolbar */
             .top-navbar, [class*="navbar"], [class*="nav-tabs"], header.sticky {
               top: 72px !important;
+            }
+            /* Hide duplicate scroll-to-top buttons inside iframe */
+            .scroll-top-btn, [id*="scrollTop"], [class*="scroll-to-top"] {
+              display: none !important;
             }
           `;
       } catch (err) {}
