@@ -2497,8 +2497,8 @@
         }
 
         const currentPadTop = parseInt(window.getComputedStyle(body).paddingTop) || 0;
-        if (currentPadTop < 50) {
-          body.style.paddingTop = "3.8rem";
+        if (currentPadTop < 75) {
+          body.style.paddingTop = "5rem";
         }
 
         // Inject Dynamic Responsive 100% Fluid Width & Clamping Styles inside Iframe
@@ -2506,14 +2506,21 @@
         if (!responsiveStyle) {
           responsiveStyle = iDoc.createElement("style");
           responsiveStyle.id = "ai-hub-responsive-rules";
-          responsiveStyle.textContent = `
+          if (iDoc.head) {
+            iDoc.head.appendChild(responsiveStyle);
+          } else if (iDoc.body) {
+            iDoc.body.appendChild(responsiveStyle);
+          }
+        }
+        responsiveStyle.textContent = `
             html, body {
               overflow-x: hidden !important;
               width: 100% !important;
               max-width: 100% !important;
               margin: 0 !important;
+              margin-top: 0 !important;
               padding: 0 !important;
-              padding-top: 4rem !important; /* Keep top clearance for the toolbar */
+              padding-top: 5rem !important; /* Ensures complete clearance under the fixed top bar */
               box-sizing: border-box !important;
               -webkit-text-size-adjust: 100% !important;
             }
@@ -2562,8 +2569,6 @@
               scroll-margin-top: 5.5rem !important;
             }
           `;
-          iDoc.head.appendChild(responsiveStyle);
-        }
       } catch (err) {}
     }
 
