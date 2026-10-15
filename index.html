@@ -47,6 +47,9 @@
               primary: '#6366f1'
             }
           },
+          screens: {
+            'xs': '440px',
+          },
           fontFamily: {
             sans: ['Inter', 'Noto Sans Arabic', 'Segoe UI', 'Roboto', '-apple-system', 'sans-serif'],
             mono: ['JetBrains Mono', 'Fira Code', 'monospace']
@@ -146,9 +149,25 @@
       direction: ltr !important;
       unicode-bidi: isolate !important;
     }
+
+    /* Prevent Horizontal Overflow & Viewport Jitter */
+    html, body {
+      max-width: 100vw;
+      overflow-x: hidden !important;
+      position: relative;
+    }
+
+    /* AI Disclaimer Banner */
+    .ai-disclaimer-banner {
+      background-color: rgba(245, 158, 11, 0.08);
+      border: 1px solid rgba(245, 158, 11, 0.25);
+    }
+    .ai-disclaimer-text {
+      color: #fbbf24;
+    }
   </style>
 </head>
-<body class="bg-[#090d16] text-slate-100 min-h-screen font-sans antialiased selection:bg-cyan-500/30 selection:text-cyan-200 flex flex-col">
+<body class="bg-[#090d16] text-slate-100 min-h-screen font-sans antialiased selection:bg-cyan-500/30 selection:text-cyan-200 flex flex-col overflow-x-hidden">
 
   <!-- ======================================================== -->
   <!-- 0. IN-APP NEW CONTENT TOAST (Swipe-to-Dismiss)           -->
@@ -211,14 +230,14 @@
   <!-- ======================================================== -->
   <!-- 1. MAIN APP HEADER (Branded Squircle & EN/AR Switcher)   -->
   <!-- ======================================================== -->
-  <header class="sticky top-0 z-40 bg-[#090d16]/90 backdrop-blur-md border-b border-slate-800/80 transition-colors">
-    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-3">
+  <header class="sticky top-0 z-40 bg-[#090d16]/90 backdrop-blur-md border-b border-slate-800/80 transition-colors w-full overflow-x-hidden">
+    <div class="max-w-5xl mx-auto px-3 sm:px-6 lg:px-8 min-h-[3.75rem] py-2 flex flex-wrap items-center justify-between gap-2 sm:gap-3">
       
       <!-- Brand Logo / Title (Matching custom identity from image) -->
-      <a href="./" onclick="backToFolders(event)" class="flex items-center gap-2.5 text-white hover:opacity-90 transition group">
+      <a href="./" onclick="backToFolders(event)" class="flex items-center gap-2 sm:gap-2.5 text-white hover:opacity-90 transition group shrink-0 min-w-0">
         <!-- Glowing Royal-Blue Squircle with White Open Book -->
-        <div class="w-9 h-9 rounded-xl bg-gradient-to-b from-blue-500 via-blue-600 to-blue-700 flex items-center justify-center shadow-lg shadow-blue-500/35 group-hover:scale-105 group-hover:shadow-blue-500/50 transition shrink-0 border border-blue-400/30">
-          <svg class="w-5 h-5 text-white" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round">
+        <div class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-gradient-to-b from-blue-500 via-blue-600 to-blue-700 flex items-center justify-center shadow-lg shadow-blue-500/35 group-hover:scale-105 group-hover:shadow-blue-500/50 transition shrink-0 border border-blue-400/30">
+          <svg class="w-4 h-4 sm:w-5 sm:h-5 text-white" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round">
             <path d="M 16 28 L 16 46 C 16 47 17 48 18 48 L 20 48" />
             <path d="M 48 28 L 48 46 C 48 47 47 48 46 48 L 44 48" />
             <path d="M 32 25 C 27 22 22 23 20 25 L 20 45 C 23 43 28 43 32 46 Z" />
@@ -226,42 +245,56 @@
             <circle cx="32" cy="47" r="1.5" fill="currentColor" stroke="none" />
           </svg>
         </div>
-        <span class="font-extrabold text-base tracking-tight text-white group-hover:text-sky-300 transition">
+        <span class="font-extrabold text-sm sm:text-base tracking-tight text-white group-hover:text-sky-300 transition truncate max-w-[140px] xs:max-w-none">
           AI HUB SUMMARY
         </span>
       </a>
 
       <!-- Header Right Controls -->
-      <div class="flex items-center gap-2 sm:gap-2.5">
+      <div class="flex items-center gap-1.5 sm:gap-2 shrink-0">
         
         <!-- Offline Mode Pill Indicator -->
-        <div id="offline-status-pill" class="hidden items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-mono bg-amber-950/80 border border-amber-800 text-amber-300">
-          <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
-          <span id="offline-status-text">Offline Mode</span>
+        <div id="offline-status-pill" class="hidden items-center gap-1 px-2 py-1 rounded-full text-[11px] sm:text-xs font-mono bg-amber-950/80 border border-amber-800 text-amber-300">
+          <span class="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-amber-400 animate-pulse"></span>
+          <span id="offline-status-text">Offline</span>
         </div>
+
+        <!-- Report an Issue via Telegram Button (Icon-only on mobile, icon + label on sm+) -->
+        <a 
+          id="telegram-report-btn"
+          href="https://t.me/ai_summary_help?text=Hello%2C%20I%20found%20an%20error%20in%20the%20study%20summaries%3A%20general%20notes" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          title="Report an Issue via Telegram / أبلغ عن خطأ عبر تليجرام"
+          class="flex items-center justify-center gap-1.5 px-2 sm:px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800/90 hover:bg-slate-700/90 text-slate-200 hover:text-white border border-slate-700/80 hover:border-amber-500/40 transition active:scale-95 shadow-sm shrink-0 min-w-[32px] sm:min-w-0 h-8">
+          <svg class="w-3.5 h-3.5 text-[#229ED9] shrink-0" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.121l-6.871 4.326-2.962-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.832.926z"/>
+          </svg>
+          <span id="telegram-report-label" class="hidden sm:inline font-medium whitespace-nowrap">Report</span>
+        </a>
 
         <!-- Language Toggle (AR / EN Switcher) -->
         <button 
           id="lang-toggle-btn" 
           type="button" 
           title="Switch Language / تغيير اللغة" 
-          class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-bold bg-slate-800/90 hover:bg-slate-700 text-sky-400 hover:text-sky-300 border border-slate-700/80 transition active:scale-95 shadow-sm">
+          class="flex items-center justify-center gap-1 px-2 sm:px-2.5 py-1.5 rounded-lg text-xs font-bold bg-slate-800/90 hover:bg-slate-700 text-sky-400 hover:text-sky-300 border border-slate-700/80 transition active:scale-95 shadow-sm shrink-0 min-w-[32px] sm:min-w-0 h-8">
           <svg class="w-3.5 h-3.5 text-sky-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
             <path stroke-linecap="round" stroke-linejoin="round" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129" />
           </svg>
           <span id="lang-label" class="font-bold tracking-wide">AR</span>
         </button>
 
-        <!-- Refresh Button -->
+        <!-- Refresh Button (Compact on mobile) -->
         <button 
           id="refresh-btn" 
           type="button" 
           title="Check updates / مزامنة وتحديث الملفات" 
-          class="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800/90 hover:bg-slate-700/90 text-slate-200 hover:text-white border border-slate-700/80 transition active:scale-95 shadow-sm shrink-0">
+          class="flex items-center justify-center gap-1.5 px-2 sm:px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800/90 hover:bg-slate-700/90 text-slate-200 hover:text-white border border-slate-700/80 transition active:scale-95 shadow-sm shrink-0 h-8">
           <svg id="refresh-icon" class="w-3.5 h-3.5 text-sky-400 shrink-0 transition" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
             <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
           </svg>
-          <span id="refresh-text" class="inline font-medium whitespace-nowrap">Check Updates</span>
+          <span id="refresh-text" class="hidden xs:inline font-medium whitespace-nowrap">Check Updates</span>
         </button>
 
       </div>
@@ -272,7 +305,7 @@
   <!-- ======================================================== -->
   <!-- 2. MAIN WORKSPACE CONTENT                                -->
   <!-- ======================================================== -->
-  <main id="list-view" class="flex-1 max-w-5xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 transition-opacity duration-200">
+  <main id="list-view" class="flex-1 max-w-5xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 transition-opacity duration-200 overflow-x-hidden max-w-full">
     
     <!-- 1. SEARCH BAR & CONTINUE STUDYING QUICK ACCESS -->
     <div class="mb-6 space-y-3">
@@ -342,6 +375,15 @@
           <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
           <span id="total-docs-count">Scanning...</span>
         </div>
+      </div>
+
+      <!-- AI Disclaimer Banner (Clean, compact text-only warning) -->
+      <div 
+        id="ai-disclaimer-banner" 
+        class="ai-disclaimer-banner mb-5 px-3.5 py-2.5 sm:px-4 sm:py-3 rounded-xl flex items-center gap-2.5 transition-all duration-200 shadow-sm">
+        <p id="ai-disclaimer-text" class="ai-disclaimer-text text-xs sm:text-sm leading-relaxed font-normal">
+          ⚠️ Note: AI-generated summaries and solutions may contain errors. Please verify answers and equations carefully.
+        </p>
       </div>
 
       <!-- Quick Access Priority Card: "Starred / Favorites" Only -->
@@ -607,6 +649,17 @@
               <span id="menu-download-label" class="flex-1 font-medium">Download Document</span>
             </button>
 
+            <!-- 6. Report Issue via Telegram -->
+            <button 
+              id="menu-report-issue-btn" 
+              type="button" 
+              class="w-full px-3.5 py-2.5 flex items-center gap-3 text-start text-xs sm:text-sm text-slate-200 hover:text-sky-300 hover:bg-slate-800/80 transition group">
+              <svg class="w-4 h-4 text-[#229ED9] group-hover:scale-110 transition shrink-0" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.121l-6.871 4.326-2.962-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.832.926z"/>
+              </svg>
+              <span id="menu-report-label" class="flex-1 font-medium">Report Issue</span>
+            </button>
+
           </div>
 
         </div>
@@ -747,6 +800,10 @@
         menuOptions: "Options & Tools",
         menuStar: "Star Document",
         menuUnstar: "Remove from Starred",
+        aiDisclaimer: "⚠️ Note: AI-generated summaries and solutions may contain errors. Please verify answers and equations carefully.",
+        reportIssue: "Report",
+        reportIssueTooltip: "Report an Issue via Telegram / أبلغ عن خطأ عبر تليجرام",
+        menuReportIssue: "Report Issue via Telegram",
         langNext: "AR",
         langTitle: "التبديل إلى العربية (Switch to Arabic)"
       },
@@ -791,6 +848,10 @@
         menuOptions: "الخيارات والأدوات",
         menuStar: "إضافة إلى المفضلة",
         menuUnstar: "إلغاء التثبيت من المفضلة",
+        aiDisclaimer: "⚠️ تنبيه: الملخصات والحلول مولدة بالذكاء الاصطناعي وقد تحتمل الخطأ، يُرجى مراجعة الحلول والقوانين جيداً.",
+        reportIssue: "أبلغ عن خطأ",
+        reportIssueTooltip: "الإبلاغ عن خطأ عبر تليجرام / Report an Issue via Telegram",
+        menuReportIssue: "الإبلاغ عن خطأ عبر تليجرام",
         langNext: "EN",
         langTitle: "Switch to English (التبديل للإنجليزية)"
       }
@@ -954,6 +1015,24 @@
     // UTILITY FUNCTIONS & LANGUAGE SWITCHER
     // ==========================================================
 
+    function getTelegramReportUrl(contextName) {
+      const base = "https://t.me/ai_summary_help";
+      const isArabic = currentLang === "ar";
+      let contextStr = contextName || (currentDocument ? currentDocument.title : (activeFolder && activeFolder !== "all" && activeFolder !== "starred" ? activeFolder : null));
+
+      let msg = "";
+      if (isArabic) {
+        msg = contextStr
+          ? `مرحباً، لقد وجدت خطأ في ملخصات المواد: ${contextStr}`
+          : `مرحباً، لقد وجدت خطأ في ملخصات المواد الدراسية: ملاحظات عامة`;
+      } else {
+        msg = contextStr
+          ? `Hello, I found an error in the study summaries: ${contextStr}`
+          : `Hello, I found an error in the study summaries: general notes`;
+      }
+      return `${base}?text=${encodeURIComponent(msg)}`;
+    }
+
     function toggleLanguage() {
       const nextLang = currentLang === "en" ? "ar" : "en";
       applyLanguage(nextLang);
@@ -991,6 +1070,18 @@
 
       const studySubtitle = document.getElementById("study-subtitle");
       if (studySubtitle) studySubtitle.textContent = dict.studySubtitle;
+
+      const aiDisclaimerText = document.getElementById("ai-disclaimer-text");
+      if (aiDisclaimerText) aiDisclaimerText.textContent = dict.aiDisclaimer;
+
+      const telegramReportLabel = document.getElementById("telegram-report-label");
+      if (telegramReportLabel) telegramReportLabel.textContent = dict.reportIssue;
+
+      const telegramReportBtn = document.getElementById("telegram-report-btn");
+      if (telegramReportBtn) {
+        telegramReportBtn.href = getTelegramReportUrl();
+        if (dict.reportIssueTooltip) telegramReportBtn.title = dict.reportIssueTooltip;
+      }
 
       const allDocsTitle = document.getElementById("all-docs-card-title");
       if (allDocsTitle) allDocsTitle.textContent = dict.allDocuments;
@@ -1033,6 +1124,9 @@
 
       const menuDownloadLabel = document.getElementById("menu-download-label");
       if (menuDownloadLabel) menuDownloadLabel.textContent = dict.downloadDoc;
+
+      const menuReportLabel = document.getElementById("menu-report-label");
+      if (menuReportLabel) menuReportLabel.textContent = dict.menuReportIssue;
 
       const viewerMenuBtn = document.getElementById("viewer-menu-btn");
       if (viewerMenuBtn) viewerMenuBtn.title = dict.menuOptions;
@@ -3360,6 +3454,22 @@
         e.stopPropagation();
         triggerMenuAction(downloadCurrentDocument);
       });
+
+      document.getElementById("menu-report-issue-btn")?.addEventListener("click", (e) => {
+        e.stopPropagation();
+        triggerMenuAction(() => {
+          const docTitle = currentDocument ? currentDocument.title : "";
+          const url = getTelegramReportUrl(docTitle);
+          window.open(url, "_blank", "noopener,noreferrer");
+        });
+      });
+
+      const telegramDashboardBtn = document.getElementById("telegram-report-btn");
+      if (telegramDashboardBtn) {
+        telegramDashboardBtn.addEventListener("click", () => {
+          telegramDashboardBtn.href = getTelegramReportUrl();
+        });
+      }
 
       document.getElementById("zoom-in-btn")?.addEventListener("click", zoomIn);
       document.getElementById("zoom-out-btn")?.addEventListener("click", zoomOut);
