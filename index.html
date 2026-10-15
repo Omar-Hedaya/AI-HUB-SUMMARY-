@@ -157,6 +157,22 @@
       position: relative;
     }
 
+    /* Modal Animation */
+    @keyframes modalScaleIn {
+      from { opacity: 0; transform: scale(0.95) translateY(8px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+    @keyframes modalScaleOut {
+      from { opacity: 1; transform: scale(1) translateY(0); }
+      to { opacity: 0; transform: scale(0.95) translateY(8px); }
+    }
+    .modal-enter {
+      animation: modalScaleIn 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    .modal-exit {
+      animation: modalScaleOut 0.18s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
     /* AI Disclaimer Banner */
     .ai-disclaimer-banner {
       background-color: rgba(245, 158, 11, 0.08);
@@ -259,19 +275,32 @@
           <span id="offline-status-text">Offline</span>
         </div>
 
-        <!-- Report an Issue via Telegram Button (Icon-only on mobile, icon + label on sm+) -->
+        <!-- Report an Issue via Telegram Button (Warning Triangle Icon) -->
         <a 
           id="telegram-report-btn"
           href="https://t.me/ai_summary_help?text=Hello%2C%20I%20found%20an%20error%20in%20the%20study%20summaries%3A%20general%20notes" 
           target="_blank" 
           rel="noopener noreferrer"
           title="Report an Issue via Telegram / أبلغ عن خطأ عبر تليجرام"
-          class="flex items-center justify-center gap-1.5 px-2 sm:px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800/90 hover:bg-slate-700/90 text-slate-200 hover:text-white border border-slate-700/80 hover:border-amber-500/40 transition active:scale-95 shadow-sm shrink-0 min-w-[32px] sm:min-w-0 h-8">
-          <svg class="w-3.5 h-3.5 text-[#229ED9] shrink-0" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.121l-6.871 4.326-2.962-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.832.926z"/>
+          class="flex items-center justify-center gap-1.5 px-2 sm:px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-slate-800/90 hover:bg-slate-700/90 text-slate-200 hover:text-white border border-slate-700/80 hover:border-amber-500/50 transition active:scale-95 shadow-sm shrink-0 min-w-[32px] sm:min-w-0 h-8">
+          <svg class="w-3.5 h-3.5 text-amber-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
           </svg>
           <span id="telegram-report-label" class="hidden sm:inline font-medium whitespace-nowrap">Report</span>
         </a>
+
+        <!-- GPA & Percentage Calculator Button -->
+        <button 
+          id="gpa-calc-btn" 
+          type="button" 
+          onclick="openGpaModal()"
+          title="GPA & Grade Calculator / حاسبة المعدل والنسبة المئوية" 
+          class="flex items-center justify-center gap-1.5 px-2 sm:px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-slate-800/90 hover:bg-slate-700 text-slate-200 hover:text-white border border-slate-700/80 hover:border-sky-500/50 transition active:scale-95 shadow-sm shrink-0 min-w-[32px] sm:min-w-0 h-8">
+          <svg class="w-3.5 h-3.5 text-sky-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+          </svg>
+          <span id="gpa-calc-label" class="hidden md:inline font-medium whitespace-nowrap">GPA</span>
+        </button>
 
         <!-- Language Toggle (AR / EN Switcher) -->
         <button 
@@ -290,7 +319,7 @@
           id="refresh-btn" 
           type="button" 
           title="Check updates / مزامنة وتحديث الملفات" 
-          class="flex items-center justify-center gap-1.5 px-2 sm:px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800/90 hover:bg-slate-700/90 text-slate-200 hover:text-white border border-slate-700/80 transition active:scale-95 shadow-sm shrink-0 h-8">
+          class="flex items-center justify-center gap-1.5 px-2 sm:px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-slate-800/90 hover:bg-slate-700/90 text-slate-200 hover:text-white border border-slate-700/80 transition active:scale-95 shadow-sm shrink-0 h-8">
           <svg id="refresh-icon" class="w-3.5 h-3.5 text-sky-400 shrink-0 transition" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
             <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
           </svg>
@@ -701,6 +730,225 @@
   </section>
 
   <!-- ======================================================== -->
+  <!-- 3.5 GPA & PERCENTAGE CALCULATOR MODAL                    -->
+  <!-- ======================================================== -->
+  <div 
+    id="gpa-modal-backdrop" 
+    class="fixed inset-0 z-50 hidden bg-black/75 backdrop-blur-md flex items-center justify-center p-3 sm:p-5 overflow-y-auto"
+    onclick="handleGpaBackdropClick(event)">
+    <div 
+      id="gpa-modal-card" 
+      class="relative w-full max-w-2xl bg-[#0b1222] border border-slate-800 rounded-3xl shadow-2xl overflow-hidden flex flex-col my-auto transition-all max-h-[90vh]"
+      onclick="event.stopPropagation()">
+      
+      <!-- Modal Header -->
+      <div class="px-5 py-4 border-b border-slate-800/90 flex items-center justify-between gap-3 bg-slate-900/60 sticky top-0 z-10 backdrop-blur-md">
+        <div class="flex items-center gap-3 min-w-0">
+          <div class="w-10 h-10 rounded-2xl bg-sky-500/10 border border-sky-500/30 flex items-center justify-center text-sky-400 shrink-0">
+            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+            </svg>
+          </div>
+          <div class="min-w-0">
+            <h3 class="text-base sm:text-lg font-bold text-white truncate flex items-center gap-2">
+              <span>GPA & Grade Calculator</span>
+              <span class="text-xs font-mono font-medium px-2 py-0.5 rounded-full bg-sky-950 border border-sky-800 text-sky-300">4.0 & %</span>
+            </h3>
+            <p class="text-xs text-slate-400 mt-0.5">Calculate cumulative GPA, weighted percentages, and quick grade conversions</p>
+          </div>
+        </div>
+
+        <button 
+          type="button" 
+          onclick="closeGpaModal()" 
+          title="Close / إغلاق" 
+          class="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/80 transition active:scale-95 shrink-0">
+          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+
+      <!-- Modal Body (Scrollable) -->
+      <div class="p-4 sm:p-6 overflow-y-auto space-y-5 flex-1">
+        
+        <!-- Mode Tabs & Quick Converter Switch -->
+        <div class="grid grid-cols-2 sm:grid-cols-3 gap-1.5 p-1.5 rounded-2xl bg-slate-950/80 border border-slate-800/90 text-xs font-semibold">
+          <button 
+            type="button" 
+            id="gpa-mode-letter-btn" 
+            onclick="setGpaMode('letter')" 
+            class="py-2 px-3 rounded-xl transition text-center active:scale-95 bg-sky-500 text-slate-950 font-bold shadow-sm">
+            🎓 4.0 GPA Scale
+          </button>
+          <button 
+            type="button" 
+            id="gpa-mode-percent-btn" 
+            onclick="setGpaMode('percent')" 
+            class="py-2 px-3 rounded-xl transition text-center active:scale-95 text-slate-300 hover:text-white hover:bg-slate-800/60 font-medium">
+            📊 Percentage Scale (%)
+          </button>
+          <button 
+            type="button" 
+            id="gpa-mode-converter-btn" 
+            onclick="setGpaMode('converter')" 
+            class="col-span-2 sm:col-span-1 py-2 px-3 rounded-xl transition text-center active:scale-95 text-slate-300 hover:text-white hover:bg-slate-800/60 font-medium">
+            🔄 Quick Converter
+          </button>
+        </div>
+
+        <!-- VIEW A: COURSE CALCULATOR (Letter or Percentage) -->
+        <div id="gpa-calc-courses-view" class="space-y-4">
+          
+          <!-- Summary Dashboard Cards -->
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+            <div class="p-3.5 rounded-2xl bg-slate-900/80 border border-slate-800/80 text-center">
+              <span class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider block">Total Hours</span>
+              <span id="gpa-total-credits" class="text-xl sm:text-2xl font-black text-white font-mono mt-1 block">0</span>
+            </div>
+            <div class="p-3.5 rounded-2xl bg-slate-900/80 border border-slate-800/80 text-center">
+              <span class="text-[11px] font-semibold text-sky-400 uppercase tracking-wider block">Cumulative GPA</span>
+              <span id="gpa-result-value" class="text-xl sm:text-2xl font-black text-sky-400 font-mono mt-1 block">0.00</span>
+            </div>
+            <div class="p-3.5 rounded-2xl bg-slate-900/80 border border-slate-800/80 text-center">
+              <span class="text-[11px] font-semibold text-emerald-400 uppercase tracking-wider block">Percentage</span>
+              <span id="gpa-result-percent" class="text-xl sm:text-2xl font-black text-emerald-400 font-mono mt-1 block">0.0%</span>
+            </div>
+            <div class="p-3.5 rounded-2xl bg-slate-900/80 border border-slate-800/80 text-center flex flex-col justify-center items-center">
+              <span class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider block mb-1">Standing</span>
+              <span id="gpa-standing-badge" class="px-2.5 py-0.5 rounded-lg text-xs font-bold bg-slate-800 text-slate-300 border border-slate-700">
+                Not Started
+              </span>
+            </div>
+          </div>
+
+          <!-- Courses Table Header -->
+          <div class="flex items-center justify-between pt-2">
+            <div class="flex items-center gap-2">
+              <h4 class="text-sm font-bold text-white flex items-center gap-1.5">
+                <span>Enrolled Courses</span>
+                <span id="gpa-courses-count" class="text-xs font-mono px-2 py-0.2 rounded-full bg-slate-800 text-slate-400">0</span>
+              </h4>
+            </div>
+            <div class="flex items-center gap-2">
+              <button 
+                type="button" 
+                onclick="resetGpaCalculator()" 
+                class="px-2.5 py-1.5 rounded-xl text-xs font-semibold bg-rose-950/40 hover:bg-rose-900/60 text-rose-300 border border-rose-800/50 transition active:scale-95">
+                Clear
+              </button>
+              <button 
+                type="button" 
+                onclick="addGpaCourseRow()" 
+                class="px-3 py-1.5 rounded-xl text-xs font-bold bg-sky-500 hover:bg-sky-400 text-slate-950 transition active:scale-95 shadow-sm flex items-center gap-1">
+                <span>+</span> Add Course
+              </button>
+            </div>
+          </div>
+
+          <!-- Course List Rows Container -->
+          <div id="gpa-course-rows-container" class="space-y-2.5 min-h-[140px]">
+            <!-- Dynamic Rows injected via JS -->
+          </div>
+
+          <!-- Helper Tips -->
+          <p class="text-[11px] text-slate-400 leading-relaxed bg-slate-950/40 p-2.5 rounded-xl border border-slate-800/60">
+            💡 Type course GPA points directly (0.00 to 4.00) or toggle to Percentage scale (0 to 100%). Inputs are saved automatically in local storage.
+          </p>
+
+        </div>
+
+        <!-- VIEW B: REAL-TIME CONVERTER TAB -->
+        <div id="gpa-calc-converter-view" class="hidden space-y-4">
+          <div class="p-4 rounded-2xl bg-slate-900/80 border border-slate-800/80 space-y-4">
+            <h4 class="text-sm font-bold text-white">Direct GPA ⇄ Percentage Converter</h4>
+            <p class="text-xs text-slate-400">Estimate standard Egyptian / US engineering university equivalents instantly.</p>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <!-- GPA to % -->
+              <div class="p-3.5 rounded-xl bg-slate-950/90 border border-slate-800/90 space-y-2">
+                <label class="text-xs font-semibold text-sky-300 block">Enter GPA (0.00 – 4.00)</label>
+                <div class="relative">
+                  <input 
+                    type="number" 
+                    id="converter-gpa-input" 
+                    min="0" 
+                    max="4" 
+                    step="0.01" 
+                    placeholder="e.g. 3.45"
+                    oninput="convertGpaToPercent(this.value)"
+                    class="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-sm font-mono text-white placeholder-slate-500 focus:outline-none focus:border-sky-500"
+                  />
+                </div>
+                <div class="text-xs text-slate-300 pt-1">
+                  Estimated Percentage: <span id="converter-percent-result" class="font-bold text-emerald-400 font-mono">--%</span>
+                </div>
+              </div>
+
+              <!-- % to GPA -->
+              <div class="p-3.5 rounded-xl bg-slate-950/90 border border-slate-800/90 space-y-2">
+                <label class="text-xs font-semibold text-emerald-300 block">Enter Percentage (0% – 100%)</label>
+                <div class="relative">
+                  <input 
+                    type="number" 
+                    id="converter-percent-input" 
+                    min="0" 
+                    max="100" 
+                    step="0.1" 
+                    placeholder="e.g. 84.5"
+                    oninput="convertPercentToGpa(this.value)"
+                    class="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-sm font-mono text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500"
+                  />
+                </div>
+                <div class="text-xs text-slate-300 pt-1">
+                  Estimated 4.0 GPA: <span id="converter-gpa-result" class="font-bold text-sky-400 font-mono">--</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Standard Grade Conversion Reference Table -->
+            <div class="mt-4 pt-4 border-t border-slate-800/80">
+              <span class="text-xs font-bold text-slate-300 uppercase tracking-wider block mb-2">Grading System Reference</span>
+              <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
+                <div class="p-2 rounded-lg bg-slate-950/60 border border-slate-800/60">
+                  <span class="text-emerald-400 font-bold block">A+ / A (3.7 - 4.0)</span>
+                  <span class="text-slate-400 font-mono">85% - 100% (Excellent)</span>
+                </div>
+                <div class="p-2 rounded-lg bg-slate-950/60 border border-slate-800/60">
+                  <span class="text-sky-400 font-bold block">B+ / B (3.0 - 3.69)</span>
+                  <span class="text-slate-400 font-mono">75% - 84.9% (Very Good)</span>
+                </div>
+                <div class="p-2 rounded-lg bg-slate-950/60 border border-slate-800/60">
+                  <span class="text-amber-400 font-bold block">C+ / C (2.4 - 2.99)</span>
+                  <span class="text-slate-400 font-mono">65% - 74.9% (Good)</span>
+                </div>
+                <div class="p-2 rounded-lg bg-slate-950/60 border border-slate-800/60">
+                  <span class="text-rose-400 font-bold block">D / F (&lt; 2.4)</span>
+                  <span class="text-slate-400 font-mono">&lt; 65% (Pass / Fail)</span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="px-5 py-3.5 border-t border-slate-800/90 bg-slate-900/60 flex items-center justify-between gap-3">
+        <span class="text-[11px] text-slate-500 font-mono">Saved locally</span>
+        <button 
+          type="button" 
+          onclick="closeGpaModal()" 
+          class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold transition active:scale-95">
+          Done
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ======================================================== -->
   <!-- 4. PWA INSTALL BANNER & TOAST NOTIFICATION               -->
   <!-- ======================================================== -->
   <div id="pwa-install-banner" class="hidden fixed bottom-4 left-4 right-4 sm:left-auto sm:right-6 rtl:sm:right-auto rtl:sm:left-6 sm:w-96 z-50 p-4 rounded-2xl bg-slate-900/95 border border-sky-500/40 shadow-2xl backdrop-blur-xl transition-all">
@@ -804,6 +1052,8 @@
         reportIssue: "Report",
         reportIssueTooltip: "Report an Issue via Telegram / أبلغ عن خطأ عبر تليجرام",
         menuReportIssue: "Report Issue via Telegram",
+        gpaCalc: "GPA",
+        gpaCalcTooltip: "GPA & Percentage Calculator / حاسبة المعدل والنسبة المئوية",
         langNext: "AR",
         langTitle: "التبديل إلى العربية (Switch to Arabic)"
       },
@@ -852,6 +1102,8 @@
         reportIssue: "أبلغ عن خطأ",
         reportIssueTooltip: "الإبلاغ عن خطأ عبر تليجرام / Report an Issue via Telegram",
         menuReportIssue: "الإبلاغ عن خطأ عبر تليجرام",
+        gpaCalc: "المعدل",
+        gpaCalcTooltip: "حاسبة المعدل التراكمي والنسبة المئوية / GPA Calculator",
         langNext: "EN",
         langTitle: "Switch to English (التبديل للإنجليزية)"
       }
@@ -1012,8 +1264,415 @@
     ];
 
     // ==========================================================
-    // UTILITY FUNCTIONS & LANGUAGE SWITCHER
+    // GPA & PERCENTAGE CALCULATOR LOGIC & STATE PERSISTENCE
     // ==========================================================
+    const GPA_SCALE_MAP = {
+      "A+": { point: 4.0, percent: 95 },
+      "A":  { point: 3.7, percent: 90 },
+      "A-": { point: 3.5, percent: 85 },
+      "B+": { point: 3.3, percent: 80 },
+      "B":  { point: 3.0, percent: 75 },
+      "B-": { point: 2.7, percent: 70 },
+      "C+": { point: 2.4, percent: 68 },
+      "C":  { point: 2.2, percent: 65 },
+      "C-": { point: 2.0, percent: 60 },
+      "D+": { point: 1.5, percent: 55 },
+      "D":  { point: 1.0, percent: 50 },
+      "F":  { point: 0.0, percent: 0 }
+    };
+
+    let gpaState = {
+      mode: 'letter', // 'letter' | 'percent' | 'converter'
+      courses: [
+        { id: 1, name: "Math 2", grade: "A", percent: 90, credits: 3 },
+        { id: 2, name: "Computer Programming", grade: "A+", percent: 95, credits: 3 },
+        { id: 3, name: "Principle of Electrical Engineering", grade: "B+", percent: 82, credits: 3 },
+        { id: 4, name: "Fluid & Thermal Systems", grade: "B", percent: 76, credits: 3 }
+      ]
+    };
+
+    function loadGpaState() {
+      try {
+        const saved = localStorage.getItem('aihub_gpa_state_v1');
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          if (parsed && Array.isArray(parsed.courses) && parsed.courses.length > 0) {
+            gpaState = parsed;
+          }
+        }
+      } catch (e) {}
+    }
+
+    function saveGpaState() {
+      try {
+        localStorage.setItem('aihub_gpa_state_v1', JSON.stringify(gpaState));
+      } catch (e) {}
+    }
+
+    function openGpaModal() {
+      loadGpaState();
+      renderGpaCourses();
+      calculateGpa();
+      const backdrop = document.getElementById("gpa-modal-backdrop");
+      const card = document.getElementById("gpa-modal-card");
+      if (backdrop && card) {
+        backdrop.classList.remove("hidden");
+        card.classList.remove("modal-exit");
+        card.classList.add("modal-enter");
+        document.body.style.overflow = "hidden";
+      }
+    }
+
+    function closeGpaModal() {
+      const backdrop = document.getElementById("gpa-modal-backdrop");
+      const card = document.getElementById("gpa-modal-card");
+      if (backdrop && card) {
+        card.classList.remove("modal-enter");
+        card.classList.add("modal-exit");
+        setTimeout(() => {
+          backdrop.classList.add("hidden");
+          document.body.style.overflow = "";
+        }, 160);
+      }
+    }
+
+    function handleGpaBackdropClick(e) {
+      if (e.target.id === "gpa-modal-backdrop") {
+        closeGpaModal();
+      }
+    }
+
+    function setGpaMode(mode) {
+      gpaState.mode = mode;
+      saveGpaState();
+
+      const letterBtn = document.getElementById("gpa-mode-letter-btn");
+      const percentBtn = document.getElementById("gpa-mode-percent-btn");
+      const converterBtn = document.getElementById("gpa-mode-converter-btn");
+      const coursesView = document.getElementById("gpa-calc-courses-view");
+      const converterView = document.getElementById("gpa-calc-converter-view");
+
+      const activeClasses = ["bg-sky-500", "text-slate-950", "font-bold", "shadow-sm"];
+      const inactiveClasses = ["text-slate-300", "hover:text-white", "hover:bg-slate-800/60", "font-medium"];
+
+      [letterBtn, percentBtn, converterBtn].forEach(btn => {
+        if (!btn) return;
+        btn.classList.remove(...activeClasses);
+        btn.classList.add(...inactiveClasses);
+      });
+
+      if (mode === 'letter' && letterBtn) {
+        letterBtn.classList.remove(...inactiveClasses);
+        letterBtn.classList.add(...activeClasses);
+        coursesView?.classList.remove("hidden");
+        converterView?.classList.add("hidden");
+      } else if (mode === 'percent' && percentBtn) {
+        percentBtn.classList.remove(...inactiveClasses);
+        percentBtn.classList.add(...activeClasses);
+        coursesView?.classList.remove("hidden");
+        converterView?.classList.add("hidden");
+      } else if (mode === 'converter' && converterBtn) {
+        converterBtn.classList.remove(...inactiveClasses);
+        converterBtn.classList.add(...activeClasses);
+        coursesView?.classList.add("hidden");
+        converterView?.classList.remove("hidden");
+      }
+
+      if (mode !== 'converter') {
+        renderGpaCourses();
+        calculateGpa();
+      }
+    }
+
+    function renderGpaCourses() {
+      const container = document.getElementById("gpa-course-rows-container");
+      const countEl = document.getElementById("gpa-courses-count");
+      if (!container) return;
+
+      if (countEl) countEl.textContent = gpaState.courses.length;
+
+      if (gpaState.courses.length === 0) {
+        container.innerHTML = `
+          <div class="p-8 text-center rounded-2xl border border-dashed border-slate-800 bg-slate-950/40">
+            <p class="text-xs text-slate-400">No courses added yet.</p>
+            <button type="button" onclick="addGpaCourseRow()" class="mt-2.5 px-3 py-1.5 rounded-xl bg-sky-500 hover:bg-sky-400 text-slate-950 font-bold text-xs transition active:scale-95 shadow-sm">
+              + Add First Course
+            </button>
+          </div>
+        `;
+        return;
+      }
+
+      const isPercent = gpaState.mode === 'percent';
+
+      container.innerHTML = gpaState.courses.map((course, idx) => {
+        // Resolve numeric GPA point (support legacy letter or direct point number)
+        let currentPoint = 3.5;
+        if (course.point !== undefined) {
+          currentPoint = course.point;
+        } else if (course.grade && GPA_SCALE_MAP[course.grade]) {
+          currentPoint = GPA_SCALE_MAP[course.grade].point;
+        }
+
+        return `
+          <div class="p-2.5 sm:p-3 rounded-2xl bg-slate-900/90 border border-slate-800/90 hover:border-slate-700/80 transition flex flex-wrap sm:flex-nowrap items-center gap-2 sm:gap-3 group">
+            
+            <!-- Course Index & Optional Name Input -->
+            <div class="flex items-center gap-2 flex-1 min-w-[150px]">
+              <span class="w-6 h-6 rounded-lg bg-slate-800 border border-slate-700 text-slate-400 text-[11px] font-mono font-bold flex items-center justify-center shrink-0">
+                ${idx + 1}
+              </span>
+              <input 
+                type="text" 
+                value="${course.name || ''}" 
+                placeholder="Course Title" 
+                onchange="updateCourseField(${course.id}, 'name', this.value)"
+                class="w-full px-2.5 py-1.5 rounded-xl bg-slate-950/80 border border-slate-700/80 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-sky-500 transition"
+              />
+            </div>
+
+            <!-- Grade (Direct GPA numeric input or Percentage numeric input) -->
+            <div class="w-[125px] sm:w-[135px] shrink-0">
+              ${isPercent ? `
+                <div class="relative flex items-center">
+                  <input 
+                    type="number" 
+                    min="0" 
+                    max="100" 
+                    step="0.5" 
+                    value="${course.percent !== undefined ? course.percent : 85}" 
+                    oninput="updateCourseField(${course.id}, 'percent', parseFloat(this.value) || 0)"
+                    placeholder="Percentage (0-100)" 
+                    class="w-full px-2.5 py-1.5 pr-6 rounded-xl bg-slate-950/80 border border-slate-700/80 text-xs font-mono text-emerald-400 focus:outline-none focus:border-emerald-500 transition"
+                  />
+                  <span class="absolute right-2 text-xs font-mono text-slate-500 pointer-events-none">%</span>
+                </div>
+              ` : `
+                <div class="relative flex items-center">
+                  <input 
+                    type="number" 
+                    min="0" 
+                    max="4.0" 
+                    step="0.01" 
+                    value="${currentPoint !== undefined ? currentPoint : 3.5}" 
+                    oninput="updateCourseField(${course.id}, 'point', Math.min(4.0, Math.max(0, parseFloat(this.value) || 0)))"
+                    placeholder="GPA (0-4.0)" 
+                    class="w-full px-2.5 py-1.5 pr-8 rounded-xl bg-slate-950/80 border border-slate-700/80 text-xs font-mono text-sky-400 focus:outline-none focus:border-sky-500 transition"
+                  />
+                  <span class="absolute right-2 text-[10px] font-mono text-slate-500 pointer-events-none">/4.0</span>
+                </div>
+              `}
+            </div>
+
+            <!-- Credit Hours Input -->
+            <div class="w-[85px] sm:w-[95px] shrink-0 relative flex items-center">
+              <input 
+                type="number" 
+                min="0.5" 
+                max="12" 
+                step="0.5" 
+                value="${course.credits || 3}" 
+                oninput="updateCourseField(${course.id}, 'credits', parseFloat(this.value) || 0)"
+                placeholder="Hours" 
+                class="w-full px-2.5 py-1.5 pr-7 rounded-xl bg-slate-950/80 border border-slate-700/80 text-xs font-mono text-amber-300 focus:outline-none focus:border-amber-500 transition"
+              />
+              <span class="absolute right-2 text-[10px] font-mono text-slate-500 pointer-events-none">hrs</span>
+            </div>
+
+            <!-- Delete Row Button -->
+            <button 
+              type="button" 
+              onclick="deleteGpaCourseRow(${course.id})" 
+              title="Delete Course / حذف" 
+              class="p-1.5 rounded-xl text-slate-500 hover:text-rose-400 hover:bg-rose-950/30 transition active:scale-95 shrink-0">
+              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+              </svg>
+            </button>
+
+          </div>
+        `;
+      }).join("");
+    }
+
+    function addGpaCourseRow() {
+      const newId = Date.now();
+      gpaState.courses.push({
+        id: newId,
+        name: "",
+        point: 3.5,
+        percent: 85,
+        credits: 3
+      });
+      saveGpaState();
+      renderGpaCourses();
+      calculateGpa();
+    }
+
+    function deleteGpaCourseRow(id) {
+      gpaState.courses = gpaState.courses.filter(c => c.id !== id);
+      saveGpaState();
+      renderGpaCourses();
+      calculateGpa();
+    }
+
+    function updateCourseField(id, field, value) {
+      const course = gpaState.courses.find(c => c.id === id);
+      if (course) {
+        course[field] = value;
+        // Keep point and percent synchronized
+        if (field === 'point') {
+          course.percent = parseFloat(convertGpaToPercentValue(value));
+        } else if (field === 'percent') {
+          course.point = parseFloat(convertPercentToGpaValue(value));
+        }
+        saveGpaState();
+        calculateGpa();
+      }
+    }
+
+    function resetGpaCalculator() {
+      if (confirm("Reset all courses and start new calculation? / هل تريد إعادة تعيين جميع المواد؟")) {
+        gpaState.courses = [];
+        saveGpaState();
+        renderGpaCourses();
+        calculateGpa();
+      }
+    }
+
+    function calculateGpa() {
+      let totalCredits = 0;
+      let totalQualityPoints = 0;
+      let totalWeightedPercent = 0;
+
+      const isPercentMode = gpaState.mode === 'percent';
+
+      gpaState.courses.forEach(course => {
+        const cr = parseFloat(course.credits) || 0;
+        if (cr > 0) {
+          totalCredits += cr;
+          if (isPercentMode) {
+            const p = parseFloat(course.percent) || 0;
+            totalWeightedPercent += (p * cr);
+            const pt = convertPercentToGpaValue(p);
+            totalQualityPoints += (pt * cr);
+          } else {
+            let pt = 0;
+            if (course.point !== undefined) {
+              pt = parseFloat(course.point) || 0;
+            } else if (course.grade && GPA_SCALE_MAP[course.grade]) {
+              pt = GPA_SCALE_MAP[course.grade].point;
+            }
+            pt = Math.min(4.0, Math.max(0, pt));
+            totalQualityPoints += (pt * cr);
+            const pct = convertGpaToPercentValue(pt);
+            totalWeightedPercent += (pct * cr);
+          }
+        }
+      });
+
+      const finalGpa = totalCredits > 0 ? (totalQualityPoints / totalCredits) : 0.0;
+      const finalPercent = totalCredits > 0 ? (totalWeightedPercent / totalCredits) : 0.0;
+
+      const creditsEl = document.getElementById("gpa-total-credits");
+      const gpaEl = document.getElementById("gpa-result-value");
+      const percentEl = document.getElementById("gpa-result-percent");
+      const badgeEl = document.getElementById("gpa-standing-badge");
+
+      if (creditsEl) creditsEl.textContent = totalCredits.toFixed(totalCredits % 1 === 0 ? 0 : 1);
+      if (gpaEl) gpaEl.textContent = finalGpa.toFixed(2);
+      if (percentEl) percentEl.textContent = finalPercent.toFixed(1) + "%";
+
+      if (badgeEl) {
+        if (totalCredits === 0) {
+          badgeEl.className = "px-2.5 py-0.5 rounded-lg text-xs font-bold bg-slate-800 text-slate-400 border border-slate-700";
+          badgeEl.textContent = "Not Started";
+        } else if (finalGpa >= 3.7 || finalPercent >= 85) {
+          badgeEl.className = "px-2.5 py-0.5 rounded-lg text-xs font-bold bg-emerald-950 text-emerald-300 border border-emerald-700";
+          badgeEl.textContent = "🏆 Excellent (ممتاز)";
+        } else if (finalGpa >= 3.0 || finalPercent >= 75) {
+          badgeEl.className = "px-2.5 py-0.5 rounded-lg text-xs font-bold bg-sky-950 text-sky-300 border border-sky-700";
+          badgeEl.textContent = "✨ Very Good (جيد جداً)";
+        } else if (finalGpa >= 2.4 || finalPercent >= 65) {
+          badgeEl.className = "px-2.5 py-0.5 rounded-lg text-xs font-bold bg-amber-950 text-amber-300 border border-amber-700";
+          badgeEl.textContent = "👍 Good (جيد)";
+        } else if (finalGpa >= 2.0 || finalPercent >= 50) {
+          badgeEl.className = "px-2.5 py-0.5 rounded-lg text-xs font-bold bg-indigo-950 text-indigo-300 border border-indigo-700";
+          badgeEl.textContent = "Pass (مقبول)";
+        } else {
+          badgeEl.className = "px-2.5 py-0.5 rounded-lg text-xs font-bold bg-rose-950 text-rose-300 border border-rose-700";
+          badgeEl.textContent = "Warning (ضعيف)";
+        }
+      }
+    }
+
+    // Direct GPA <-> Percentage Formulas
+    function convertPercentToGpaValue(percent) {
+      if (percent >= 90) return 4.0;
+      if (percent >= 85) return 3.7;
+      if (percent >= 80) return 3.3;
+      if (percent >= 75) return 3.0;
+      if (percent >= 70) return 2.7;
+      if (percent >= 65) return 2.4;
+      if (percent >= 60) return 2.0;
+      if (percent >= 50) return 1.0;
+      return 0.0;
+    }
+
+    function convertGpaToPercentValue(gpa) {
+      if (isNaN(gpa) || gpa <= 0) return 0;
+      let estimated = 0;
+      if (gpa >= 3.7) {
+        estimated = 85 + ((gpa - 3.7) / 0.3) * 15;
+      } else if (gpa >= 3.0) {
+        estimated = 75 + ((gpa - 3.0) / 0.7) * 9.9;
+      } else if (gpa >= 2.4) {
+        estimated = 65 + ((gpa - 2.4) / 0.6) * 9.9;
+      } else if (gpa >= 2.0) {
+        estimated = 60 + ((gpa - 2.0) / 0.4) * 4.9;
+      } else {
+        estimated = (gpa / 2.0) * 59;
+      }
+      return Math.min(100, Math.max(0, estimated));
+    }
+
+    function convertGpaToPercent(val) {
+      const gpa = parseFloat(val);
+      const resEl = document.getElementById("converter-percent-result");
+      if (!resEl) return;
+      if (isNaN(gpa) || gpa < 0) {
+        resEl.textContent = "--%";
+        return;
+      }
+      const estimated = convertGpaToPercentValue(gpa);
+      resEl.textContent = estimated.toFixed(1) + "%";
+    }
+
+    function convertPercentToGpa(val) {
+      const percent = parseFloat(val);
+      const resEl = document.getElementById("converter-gpa-result");
+      if (!resEl) return;
+      if (isNaN(percent) || percent < 0) {
+        resEl.textContent = "--";
+        return;
+      }
+      let gpa = 0;
+      if (percent >= 85) {
+        gpa = 3.7 + ((percent - 85) / 15) * 0.3;
+      } else if (percent >= 75) {
+        gpa = 3.0 + ((percent - 75) / 10) * 0.69;
+      } else if (percent >= 65) {
+        gpa = 2.4 + ((percent - 65) / 10) * 0.59;
+      } else if (percent >= 60) {
+        gpa = 2.0 + ((percent - 60) / 5) * 0.39;
+      } else if (percent >= 50) {
+        gpa = 1.0 + ((percent - 50) / 10) * 0.99;
+      } else {
+        gpa = (percent / 50) * 1.0;
+      }
+      gpa = Math.min(4.0, Math.max(0, gpa));
+      resEl.textContent = gpa.toFixed(2);
+    }
 
     function getTelegramReportUrl(contextName) {
       const base = "https://t.me/ai_summary_help";
@@ -1082,6 +1741,12 @@
         telegramReportBtn.href = getTelegramReportUrl();
         if (dict.reportIssueTooltip) telegramReportBtn.title = dict.reportIssueTooltip;
       }
+
+      const gpaCalcLabel = document.getElementById("gpa-calc-label");
+      if (gpaCalcLabel) gpaCalcLabel.textContent = dict.gpaCalc;
+
+      const gpaCalcBtn = document.getElementById("gpa-calc-btn");
+      if (gpaCalcBtn && dict.gpaCalcTooltip) gpaCalcBtn.title = dict.gpaCalcTooltip;
 
       const allDocsTitle = document.getElementById("all-docs-card-title");
       if (allDocsTitle) allDocsTitle.textContent = dict.allDocuments;
@@ -3483,6 +4148,16 @@
         if (menu && !menu.classList.contains("hidden")) {
           if (!menu.contains(e.target) && !btn?.contains(e.target)) {
             toggleViewerMenu(false);
+          }
+        }
+      });
+
+      // Escape key to dismiss modals
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") {
+          const gpaModal = document.getElementById("gpa-modal-backdrop");
+          if (gpaModal && !gpaModal.classList.contains("hidden")) {
+            closeGpaModal();
           }
         }
       });
