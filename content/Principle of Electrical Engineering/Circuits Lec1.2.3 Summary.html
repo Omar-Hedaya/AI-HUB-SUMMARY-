@@ -1,0 +1,1907 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Principles of Electrical Engineering (ELE111) — Lectures 1, 2 & 3 Fast Summary Portal — Assoc. Prof. Dr. Essam M. Shaalan</title>
+  <!-- KaTeX for ultra-fast, lightweight mathematical rendering -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+  <style>
+    :root {
+      --bg-base: #090d13;
+      --bg-card: #111722;
+      --bg-code: #0b1017;
+      --border-card: #1f2937;
+      --cyan: #38bdf8;
+      --emerald: #34d399;
+      --amber: #fbbf24;
+      --purple: #c084fc;
+      --rose: #f43f5e;
+      --text-main: #e2e8f0;
+      --text-muted: #94a3b8;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      width: 100% !important;
+      max-width: 100% !important;
+      overflow-x: hidden !important;
+      position: relative !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      background-color: var(--bg-base);
+      color: var(--text-main);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.6;
+      -webkit-text-size-adjust: 100%;
+      padding-bottom: 70px;
+    }
+    .container {
+      width: 100% !important;
+      max-width: 960px !important;
+      margin: 0 auto !important;
+      padding: 14px 10px !important;
+      box-sizing: border-box;
+      overflow-x: hidden !important;
+    }
+
+    /* Top Lecture Switcher Bar */
+    .lecture-switch-wrapper {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 8px;
+      position: sticky;
+      top: 6px;
+      z-index: 1002;
+      background: rgba(9, 13, 19, 0.95);
+      backdrop-filter: blur(14px);
+      padding: 6px;
+      border-radius: 12px;
+      border: 1px solid var(--border-card);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
+    }
+    .lecture-tab {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 10px 12px;
+      border-radius: 8px;
+      font-size: 0.88rem;
+      font-weight: 800;
+      cursor: pointer;
+      color: var(--text-muted);
+      background: #111722;
+      border: 1px solid #1e293b;
+      transition: all 0.2s ease;
+      user-select: none;
+      text-align: center;
+    }
+    .lecture-tab:hover {
+      color: #fff;
+      border-color: rgba(56, 189, 248, 0.4);
+    }
+    .lecture-tab.active {
+      background: rgba(56, 189, 248, 0.15);
+      border-color: var(--cyan);
+      color: var(--cyan);
+      box-shadow: 0 0 14px rgba(56, 189, 248, 0.25);
+    }
+
+    /* Sub-navigation Bar */
+    .nav-tabs-wrapper {
+      position: sticky;
+      top: 62px;
+      z-index: 1000;
+      background: rgba(9, 13, 19, 0.95);
+      backdrop-filter: blur(12px);
+      padding: 6px 8px;
+      border-radius: 12px;
+      border: 1px solid var(--border-card);
+      margin-bottom: 18px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .nav-tabs-wrapper::-webkit-scrollbar { display: none; }
+    .nav-tabs {
+      display: flex;
+      gap: 6px;
+      width: 100%;
+      min-width: min-content;
+    }
+    .tab-btn {
+      flex: 1;
+      padding: 8px 12px;
+      background: #111722;
+      border: 1px solid #1e293b;
+      color: var(--text-muted);
+      border-radius: 8px;
+      font-weight: 800;
+      font-size: 0.8rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      user-select: none;
+      white-space: nowrap;
+    }
+    .tab-btn:hover {
+      color: #fff;
+      border-color: rgba(56, 189, 248, 0.4);
+    }
+    .tab-btn.active {
+      background: rgba(56, 189, 248, 0.15);
+      border-color: var(--cyan);
+      color: var(--cyan);
+      box-shadow: 0 0 12px rgba(56, 189, 248, 0.2);
+    }
+    .tab-btn.all-parts-btn {
+      background: rgba(52, 211, 153, 0.12);
+      border-color: rgba(52, 211, 153, 0.35);
+      color: var(--emerald);
+    }
+    .tab-btn.all-parts-btn.active {
+      background: rgba(52, 211, 153, 0.22);
+      border-color: var(--emerald);
+      color: #fff;
+      box-shadow: 0 0 14px rgba(52, 211, 153, 0.3);
+    }
+
+    /* Header */
+    .header {
+      padding: 10px 0 16px 0;
+      border-bottom: 1px solid var(--border-card);
+      margin-bottom: 18px;
+    }
+    .header-badge {
+      display: inline-block;
+      background: rgba(56, 189, 248, 0.12);
+      color: var(--cyan);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      padding: 4px 10px;
+      border-radius: 9999px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .header h1 {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 6px;
+      line-height: 1.3;
+      word-break: break-word;
+    }
+    .header p {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+
+    /* Views */
+    .view-panel {
+      display: none;
+      animation: fadeIn 0.25s ease-in-out;
+    }
+    .view-panel.active-panel {
+      display: block;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Lecture Headings */
+    .lecture-content-wrapper h2 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #fff;
+      padding: 12px 18px;
+      border-radius: 8px;
+      margin-top: 1.2rem;
+      margin-bottom: 1.2rem;
+      box-shadow: 0 4px 18px rgba(0,0,0,0.5);
+      border: 1px solid rgba(255,255,255,0.12);
+    }
+    .lecture-content-wrapper h2.purple  { background: linear-gradient(90deg, #3b0764, #0f172a); border-left: 6px solid var(--purple); }
+    .lecture-content-wrapper h2.emerald { background: linear-gradient(90deg, #064e3b, #0f172a); border-left: 6px solid var(--emerald); }
+    .lecture-content-wrapper h2.blue    { background: linear-gradient(90deg, #0c4a6e, #0f172a); border-left: 6px solid var(--cyan); }
+    .lecture-content-wrapper h2.orange  { background: linear-gradient(90deg, #7c2d12, #0f172a); border-left: 6px solid var(--amber); }
+    .lecture-content-wrapper h2.teal    { background: linear-gradient(90deg, #134e4a, #0f172a); border-left: 6px solid var(--emerald); }
+    .lecture-content-wrapper h2.pink    { background: linear-gradient(90deg, #831843, #0f172a); border-left: 6px solid var(--rose); }
+
+    /* Tables */
+    .table-scroll-container {
+      width: 100% !important;
+      max-width: 100% !important;
+      overflow-x: auto !important;
+      overflow-y: hidden !important;
+      -webkit-overflow-scrolling: touch !important;
+      margin: 1rem 0 1.5rem 0 !important;
+      border: 1px solid #1e293b !important;
+      border-radius: 10px !important;
+      background: var(--bg-card) !important;
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.45) !important;
+      contain: paint !important;
+      box-sizing: border-box !important;
+    }
+    .scroll-hint {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      font-size: 0.76rem;
+      color: var(--cyan);
+      background: rgba(56, 189, 248, 0.08);
+      padding: 7px 12px;
+      text-align: center;
+      border-bottom: 1px solid #1e293b;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      user-select: none;
+    }
+    table {
+      width: 100% !important;
+      min-width: 720px !important;
+      border-collapse: collapse !important;
+      background: var(--bg-card) !important;
+      border: none !important;
+      margin: 0 !important;
+      table-layout: auto !important;
+    }
+    th {
+      background: #1e293b !important;
+      color: var(--cyan) !important;
+      font-weight: 700 !important;
+      font-size: 0.88rem !important;
+      padding: 12px 14px !important;
+      border: 1px solid #334155 !important;
+      text-align: left !important;
+      white-space: nowrap !important;
+    }
+    td {
+      padding: 12px 14px !important;
+      border: 1px solid #1e293b !important;
+      color: #e2e8f0 !important;
+      font-size: 0.88rem !important;
+      vertical-align: top !important;
+      text-align: left !important;
+      line-height: 1.6 !important;
+    }
+    td:nth-child(1) { font-weight: 600 !important; min-width: 170px !important; color: #f1f5f9 !important; }
+    td:nth-child(2) { min-width: 230px !important; color: #38bdf8 !important; }
+    td:nth-child(3) { min-width: 280px !important; color: #cbd5e1 !important; line-height: 1.6 !important; }
+    tr:nth-child(even) td { background: #0b1120 !important; }
+    tr:hover td { background: #162036 !important; }
+
+    /* Callout Boxes */
+    .callout {
+      background: #0d1527;
+      border: 1px solid #334155;
+      border-radius: 8px;
+      padding: 1.1rem 1.4rem;
+      margin: 1.2rem 0 2rem 0;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+      word-break: break-word;
+    }
+    .callout.purple { border-left: 5px solid var(--purple); }
+    .callout.blue   { border-left: 5px solid var(--cyan); }
+    .callout.orange { border-left: 5px solid var(--amber); }
+    .callout.green  { border-left: 5px solid var(--emerald); }
+    .callout.teal   { border-left: 5px solid var(--emerald); }
+    .callout.pink   { border-left: 5px solid var(--rose); }
+    .callout h4 {
+      margin: 0 0 8px 0;
+      font-size: 0.98rem;
+      font-weight: 700;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .callout ul {
+      margin: 0;
+      padding-left: 1.3rem;
+      color: #cbd5e1;
+      font-size: 0.9rem;
+      line-height: 1.65;
+    }
+    .callout li { margin-bottom: 6px; }
+
+    /* Color Swatch Pill for Resistor Table */
+    .color-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 3px 10px;
+      border-radius: 6px;
+      font-weight: 700;
+      font-size: 0.82rem;
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+    .swatch-dot {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      display: inline-block;
+      border: 1px solid rgba(255,255,255,0.4);
+    }
+
+    .result-badge {
+      display: inline-block;
+      background: rgba(52, 211, 153, 0.1);
+      border: 1px solid rgba(52, 211, 153, 0.25);
+      color: var(--emerald);
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-weight: 700;
+      font-size: 0.85rem;
+    }
+
+    /* Interactive Resistor Calculator Box */
+    .resistor-calc-box {
+      background: #0d1527;
+      border: 1px solid #334155;
+      border-left: 5px solid var(--amber);
+      border-radius: 10px;
+      padding: 14px;
+      margin: 1.2rem 0;
+    }
+    .calc-controls {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .calc-controls select {
+      width: 100%;
+      padding: 8px;
+      background: #111722;
+      color: #fff;
+      border: 1px solid #334155;
+      border-radius: 6px;
+      font-size: 0.84rem;
+      font-weight: 600;
+    }
+
+    /* Schematic SVG Icon Styling */
+    .sym-svg {
+      width: 90px;
+      height: 42px;
+      stroke: var(--cyan);
+      stroke-width: 2;
+      fill: none;
+      vertical-align: middle;
+    }
+
+    @media (max-width: 640px) {
+      .nav-tabs-wrapper { top: 58px; }
+      .lecture-tab { font-size: 0.82rem; padding: 8px 6px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <!-- Top Lecture Selector (Lectures 1, 2, 3 + Exam Sheet & Tricks) -->
+    <div class="lecture-switch-wrapper">
+      <div id="lec-tab-1" class="lecture-tab active" onclick="switchLectureGroup(1)">⚡ Lecture 1: Power & Basics</div>
+      <div id="lec-tab-2" class="lecture-tab" onclick="switchLectureGroup(2)">🔗 Lecture 2: Series, KVL & VDR</div>
+      <div id="lec-tab-3" class="lecture-tab" onclick="switchLectureGroup(3)">🔀 Lecture 3: Parallel, KCL & CDR</div>
+      <div id="lec-tab-4" class="lecture-tab" onclick="switchLectureGroup(4)">🏆 Exam Sheet & Tricks (الخلاصة والتريكات)</div>
+    </div>
+
+    <!-- Sub-navigation Bar for Lecture 1 -->
+    <div class="nav-tabs-wrapper" id="subnav-wrapper-1">
+      <div class="nav-tabs">
+        <div id="part-btn-1-0" class="tab-btn all-parts-btn" onclick="showLec1Part(0)">All Parts (كل الأجزاء)</div>
+        <div id="part-btn-1-1" class="tab-btn active" onclick="showLec1Part(1)">Part 1: Course & Power System</div>
+        <div id="part-btn-1-2" class="tab-btn" onclick="showLec1Part(2)">Part 2: Circuit Basics & Meters</div>
+        <div id="part-btn-1-3" class="tab-btn" onclick="showLec1Part(3)">Part 3: Materials & Color Code</div>
+        <div id="part-btn-1-4" class="tab-btn" onclick="showLec1Part(4)">Part 4: States, Ohm's Law & Power</div>
+        <div id="part-btn-1-5" class="tab-btn" onclick="showLec1Part(5)">Part 5: System Efficiency ($\eta$)</div>
+        <div id="part-btn-1-6" class="tab-btn" onclick="showLec1Part(6)">Part 6: Units & Circuit Symbols</div>
+      </div>
+    </div>
+
+    <!-- Sub-navigation Bar for Lecture 2 -->
+    <div class="nav-tabs-wrapper" id="subnav-wrapper-2" style="display: none;">
+      <div class="nav-tabs">
+        <div id="part-btn-2-0" class="tab-btn all-parts-btn" onclick="showLec2Part(0)">All Parts (كل الأجزاء)</div>
+        <div id="part-btn-2-1" class="tab-btn active" onclick="showLec2Part(1)">Part 1: Variable Resistors & Switches</div>
+        <div id="part-btn-2-2" class="tab-btn" onclick="showLec2Part(2)">Part 2: Series Circuits & KVL</div>
+        <div id="part-btn-2-3" class="tab-btn" onclick="showLec2Part(3)">Part 3: Series Sources & Power</div>
+        <div id="part-btn-2-4" class="tab-btn" onclick="showLec2Part(4)">Part 4: Voltage Divider & Node Voltages</div>
+      </div>
+    </div>
+
+    <!-- Sub-navigation Bar for Lecture 3 -->
+    <div class="nav-tabs-wrapper" id="subnav-wrapper-3" style="display: none;">
+      <div class="nav-tabs">
+        <div id="part-btn-3-0" class="tab-btn all-parts-btn" onclick="showLec3Part(0)">All Parts (كل الأجزاء)</div>
+        <div id="part-btn-3-1" class="tab-btn active" onclick="showLec3Part(1)">Part 1: Parallel Circuits & KCL</div>
+        <div id="part-btn-3-2" class="tab-btn" onclick="showLec3Part(2)">Part 2: Parallel $R_T$ & Conductance $G$</div>
+        <div id="part-btn-3-3" class="tab-btn" onclick="showLec3Part(3)">Part 3: Parallel Sources & Power</div>
+        <div id="part-btn-3-4" class="tab-btn" onclick="showLec3Part(4)">Part 4: Current Divider & Master Comparison</div>
+      </div>
+    </div>
+
+    <!-- Sub-navigation Bar for Tab 4: Exam Sheet & Tricks -->
+    <div class="nav-tabs-wrapper" id="subnav-wrapper-4" style="display: none;">
+      <div class="nav-tabs">
+        <div id="part-btn-4-0" class="tab-btn all-parts-btn" onclick="showLec4Part(0)">All Parts (كل الأجزاء)</div>
+        <div id="part-btn-4-1" class="tab-btn active" onclick="showLec4Part(1)">Part 1: One-Page Formula Cheat Sheet (ورقة القوانين المجمعة)</div>
+        <div id="part-btn-4-2" class="tab-btn" onclick="showLec4Part(2)">Part 2: Exam Problem-Solving Tricks (تريكات حل المسائل الـ 8)</div>
+      </div>
+    </div>
+
+    <!-- Page Header -->
+    <div class="header">
+      <span class="header-badge" id="header-badge">PRINCIPLES OF ELECTRICAL ENGINEERING (ELE111) • LECTURE 1</span>
+      <h1 id="page-main-title">Part 1: Course Roadmap & Electrical Power System — Complete Summary</h1>
+      <p id="page-main-desc">Prepared strictly according to <b>Assoc. Prof. Dr. Essam M. Shaalan's</b> lecture notes (Faculty of Engineering at Shoubra, Benha University • A.Y. 2026/2027): Fast Exam-Night Summary Portal (Lectures 1, 2 & 3).</p>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- LECTURE 1 CONTAINER -->
+    <!-- ============================================================ -->
+    <div id="lec1-container">
+
+      <!-- PART 1: COURSE OUTLINE & ELECTRICAL POWER SYSTEM -->
+      <div id="part-view-1-1" class="view-panel active-panel">
+        <div class="lecture-content-wrapper">
+          <h2 class="purple">Part 1A: Course Outline & Marks Distribution (ELE111)</h2>
+          <div class="table-scroll-container">
+            <div class="scroll-hint">👈 اسحب الجدول أفقياً لتصفح توزيع الدرجات وخريطة المنهج 👉</div>
+            <table>
+              <thead>
+                <tr><th style="width:26%">Week / Assessment</th><th style="width:34%">Weight / Topic Title</th><th>Detailed Scope & Description</th></tr>
+              </thead>
+              <tbody>
+                <tr><td><b>Week $W(1)$</b></td><td>Fundamentals of Power & Circuits</td><td>Electrical Power System structure (Generation, Transmission, Distribution) & Basic DC Circuit concepts (Current Lecture).</td></tr>
+                <tr><td><b>Week $W(2)$</b></td><td>DC Circuits: Series & Kirchhoff's Laws</td><td>Ohm's Law, Series Circuits, Kirchhoff's Voltage & Current Laws (KVL & KCL), Voltage Dividers.</td></tr>
+                <tr><td><b>Week $W(3)$</b></td><td>DC Circuits: Parallel & Series-Parallel</td><td>Parallel Circuits, Series-Parallel Combinations, Current Divider Rule.</td></tr>
+                <tr><td><b>Week $W(4)$</b></td><td>Source Conversions & Loop Analysis</td><td>Ideal vs. Practical Source Conversions, Mesh / Loop Current Analysis.</td></tr>
+                <tr><td><b>Week $W(5)$</b></td><td>Nodal Analysis</td><td>Node-Voltage Method for systematic DC circuit analysis.</td></tr>
+                <tr><td><b>Weeks $W(6, 7)$</b></td><td>Basic Network Theorems</td><td>Superposition, Thevenin's Theorem, Norton's Theorem, Maximum Power Transfer.</td></tr>
+                <tr><td><b>Marks Distribution</b></td><td>Total = $100\%$</td><td>&bull; <b>Final Exam:</b> $40\%$<br>&bull; <b>First Mid-Term:</b> $20\%$ &nbsp;|&nbsp; <b>Second Mid-Term:</b> $20\%$<br>&bull; <b>Assignments:</b> $10\%$ &nbsp;|&nbsp; <b>Quizzes:</b> $5\%$ &nbsp;|&nbsp; <b>Class Participation:</b> $5\%$</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h2 class="blue">Part 1B: Electrical Power System Architecture & Voltage Levels in Egypt</h2>
+          <div class="table-scroll-container">
+            <div class="scroll-hint">👈 اسحب الجدول أفقياً لتصفح مراحل الشبكة الكهربية وجهود الشبكة في مصر 👉</div>
+            <table>
+              <thead>
+                <tr><th style="width:26%">Power System Stage</th><th style="width:34%">Voltage Levels (Egypt & Standard)</th><th>Function & Technical Role</th></tr>
+              </thead>
+              <tbody>
+                <tr><td><b>1. Generation Station</b><br>(محطات التوليد)</td><td><b>Egypt:</b> Up to $30\text{ kV}$<br>Typical: $11, 11.5, 12, \text{ or } 13\text{ kV}$</td><td>Electricity is generated at power plants (thermal, hydro, gas, etc.) using 3-phase synchronous generators.</td></tr>
+                <tr><td><b>2. Step-Up Transformer</b><br>(محول رفع الجهد)</td><td>$12\text{ kV} / 500\text{ kV}$ or $220\text{ kV}$</td><td>Steps up voltage at the generating station to drastically reduce transmission current ($I$) and minimize line power losses ($P_{loss} = I^2 R$).</td></tr>
+                <tr><td><b>3. Primary Transmission</b><br>(النقل الرئيسي الفائق)</td><td><b>Egypt:</b> $500\text{ kV}$ and $220\text{ kV}$<br>(UK/Intl: $400\text{ kV} / 275\text{ kV}$)</td><td>High-voltage 3-phase, 3-wire overhead transmission towers carrying bulk power across long distances across the country.</td></tr>
+                <tr><td><b>4. Primary Distribution</b><br>(التوزيع الابتدائي / النقل الثانوي)</td><td><b>Egypt:</b> $132\text{ kV}, 66\text{ kV}, 33\text{ kV}$<br>Step-Down: $500/132\text{ kV}, 132/66\text{ kV}$</td><td>Substations step down extra-high voltage to medium/high levels to feed heavy industry, large factories, and regional substations.</td></tr>
+                <tr><td><b>5. Secondary Distribution</b><br>(التوزيع الثانوي)</td><td><b>Egypt:</b> $11\text{ kV}$<br>Step-Down: $66\text{ kV} / 11\text{ kV}$</td><td>Carried on neighborhood distribution lines (3-phase, 3-wire) to local distribution transformers and light/medium industries.</td></tr>
+                <tr><td><b>6. Load / Customer Level</b><br>(المستهلك النهائي)</td><td><b>Egypt:</b> $415\text{ V}$ (or $400\text{ V} / 230\text{ V}$)<br>Step-Down: $11\text{ kV} / 415\text{ V}$</td><td>3-Phase, 4-Wire system supplying $415\text{ V}$ (or $380\text{ V}-400\text{ V}$ line-to-line) for 3-phase loads and $220\text{ V}-240\text{ V}$ (line-to-neutral) for residential homes.</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="callout purple">
+            <h4>📌 ملخص سريع ليلة الامتحان — كيف تصل الكهرباء إلى منزلك؟ (6 مراحل أساسية)</h4>
+            <ul>
+              <li><b>المرحلة 1 (Power Plant):</b> يتم توليد الكهرباء في محطة التوليد بجهد متوسط ($11\text{ kV} \sim 13\text{ kV}$ وحتى $30\text{ kV}$ في مصر).</li>
+              <li><b>المرحلة 2 (Step-Up Station):</b> يتم رفع الجهد بواسطة محول رافع (Step-Up Transformer) لتقليل الفقد الحراري في الخطوط.</li>
+              <li><b>المرحلة 3 (Transmission Lines):</b> تسري الكهرباء عبر أبراج النقل الفائق ($500\text{ kV}$ أو $220\text{ kV}$ في مصر).</li>
+              <li><b>المرحلة 4 (Substation Step-Down):</b> محطات المحولات تخفض الجهد تدريجياً للتوزيع الابتدائي ($132\text{ kV} \to 66\text{ kV} \to 33\text{ kV}$).</li>
+              <li><b>المرحلة 5 (Distribution Lines):</b> تنتقل الكهرباء عبر خطوط التوزيع الثانوي بجهد $11\text{ kV}$ إلى محولات الأحياء والشوارع.</li>
+              <li><b>المرحلة 6 (Pole/Local Transformer to Home):</b> محول التوزيع النهائي يخفض الجهد من $11\text{ kV}$ إلى $415\text{ V}$ (ثلاثي الأوجه) و $230\text{ V}-240\text{ V}$ (أحادي الوجه للمنازل).</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- PART 2: CIRCUIT FUNDAMENTALS & MEASUREMENTS -->
+      <div id="part-view-1-2" class="view-panel">
+        <div class="lecture-content-wrapper">
+          <h2 class="blue">Part 2A: Main Components & Four Basic Parts of Any Electrical Circuit</h2>
+          <div class="table-scroll-container">
+            <div class="scroll-hint">👈 اسحب الجدول أفقياً لتصفح مكونات وعناصر الدائرة الكهربية 👉</div>
+            <table>
+              <thead>
+                <tr><th style="width:26%">Category / Part</th><th style="width:34%">Examples in Circuit</th><th>Technical Definition & Role</th></tr>
+              </thead>
+              <tbody>
+                <tr><td><b>Active Components</b><br>(عناصر فعالة)</td><td>Voltage Source, Current Source, Battery, Generator</td><td>Components capable of <b>generating or supplying</b> electrical power/energy to the circuit.</td></tr>
+                <tr><td><b>Passive Components</b><br>(عناصر غير فعالة / سلبية)</td><td>Resistors ($R$), Inductors ($L$), Capacitors ($C$)</td><td>Components that <b>cannot generate</b> electrical power; they either dissipate energy ($R$) or store energy temporarily ($L, C$).</td></tr>
+                <tr><td><b>1. Generation (Source)</b></td><td>Battery, DC/AC Voltage or Current Source</td><td>First basic part of a circuit; provides the electromotive force (EMF) required to drive current.</td></tr>
+                <tr><td><b>2. Conductors</b></td><td>Interconnecting Copper / Aluminum Wires</td><td>Second basic part; forms the low-resistance path connecting all circuit components together.</td></tr>
+                <tr><td><b>3. Control & Protection</b></td><td>Switches (SPST, SPDT), Fuses, Circuit Breakers</td><td>Third basic part; starts/stops current flow intentionally (switch) or interrupts excessive fault current (fuse/breaker).</td></tr>
+                <tr><td><b>4. Loads</b></td><td>Lamp, Electric Heater, Motors, Resistors</td><td>Fourth basic part; converts electrical energy into useful work (light, heat, mechanical motion).</td></tr>
+                <tr><td><b>5. Measurements (Optional)</b></td><td>Voltmeter, Ammeter, Ohmmeter, Multimeter</td><td>Auxiliary instruments used to monitor electrical quantities ($V, I, R$).</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h2 class="teal">Part 2B: Electrical Measurement Instruments (Voltmeter, Ammeter, Ohmmeter)</h2>
+          <div class="table-scroll-container">
+            <div class="scroll-hint">👈 اسحب الجدول أفقياً لمقارنة طرق توصيل أجهزة القياس في الدائرة 👉</div>
+            <table>
+              <thead>
+                <tr><th style="width:24%">Instrument</th><th style="width:32%">Circuit Connection Method</th><th>Critical Rules & Precautions (مهم جداً للامتحان)</th></tr>
+              </thead>
+              <tbody>
+                <tr><td><b>Voltmeter</b><br>(جهاز قياس الجهد $V$)</td><td>Connected in <b>PARALLEL (توازي)</b> across the component</td><td>&bull; Connected directly across the two terminals of the load/battery while circuit is energized.<br>&bull; Observe polarity in DC: Red probe to $(+)$, Black probe to $(-)$.</td></tr>
+                <tr><td><b>Ammeter</b><br>(جهاز قياس التيار $I$)</td><td>Connected in <b>SERIES (توالي)</b> within the branch</td><td>&bull; You must <b>break/open the circuit path</b> and insert the ammeter in series so all branch current flows through the meter.<br>&bull; Never connect an ammeter in parallel across a voltage source (causes a short circuit!).</td></tr>
+                <tr><td><b>Ohmmeter</b><br>(جهاز قياس المقاومة $R$)</td><td>Connected across <b>ISOLATED</b> component</td><td>&bull; <b>Step (a):</b> Disconnect the circuit completely from any voltage/current source (Power OFF).<br>&bull; <b>Step (b):</b> Isolate at least one terminal of the resistor from the rest of the circuit so parallel paths don't falsify the reading.</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="callout blue">
+            <h4>⚠️ تنبيهات هامة جداً في أسئلة الصح والخطأ والاختياري (Meter Connections)</h4>
+            <ul>
+              <li><b>قياس الفولت (Voltage):</b> التوصيل <b>على التوازي (Across / Parallel)</b> بدون قطع الدائرة.</li>
+              <li><b>قياس التيار (Current):</b> التوصيل <b>على التوالي (In Series)</b> ويشترط فتح المسار ليمر التيار بداخل الأميتر.</li>
+              <li><b>قياس المقاومة (Resistance):</b> يُمنع منعاً باتاً قياس المقاومة بالأوميتر والدائرة متصلة بالمصدر؛ يجب فصل المصدر أولاً وعزل المقاومة، لأن الأوميتر يحتوي على بطارية داخلية خاصة به.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- PART 3: MATERIALS, SOURCES & RESISTOR COLOR CODING -->
+      <div id="part-view-1-3" class="view-panel">
+        <div class="lecture-content-wrapper">
+          <h2 class="orange">Part 3A: Electrical Materials & Ideal vs. Real Sources</h2>
+          <div class="table-scroll-container">
+            <div class="scroll-hint">👈 اسحب الجدول أفقياً لتصفح مقارنة المواد والمصادر الكهربية 👉</div>
+            <table>
+              <thead>
+                <tr><th style="width:26%">Term / Concept</th><th style="width:34%">Physical / Analytical Property</th><th>Detailed Explanation</th></tr>
+              </thead>
+              <tbody>
+                <tr><td><b>Conductors (الموصلات)</b></td><td>Permit free motion of electrons</td><td>Materials containing a large number of loosely bound valence electrons that move freely (e.g., Copper, Silver, Gold, Aluminum).</td></tr>
+                <tr><td><b>Insulators (العوازل)</b></td><td>Prevent free motion of electrons</td><td>Materials that require very large amounts of energy to free electrons from their nuclei (e.g., Rubber, Glass, Plastic, Mica, Air).</td></tr>
+                <tr><td><b>Resistors (المقاومات)</b></td><td>Conduct electricity but oppose current</td><td>Materials/components engineered to conduct current while offering a specific opposition (resistance $R$) to current flow, converting electrical energy into heat.</td></tr>
+                <tr><td><b>Ideal Source (مصدر مثالي)</b></td><td>Zero internal losses ($\text{Losses} = 0$)</td><td>A <b>theoretical concept</b> of a voltage or current supply that has no internal resistance/losses and maintains a 100% perfect output. Used for <b>analytical purposes only</b>; cannot occur in nature.</td></tr>
+                <tr><td><b>Real Source (مصدر حقيقي)</b></td><td>Has internal losses ($\text{Losses} > 0$)</td><td>An <b>actual, real-life</b> voltage or current supply (like a physical battery or generator) that has internal resistance and energy losses associated with it.</td></tr>
+                <tr><td><b>DC vs. AC</b></td><td>Unidirectional vs. Alternating</td><td><b>DC (Direct Current):</b> Constant polarity, electrons flow in one direction.<br><b>AC (Alternating Current):</b> Periodically reverses direction and magnitude with time.</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h2 class="pink">Part 3B: 4-Band Resistor Color Coding Table (جدول ألوان المقاومات)</h2>
+          <div class="table-scroll-container">
+            <div class="scroll-hint">👈 اسحب الجدول أفقياً لتصفح جدول شفرة ألوان المقاومات القياسي 👉</div>
+            <table>
+              <thead>
+                <tr>
+                  <th style="width:22%">Color (اللون)</th>
+                  <th style="width:20%">Band 1 (1st Digit)</th>
+                  <th style="width:20%">Band 2 (2nd Digit)</th>
+                  <th style="width:22%">Band 3 (Multiplier)</th>
+                  <th>Band 4 (Tolerance)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><span class="color-pill"><span class="swatch-dot" style="background:#000000;"></span>Black (أسود)</span></td>
+                  <td>— ($0$)</td>
+                  <td>$0$</td>
+                  <td>$10^0 = 1$</td>
+                  <td>—</td>
+                </tr>
+                <tr>
+                  <td><span class="color-pill"><span class="swatch-dot" style="background:#8B4513;"></span>Brown (بني)</span></td>
+                  <td>$1$</td>
+                  <td>$1$</td>
+                  <td>$10^1 = 10$</td>
+                  <td>—</td>
+                </tr>
+                <tr>
+                  <td><span class="color-pill"><span class="swatch-dot" style="background:#ef4444;"></span>Red (أحمر)</span></td>
+                  <td>$2$</td>
+                  <td>$2$</td>
+                  <td>$10^2 = 100$</td>
+                  <td>—</td>
+                </tr>
+                <tr>
+                  <td><span class="color-pill"><span class="swatch-dot" style="background:#f97316;"></span>Orange (برتقالي)</span></td>
+                  <td>$3$</td>
+                  <td>$3$</td>
+                  <td>$10^3 = 1,000$ ($1\text{ k}\Omega$)</td>
+                  <td>—</td>
+                </tr>
+                <tr>
+                  <td><span class="color-pill"><span class="swatch-dot" style="background:#eab308;"></span>Yellow (أصفر)</span></td>
+                  <td>$4$</td>
+                  <td>$4$</td>
+                  <td>$10^4 = 10,000$ ($10\text{ k}\Omega$)</td>
+                  <td>—</td>
+                </tr>
+                <tr>
+                  <td><span class="color-pill"><span class="swatch-dot" style="background:#22c55e;"></span>Green (أخضر)</span></td>
+                  <td>$5$</td>
+                  <td>$5$</td>
+                  <td>$10^5 = 100,000$ ($100\text{ k}\Omega$)</td>
+                  <td>—</td>
+                </tr>
+                <tr>
+                  <td><span class="color-pill"><span class="swatch-dot" style="background:#3b82f6;"></span>Blue (أزرق)</span></td>
+                  <td>$6$</td>
+                  <td>$6$</td>
+                  <td>$10^6 = 1,000,000$ ($1\text{ M}\Omega$)</td>
+                  <td>—</td>
+                </tr>
+                <tr>
+                  <td><span class="color-pill"><span class="swatch-dot" style="background:#a855f7;"></span>Violet (بنفسجي)</span></td>
+                  <td>$7$</td>
+                  <td>$7$</td>
+                  <td>$10^7 = 10,000,000$ ($10\text{ M}\Omega$)</td>
+                  <td>—</td>
+                </tr>
+                <tr>
+                  <td><span class="color-pill"><span class="swatch-dot" style="background:#9ca3af;"></span>Gray (رمادي)</span></td>
+                  <td>$8$</td>
+                  <td>$8$</td>
+                  <td>$10^8$</td>
+                  <td>—</td>
+                </tr>
+                <tr>
+                  <td><span class="color-pill"><span class="swatch-dot" style="background:#ffffff;"></span>White (أبيض)</span></td>
+                  <td>$9$</td>
+                  <td>$9$</td>
+                  <td>$10^9$</td>
+                  <td>—</td>
+                </tr>
+                <tr>
+                  <td><span class="color-pill"><span class="swatch-dot" style="background:#fbbf24;"></span>Gold (ذهبي)</span></td>
+                  <td>—</td>
+                  <td>—</td>
+                  <td>$10^{-1} = 0.1$</td>
+                  <td><span class="result-badge">$\pm 5\%$</span></td>
+                </tr>
+                <tr>
+                  <td><span class="color-pill"><span class="swatch-dot" style="background:#cbd5e1;"></span>Silver (فضي)</span></td>
+                  <td>—</td>
+                  <td>—</td>
+                  <td>$10^{-2} = 0.01$</td>
+                  <td><span class="result-badge">$\pm 10\%$</span></td>
+                </tr>
+                <tr>
+                  <td><span class="color-pill"><span class="swatch-dot" style="background:transparent; border-style:dashed;"></span>No Color (بدون لون)</span></td>
+                  <td>—</td>
+                  <td>—</td>
+                  <td>—</td>
+                  <td><span class="result-badge">$\pm 20\%$</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Interactive 4-Band Resistor Calculator -->
+          <div class="resistor-calc-box">
+            <h4 style="color:#fff; margin-bottom:6px;">🧮 أداة تفاعلية سريعة: حاسبة ألوان المقاومة (4-Band Resistor Calculator)</h4>
+            <p style="font-size:0.84rem; color:var(--text-muted);">اختر الألوان الأربعة لتطبيق قانون حساب المقاومة فوراً: $R = (\text{Band}_1\text{Band}_2) \times \text{Multiplier} \pm \text{Tolerance}$</p>
+            <div class="calc-controls">
+              <div>
+                <label style="font-size:0.75rem; color:var(--cyan);">Band 1 (1st Digit)</label>
+                <select id="b1" onchange="calcResistor()">
+                  <option value="1">Brown (1)</option>
+                  <option value="2" selected>Red (2)</option>
+                  <option value="3">Orange (3)</option>
+                  <option value="4">Yellow (4)</option>
+                  <option value="5">Green (5)</option>
+                  <option value="6">Blue (6)</option>
+                  <option value="7">Violet (7)</option>
+                  <option value="8">Gray (8)</option>
+                  <option value="9">White (9)</option>
+                </select>
+              </div>
+              <div>
+                <label style="font-size:0.75rem; color:var(--cyan);">Band 2 (2nd Digit)</label>
+                <select id="b2" onchange="calcResistor()">
+                  <option value="0">Black (0)</option>
+                  <option value="1">Brown (1)</option>
+                  <option value="2">Red (2)</option>
+                  <option value="3">Orange (3)</option>
+                  <option value="4">Yellow (4)</option>
+                  <option value="5">Green (5)</option>
+                  <option value="6">Blue (6)</option>
+                  <option value="7" selected>Violet (7)</option>
+                  <option value="8">Gray (8)</option>
+                  <option value="9">White (9)</option>
+                </select>
+              </div>
+              <div>
+                <label style="font-size:0.75rem; color:var(--cyan);">Band 3 (Multiplier)</label>
+                <select id="b3" onchange="calcResistor()">
+                  <option value="1">Black (×1)</option>
+                  <option value="10">Brown (×10)</option>
+                  <option value="100">Red (×100)</option>
+                  <option value="1000" selected>Orange (×1,000)</option>
+                  <option value="10000">Yellow (×10,000)</option>
+                  <option value="100000">Green (×100,000)</option>
+                  <option value="1000000">Blue (×1,000,000)</option>
+                  <option value="0.1">Gold (×0.1)</option>
+                  <option value="0.01">Silver (×0.01)</option>
+                </select>
+              </div>
+              <div>
+                <label style="font-size:0.75rem; color:var(--cyan);">Band 4 (Tolerance)</label>
+                <select id="b4" onchange="calcResistor()">
+                  <option value="5" selected>Gold (±5%)</option>
+                  <option value="10">Silver (±10%)</option>
+                  <option value="20">No Color (±20%)</option>
+                </select>
+              </div>
+            </div>
+            <div id="resistor-output" style="margin-top:12px; padding:10px; background:#090d13; border-radius:8px; border:1px solid #1e293b; font-weight:700; color:var(--emerald); font-size:0.95rem;">
+              Resistance Value: 27,000 Ω (27 kΩ) ± 5%  [Range: 25.65 kΩ to 28.35 kΩ]
+            </div>
+          </div>
+
+          <div class="callout orange">
+            <h4>💡 جملة شهيرة لحفظ ترتيب ألوان المقاومات بسهولة</h4>
+            <ul>
+              <li><b>B</b>lack (0) - <b>B</b>rown (1) - <b>R</b>ed (2) - <b>O</b>range (3) - <b>Y</b>ellow (4) - <b>G</b>reen (5) - <b>B</b>lue (6) - <b>V</b>iolet (7) - <b>G</b>ray (8) - <b>W</b>hite (9)</li>
+              <li><b>Mnemonic:</b> <i>"<b>B</b>etter <b>B</b>e <b>R</b>ight <b>O</b>r <b>Y</b>our <b>G</b>reat <b>B</b>ig <b>V</b>enture <b>G</b>oes <b>W</b>rong"</i> (أو بالعربية: <b>أسود بني أحمر برتقالي أصفر أخضر أزرق بنفسجي رمادي أبيض</b>).</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- PART 4: CIRCUIT STATES, OHM'S LAW & POWER WHEEL -->
+      <div id="part-view-1-4" class="view-panel">
+        <div class="lecture-content-wrapper">
+          <h2 class="teal">Part 4A: Closed Circuit, Open Circuit & Short Circuit</h2>
+          <div class="table-scroll-container">
+            <div class="scroll-hint">👈 اسحب الجدول أفقياً لمقارنة حالات الدائرة الثلاث (مغلقة - مفتوحة - قصر) 👉</div>
+            <table>
+              <thead>
+                <tr><th style="width:24%">Circuit Condition</th><th style="width:32%">Resistance & Current ($R, I$)</th><th>Physical Meaning & Common Causes</th></tr>
+              </thead>
+              <tbody>
+                <tr><td><b>1. Closed Circuit</b><br>(دائرة مغلقة طبيعية)</td><td>$R = R_{load}$ (Finite)<br>$I = \frac{E}{R}$ (Normal Current)</td><td>An <b>uninterrupted, unbroken path</b> for current flow from the source (EMF), through the load, and back to the source is completed.</td></tr>
+                <tr><td><b>2. Open Circuit (O.C.)</b><br>(دائرة مفتوحة)</td><td>$R \to \infty \ (\text{Infinity})$<br>$I = 0\text{ A}$ (Zero Current)</td><td>An <b>incomplete circuit</b> where a break occurs, preventing a complete path for current flow.<br><b>Common Causes:</b><br>1. Open Switch (مفتاح مفتوح)<br>2. Burned-Out Fuse (فيوز محترق/منصهر)<br>3. Burned-Out Resistor or Broken Wire (مقاومة محترقة أو سلك مقطوع).</td></tr>
+                <tr><td><b>3. Short Circuit (S.C.)</b><br>(دائرة قِصَر / شورت)</td><td>$R \approx 0\ \Omega$ (Very Little)<br>$I \to \text{Dangerously High!}$</td><td>A circuit offering <b>very little or no resistance</b> to current flow, causing <b>dangerously high current</b>.<br><b>Common Cause:</b> Inadvertent connection (سلك التماس مباشر) between two points bypassing the load $R$.<br><b>Protection:</b> A <b>Fuse</b> or <b>Circuit Breaker</b> melts/trips to open the circuit and prevent fire/damage.</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h2 class="purple">Part 4B: Ohm's Law, Physical Resistance & The Complete Power Wheel</h2>
+          <div class="table-scroll-container">
+            <div class="scroll-hint">👈 اسحب الجدول أفقياً لتصفح قانون أوم وقوانين القدرة الكهربية 👉</div>
+            <table>
+              <thead>
+                <tr><th style="width:26%">Law / Parameter</th><th style="width:36%">Formulas & Equations</th><th>Units & Physical Meaning</th></tr>
+              </thead>
+              <tbody>
+                <tr><td><b>Ohm's Law — Voltage</b></td><td>$E = I \times R \quad \text{or} \quad V = I \times R$</td><td>Applied voltage ($V$ or $E$ in <b>Volts [V]</b>) equals circuit current times circuit resistance.</td></tr>
+                <tr><td><b>Ohm's Law — Current</b></td><td>$I = \frac{E}{R} \quad \text{or} \quad I = \frac{V}{R}$</td><td>Current ($I$ in <b>Amperes [A]</b>) is directly proportional to voltage and inversely proportional to resistance.</td></tr>
+                <tr><td><b>Ohm's Law — Resistance</b></td><td>$R = \frac{E}{I} \quad \text{or} \quad R = \frac{V}{I}$</td><td>Resistance ($R$ in <b>Ohms [$\Omega$]</b>) equals applied voltage divided by circuit current.</td></tr>
+                <tr><td><b>Conductor Resistance</b><br>(مقاومة الموصل)</td><td>$$R = \rho \frac{L}{A} \quad [\Omega]$$</td><td>&bull; $\rho$: Specific resistance / Resistivity ($\Omega\cdot\text{m}$), depends on material type & temperature.<br>&bull; $L$: Length of conductor ($\text{m}$) — $R \propto L$.<br>&bull; $A$: Cross-sectional area ($\text{m}^2$) — $R \propto \frac{1}{A}$.</td></tr>
+                <tr><td><b>Power Wheel: WATTS ($P$)</b><br>(القدرة الكهربية)</td><td>$$P = V \cdot I = I^2 \cdot R = \frac{V^2}{R}$$</td><td>Measured in <b>Watts [W]</b> ($\text{J/s}$). Always gives the exact same value regardless of which of the 3 formulas is used.</td></tr>
+                <tr><td><b>Power Wheel: AMPERES ($I$)</b></td><td>$$I = \frac{V}{R} = \frac{P}{V} = \sqrt{\frac{P}{R}}$$</td><td>Three equivalent ways to find current ($I$) depending on given pairs: $(V,R)$, $(P,V)$, or $(P,R)$.</td></tr>
+                <tr><td><b>Power Wheel: VOLTS ($V$ or $E$)</b></td><td>$$V = I \cdot R = \frac{P}{I} = \sqrt{P \cdot R}$$</td><td>Three equivalent ways to find voltage ($V$) depending on given pairs: $(I,R)$, $(P,I)$, or $(P,R)$.</td></tr>
+                <tr><td><b>Power Wheel: OHMS ($R$)</b></td><td>$$R = \frac{V}{I} = \frac{P}{I^2} = \frac{V^2}{P}$$</td><td>Three equivalent ways to find resistance ($R$) depending on given pairs: $(V,I)$, $(P,I)$, or $(V,P)$.</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="callout green">
+            <h4>🔥 خلاصة العلاقات الطردية والعكسية في القدرة (أسئلة امتحانات مكررة)</h4>
+            <ul>
+              <li><b>عند ثبوت الجهد ($V = \text{const}$):</b> من العلاقة $I = \frac{P}{V}$، كلما زادت قدرة الجهاز بالوات ($P$) سحب تياراً أعلى ($I$)، وتكون مقاومته أقل ($R = \frac{V^2}{P}$).</li>
+              <li><b>عند ثبوت المقاومة ($R = \text{const}$):</b> من العلاقة $P = I^2 R$، تتغير القدرة المستهلكة <b>طردياً مع مربع التيار</b>!
+                <br>&bull; إذا تضاعف التيار ($2I$) $\implies$ تزداد القدرة إلى <b>$4$ أضعاف</b> ($2^2 = 4$).
+                <br>&bull; إذا قل التيار للنصف ($\frac{1}{2}I$) $\implies$ تقل القدرة إلى <b>الربع</b> ($\left(\frac{1}{2}\right)^2 = \frac{1}{4}$).</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- PART 5: SYSTEM EFFICIENCY -->
+      <div id="part-view-1-5" class="view-panel">
+        <div class="lecture-content-wrapper">
+          <h2 class="emerald">Part 5: System Efficiency ($\eta$) & Cascaded Systems</h2>
+          <div class="table-scroll-container">
+            <div class="scroll-hint">👈 اسحب الجدول أفقياً لتصفح قوانين الكفاءة والمفاقيد والأنظمة المتتالية 👉</div>
+            <table>
+              <thead>
+                <tr><th style="width:26%">Concept / Law</th><th style="width:38%">Formula / Mathematical Relation</th><th>Notes & Unit Conversions</th></tr>
+              </thead>
+              <tbody>
+                <tr><td><b>Power Balance Equation</b></td><td>$$P_{in} = P_{out} + P_{losses}$$</td><td>Input power equals useful output power plus wasted power losses (heat, friction).<br>$P_{losses} = P_{in} - P_{out}$.</td></tr>
+                <tr><td><b>System Efficiency ($\eta$)</b></td><td>$$\eta = \frac{P_{out}}{P_{in}} \times 100\%$$</td><td>Dimensionless ratio (or percentage). Always less than $100\%$ ($\eta < 1$) for real devices.</td></tr>
+                <tr><td><b>Efficiency in Terms of Losses</b></td><td>$$\eta = \frac{P_{out}}{P_{out} + P_{losses}} \times 100\% = \frac{1}{1 + \frac{P_{losses}}{P_{out}}} \times 100\%$$</td><td>Useful when output power and internal losses are known directly.</td></tr>
+                <tr><td><b>Cascaded System Efficiency</b><br>(كفاءة الأنظمة المتتالية)</td><td>$$\eta_{T} = \eta_1 \times \eta_2 \times \eta_3 \times \dots \times \eta_n$$</td><td>For subsystems connected in cascade (series chain, e.g., Motor $\to$ Gearbox $\to$ Pump), overall efficiency is the <b>product</b> of individual decimal efficiencies: $P_{out,final} = \eta_T \times P_{in,1}$.</td></tr>
+                <tr><td><b>Horsepower Conversion</b><br>(تحويل الحصان الميكانيكي)</td><td>$$1\text{ hp (Horsepower)} = 746\text{ W}$$</td><td>&bull; $\text{Watts} \to \text{hp}$: Divide by $746$.<br>&bull; $\text{hp} \to \text{Watts}$: Multiply by $746$.</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="callout teal">
+            <h4>⚙️ قاعدة ذهبية لحل مسائل المحركات والأنظمة المتتالية (Cascaded Systems)</h4>
+            <ul>
+              <li>تأكد دائماً من توحيد وحدات القدرة ($P_{in}$ و $P_{out}$) بالوات ($\text{W}$) قبل قسمتها لحساب الكفاءة $\eta$!</li>
+              <li>في المحرك الكهربي (DC Motor): القدرة الداخلة هي قدرة كهربية $P_{in} = E \times I = V \times I$ (بالوات)، والقدرة الخارجة هي قدرة ميكانيكية على عمود الدوران غالباً تُعطى بالحصان ($\text{hp}$) فنضربها في $746$ لتحويلها إلى وات.</li>
+              <li>عند ضرب كفاءات الأنظمة المتتالية ($\eta_T = \eta_1 \times \eta_2$)، عوّض عن الكفاءات كأرقام عشرية (مثلاً $90\% = 0.90$ و $70\% = 0.70 \implies \eta_T = 0.90 \times 0.70 = 0.63 = 63\%$).</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- PART 6: ELECTRICAL UNITS & SCHEMATIC SYMBOLS -->
+      <div id="part-view-1-6" class="view-panel">
+        <div class="lecture-content-wrapper">
+          <h2 class="blue">Part 6A: Electrical Units Summary Table (جدول الوحدات والعلاقات)</h2>
+          <div class="table-scroll-container">
+            <div class="scroll-hint">👈 اسحب الجدول أفقياً لتصفح ملخص الوحدات الكهربية الأساسي في المحاضرة 👉</div>
+            <table>
+              <thead>
+                <tr><th style="width:25%">Parameter (الكمية)</th><th style="width:30%">Measuring Unit & Symbol</th><th>Fundamental Relationship (العلاقة الرياضية)</th></tr>
+              </thead>
+              <tbody>
+                <tr><td><b>Voltage (الجهد الكهربي)</b></td><td>Volt ($V$ or $E$)</td><td>$$E = I \times R$$</td></tr>
+                <tr><td><b>Current (التيار الكهربي)</b></td><td>Amp / Ampere ($I$ or $\text{A}$)</td><td>$$I = \frac{E}{R}$$</td></tr>
+                <tr><td><b>Resistance (المقاومة الكهربية)</b></td><td>Ohm ($R$ or $\Omega$)</td><td>$$R = \frac{E}{I}$$</td></tr>
+                <tr><td><b>Conductance (المواصلة الكهربية)</b></td><td>Mho ($G$ or $\mho$) / Siemens ($\text{S}$)</td><td>$$G = \frac{1}{R} = \frac{I}{E}$$ <span style="color:var(--text-muted); font-size:0.8rem;">(مقلوب المقاومة: مدى سهولة مرور التيار)</span></td></tr>
+                <tr><td><b>Power (القدرة الكهربية)</b></td><td>Watt ($\text{W}$)</td><td>$$P = I \times E \quad \text{or} \quad P = I^2 R$$</td></tr>
+                <tr><td><b>Inductance (الحث الذاتي للملف)</b></td><td>Henry ($L$ or $\text{H}$)</td><td>$$V_L = -L \left(\frac{\Delta I}{\Delta t}\right)$$ <span style="color:var(--text-muted); font-size:0.8rem;">(الجهد المستحث يتناسب مع معدل تغير التيار)</span></td></tr>
+                <tr><td><b>Capacitance (سعة المكثف)</b></td><td>Farad ($C$ or $\text{F}$)</td><td>$$C = \frac{Q}{E} \quad (Q = \text{Charge in Coulombs})$$</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h2 class="purple">Part 6B: Complete Guide to Schematic Circuit Symbols (رموز العناصر في الدوائر)</h2>
+          <div class="table-scroll-container">
+            <div class="scroll-hint">👈 اسحب الجدول أفقياً لتصفح الرسوم القياسية لرموز الدوائر الكهربية 👉</div>
+            <table>
+              <thead>
+                <tr><th style="width:24%">Component Group</th><th style="width:30%">Schematic Symbol (SVG)</th><th>Sub-Types & Identification Details</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><b>Batteries (DC Sources)</b><br>Single Cell & Multicell</td>
+                  <td>
+                    <svg class="sym-svg" viewBox="0 0 100 40">
+                      <line x1="5" y1="20" x2="25" y2="20"/>
+                      <line x1="25" y1="8" x2="25" y2="32" stroke-width="2.5"/>
+                      <line x1="33" y1="14" x2="33" y2="26" stroke-width="3.5"/>
+                      <line x1="33" y1="20" x2="50" y2="20"/>
+                      <text x="16" y="12" fill="#34d399" stroke="none" font-size="10">+</text>
+                      <line x1="55" y1="20" x2="68" y2="20"/>
+                      <line x1="68" y1="8" x2="68" y2="32" stroke-width="2"/>
+                      <line x1="74" y1="14" x2="74" y2="26" stroke-width="3"/>
+                      <line x1="80" y1="8" x2="80" y2="32" stroke-width="2"/>
+                      <line x1="86" y1="14" x2="86" y2="26" stroke-width="3"/>
+                      <line x1="86" y1="20" x2="98" y2="20"/>
+                    </svg>
+                  </td>
+                  <td>&bull; <b>Single Cell:</b> One long thin line ($+$) and one short thick line ($-$).<br>&bull; <b>Multicell Battery:</b> Multiple alternating long/short parallel plates in series.</td>
+                </tr>
+                <tr>
+                  <td><b>AC Voltage Source & Current Source</b></td>
+                  <td>
+                    <svg class="sym-svg" viewBox="0 0 100 40">
+                      <circle cx="25" cy="20" r="12"/>
+                      <path d="M 18 20 Q 21.5 12, 25 20 T 32 20"/>
+                      <circle cx="75" cy="20" r="12"/>
+                      <line x1="75" y1="30" x2="75" y2="12"/>
+                      <polyline points="71,16 75,11 79,16"/>
+                    </svg>
+                  </td>
+                  <td>&bull; <b>AC Voltage Source:</b> Circle containing a sine wave ($\sim$).<br>&bull; <b>Current Source:</b> Circle with an internal arrow or vertical line indicating current flow.</td>
+                </tr>
+                <tr>
+                  <td><b>Resistors</b><br>Fixed & Variable</td>
+                  <td>
+                    <svg class="sym-svg" viewBox="0 0 100 40">
+                      <polyline points="2,20 10,20 13,12 19,28 25,12 31,28 37,12 40,20 48,20"/>
+                      <polyline points="54,20 60,20 63,12 69,28 75,12 81,28 87,12 90,20 98,20"/>
+                      <line x1="62" y1="33" x2="88" y2="9" stroke="#fbbf24"/>
+                      <polyline points="83,9 88,9 88,14" stroke="#fbbf24"/>
+                    </svg>
+                  </td>
+                  <td>&bull; <b>Fixed Resistor:</b> Standard jagged zigzag line.<br>&bull; <b>Variable Resistor (Rheostat / Potentiometer):</b> Zigzag with a diagonal arrow across it.</td>
+                </tr>
+                <tr>
+                  <td><b>Capacitors</b><br>Fixed & Variable</td>
+                  <td>
+                    <svg class="sym-svg" viewBox="0 0 100 40">
+                      <line x1="5" y1="20" x2="22" y2="20"/>
+                      <line x1="22" y1="8" x2="22" y2="32"/>
+                      <path d="M 30 8 Q 25 20, 30 32"/>
+                      <line x1="28" y1="20" x2="45" y2="20"/>
+                      <line x1="55" y1="20" x2="72" y2="20"/>
+                      <line x1="72" y1="8" x2="72" y2="32"/>
+                      <path d="M 80 8 Q 75 20, 80 32"/>
+                      <line x1="78" y1="20" x2="95" y2="20"/>
+                      <line x1="64" y1="32" x2="88" y2="8" stroke="#fbbf24"/>
+                    </svg>
+                  </td>
+                  <td>&bull; <b>Fixed Capacitor:</b> One flat plate and one curved plate.<br>&bull; <b>Variable Capacitor:</b> Capacitor symbol with a diagonal arrow through the plates.</td>
+                </tr>
+                <tr>
+                  <td><b>Inductors (Coils)</b><br>Air, Iron & Ferrite Core</td>
+                  <td>
+                    <svg class="sym-svg" viewBox="0 0 100 40">
+                      <path d="M 5 25 Q 10 10, 15 25 Q 20 10, 25 25 Q 30 10, 35 25"/>
+                      <path d="M 55 25 Q 60 10, 65 25 Q 70 10, 75 25 Q 80 10, 85 25"/>
+                      <line x1="55" y1="10" x2="85" y2="10" stroke="#fbbf24"/>
+                      <line x1="55" y1="6" x2="85" y2="6" stroke="#fbbf24"/>
+                    </svg>
+                  </td>
+                  <td>&bull; <b>Air Core:</b> Coiled loops alone.<br>&bull; <b>Iron Core:</b> Coil with <b>two solid parallel lines</b>.<br>&bull; <b>Ferrite Core:</b> Coil with <b>dashed parallel lines</b>.</td>
+                </tr>
+                <tr>
+                  <td><b>Transformers</b><br>Air, Iron & Ferrite Core</td>
+                  <td>
+                    <svg class="sym-svg" viewBox="0 0 100 40">
+                      <path d="M 25 6 Q 35 11, 25 16 Q 35 21, 25 26 Q 35 31, 25 36"/>
+                      <line x1="46" y1="6" x2="46" y2="36" stroke="#fbbf24"/>
+                      <line x1="52" y1="6" x2="52" y2="36" stroke="#fbbf24"/>
+                      <path d="M 73 6 Q 63 11, 73 16 Q 63 21, 73 26 Q 63 31, 73 36"/>
+                    </svg>
+                  </td>
+                  <td>Two coupled coils side by side:<br>&bull; <b>Air Core:</b> No lines between coils.<br>&bull; <b>Iron Core:</b> Two solid vertical lines between coils.<br>&bull; <b>Ferrite Core:</b> Dashed vertical lines between coils.</td>
+                </tr>
+                <tr>
+                  <td><b>Switches</b><br>SPST & SPDT</td>
+                  <td>
+                    <svg class="sym-svg" viewBox="0 0 100 40">
+                      <line x1="5" y1="22" x2="18" y2="22"/>
+                      <circle cx="20" cy="22" r="2"/>
+                      <line x1="21" y1="21" x2="36" y2="10" stroke="#fbbf24"/>
+                      <circle cx="38" cy="22" r="2"/>
+                      <line x1="40" y1="22" x2="50" y2="22"/>
+                      <circle cx="65" cy="22" r="2"/>
+                      <line x1="67" y1="21" x2="82" y2="12" stroke="#fbbf24"/>
+                      <circle cx="85" cy="12" r="2"/>
+                      <circle cx="85" cy="30" r="2"/>
+                    </svg>
+                  </td>
+                  <td>&bull; <b>SPST (Single-Pole Single-Throw):</b> Simple ON/OFF two-terminal switch.<br>&bull; <b>SPDT (Single-Pole Double-Throw):</b> Three-terminal changeover switch routing 1 input to 1 of 2 outputs.</td>
+                </tr>
+                <tr>
+                  <td><b>Grounds, Fuses & Circuit Breakers</b></td>
+                  <td>
+                    <svg class="sym-svg" viewBox="0 0 100 40">
+                      <line x1="20" y1="6" x2="20" y2="20"/>
+                      <line x1="10" y1="20" x2="30" y2="20"/>
+                      <line x1="14" y1="25" x2="26" y2="25"/>
+                      <line x1="17" y1="30" x2="23" y2="30"/>
+                      <path d="M 55 20 Q 65 10, 75 20 T 95 20" stroke="#fbbf24"/>
+                      <circle cx="55" cy="20" r="2"/>
+                      <circle cx="95" cy="20" r="2"/>
+                    </svg>
+                  </td>
+                  <td>&bull; <b>Earth Ground:</b> Vertical line with 3 horizontal lines of decreasing width.<br>&bull; <b>Chassis Ground:</b> Angled rake/comb lines.<br>&bull; <b>Fuse:</b> S-curve wave or rectangle between terminals.<br>&bull; <b>Circuit Breaker:</b> Curved arc bridge between two contacts.</td>
+                </tr>
+                <tr>
+                  <td><b>Meters & Transducers</b><br>Voltmeter, Ammeter, Lamp, Mic, Speaker</td>
+                  <td>
+                    <svg class="sym-svg" viewBox="0 0 100 40">
+                      <circle cx="25" cy="20" r="12"/>
+                      <text x="21" y="24" fill="#38bdf8" stroke="none" font-size="12" font-weight="bold">V</text>
+                      <circle cx="70" cy="20" r="12"/>
+                      <text x="66" y="24" fill="#34d399" stroke="none" font-size="12" font-weight="bold">A</text>
+                    </svg>
+                  </td>
+                  <td>&bull; <b>Voltmeter:</b> Circle with letter <b>V</b>.<br>&bull; <b>Ammeter:</b> Circle with letter <b>A</b> or <b>I</b>.<br>&bull; <b>Wires Joining vs. Crossing:</b> Joined wires have a solid dot (node) or T-junction; crossing unconnected wires use a bridge/arch jump.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- LECTURE 2 CONTAINER (SERIES DC CIRCUITS, KVL & VOLTAGE DIVIDER) -->
+    <!-- ============================================================ -->
+    <div id="lec2-container" style="display: none;">
+
+      <!-- PART 1: VARIABLE RESISTORS & MECHANICAL SWITCHES -->
+      <div id="part-view-2-1" class="view-panel active-panel">
+        <div class="lecture-content-wrapper">
+          <h2 class="purple">Part 1A: Variable Resistors (Potentiometer vs. Rheostat)</h2>
+          <div class="table-scroll-container">
+            <div class="scroll-hint">👈 اسحب الجدول أفقياً لمقارنة أنواع المقاومات المتغيرة (Potentiometer & Rheostat) 👉</div>
+            <table>
+              <thead>
+                <tr><th style="width:25%">Variable Resistor Type</th><th style="width:33%">Terminals & Connection</th><th>Primary Function & Technical Details</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><b>1. Potentiometer</b><br>(مجزئ جهد متغير)</td>
+                  <td><b>3 Terminals:</b><br>Fixed ends $(1, 2)$ + movable wiper $(3)$</td>
+                  <td>Used primarily to <b>divide voltage (تقسيم الجهد)</b>. The input voltage is applied across terminals $1$ and $2$, and the variable output voltage is taken between wiper $3$ and terminal $2$.</td>
+                </tr>
+                <tr>
+                  <td><b>2. Rheostat</b><br>(ريوستات / متحكم تيار)</td>
+                  <td><b>2 Terminals:</b><br>Only $(1, 2)$ or Potentiometer with $(3)$ shorted to $(2)$</td>
+                  <td>Used primarily to <b>control current (التحكم في شدة التيار)</b> in series with a load. A 3-terminal potentiometer is converted into a rheostat by connecting wiper terminal $3$ directly to terminal $2$.</td>
+                </tr>
+                <tr>
+                  <td><b>Linear Potentiometer</b><br>(مقاومة متغيرة خطية)</td>
+                  <td>$\Delta R \propto \text{Shaft Rotation Angle}$</td>
+                  <td>Resistance changes at a constant rate with shaft rotation. Example ($100\ \Omega$ pot):<br>&bull; <b>$\frac{1}{4}$ Turn:</b> Top $= 75\ \Omega$, Bottom $= 25\ \Omega$<br>&bull; <b>$\frac{1}{2}$ Turn:</b> Top $= 50\ \Omega$, Bottom $= 50\ \Omega$<br>&bull; <b>$\frac{3}{4}$ Turn:</b> Top $= 25\ \Omega$, Bottom $= 75\ \Omega$</td>
+                </tr>
+                <tr>
+                  <td><b>Tapered (Nonlinear) Potentiometer</b><br>(مقاومة غير خطية)</td>
+                  <td>$\Delta R \ne \text{Linear with Rotation}$</td>
+                  <td>Resistance changes nonlinearly (logarithmic/audio taper). Example ($100\ \Omega$ pot):<br>&bull; <b>$\frac{1}{4}$ Turn:</b> Top $= 60\ \Omega$, Bottom $= 40\ \Omega$<br>&bull; <b>$\frac{1}{2}$ Turn:</b> Top $= 40\ \Omega$, Bottom $= 60\ \Omega$<br>&bull; <b>$\frac{3}{4}$ Turn:</b> Top $= 10\ \Omega$, Bottom $= 90\ \Omega$</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h2 class="blue">Part 1B: Mechanical Switches (أنواع المفاتيح الميكانيكية ورموزها)</h2>
+          <div class="table-scroll-container">
+            <div class="scroll-hint">👈 اسحب الجدول أفقياً لتصفح أنواع المفاتيح الميكانيكية السبعة 👉</div>
+            <table>
+              <thead>
+                <tr><th style="width:24%">Switch Type</th><th style="width:28%">Schematic Symbol (SVG)</th><th>Operation & Practical Application</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><b>(a) SPST</b><br>Single-Pole Single-Throw</td>
+                  <td>
+                    <svg class="sym-svg" viewBox="0 0 100 40">
+                      <line x1="15" y1="24" x2="35" y2="24"/>
+                      <circle cx="38" cy="24" r="2.5"/>
+                      <line x1="40" y1="22" x2="62" y2="10" stroke="#fbbf24"/>
+                      <circle cx="65" cy="24" r="2.5"/>
+                      <line x1="68" y1="24" x2="88" y2="24"/>
+                    </svg>
+                  </td>
+                  <td>Simple 2-terminal ON/OFF switch controlling a single branch/circuit.</td>
+                </tr>
+                <tr>
+                  <td><b>(b) SPDT</b><br>Single-Pole Double-Throw</td>
+                  <td>
+                    <svg class="sym-svg" viewBox="0 0 100 40">
+                      <line x1="10" y1="20" x2="32" y2="20"/>
+                      <circle cx="35" cy="20" r="2.5"/>
+                      <line x1="37" y1="19" x2="62" y2="10" stroke="#fbbf24"/>
+                      <circle cx="65" cy="10" r="2.5"/>
+                      <circle cx="65" cy="30" r="2.5"/>
+                      <line x1="68" y1="10" x2="90" y2="10"/>
+                      <line x1="68" y1="30" x2="90" y2="30"/>
+                    </svg>
+                  </td>
+                  <td>3-terminal changeover switch connecting 1 common input to either terminal 1 (e.g., <b>Lamp 1 ON, Lamp 2 OFF</b>) or terminal 2 (<b>Lamp 2 ON, Lamp 1 OFF</b>).</td>
+                </tr>
+                <tr>
+                  <td><b>(c) DPST</b><br>Double-Pole Single-Throw</td>
+                  <td>
+                    <svg class="sym-svg" viewBox="0 0 100 40">
+                      <line x1="15" y1="14" x2="32" y2="14"/><circle cx="35" cy="14" r="2"/>
+                      <line x1="37" y1="13" x2="56" y2="4" stroke="#fbbf24"/><circle cx="60" cy="14" r="2"/><line x1="62" y1="14" x2="80" y2="14"/>
+                      <line x1="15" y1="32" x2="32" y2="32"/><circle cx="35" cy="32" r="2"/>
+                      <line x1="37" y1="31" x2="56" y2="22" stroke="#fbbf24"/><circle cx="60" cy="32" r="2"/><line x1="62" y1="32" x2="80" y2="32"/>
+                      <line x1="46" y1="9" x2="46" y2="27" stroke="#94a3b8" stroke-dasharray="2,2"/>
+                    </svg>
+                  </td>
+                  <td>Two mechanically linked SPST switches operating simultaneously to open/close two separate lines at once.</td>
+                </tr>
+                <tr>
+                  <td><b>(d) DPDT</b><br>Double-Pole Double-Throw</td>
+                  <td>
+                    <svg class="sym-svg" viewBox="0 0 100 40">
+                      <circle cx="28" cy="12" r="2"/><line x1="30" y1="11" x2="48" y2="5" stroke="#fbbf24"/><circle cx="52" cy="6" r="2"/><circle cx="52" cy="17" r="2"/>
+                      <circle cx="28" cy="30" r="2"/><line x1="30" y1="29" x2="48" y2="23" stroke="#fbbf24"/><circle cx="52" cy="24" r="2"/><circle cx="52" cy="35" r="2"/>
+                      <line x1="39" y1="8" x2="39" y2="26" stroke="#94a3b8" stroke-dasharray="2,2"/>
+                    </svg>
+                  </td>
+                  <td>6-terminal switch consisting of two mechanically linked SPDT switches operating together.</td>
+                </tr>
+                <tr>
+                  <td><b>(e) NOPB</b><br>Normally Open Push Button</td>
+                  <td>
+                    <svg class="sym-svg" viewBox="0 0 100 40">
+                      <line x1="15" y1="26" x2="35" y2="26"/><circle cx="38" cy="26" r="2.5"/>
+                      <circle cx="62" cy="26" r="2.5"/><line x1="65" y1="26" x2="85" y2="26"/>
+                      <line x1="34" y1="18" x2="66" y2="18" stroke="#fbbf24"/>
+                      <line x1="50" y1="8" x2="50" y2="18" stroke="#fbbf24"/>
+                    </svg>
+                  </td>
+                  <td>Open at rest; pressing the button bridges the contacts and closes the circuit momentarily.</td>
+                </tr>
+                <tr>
+                  <td><b>(f) NCPB</b><br>Normally Closed Push Button</td>
+                  <td>
+                    <svg class="sym-svg" viewBox="0 0 100 40">
+                      <line x1="15" y1="22" x2="35" y2="22"/><circle cx="38" cy="22" r="2.5"/>
+                      <circle cx="62" cy="22" r="2.5"/><line x1="65" y1="22" x2="85" y2="22"/>
+                      <line x1="34" y1="25" x2="66" y2="25" stroke="#fbbf24"/>
+                      <line x1="50" y1="10" x2="50" y2="25" stroke="#fbbf24"/>
+                    </svg>
+                  </td>
+                  <td>Closed at rest (conducting); pressing the button breaks the contact and opens the circuit.</td>
+                </tr>
+                <tr>
+                  <td><b>(g) Single-Pole Rotary Switch</b></td>
+                  <td>
+                    <svg class="sym-svg" viewBox="0 0 100 40">
+                      <circle cx="35" cy="30" r="2.5"/><line x1="37" y1="29" x2="55" y2="29" stroke="#fbbf24"/>
+                      <circle cx="58" cy="30" r="2"/><circle cx="56" cy="20" r="2"/><circle cx="48" cy="12" r="2"/>
+                      <circle cx="36" cy="10" r="2"/><circle cx="25" cy="15" r="2"/><circle cx="20" cy="25" r="2"/>
+                    </svg>
+                  </td>
+                  <td>Multi-position selector switch (e.g., 6-position rotary) rotating a central wiper to select one of several outputs (such as multimeter range dials).</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- PART 2: SERIES DC CIRCUITS & KVL -->
+      <div id="part-view-2-2" class="view-panel">
+        <div class="lecture-content-wrapper">
+          <h2 class="teal">Part 2: Series DC Circuits & Kirchhoff's Voltage Law (KVL)</h2>
+          <div class="table-scroll-container">
+            <div class="scroll-hint">👈 اسحب الجدول أفقياً لتصفح قوانين التوصيل على التوالي وقانون كيرشوف للجهد 👉</div>
+            <table>
+              <thead>
+                <tr><th style="width:26%">Concept / Law</th><th style="width:36%">Formula / Equation</th><th>Key Rules & Physical Meaning</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><b>Series Circuit Definition</b><br>(تعريف دائرة التوالي)</td>
+                  <td>$$I = I_1 = I_2 = I_3 = \dots = I_n$$</td>
+                  <td>A circuit having <b>only one path</b> for current flow. Therefore, the current ($I$) is strictly the <b>same</b> through every resistor and component in the series loop.</td>
+                </tr>
+                <tr>
+                  <td><b>Total Series Resistance ($R_T$)</b><br>(المقاومة الكلية المكافئة)</td>
+                  <td>$$R_T = R_1 + R_2 + \dots + R_n \quad [\Omega]$$</td>
+                  <td>Total equivalent resistance is the direct sum of all individual series resistances. Always larger than the largest single resistor ($R_T > R_{\max}$).</td>
+                </tr>
+                <tr>
+                  <td><b>Identical Series Resistors</b><br>(مقاومات متساوية على التوالي)</td>
+                  <td>$$R_T = n \cdot R \quad [\Omega]$$</td>
+                  <td>If $n$ series resistors all have the exact same resistance value $R$, multiply $n$ by $R$.</td>
+                </tr>
+                <tr>
+                  <td><b>Series Circuit Current ($I$)</b></td>
+                  <td>$$I = \frac{E}{R_T} \quad [\text{A}]$$</td>
+                  <td>By Ohm's Law, total loop current equals net applied source voltage $E$ divided by total series resistance $R_T$.</td>
+                </tr>
+                <tr>
+                  <td><b>Resistor Voltage Drop ($V_x$)</b></td>
+                  <td>$$V_x = I \cdot R_x \quad [\text{V}]$$</td>
+                  <td>Voltage drop across any resistor $R_x$. Polarity is $(+)$ where current $I$ <b>enters</b> the resistor and $(-)$ where current <b>leaves</b>.</td>
+                </tr>
+                <tr>
+                  <td><b>Kirchhoff's Voltage Law (KVL)</b><br>(قانون كيرشوف للجهد)</td>
+                  <td>$$\sum V = 0 \quad (\text{around closed loop})$$<br>$$\sum E_{rises} = \sum V_{drops}$$</td>
+                  <td>The algebraic summation of voltage rises and voltage drops around any closed loop is equal to zero:<br>$E - V_1 - V_2 - \dots - V_n = 0 \implies E = V_1 + V_2 + \dots + V_n$.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="callout teal">
+            <h4>🧭 قاعدة الإشارات عند تطبيق قانون كيرشوف للجهد (KVL Sign Convention)</h4>
+            <ul>
+              <li>اختر نقطة بداية على المسار المغلق واترك مع اتجاه التيار (أو في اتجاه عقارب الساعة CW):</li>
+              <li><b>ارتفاع الجهد (Voltage Rise $+E$):</b> عند المرور داخل عنصر من القطب السالب $(-)$ إلى القطب الموجب $(+)$ يُكتب بإشارة <b>موجبة $(+)$</b>.</li>
+              <li><b>انخفاض الجهد (Voltage Drop $-V$):</b> عند المرور داخل عنصر من القطب الموجب $(+)$ إلى القطب السالب $(-)$ (مع اتجاه التيار في المقاومة) يُكتب بإشارة <b>سالبة $(-)$</b>.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- PART 3: VOLTAGE SOURCES IN SERIES & POWER -->
+      <div id="part-view-2-3" class="view-panel">
+        <div class="lecture-content-wrapper">
+          <h2 class="orange">Part 3: Voltage Sources in Series & Power Conservation</h2>
+          <div class="table-scroll-container">
+            <div class="scroll-hint">👈 اسحب الجدول أفقياً لتصفح جمع مصادر الجهد على التوالي وقوانين القدرة 👉</div>
+            <table>
+              <thead>
+                <tr><th style="width:26%">Topic / Parameter</th><th style="width:36%">Formula / Equation</th><th>Explanation & Direction Rules</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><b>Series-Aiding Sources</b><br>(مصادر متفقة الاتجاه)</td>
+                  <td>$$E_T = E_1 + E_2 + \dots + E_n$$</td>
+                  <td>When voltage sources push current in the <b>same loop direction</b> (e.g., all clockwise or all upward), their voltages add directly.</td>
+                </tr>
+                <tr>
+                  <td><b>Series-Opposing Sources</b><br>(مصادر متعاكسة الاتجاه)</td>
+                  <td>$$E_T = \left| \sum E_{CW} - \sum E_{CCW} \right|$$</td>
+                  <td>When sources oppose each other in the same loop, subtract the smaller sum from the larger sum.<br>&bull; <b>Polarity of $E_T$ & Current Direction:</b> Always follows the direction of the <b>larger voltage sum</b>.</td>
+                </tr>
+                <tr>
+                  <td><b>Element Reordering in Series</b></td>
+                  <td>Series elements can be rearranged freely</td>
+                  <td>In a single-loop series circuit, voltage sources and resistors can be moved around the loop to group all sources together into $E_T$ and all resistors into $R_T$ without changing loop current $I = \frac{E_T}{R_T}$.</td>
+                </tr>
+                <tr>
+                  <td><b>Power Dissipated by Resistor $R_x$</b></td>
+                  <td>$$P_x = V_x \cdot I = \frac{V_x^2}{R_x} = I^2 \cdot R_x \quad [\text{W}]$$</td>
+                  <td>Electrical power converted into heat by each individual series resistor $R_1, R_2, \dots, R_n$.</td>
+                </tr>
+                <tr>
+                  <td><b>Total Source Power ($P_T$)</b></td>
+                  <td>$$P_T = E \cdot I \quad [\text{W}]$$</td>
+                  <td>Total electrical power delivered by the equivalent voltage source to the series circuit.</td>
+                </tr>
+                <tr>
+                  <td><b>Conservation of Power</b><br>(بقاء القدرة في الدائرة)</td>
+                  <td>$$P_T = P_1 + P_2 + \dots + P_n \quad [\text{W}]$$</td>
+                  <td>Total power delivered by the voltage source is strictly equal to the sum of powers dissipated by all resistors in the circuit.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- PART 4: VOLTAGE DIVIDER RULE & SUBSCRIPT VOLTAGES -->
+      <div id="part-view-2-4" class="view-panel">
+        <div class="lecture-content-wrapper">
+          <h2 class="pink">Part 4: Voltage Divider Rule (VDR) & Point Voltage Notation ($V_a, V_{ab}$)</h2>
+          <div class="table-scroll-container">
+            <div class="scroll-hint">👈 اسحب الجدول أفقياً لتصفح قاعدة مجزئ الجهد وحساب جهود النقاط 👉</div>
+            <table>
+              <thead>
+                <tr><th style="width:26%">Rule / Notation</th><th style="width:36%">Formula / Equation</th><th>Application & Exam Shortcuts</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><b>General Voltage Divider Rule (VDR)</b><br>(مجزئ الجهد العام)</td>
+                  <td>$$V_x = \frac{R_x}{R_T} \cdot E \quad [\text{V}]$$</td>
+                  <td>Finds the voltage drop across <b>any resistor $R_x$</b> in a series chain directly from the total applied voltage $E$ <b>without</b> calculating current $I$ first!</td>
+                </tr>
+                <tr>
+                  <td><b>Two-Resistor Voltage Divider</b><br>(مجزئ الجهد لمقاومتين)</td>
+                  <td>$$V_1 = \frac{R_1}{R_1 + R_2} E, \quad V_2 = \frac{R_2}{R_1 + R_2} E$$</td>
+                  <td>Notice that in VDR, the numerator is the <b>same resistor ($R_x$)</b> whose voltage you want to find (unlike Current Divider!). Larger series resistor always takes a larger share of voltage ($V_x \propto R_x$).</td>
+                </tr>
+                <tr>
+                  <td><b>Single-Subscript Voltage ($V_a$)</b><br>(جهد نقطة بالنسبة للأرضي)</td>
+                  <td>$$V_a = V_{a \to \text{Ground}}, \quad V_{\text{Ground}} = 0\text{ V}$$</td>
+                  <td>Denotes the potential of point $a$ with respect to the <b>reference ground ($\frac{\perp}{=}$)</b>. Start at point $a$, trace a path to Ground, and sum the voltages along the path.</td>
+                </tr>
+                <tr>
+                  <td><b>Double-Subscript Voltage ($V_{ab}$)</b><br>(فرق الجهد بين نقطتين)</td>
+                  <td>$$V_{ab} = V_a - V_b = -V_{ba}$$</td>
+                  <td>Voltage between point $a$ and point $b$.<br><b>Path Method (Slide 24):</b> Start at the first subscript ($a$) and walk to the second subscript ($b$):<br>&bull; Going from $(+)$ to $(-)$ across an element: write <b>$-V$</b>.<br>&bull; Going from $(-)$ to $(+)$ across an element: write <b>$+V$</b>.<br>(Note: Either path around the loop gives the exact same $V_{ab}$).</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="callout pink">
+            <h4>⚡ خلاصة سريعة ليلة الامتحان — المحاضرة الثانية (Series Circuits & VDR)</h4>
+            <ul>
+              <li>في التوالي: <b>التيار ثابت</b> ($I = \text{const}$)، والجهد يتجزأ بنفس نسبة المقاومات ($V_x = \frac{R_x}{R_T}E$)، أي أن المقاومة الأكبر تأخذ الفولت الأكبر والقدرة الأكبر ($P_x = I^2 R_x$).</li>
+              <li>قبل حساب جهود النقاط ($V_{ac}, V_{ad}$) في دائرة تحتوي على عدة بطاريات ومقاومات: اجمع البطاريات أولاً لإيجاد $E_T$ وتحديد اتجاه التيار، ثم حدد قطبية $(+ / -)$ على كل مقاومة (التيار يدخل من $+$ ويخرج من $-$)، وأوجد جهد كل مقاومة بمجزئ الجهد $V_x = \frac{R_x}{R_T}E_T$.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- LECTURE 3 CONTAINER (PARALLEL DC CIRCUITS, KCL & CURRENT DIVIDER) -->
+    <!-- ============================================================ -->
+    <div id="lec3-container" style="display: none;">
+
+      <!-- PART 1: PARALLEL DC CIRCUITS & KCL -->
+      <div id="part-view-3-1" class="view-panel active-panel">
+        <div class="lecture-content-wrapper">
+          <h2 class="purple">Part 1: Parallel (Shunt) DC Circuits & Kirchhoff's Current Law (KCL)</h2>
+          <div class="table-scroll-container">
+            <div class="scroll-hint">👈 اسحب الجدول أفقياً لتصفح خصائص دوائر التوازي وقانون كيرشوف للتيار 👉</div>
+            <table>
+              <thead>
+                <tr><th style="width:26%">Concept / Law</th><th style="width:36%">Formula / Equation</th><th>Key Rules & Physical Meaning</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><b>Parallel (Shunt) Circuit</b><br>(تعريف دائرة التوازي)</td>
+                  <td>$$V = E = V_1 = V_2 = V_3 = \dots = V_n$$</td>
+                  <td>Two or more components connected across the <b>same two nodes / voltage source</b>. There is more than one path for current flow, and <b>voltage is strictly identical</b> across all parallel branches.</td>
+                </tr>
+                <tr>
+                  <td><b>Kirchhoff's Current Law (KCL)</b><br>(قانون كيرشوف للتيار)</td>
+                  <td>$$\sum I_{\text{entering node}} = \sum I_{\text{leaving node}}$$<br>$$\sum I_{in} = \sum I_{out}$$</td>
+                  <td>The algebraic sum of currents entering any node (junction) equals the sum of currents leaving that node. Charge cannot accumulate at a node.</td>
+                </tr>
+                <tr>
+                  <td><b>Total Source Current ($I_T$)</b></td>
+                  <td>$$I_T = I_1 + I_2 + \dots + I_n \quad [\text{A}]$$</td>
+                  <td>Total current leaving the source splits among the parallel branches and recombines to return to the source.</td>
+                </tr>
+                <tr>
+                  <td><b>Branch Current ($I_x$)</b></td>
+                  <td>$$I_x = \frac{E}{R_x} = \frac{V}{R_x} \quad [\text{A}]$$</td>
+                  <td>By Ohm's Law, the current in any parallel branch equals the common parallel voltage divided by that branch's resistance.</td>
+                </tr>
+                <tr>
+                  <td><b>Negative Current Sign Rule</b><br>(معنى الإشارة السالبة للتيار)</td>
+                  <td>$$I_x < 0 \implies \text{Opposite Direction}$$</td>
+                  <td>If solving KCL at a node yields a negative current (e.g., $I_3 = -1\text{ A}$ or $I_4 = -7\text{ A}$), the magnitude is correct, and the negative sign simply means the actual current flows <b>opposite</b> to the arrow direction drawn on the diagram.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- PART 2: PARALLEL RESISTANCE & CONDUCTANCE -->
+      <div id="part-view-3-2" class="view-panel">
+        <div class="lecture-content-wrapper">
+          <h2 class="blue">Part 2: Parallel Equivalent Resistance ($R_T$) & Conductance ($G_T$)</h2>
+          <div class="table-scroll-container">
+            <div class="scroll-hint">👈 اسحب الجدول أفقياً لتصفح جميع قوانين المقاومة المكافئة والمواصلة على التوازي 👉</div>
+            <table>
+              <thead>
+                <tr><th style="width:26%">Case / Parameter</th><th style="width:38%">Formula / Equation</th><th>Practical Notes & Shortcuts</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><b>Branch Conductance ($G$)</b><br>(المواصلة الكهربية)</td>
+                  <td>$$G_x = \frac{1}{R_x} \quad [\text{Siemens, S or }\mho]$$</td>
+                  <td>Reciprocal of resistance; measures how easily a branch conducts current.</td>
+                </tr>
+                <tr>
+                  <td><b>Total Parallel Conductance ($G_T$)</b></td>
+                  <td>$$G_T = G_1 + G_2 + \dots + G_n = \frac{1}{R_1} + \frac{1}{R_2} + \dots + \frac{1}{R_n} \ [\text{S}]$$</td>
+                  <td>In parallel circuits, conductances <b>add directly</b> (just like resistances add in series!).</td>
+                </tr>
+                <tr>
+                  <td><b>General $n$ Parallel Resistors</b></td>
+                  <td>$$R_T = \frac{1}{\frac{1}{R_1} + \frac{1}{R_2} + \dots + \frac{1}{R_n}} = \frac{1}{G_T} \quad [\Omega]$$</td>
+                  <td><b>Golden Check:</b> Total parallel resistance $R_T$ is <b>always less than the smallest resistor</b> in the parallel combination ($R_T < R_{\min}$).</td>
+                </tr>
+                <tr>
+                  <td><b>Identical Parallel Resistors</b><br>(مقاومات متساوية على التوازي)</td>
+                  <td>$$R_T = \frac{R}{n} \quad [\Omega]$$</td>
+                  <td>If $n$ parallel resistors all have the exact same value $R$, simply divide $R$ by the number of branches $n$ (e.g., two $60\ \Omega$ resistors in parallel $\implies \frac{60}{2} = 30\ \Omega$).</td>
+                </tr>
+                <tr>
+                  <td><b>Two Resistors in Parallel</b><br>(حاصل ضربهما على جمعهما)</td>
+                  <td>$$R_T = \frac{R_1 R_2}{R_1 + R_2} \quad [\Omega]$$</td>
+                  <td>Most frequently used formula! For 4 resistors, you can pair them two-by-two: $R_A = R_1 \parallel R_2$, $R_B = R_3 \parallel R_4$, then $R_T = \frac{R_A R_B}{R_A + R_B}$.</td>
+                </tr>
+                <tr>
+                  <td><b>Three Resistors in Parallel</b></td>
+                  <td>$$R_T = \frac{R_1 R_2 R_3}{R_1 R_2 + R_1 R_3 + R_2 R_3} \quad [\Omega]$$</td>
+                  <td>Direct closed-form formula for 3 parallel branches without taking reciprocals.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- PART 3: VOLTAGE SOURCES IN PARALLEL & POWER -->
+      <div id="part-view-3-3" class="view-panel">
+        <div class="lecture-content-wrapper">
+          <h2 class="orange">Part 3: Voltage Sources in Parallel & Power in Parallel Circuits</h2>
+          <div class="table-scroll-container">
+            <div class="scroll-hint">👈 اسحب الجدول أفقياً لتصفح توصيل البطاريات على التوازي وقوانين القدرة 👉</div>
+            <table>
+              <thead>
+                <tr><th style="width:26%">Topic / Configuration</th><th style="width:36%">Formula / Condition</th><th>Engineering Rule & Safety Warning</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><b>Equal Voltage Sources in Parallel</b><br>(توازي مصادر متساوية الجهد)</td>
+                  <td>$$E_1 = E_2 = E \implies V_{out} = E$$<br>$$I_{total} = I_1 + I_2 = 2I$$</td>
+                  <td>Identical voltage sources (e.g., two $12\text{ V}$ or two $1.5\text{ V}$ cells) are connected in parallel to <b>increase available current capacity (Amp-Hours)</b> while keeping output voltage constant.</td>
+                </tr>
+                <tr>
+                  <td><b>Unequal Voltage Sources in Parallel</b><br>(توازي مصادر مختلفة الجهد ❌)</td>
+                  <td>$$E_1 \ne E_2 \implies \textbf{NEVER ALLOWED!}$$</td>
+                  <td><b>Strictly Forbidden:</b> Never place sources of different voltages (e.g., $12\text{ V}$ and $6\text{ V}$) in parallel! A huge internal short-circuit current will circulate from the $12\text{ V}$ source into the $6\text{ V}$ source, destroying both batteries.</td>
+                </tr>
+                <tr>
+                  <td><b>Cells in Series vs. Parallel</b><br>(مقارنة البطاريات توالي وتوازي)</td>
+                  <td>&bull; <b>Series ($1.5\text{ V} + 1.5\text{ V}$):</b> $V_{out} = 3\text{ V}$, same $I$<br>&bull; <b>Parallel ($1.5\text{ V} \parallel 1.5\text{ V}$):</b> $V_{out} = 1.5\text{ V}$, double $I$</td>
+                  <td>Series boosts voltage; Parallel boosts current capacity and battery runtime.</td>
+                </tr>
+                <tr>
+                  <td><b>Branch Power Dissipation ($P_x$)</b></td>
+                  <td>$$P_x = \frac{E^2}{R_x} = E \cdot I_x = I_x^2 R_x \quad [\text{W}]$$</td>
+                  <td><b>Dr. Shaalan's Golden Exam Tip (Slide 20 & 22):</b> Always prefer using the given data ($P_x = \frac{E^2}{R_x}$ or $R_3 = \frac{V_3^2}{P_3}$) rather than previously calculated currents, so rounding errors are not carried through!</td>
+                </tr>
+                <tr>
+                  <td><b>Total Power in Parallel ($P_T$)</b></td>
+                  <td>$$P_T = E \cdot I_T = P_1 + P_2 + \dots + P_n \quad [\text{W}]$$</td>
+                  <td>Total power delivered by the source equals the sum of powers dissipated by all parallel branches ($P_{in} = P_{out}$).</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- PART 4: CURRENT DIVIDER RULE & MASTER COMPARISON -->
+      <div id="part-view-3-4" class="view-panel">
+        <div class="lecture-content-wrapper">
+          <h2 class="teal">Part 4A: Current Divider Rule (CDR — قاعدة مجزئ التيار)</h2>
+          <div class="table-scroll-container">
+            <div class="scroll-hint">👈 اسحب الجدول أفقياً لتصفح جميع صيغ مجزئ التيار (Current Divider Rule) 👉</div>
+            <table>
+              <thead>
+                <tr><th style="width:26%">CDR Case</th><th style="width:38%">Formula / Equation</th><th>How & When to Use It</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><b>General Current Divider Rule</b><br>(لأي عدد $n$ من المقاومات)</td>
+                  <td>$$I_x = \frac{R_T}{R_x} \cdot I_T = \frac{G_x}{G_T} \cdot I_T \quad [\text{A}]$$</td>
+                  <td>Valid for <b>any number of parallel resistors</b>! First find total parallel resistance $R_T$ (or $G_T$), then multiply $I_T$ by $\frac{R_T}{R_x}$.</td>
+                </tr>
+                <tr>
+                  <td><b>Two-Resistor Current Divider</b><br>(مجزئ التيار لمقاومتين فقط)</td>
+                  <td>$$I_1 = \frac{R_2}{R_1 + R_2} I_T, \qquad I_2 = \frac{R_1}{R_1 + R_2} I_T$$</td>
+                  <td><b>Critical Exam Alert:</b> For two parallel resistors, put the <b>OPPOSITE resistor</b> in the numerator! Smaller resistance always draws the larger current ($I_x \propto \frac{1}{R_x}$).</td>
+                </tr>
+                <tr>
+                  <td><b>Equal Parallel Branches</b><br>(تفرع التيار في مقاومات متساوية)</td>
+                  <td>$$I_1 = I_2 = \dots = I_n = \frac{I_T}{n}$$</td>
+                  <td>When all $n$ parallel branches have the same resistance $R$, the incoming current $I_T$ splits <b>equally</b> among them.</td>
+                </tr>
+                <tr>
+                  <td><b>Finding Unknown $R_1$ for Given Current Split</b> (Slide 18)</td>
+                  <td><b>Method I (CDR):</b> $I_2 = \frac{R_1}{R_1 + R_2} I_T$<br><b>Method II (KCL + Ohm):</b><br>$I_1 = I_T - I_2, \ V = I_2 R_2, \ R_1 = \frac{V}{I_1}$</td>
+                  <td>Method II using KCL and Ohm's law is often faster and less prone to algebra mistakes than cross-multiplying the CDR equation.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h2 class="pink">Part 4B: Master Exam Comparison — Series vs. Parallel DC Circuits</h2>
+          <div class="table-scroll-container">
+            <div class="scroll-hint">👈 اسحب الجدول أفقياً للمقارنة الشاملة بين دوائر التوالي ودوائر التوازي 👉</div>
+            <table>
+              <thead>
+                <tr><th style="width:22%">Quantity / Rule</th><th style="width:39%">Series DC Circuit (Lecture 2)</th><th>Parallel DC Circuit (Lecture 3)</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><b>Current ($I$)</b></td>
+                  <td><b>Same everywhere:</b> $I_T = I_1 = I_2 = \dots = I_n$</td>
+                  <td><b>Splits among branches (KCL):</b> $I_T = I_1 + I_2 + \dots + I_n$</td>
+                </tr>
+                <tr>
+                  <td><b>Voltage ($V$)</b></td>
+                  <td><b>Splits across resistors (KVL):</b> $E = V_1 + V_2 + \dots + V_n$</td>
+                  <td><b>Same everywhere:</b> $E = V_1 = V_2 = \dots = V_n$</td>
+                </tr>
+                <tr>
+                  <td><b>Equivalent Resistance ($R_T$)</b></td>
+                  <td>$$R_T = R_1 + R_2 + \dots + R_n \quad (R_T > R_{\max})$$<br>Equal resistors: $R_T = n \cdot R$</td>
+                  <td>$$\frac{1}{R_T} = \frac{1}{R_1} + \frac{1}{R_2} + \dots + \frac{1}{R_n} \quad (R_T < R_{\min})$$<br>Equal resistors: $R_T = \frac{R}{n}$ &nbsp;|&nbsp; Two: $R_T = \frac{R_1 R_2}{R_1 + R_2}$</td>
+                </tr>
+                <tr>
+                  <td><b>Divider Rule (2 Resistors)</b></td>
+                  <td><b>Voltage Divider (Same $R$ on top):</b><br>$$V_1 = \frac{R_1}{R_1 + R_2} E, \quad V_2 = \frac{R_2}{R_1 + R_2} E$$</td>
+                  <td><b>Current Divider (Opposite $R$ on top):</b><br>$$I_1 = \frac{R_2}{R_1 + R_2} I_T, \quad I_2 = \frac{R_1}{R_1 + R_2} I_T$$</td>
+                </tr>
+                <tr>
+                  <td><b>General Divider ($n$ Resistors)</b></td>
+                  <td>$$V_x = \frac{R_x}{R_T} \cdot E$$</td>
+                  <td>$$I_x = \frac{R_T}{R_x} \cdot I_T = \frac{G_x}{G_T} \cdot I_T$$</td>
+                </tr>
+                <tr>
+                  <td><b>Total Power ($P_T$)</b></td>
+                  <td>$$P_T = E I = P_1 + P_2 + \dots + P_n$$<br>(Largest $R$ dissipates most power: $P_x = I^2 R_x$)</td>
+                  <td>$$P_T = E I_T = P_1 + P_2 + \dots + P_n$$<br>(Smallest $R$ dissipates most power: $P_x = \frac{E^2}{R_x}$)</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- TAB 4 CONTAINER: EXAM SHEET & TRICKS (ورقة القوانين المجمعة وتريكات المسائل) -->
+    <!-- ============================================================ -->
+    <div id="lec4-container" style="display: none;">
+
+      <!-- PART 1: ONE-PAGE MASTER FORMULA CHEAT SHEET -->
+      <div id="part-view-4-1" class="view-panel active-panel">
+        <div class="lecture-content-wrapper">
+          <h2 class="emerald">Part 1: One-Page Master Formula Cheat Sheet (ورقة قوانين المحاضرات الثلاث في صفحة واحدة)</h2>
+          <div class="table-scroll-container">
+            <div class="scroll-hint">👈 اسحب الجدول أفقياً لمراجعة جميع قوانين المنهج (المحاضرات 1، 2، 3) في مكان واحد 👉</div>
+            <table>
+              <thead>
+                <tr><th style="width:24%">Category / Topic</th><th style="width:38%">Master Formulas & Equations</th><th>Key Units & Golden Exam Reminders</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><b>1. Ohm's Law & Conductance</b><br>(قانون أوم والمواصلة)</td>
+                  <td>$$V = I \cdot R, \quad I = \frac{V}{R}, \quad R = \frac{V}{I}$$<br>$$G = \frac{1}{R} = \frac{I}{V} \quad [\text{S or }\mho]$$</td>
+                  <td>&bull; $V$ or $E$ in Volts $[\text{V}]$, $I$ in Amps $[\text{A}]$, $R$ in Ohms $[\Omega]$, $G$ in Siemens $[\text{S}]$.<br>&bull; Open Circuit: $R = \infty, \ I = 0$. Short Circuit: $R \approx 0, \ I \to \text{max}$.</td>
+                </tr>
+                <tr>
+                  <td><b>2. Physical Wire Resistance</b><br>(مقاومة الموصل)</td>
+                  <td>$$R = \rho \frac{L}{A} \quad [\Omega]$$</td>
+                  <td>&bull; $\rho$: Resistivity, $L$: Length ($\text{m}$), $A$: Cross-sectional area ($\text{m}^2$).<br>&bull; $R$ increases with length $L$ and decreases with area $A$.</td>
+                </tr>
+                <tr>
+                  <td><b>3. Electrical Power Wheel</b><br>(قوانين القدرة الثلاثة)</td>
+                  <td>$$P = V \cdot I = I^2 \cdot R = \frac{V^2}{R} \quad [\text{W}]$$<br>$$I = \sqrt{\frac{P}{R}}, \quad V = \sqrt{P \cdot R}$$</td>
+                  <td>&bull; At constant $V$: $I = \frac{P}{V}$ (higher wattage lamp draws higher current).<br>&bull; At constant $R$: $P \propto I^2$ (doubling $I \implies 4\times P$; halving $I \implies \frac{1}{4}P$).</td>
+                </tr>
+                <tr>
+                  <td><b>4. System Efficiency ($\eta$)</b><br>(الكفاءة والمفاقيد)</td>
+                  <td>$$\eta = \frac{P_{out}}{P_{in}} \times 100\% = \frac{P_{out}}{P_{out} + P_{losses}} \times 100\%$$<br>$$P_{in} = P_{out} + P_{losses}, \quad \eta_T = \eta_1 \cdot \eta_2 \cdots \eta_n$$</td>
+                  <td>&bull; Mechanical Power Conversion: <span class="result-badge">$1\text{ hp} = 746\text{ W}$</span>.<br>&bull; For DC Motor: $P_{in} = E \cdot I \ [\text{W}]$, $P_{out} = (\text{hp}) \times 746 \ [\text{W}]$.</td>
+                </tr>
+                <tr>
+                  <td><b>5. Reactive Elements ($L, C$)</b><br>(الحث والسعة - جدول الوحدات)</td>
+                  <td>$$V_L = -L \left(\frac{\Delta I}{\Delta t}\right) \ [\text{V}], \qquad C = \frac{Q}{E} \ [\text{F}]$$</td>
+                  <td>&bull; Inductance $L$ in Henry $[\text{H}]$; Capacitance $C$ in Farad $[\text{F}]$ ($Q$ in Coulombs).</td>
+                </tr>
+                <tr>
+                  <td><b>6. Series DC Circuits & KVL</b><br>(دوائر التوالي وكيرشوف للجهد)</td>
+                  <td>$$I_T = I_1 = I_2 = \dots = I_n = \frac{E_T}{R_T}$$<br>$$R_T = R_1 + R_2 + \dots + R_n \quad (\text{Equal: } R_T = nR)$$<br>$$\sum V_{loop} = 0 \implies E_T = V_1 + V_2 + \dots + V_n$$</td>
+                  <td>&bull; Series-Aiding sources add; Series-Opposing sources subtract ($E_T$ takes sign of larger sum).<br>&bull; Total Power: $P_T = E_T I = P_1 + P_2 + \dots + P_n$.</td>
+                </tr>
+                <tr>
+                  <td><b>7. Voltage Divider Rule (VDR)</b><br>(قاعدة مجزئ الجهد)</td>
+                  <td>$$V_x = \frac{R_x}{R_T} \cdot E \qquad (\text{General } n \text{ resistors})$$<br>$$V_1 = \frac{R_1}{R_1 + R_2} E, \quad V_2 = \frac{R_2}{R_1 + R_2} E$$</td>
+                  <td>&bull; Numerator has the <b>SAME resistor $R_x$</b> whose voltage drop you want.<br>&bull; Subscript Voltages: $V_{ab} = V_a - V_b = -V_{ba}$, and $V_{\text{Ground}} = 0\text{ V}$.</td>
+                </tr>
+                <tr>
+                  <td><b>8. Parallel DC Circuits & KCL</b><br>(دوائر التوازي وكيرشوف للتيار)</td>
+                  <td>$$V = E = V_1 = V_2 = \dots = V_n$$<br>$$\sum I_{in} = \sum I_{out} \implies I_T = I_1 + I_2 + \dots + I_n$$<br>$$G_T = G_1 + G_2 + \dots + G_n, \quad R_T = \frac{1}{G_T}$$</td>
+                  <td>&bull; Two Resistors: <span class="result-badge">$R_T = \frac{R_1 R_2}{R_1 + R_2}$</span> &nbsp;|&nbsp; $n$ Equal Resistors: <span class="result-badge">$R_T = \frac{R}{n}$</span>.<br>&bull; Three Resistors: $R_T = \frac{R_1 R_2 R_3}{R_1 R_2 + R_1 R_3 + R_2 R_3}$.</td>
+                </tr>
+                <tr>
+                  <td><b>9. Current Divider Rule (CDR)</b><br>(قاعدة مجزئ التيار)</td>
+                  <td>$$I_x = \frac{R_T}{R_x} \cdot I_T = \frac{G_x}{G_T} \cdot I_T \quad (\text{General } n \text{ branches})$$<br>$$I_1 = \frac{R_2}{R_1 + R_2} I_T, \quad I_2 = \frac{R_1}{R_1 + R_2} I_T \quad (2 \text{ branches})$$</td>
+                  <td>&bull; For 2 branches, numerator has the <b>OPPOSITE resistor</b>!<br>&bull; For $n$ equal parallel branches: $I_1 = I_2 = \dots = \frac{I_T}{n}$.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          
+          </div>
+        </div>
+      </div>
+
+      <!-- PART 2: EXAM PROBLEM-SOLVING TRICKS & RECIPES -->
+      <div id="part-view-4-2" class="view-panel">
+        <div class="lecture-content-wrapper">
+          <h2 class="purple">Part 2: Top 8 Exam Problem-Solving Tricks & Recipes (تريكات وأسرار حل المسائل في الامتحان)</h2>
+          <div class="table-scroll-container">
+            <div class="scroll-hint">👈 اسحب الجدول أفقياً لتصفح تريكات حل جميع أفكار مسائل المحاضرات الثلاث بدون أخطاء 👉</div>
+            <table>
+              <thead>
+                <tr><th style="width:25%">Exam Problem Type (فكرة المسألة)</th><th style="width:37%">Fast Solution Recipe (خطوات الحل السريع)</th><th>Pro Exam Trick & Common Trap (التريكة والفخ)</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><b>Trick 1: Finding Voltage Between Two Points ($V_{ac}, V_{ad}, V_{cf}, V_{eb}$)</b><br>(Lec 2 - Slides 22–24)</td>
+                  <td>
+                    <b>1.</b> Combine series batteries: $E_T = \sum E_{\text{with}} - \sum E_{\text{against}}$ and find loop current direction.<br>
+                    <b>2.</b> Find each resistor drop by VDR: $V_x = \frac{R_x}{R_T} E_T$ and mark $(+)$ where $I$ enters and $(-)$ where $I$ leaves.<br>
+                    <b>3.</b> Walk from the <b>1st letter to the 2nd letter</b> (e.g., for $V_{ac}$, walk from $a$ to $c$):<br>
+                    &bull; Going $(+) \to (-)$: write <b>$-V$</b> (drop).<br>
+                    &bull; Going $(-) \to (+)$: write <b>$+V$</b> (rise).
+                  </td>
+                  <td>
+                    &bull; <b>مثال المحاضرة:</b> لحساب $V_{ac}$ مشينا من $a$ إلى $b$ إلى $c$: قابلنا البطارية $E_1=2\text{ V}$ من $(+)$ إلى $(-)$ فكتبنا $-2.0\text{ V}$، ثم المقاومة $R_1$ من $(+)$ إلى $(-)$ فكتبنا $-0.625\text{ V}$ فكان الناتج $V_{ac} = -2.625\text{ V}$.<br>
+                    &bull; <b>تأكيد الحل:</b> سواء مشيت من المسار الأيمن أو المسار الأيسر ستصل لنفس الناتج بالضبط!
+                  </td>
+                </tr>
+                <tr>
+                  <td><b>Trick 2: Single-Subscript Node Voltages to Ground ($V_a, V_b, V_c, V_d$)</b><br>(Lec 2 - Slide 25)</td>
+                  <td>
+                    <b>1.</b> Any point connected directly to the Ground symbol ($\frac{\perp}{=}$) has <b>Zero Voltage</b> ($V_d = 0\text{ V}$).<br>
+                    <b>2.</b> Find voltage drops $V_1, V_2, V_3$ using VDR.<br>
+                    <b>3.</b> Climb up from Ground to the point: add voltage rises $(-) \to (+)$:<br>
+                    $V_c = +V_3$, $V_b = V_2 + V_3$, $V_a = V_1 + V_2 + V_3 = E$.
+                  </td>
+                  <td>
+                    &bull; إذا كانت جميع المقاومات بالكيلو أوم ($\text{k}\Omega$) في قانون مجزئ الجهد $V_x = \frac{R_x}{R_T}E$، لا داعي لتحويلها إلى أوم لأن الـ $\text{k}\Omega$ في البسط يختصر مع الـ $\text{k}\Omega$ في المقام!
+                  </td>
+                </tr>
+                <tr>
+                  <td><b>Trick 3: KCL with Zero-Resistance Wire Between Two Nodes ($a$ & $b$)</b><br>(Lec 3 - Slides 5–6)</td>
+                  <td>
+                    <b>1.</b> Even if points $a$ and $b$ are connected by a plain wire ($0\ \Omega$), treat them as <b>two separate nodes</b>.<br>
+                    <b>2.</b> Apply $\sum I_{in} = \sum I_{out}$ at Node $a$ first to find the interconnecting wire current $I_3$.<br>
+                    <b>3.</b> Apply $\sum I_{in} = \sum I_{out}$ at Node $b$ using the algebraic value of $I_3$ (keep its negative sign!) to find $I_5$.
+                  </td>
+                  <td>
+                    &bull; <b>فخ الإشارة السالبة:</b> إذا وجدت $I_3 = -1\text{ A}$ عند العقدة $a$، فعند تعويضك في معادلة العقدة $b$ ($I_3 = I_4 + I_5$) عوّض عن $I_3$ بـ $(-1\text{ A})$ كما هي ($-1 - 6 = -7\text{ A}$)، ثم اكتب في السطر الأخير أن الاتجاه الحقيقي عكس السهم المرسوم.
+                  </td>
+                </tr>
+                <tr>
+                  <td><b>Trick 4: Finding Unknown Parallel Resistor $R_1$ Given $I_T$ and $I_2$</b><br>(Lec 3 - Slide 18)</td>
+                  <td>
+                    <b>Avoid slow CDR algebra! Use Method II (KCL + Ohm):</b><br>
+                    <b>1.</b> By KCL: $I_1 = I_T - I_2$.<br>
+                    <b>2.</b> Find parallel voltage from known branch: $V = I_2 \cdot R_2$.<br>
+                    <b>3.</b> Divide $V$ by $I_1$: <span class="result-badge">$R_1 = \frac{V}{I_1}$</span>.
+                  </td>
+                  <td>
+                    &bull; في مسألة المحاضرة ($I_T=25\text{ A}, I_2=5\text{ A}, R_2=30\ \Omega$):<br>
+                    بدل حل معادلة كسرية، فوراً: $I_1 = 25 - 5 = 20\text{ A}$، والجهد $V = 5 \times 30 = 150\text{ V}$، إذن $R_1 = \frac{150}{20} = 7.5\ \Omega$ في 10 ثوانٍ!
+                  </td>
+                </tr>
+                <tr>
+                  <td><b>Trick 5: Parallel Circuit with One Branch Given as Power ($P_3$)</b><br>(Lec 3 - Slides 21–22)</td>
+                  <td>
+                    Given $E$, $I_T$, $R_1$, and $P_3$ (with $R_2, R_3$ unknown):<br>
+                    <b>1.</b> Since parallel voltage is constant ($V_1=V_2=V_3=E$):<br>
+                    $I_1 = \frac{E}{R_1}$ and $I_3 = \frac{P_3}{E}$.<br>
+                    <b>2.</b> By KCL: $I_2 = I_T - I_1 - I_3 \implies R_2 = \frac{E}{I_2}$.<br>
+                    <b>3.</b> Find $R_3$ directly from given data: <span class="result-badge">$R_3 = \frac{E^2}{P_3}$</span>.
+                  </td>
+                  <td>
+                    &bull; <b>نصيحة د. عصام شعلان الذهبية:</b> استخدم دائماً المعطيات الأصلية في المسألة ($R_3 = \frac{E^2}{P_3}$ أو $P_1 = \frac{E^2}{R_1}$) بدلاً من استخدام التيارات التي حسبتها، حتى لا تنتقل أخطاء التقريب لباقي المطاليب!
+                  </td>
+                </tr>
+                <tr>
+                  <td><b>Trick 6: 4-Resistor Parallel Reduction by Pairing</b><br>(Lec 3 - Slide 11)</td>
+                  <td>
+                    Instead of $\frac{1}{R_T} = \frac{1}{R_1}+\frac{1}{R_2}+\frac{1}{R_3}+\frac{1}{R_4}$, group friendly pairs:<br>
+                    <b>1.</b> $R_A = \frac{R_1 R_2}{R_1 + R_2}$<br>
+                    <b>2.</b> $R_B = \frac{R_3 R_4}{R_3 + R_4}$ (or $\frac{R}{2}$ if $R_3 = R_4$)<br>
+                    <b>3.</b> $R_T = \frac{R_A R_B}{R_A + R_B}$.
+                  </td>
+                  <td>
+                    &bull; <b>حيلة سريعة للأرقام:</b> إذا كانت إحدى المقاومتين ضعف الأخرى على التوازي (مثل $180\ \Omega \parallel 90\ \Omega$ أو $60\ \Omega \parallel 30\ \Omega$)، فإن محصلتهما دائماً تساوي <b>ثلث المقاومة الكبرى</b> ($\frac{180}{3} = 60\ \Omega$ و $\frac{60}{3} = 20\ \Omega$)!
+                  </td>
+                </tr>
+                <tr>
+                  <td><b>Trick 7: Repeating Decimals in Conductance ($G_T$)</b><br>(Lec 3 - Slide 10 & 15)</td>
+                  <td>
+                    When calculating $G_T = \frac{1}{18} + \frac{1}{9} + \frac{1}{6} = 0.0\overline{5} + 0.1\overline{1} + 0.1\overline{6} = 0.3\overline{3}\text{ S}$:<br>
+                    Keep exact fractions on your calculator ($\frac{1}{3}\text{ S}$) so that $R_T = \frac{1}{G_T} = 3.00\ \Omega$ comes out exact.
+                  </td>
+                  <td>
+                    &bull; الخطأ الشائع: تقريب $0.3333\text{ S}$ إلى $0.3\text{ S}$ يعطي مقاومة خاطئة ($3.33\ \Omega$ بدلاً من $3.00\ \Omega$). استخدم زر الكسور أو زر $x^{-1}$ على الآلة الحاسبة مباشرة.
+                  </td>
+                </tr>
+                <tr>
+                  <td><b>Trick 8: Motor-Gearbox-Pump & Horsepower Conversions</b><br>(Lec 1 - Slides 23–24)</td>
+                  <td>
+                    <b>1.</b> If input is electrical ($V, I$): $P_{in} = V \cdot I \ [\text{W}]$.<br>
+                    <b>2.</b> If output is mechanical ($\text{hp}$): $P_{out\text{ (W)}} = P_{out\text{ (hp)}} \times 746$.<br>
+                    <b>3.</b> For cascaded stages: $\eta_T = \eta_1 \times \eta_2$ (multiply as decimals, e.g., $0.90 \times 0.70 = 0.63$), then $P_{out\text{ (hp)}} = \frac{\eta_T \cdot P_{in\text{ (W)}}}{746}$.
+                  </td>
+                  <td>
+                    &bull; <b>احذر:</b> لا تقسم القدرة بالحصان ($\text{hp}$) على القدرة بالواط ($\text{W}$) أبداً! يجب تحويل الحصان بالضرب في $746$ أولاً.
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <script>
+    let currentLec = 1;
+    let currentLec1Part = 1;
+    let currentLec2Part = 1;
+    let currentLec3Part = 1;
+    let currentLec4Part = 1;
+
+    const lec1Titles = [
+      "Lecture 1: Complete Fast Review (All Parts Combined)",
+      "Part 1: Course Roadmap & Electrical Power System — Complete Summary",
+      "Part 2: Circuit Fundamentals & Measurement Instruments — Complete Summary",
+      "Part 3: Materials, Sources & 4-Band Resistor Color Coding — Complete Summary",
+      "Part 4: Circuit States, Ohm's Law & The Power Wheel — Complete Summary",
+      "Part 5: System Efficiency (η) & Cascaded Subsystems — Complete Summary",
+      "Part 6: Electrical Units Summary & Schematic Circuit Symbols — Complete Summary"
+    ];
+
+    const lec2Titles = [
+      "Lecture 2: Complete Fast Review (All Parts Combined)",
+      "Part 1: Variable Resistors (Potentiometer & Rheostat) & Mechanical Switches",
+      "Part 2: Series DC Circuits & Kirchhoff's Voltage Law (KVL) — Complete Summary",
+      "Part 3: Voltage Sources in Series & Power Conservation — Complete Summary",
+      "Part 4: Voltage Divider Rule (VDR) & Subscript Voltages (Va, Vab)"
+    ];
+
+    const lec3Titles = [
+      "Lecture 3: Complete Fast Review (All Parts Combined)",
+      "Part 1: Parallel (Shunt) DC Circuits & Kirchhoff's Current Law (KCL)",
+      "Part 2: Parallel Equivalent Resistance (RT) & Conductance (GT)",
+      "Part 3: Voltage Sources in Parallel & Power in Parallel Circuits",
+      "Part 4: Current Divider Rule (CDR) & Series vs. Parallel Master Comparison"
+    ];
+
+    const lec4Titles = [
+      "Exam Sheet & Tricks: Complete Master Formula Sheet & Problem Recipes",
+      "Part 1: One-Page Master Formula Cheat Sheet (ورقة القوانين المجمعة للمحاضرات 1، 2، 3)",
+      "Part 2: Top 8 Exam Problem-Solving Tricks & Recipes (تريكات حل المسائل في الامتحان)"
+    ];
+
+    function showLec1Part(num) {
+      currentLec1Part = num;
+      document.getElementById('header-badge').innerText = "PRINCIPLES OF ELECTRICAL ENGINEERING (ELE111) • LECTURE 1 SUMMARIES";
+      document.getElementById('page-main-title').innerText = lec1Titles[num];
+
+      for (let i = 0; i <= 6; i++) {
+        const b = document.getElementById('part-btn-1-' + i);
+        if (b) b.classList.remove('active');
+      }
+      const activeBtn = document.getElementById('part-btn-1-' + num);
+      if (activeBtn) activeBtn.classList.add('active');
+
+      for (let i = 1; i <= 6; i++) {
+        const p = document.getElementById('part-view-1-' + i);
+        if (p) {
+          if (num === 0) p.classList.add('active-panel');
+          else p.classList.remove('active-panel');
+        }
+      }
+
+      if (num !== 0) {
+        const activePart = document.getElementById('part-view-1-' + num);
+        if (activePart) activePart.classList.add('active-panel');
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function showLec2Part(num) {
+      currentLec2Part = num;
+      document.getElementById('header-badge').innerText = "PRINCIPLES OF ELECTRICAL ENGINEERING (ELE111) • LECTURE 2 SUMMARIES";
+      document.getElementById('page-main-title').innerText = lec2Titles[num];
+
+      for (let i = 0; i <= 4; i++) {
+        const b = document.getElementById('part-btn-2-' + i);
+        if (b) b.classList.remove('active');
+      }
+      const activeBtn = document.getElementById('part-btn-2-' + num);
+      if (activeBtn) activeBtn.classList.add('active');
+
+      for (let i = 1; i <= 4; i++) {
+        const p = document.getElementById('part-view-2-' + i);
+        if (p) {
+          if (num === 0) p.classList.add('active-panel');
+          else p.classList.remove('active-panel');
+        }
+      }
+
+      if (num !== 0) {
+        const activePart = document.getElementById('part-view-2-' + num);
+        if (activePart) activePart.classList.add('active-panel');
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function showLec3Part(num) {
+      currentLec3Part = num;
+      document.getElementById('header-badge').innerText = "PRINCIPLES OF ELECTRICAL ENGINEERING (ELE111) • LECTURE 3 SUMMARIES";
+      document.getElementById('page-main-title').innerText = lec3Titles[num];
+
+      for (let i = 0; i <= 4; i++) {
+        const b = document.getElementById('part-btn-3-' + i);
+        if (b) b.classList.remove('active');
+      }
+      const activeBtn = document.getElementById('part-btn-3-' + num);
+      if (activeBtn) activeBtn.classList.add('active');
+
+      for (let i = 1; i <= 4; i++) {
+        const p = document.getElementById('part-view-3-' + i);
+        if (p) {
+          if (num === 0) p.classList.add('active-panel');
+          else p.classList.remove('active-panel');
+        }
+      }
+
+      if (num !== 0) {
+        const activePart = document.getElementById('part-view-3-' + num);
+        if (activePart) activePart.classList.add('active-panel');
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function showLec4Part(num) {
+      currentLec4Part = num;
+      document.getElementById('header-badge').innerText = "PRINCIPLES OF ELECTRICAL ENGINEERING (ELE111) • EXAM SHEET & TRICKS";
+      document.getElementById('page-main-title').innerText = lec4Titles[num];
+
+      for (let i = 0; i <= 2; i++) {
+        const b = document.getElementById('part-btn-4-' + i);
+        if (b) b.classList.remove('active');
+      }
+      const activeBtn = document.getElementById('part-btn-4-' + num);
+      if (activeBtn) activeBtn.classList.add('active');
+
+      for (let i = 1; i <= 2; i++) {
+        const p = document.getElementById('part-view-4-' + i);
+        if (p) {
+          if (num === 0) p.classList.add('active-panel');
+          else p.classList.remove('active-panel');
+        }
+      }
+
+      if (num !== 0) {
+        const activePart = document.getElementById('part-view-4-' + num);
+        if (activePart) activePart.classList.add('active-panel');
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function switchLectureGroup(lecNum) {
+      currentLec = lecNum;
+      for (let l = 1; l <= 4; l++) {
+        const tab = document.getElementById('lec-tab-' + l);
+        const sub = document.getElementById('subnav-wrapper-' + l);
+        const cont = document.getElementById('lec' + l + '-container');
+        if (tab) tab.classList.remove('active');
+        if (sub) sub.style.display = 'none';
+        if (cont) cont.style.display = 'none';
+      }
+
+      const activeTab = document.getElementById('lec-tab-' + lecNum);
+      const activeSub = document.getElementById('subnav-wrapper-' + lecNum);
+      const activeCont = document.getElementById('lec' + lecNum + '-container');
+
+      if (activeTab) activeTab.classList.add('active');
+      if (activeSub) activeSub.style.display = 'block';
+      if (activeCont) activeCont.style.display = 'block';
+
+      if (lecNum === 1) showLec1Part(currentLec1Part);
+      else if (lecNum === 2) showLec2Part(currentLec2Part);
+      else if (lecNum === 3) showLec3Part(currentLec3Part);
+      else if (lecNum === 4) showLec4Part(currentLec4Part);
+    }
+
+    /* Interactive Resistor Calculator Function */
+    function calcResistor() {
+      const d1 = parseInt(document.getElementById('b1').value, 10);
+      const d2 = parseInt(document.getElementById('b2').value, 10);
+      const mult = parseFloat(document.getElementById('b3').value);
+      const tol = parseFloat(document.getElementById('b4').value);
+
+      const baseVal = (d1 * 10 + d2) * mult;
+      const minVal = baseVal * (1 - tol / 100);
+      const maxVal = baseVal * (1 + tol / 100);
+
+      function formatOhms(val) {
+        if (val >= 1e6) return (val / 1e6).toFixed(2).replace(/\.00$/, '') + ' MΩ';
+        if (val >= 1e3) return (val / 1e3).toFixed(2).replace(/\.00$/, '') + ' kΩ';
+        return val.toFixed(2).replace(/\.00$/, '') + ' Ω';
+      }
+
+      const out = document.getElementById('resistor-output');
+      out.innerHTML = `Resistance Value: ${baseVal.toLocaleString()} Ω (${formatOhms(baseVal)}) ± ${tol}% &nbsp;|&nbsp; [Allowed Range: ${formatOhms(minVal)} to ${formatOhms(maxVal)}]`;
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+      if (typeof renderMathInElement === 'function') {
+        renderMathInElement(document.body, {
+          delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "$", right: "$", display: false}
+          ],
+          throwOnError: false
+        });
+      }
+    });
+  </script>
+</body>
+</html>
