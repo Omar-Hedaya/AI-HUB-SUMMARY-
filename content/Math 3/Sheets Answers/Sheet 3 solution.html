@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>حل شيت 3: Double Integral - Math 3</title>
+    <!-- مكتبة KaTeX لتنسيق المعادلات الرياضية -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+    <style>
+        :root {
+            --bg-base: #090d13;
+            --bg-card: #111722;
+            --bg-code: #0b1017;
+            --border-card: #1f2937;
+            --cyan: #38bdf8;
+            --emerald: #34d399;
+            --amber: #fbbf24;
+            --purple: #c084fc;
+            --rose: #f43f5e;
+            --text-main: #e2e8f0;
+            --text-muted: #94a3b8;
+        }
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        html, body {
+            width: 100% !important;
+            max-width: 100% !important;
+            overflow-x: hidden !important;
+            position: relative;
+            background-color: var(--bg-base);
+            color: var(--text-main);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.6;
+            padding-bottom: 70px;
+        }
+        
+        .container {
+            width: 100% !important;
+            max-width: 960px !important;
+            margin: 0 auto;
+            padding: 12px 10px;
+            overflow-x: hidden !important;
+        }
+
+        .header {
+            padding: 8px 0 16px 0;
+            border-bottom: 1px solid var(--border-card);
+            margin-bottom: 16px;
+        }
+        .top-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+        .badge {
+            background: rgba(56, 189, 248, 0.12);
+            color: var(--cyan);
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            padding: 4px 12px;
+            border-radius: 9999px;
+            font-size: 0.78rem;
+            font-weight: 800;
+        }
+        .quick-actions {
+            display: flex;
+            gap: 8px;
+        }
+        .action-btn {
+            background: #162032;
+            border: 1px solid #1e293b;
+            color: var(--text-main);
+            padding: 6px 14px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .action-btn:hover { border-color: var(--cyan); color: #fff; }
+
+        .nav-bar {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 18px;
+            background: rgba(17, 23, 34, 0.85);
+            padding: 8px;
+            border-radius: 10px;
+            border: 1px solid var(--border-card);
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+        }
+        .nav-bar::-webkit-scrollbar { display: none; }
+        .tab-btn {
+            flex: 0 0 auto;
+            padding: 8px 14px;
+            background: #111722;
+            border: 1px solid #1e293b;
+            color: var(--text-muted);
+            border-radius: 6px;
+            font-size: 0.82rem;
+            font-weight: 800;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.2s;
+        }
+        .tab-btn:hover { color: #fff; border-color: rgba(56, 189, 248, 0.4); }
+        .tab-btn.active {
+            background: rgba(56, 189, 248, 0.15);
+            border-color: var(--cyan);
+            color: var(--cyan);
+        }
+
+        .question-section { display: none; }
+        .question-section.active { display: block; animation: fadeIn 0.2s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(3px); } to { opacity: 1; transform: translateY(0); } }
+
+        .prob-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-card);
+            border-radius: 10px;
+            margin-bottom: 18px;
+            overflow: hidden;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+        }
+        
+        .prob-header {
+            padding: 12px 14px;
+            background: rgba(255, 255, 255, 0.02);
+            border-bottom: 1px solid var(--border-card);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+            direction: ltr !important;
+            text-align: left !important;
+        }
+        .prob-title {
+            font-size: 0.95rem;
+            font-weight: 800;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            direction: ltr !important;
+        }
+        .sol-btn {
+            background: rgba(56, 189, 248, 0.12);
+            color: var(--cyan);
+            border: 1px solid rgba(56, 189, 248, 0.35);
+            padding: 5px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 0.8rem;
+            transition: all 0.2s;
+        }
+        .sol-btn:hover { background: rgba(56, 189, 248, 0.2); }
+        .sol-btn.active {
+            background: rgba(244, 63, 94, 0.15);
+            color: var(--rose);
+            border-color: var(--rose);
+        }
+
+        .prob-body {
+            padding: 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .prompt-box {
+            background: rgba(56, 189, 248, 0.05);
+            border-left: 4px solid var(--cyan);
+            border-right: none;
+            padding: 10px 14px;
+            font-size: 0.92rem;
+            border-radius: 4px;
+            direction: ltr;
+            text-align: left;
+        }
+
+        .solution-wrapper {
+            display: none;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .solution-wrapper.show {
+            display: flex;
+            animation: fadeIn 0.25s ease-in-out;
+        }
+        .sol-step {
+            background: var(--bg-code);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-left: 3px solid var(--emerald);
+            border-right: none;
+            border-radius: 6px;
+            padding: 12px 14px;
+            font-size: 0.9rem;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            direction: ltr;
+            text-align: left;
+        }
+        .sol-step-title {
+            font-size: 0.82rem;
+            font-weight: 800;
+            color: var(--emerald);
+            text-transform: uppercase;
+        }
+        .step-desc {
+            font-size: 0.84rem;
+            color: var(--amber);
+            font-weight: 600;
+        }
+        .math-row {
+            overflow-x: auto;
+            overflow-y: hidden;
+            padding: 4px 0;
+            font-size: 0.96rem;
+            line-height: 1.8;
+            -webkit-overflow-scrolling: touch;
+        }
+        .math-row::-webkit-scrollbar { height: 4px; }
+        .math-row::-webkit-scrollbar-thumb { background: rgba(56, 189, 248, 0.3); border-radius: 4px; }
+
+        .result-badge {
+            display: inline-block;
+            background: rgba(52, 211, 153, 0.12);
+            border: 1px solid rgba(52, 211, 153, 0.3);
+            color: var(--emerald);
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-weight: 700;
+            width: fit-content;
+            margin-top: 4px;
+            font-size: 0.86rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+
+        <!-- الترويسة -->
+        <div class="header">
+            <div class="top-row">
+                <span class="badge">MATH 3 • SHEET 3 (DOUBLE INTEGRAL)</span>
+                <div class="quick-actions">
+                    <button class="action-btn" onclick="toggleAllSolutions(true)">👁️ إظهار كل الحلول</button>
+                    <button class="action-btn" onclick="toggleAllSolutions(false)">🙈 إخفاء كل الحلول</button>
+                </div>
+            </div>
+            <h2 style="font-size: 1.15rem; color: #fff;">حل شيت 3: التكامل الثنائي (Double Integral)</h2>
+            <p style="font-size: 0.84rem; color: var(--text-muted);">حلول تفصيلية نموذجية خطوة بخطوة للتكاملات الثنائية، تبديل ترتيب التكامل، والإحداثيات القطبية وتطبيقات المساحات.</p>
+        </div>
+
+        <!-- شريط التنقل بين الأسئلة -->
+        <div class="nav-bar" dir="ltr">
+            <button class="tab-btn active" onclick="switchQuestion(0, this)">All</button>
+            <button class="tab-btn" onclick="switchQuestion(1, this)">Q1: Iterated Integrals</button>
+            <button class="tab-btn" onclick="switchQuestion(2, this)">Q2: Change Order</button>
+            <button class="tab-btn" onclick="switchQuestion(3, this)">Q3: Polar Integrals</button>
+            <button class="tab-btn" onclick="switchQuestion(4, this)">Q4-Q5: Bounded Integrals</button>
+            <button class="tab-btn" onclick="switchQuestion(6, this)">Q6-Q7: Annulus Integrals</button>
+            <button class="tab-btn" onclick="switchQuestion(8, this)">Q8-Q9: Areas</button>
+        </div>
+
+        <!-- ========================================================= -->
+        <!-- كارت ملخص القوانين السريعة لشيت التكامل الثنائي (Sheet 3) -->
+        <!-- ========================================================= -->
+        <div class="prob-card" style="border-color: rgba(56, 189, 248, 0.4); margin-bottom: 22px;">
+            <div class="prob-header" style="background: linear-gradient(90deg, rgba(12, 74, 110, 0.45), rgba(17, 23, 34, 0.9));">
+                <span class="prob-title" style="color: var(--cyan);">
+                    ⚡ Double Integral Cheat Sheet & Formulas
+                </span>
+                <button class="sol-btn" onclick="toggleSolution(this)" style="background: rgba(56, 189, 248, 0.2); border-color: var(--cyan);">إخفاء/إظهار الملخص</button>
+            </div>
+            <div class="prob-body">
+                <div class="solution-wrapper show" style="gap: 10px;">
+                    
+                    <!-- التحويل للإحداثيات القطبية -->
+                    <div class="sol-step" style="border-left-color: var(--cyan);">
+                        <div class="sol-step-title" style="color: var(--cyan);">1. Polar Transformation</div>
+                        <div class="math-row">
+                            $$x = r\cos\theta, \quad y = r\sin\theta, \quad x^2 + y^2 = r^2$$
+                        </div>
+                        <div class="math-row">
+                            $$dx\,dy = r\,dr\,d\theta \quad \text{(Multiply by } r \text{)}$$
+                        </div>
+                        <div class="step-desc" style="color: var(--text-muted); font-size: 0.82rem;">
+                            • First quadrant: $\theta \in [0, \pi/2]$ | Upper semi-disc: $\theta \in [0, \pi]$ | Full disc: $\theta \in [0, 2\pi]$
+                        </div>
+                    </div>
+
+                    <!-- تبديل ترتيب التكامل -->
+                    <div class="sol-step" style="border-left-color: var(--amber);">
+                        <div class="sol-step-title" style="color: var(--amber);">2. Change of Order of Integration</div>
+                        <div class="math-row">
+                            $$\int_{a}^{b}\left[\int_{g_1(x)}^{g_2(x)} f(x,y)\,dy\right]dx \quad \Longleftrightarrow \quad \int_{c}^{d}\left[\int_{h_1(y)}^{h_2(y)} f(x,y)\,dx\right]dy$$
+                        </div>
+                        <div class="step-desc" style="color: var(--text-muted); font-size: 0.82rem;">
+                            • Used when the inner integral has no elementary antiderivative: $\int e^{y/x}dx$ or $\int \frac{\sinh x}{x^2}dx$ or $\int \sin(x^3)dx$.
+                        </div>
+                    </div>
+
+                    <!-- تغيير المتغيرات ومحدد الجاكوبي -->
+                    <div class="sol-step" style="border-left-color: var(--purple);">
+                        <div class="sol-step-title" style="color: var(--purple);">3. General Transformation & Jacobian</div>
+                        <div class="math-row">
+                            $$dx\,dy = \left|J\left(\frac{x,y}{u,v}\right)\right| du\,dv = \frac{1}{\left|J\left(\frac{u,v}{x,y}\right)\right|} du\,dv$$
+                        </div>
+                        <div class="math-row">
+                            $$J\left(\frac{u,v}{x,y}\right) = \begin{vmatrix} u_x & u_y \\ v_x & v_y \end{vmatrix} = u_x v_y - u_y v_x$$
+                        </div>
+                    </div>
+
+                    <!-- حساب المساحة -->
+                    <div class="sol-step" style="border-left-color: var(--emerald);">
+                        <div class="sol-step-title" style="color: var(--emerald);">4. Area by Double Integral</div>
+                        <div class="math-row">
+                            $$\text{Area} = \iint_{D} dx\,dy = \iint_{D} r\,dr\,d\theta$$
+                        </div>
+                    </div>
+
+                    <!-- متطابقات مثلثية هامة -->
+                    <div class="sol-step" style="border-left-color: var(--rose);">
+                        <div class="sol-step-title" style="color: var(--rose);">5. Essential Trigonometric Identities</div>
+                        <div class="math-row">
+                            $$\cos^2\theta = \frac{1 + \cos 2\theta}{2}, \quad \sin^2\theta = \frac{1 - \cos 2\theta}{2}, \quad \sin\theta\cos\theta = \frac{\sin 2\theta}{2}$$
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- ========================================================= -->
+        <!-- Question 1: Iterated Double Integrals -->
+        <!-- ========================================================= -->
+        <div id="sec-1" class="question-section active">
+
+            <!-- Q1 (i) to (iii) -->
+            <div class="prob-card">
+                <div class="prob-header">
+                    <span class="prob-title">📌 Question 1: (i) to (iii) Direct Iterated Integrals</span>
+                    <button class="sol-btn" onclick="toggleSolution(this)">إظهار الحل</button>
+                </div>
+                <div class="prob-body">
+                    <div class="prompt-box">
+                        (i) $\int_{0}^{1}\int_{0}^{2} (12xy)\,dx\,dy$ <br>
+                        (ii) $\int_{0}^{1}\int_{0}^{2} (12x^3 y)\,dy\,dx$ <br>
+                        (iii) $\int_{0}^{1}\int_{0}^{x} (x + e^y)\,dy\,dx$
+                    </div>
+                    <div class="solution-wrapper">
+                        <!-- 1(i) -->
+                        <div class="sol-step">
+                            <div class="sol-step-title">(i) Evaluate $\int_{0}^{1}\int_{0}^{2} (12xy)\,dx\,dy$</div>
+                            <div class="step-desc">Step 1: Inner integral with respect to $x$:</div>
+                            <div class="math-row">
+                                $$\int_{0}^{2} 12xy\,dx = 12y \left[\frac{x^2}{2}\right]_{0}^{2} = 12y \cdot \frac{4}{2} = 24y$$
+                            </div>
+                            <div class="step-desc">Step 2: Outer integral with respect to $y$:</div>
+                            <div class="math-row">
+                                $$\int_{0}^{1} 24y\,dy = 24\left[\frac{y^2}{2}\right]_{0}^{1} = 24 \cdot \frac{1}{2} = 12$$
+                            </div>
+                            <div class="result-badge">Answer = 12</div>
+                        </div>
+
+                        <!-- 1(ii) -->
+                        <div class="sol-step">
+                            <div class="sol-step-title">(ii) Evaluate $\int_{0}^{1}\int_{0}^{2} (12x^3 y)\,dy\,dx$</div>
+                            <div class="step-desc">Step 1: Inner integral with respect to $y$:</div>
+                            <div class="math-row">
+                                $$\int_{0}^{2} 12x^3 y\,dy = 12x^3 \left[\frac{y^2}{2}\right]_{0}^{2} = 12x^3 \cdot \frac{4}{2} = 24x^3$$
+                            </div>
+                            <div class="step-desc">Step 2: Outer integral with respect to $x$:</div>
+                            <div class="math-row">
+                                $$\int_{0}^{1} 24x^3\,dx = 24\left[\frac{x^4}{4}\right]_{0}^{1} = 24 \cdot \frac{1}{4} = 6$$
+                            </div>
+                            <div class="result-badge">Answer = 6</div>
+                        </div>
+
+                        <!-- 1(iii) -->
+                        <div class="sol-step">
+                            <div class="sol-step-title">(iii) Evaluate $\int_{0}^{1}\int_{0}^{x} (x + e^y)\,dy\,dx$</div>
+                            <div class="step-desc">Step 1: Inner integral with respect to $y$:</div>
+                            <div class="math-row">
+                                $$\int_{0}^{x} (x + e^y)\,dy = \left[xy + e^y\right]_{0}^{x} = (x^2 + e^x) - (0 + e^0) = x^2 + e^x - 1$$
+                            </div>
+                            <div class="step-desc">Step 2: Outer integral with respect to $x$:</div>
+                            <div class="math-row">
+                                $$\int_{0}^{1} (x^2 + e^x - 1)\,dx = \left[\frac{x^3}{3} + e^x - x\right]_{0}^{1} = \left(\frac{1}{3} + e - 1\right) - (0 + 1 - 0) = e - \frac{5}{3}$$
+                            </div>
+                            <div class="result-badge">Answer = $e - \frac{5}{3}$</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Q1 (iv) to (vi) -->
+            <div class="prob-card">
+                <div class="prob-header">
+                    <span class="prob-title">📌 Question 1: (iv) to (vi) Direct Iterated Integrals</span>
+                    <button class="sol-btn" onclick="toggleSolution(this)">إظهار الحل</button>
+                </div>
+                <div class="prob-body">
+                    <div class="prompt-box">
+                        (iv) $\int_{0}^{1}\int_{0}^{2y} (2xy)\,dx\,dy$ <br>
+                        (v) $\int_{1}^{2}\int_{0}^{x} (x^3 - y)\,dy\,dx$ <br>
+                        (vi) $\int_{1}^{2}\int_{1}^{x} \frac{x}{y}\,dy\,dx$
+                    </div>
+                    <div class="solution-wrapper">
+                        <!-- 1(iv) -->
+                        <div class="sol-step">
+                            <div class="sol-step-title">(iv) Evaluate $\int_{0}^{1}\int_{0}^{2y} (2xy)\,dx\,dy$</div>
+                            <div class="math-row">
+                                $$\int_{0}^{2y} 2xy\,dx = 2y \left[\frac{x^2}{2}\right]_{0}^{2y} = y(2y)^2 = 4y^3$$
+                            </div>
+                            <div class="math-row">
+                                $$\int_{0}^{1} 4y^3\,dy = \left[y^4\right]_{0}^{1} = 1$$
+                            </div>
+                            <div class="result-badge">Answer = 1</div>
+                        </div>
+
+                        <!-- 1(v) -->
+                        <div class="sol-step">
+                            <div class="sol-step-title">(v) Evaluate $\int_{1}^{2}\int_{0}^{x} (x^3 - y)\,dy\,dx$</div>
+                            <div class="math-row">
+                                $$\int_{0}^{x} (x^3 - y)\,dy = \left[x^3 y - \frac{y^2}{2}\right]_{0}^{x} = x^4 - \frac{x^2}{2}$$
+                            </div>
+                            <div class="math-row">
+                                $$\int_{1}^{2} \left(x^4 - \frac{x^2}{2}\right)dx = \left[\frac{x^5}{5} - \frac{x^3}{6}\right]_{1}^{2} = \left(\frac{32}{5} - \frac{8}{6}\right) - \left(\frac{1}{5} - \frac{1}{6}\right) = \frac{31}{5} - \frac{7}{6} = \frac{151}{30}$$
+                            </div>
+                            <div class="result-badge">Answer = $\frac{151}{30}$</div>
+                        </div>
+
+                        <!-- 1(vi) -->
+                        <div class="sol-step">
+                            <div class="sol-step-title">(vi) Evaluate $\int_{1}^{2}\int_{1}^{x} \frac{x}{y}\,dy\,dx$</div>
+                            <div class="math-row">
+                                $$\int_{1}^{x} \frac{x}{y}\,dy = x \left[\ln y\right]_{1}^{x} = x(\ln x - \ln 1) = x\ln x$$
+                            </div>
+                            <div class="step-desc">Integration by parts for $x\ln x$: $u=\ln x, dv=x\,dx \implies du=\frac{1}{x}dx, v=\frac{x^2}{2}$:</div>
+                            <div class="math-row">
+                                $$\int x\ln x\,dx = \frac{x^2}{2}\ln x - \int \frac{x}{2}\,dx = \frac{x^2}{2}\ln x - \frac{x^2}{4}$$
+                            </div>
+                            <div class="math-row">
+                                $$\left[\frac{x^2}{2}\ln x - \frac{x^2}{4}\right]_{1}^{2} = (2\ln 2 - 1) - \left(0 - \frac{1}{4}\right) = 2\ln 2 - \frac{3}{4}$$
+                            </div>
+                            <div class="result-badge">Answer = $2\ln 2 - \frac{3}{4}$</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Q1 (vii) to (ix) -->
+            <div class="prob-card">
+                <div class="prob-header">
+                    <span class="prob-title">📌 Question 1: (vii) to (ix) Direct Iterated Integrals</span>
+                    <button class="sol-btn" onclick="toggleSolution(this)">إظهار الحل</button>
+                </div>
+                <div class="prob-body">
+                    <div class="prompt-box">
+                        (vii) $\int_{1}^{2}\int_{1-x}^{\sqrt{x}} x^2 y\,dy\,dx$ <br>
+                        (viii) $\int_{0}^{1}\int_{0}^{y^2} \frac{3}{4+y^3}\,dx\,dy$ <br>
+                        (ix) $\int_{1}^{2}\int_{1}^{y} \frac{y}{x+1}\,dx\,dy$
+                    </div>
+                    <div class="solution-wrapper">
+                        <!-- 1(vii) -->
+                        <div class="sol-step">
+                            <div class="sol-step-title">(vii) Evaluate $\int_{1}^{2}\int_{1-x}^{\sqrt{x}} x^2 y\,dy\,dx$</div>
+                            <div class="math-row">
+                                $$\int_{1-x}^{\sqrt{x}} x^2 y\,dy = x^2 \left[\frac{y^2}{2}\right]_{1-x}^{\sqrt{x}} = \frac{x^2}{2}\left(x - (1-x)^2\right) = \frac{x^2}{2}(-x^2 + 3x - 1) = -\frac{x^4}{2} + \frac{3x^3}{2} - \frac{x^2}{2}$$
+                            </div>
+                            <div class="math-row">
+                                $$\int_{1}^{2} \left(-\frac{x^4}{2} + \frac{3x^3}{2} - \frac{x^2}{2}\right)dx = \left[-\frac{x^5}{10} + \frac{3x^4}{8} - \frac{x^3}{6}\right]_{1}^{2} = \frac{163}{120}$$
+                            </div>
+                            <div class="result-badge">Answer = $\frac{163}{120}$</div>
+                        </div>
+
+                        <!-- 1(viii) -->
+                        <div class="sol-step">
+                            <div class="sol-step-title">(viii) Evaluate $\int_{0}^{1}\int_{0}^{y^2} \frac{3}{4+y^3}\,dx\,dy$</div>
+                            <div class="math-row">
+                                $$\int_{0}^{y^2} \frac{3}{4+y^3}\,dx = \frac{3}{4+y^3} [x]_{0}^{y^2} = \frac{3y^2}{4+y^3}$$
+                            </div>
+                            <div class="math-row">
+                                $$\int_{0}^{1} \frac{3y^2}{4+y^3}\,dy = \left[\ln(4+y^3)\right]_{0}^{1} = \ln 5 - \ln 4 = \ln\left(\frac{5}{4}\right)$$
+                            </div>
+                            <div class="result-badge">Answer = $\ln(5/4)$</div>
+                        </div>
+
+                        <!-- 1(ix) -->
+                        <div class="sol-step">
+                            <div class="sol-step-title">(ix) Evaluate $\int_{1}^{2}\int_{1}^{y} \frac{y}{x+1}\,dx\,dy$</div>
+                            <div class="math-row">
+                                $$\int_{1}^{y} \frac{y}{x+1}\,dx = y \left[\ln(x+1)\right]_{1}^{y} = y[\ln(y+1) - \ln 2]$$
+                            </div>
+                            <div class="math-row">
+                                $$\int_{1}^{2} y\ln(y+1)\,dy - \ln 2\int_{1}^{2} y\,dy = \left[\frac{y^2-1}{2}\ln(y+1) - \frac{(y-1)^2}{4}\right]_{1}^{2} - \frac{3}{2}\ln 2 = \frac{3}{2}\ln\left(\frac{3}{2}\right) - \frac{1}{4}$$
+                            </div>
+                            <div class="result-badge">Answer = $\frac{3}{2}\ln(3/2) - \frac{1}{4}$</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- ========================================================= -->
+        <!-- Question 2: Changing Order of Integration -->
+        <!-- ========================================================= -->
+        <div id="sec-2" class="question-section active">
+
+            <!-- Q2 (i) to (iv) -->
+            <div class="prob-card">
+                <div class="prob-header">
+                    <span class="prob-title">📌 Question 2: (i) to (iv) Changing Order of Integration</span>
+                    <button class="sol-btn" onclick="toggleSolution(this)">إظهار الحل</button>
+                </div>
+                <div class="prob-body">
+                    <div class="prompt-box">
+                        (i) $\int_{0}^{\infty}\int_{x}^{\infty} \frac{x}{y}e^{-y}\,dy\,dx$ <br>
+                        (ii) $\int_{0}^{1}\int_{0}^{\cos^{-1}y} e^{\sin x}\,dx\,dy$ <br>
+                        (iii) $\int_{1}^{2}\int_{x^2}^{x} e^{y/x}\,dy\,dx$ <br>
+                        (iv) $\int_{-\pi/2}^{\pi/2}\int_{2}^{2(1+\cos\theta)} r\,dr\,d\theta$
+                    </div>
+                    <div class="solution-wrapper">
+                        <!-- 2(i) -->
+                        <div class="sol-step">
+                            <div class="sol-step-title">(i) Evaluate $\int_{0}^{\infty}\int_{x}^{\infty} \frac{x}{y}e^{-y}\,dy\,dx$</div>
+                            <div class="step-desc">Region: $0 \le x \le y < \infty$. Reversing order: $0 \le y < \infty$ and $0 \le x \le y$:</div>
+                            <div class="math-row">
+                                $$I = \int_{0}^{\infty} \left[\int_{0}^{y} \frac{x}{y}e^{-y}\,dx\right]dy = \int_{0}^{\infty} \frac{e^{-y}}{y}\left(\frac{y^2}{2}\right)dy = \frac{1}{2}\int_{0}^{\infty} y e^{-y}\,dy = \frac{1}{2}(1!) = \frac{1}{2}$$
+                            </div>
+                            <div class="result-badge">Answer = $1/2$</div>
+                        </div>
+
+                        <!-- 2(ii) -->
+                        <div class="sol-step">
+                            <div class="sol-step-title">(ii) Evaluate $\int_{0}^{1}\int_{0}^{\cos^{-1}y} e^{\sin x}\,dx\,dy$</div>
+                            <div class="step-desc">Region: $0 \le y \le 1, 0 \le x \le \cos^{-1}y \implies y = \cos x$. New bounds: $0 \le x \le \pi/2$ and $0 \le y \le \cos x$:</div>
+                            <div class="math-row">
+                                $$I = \int_{0}^{\pi/2} \left[\int_{0}^{cos x} e^{\sin x}\,dy\right]dx = \int_{0}^{\pi/2} \cos x \cdot e^{\sin x}\,dx = \left[e^{\sin x}\right]_{0}^{\pi/2} = e - 1$$
+                            </div>
+                            <div class="result-badge">Answer = $e - 1$</div>
+                        </div>
+
+                        <!-- 2(iii) -->
+                        <div class="sol-step">
+                            <div class="sol-step-title">(iii) Evaluate $\int_{1}^{2}\int_{x^2}^{x} e^{y/x}\,dy\,dx$</div>
+                            <div class="math-row">
+                                $$\int_{x^2}^{x} e^{y/x}\,dy = \left[x e^{y/x}\right]_{x^2}^{x} = x(e - e^x) = ex - x e^x$$
+                            </div>
+                            <div class="math-row">
+                                $$\int_{1}^{2} (ex - x e^x)\,dx = \left[\frac{e x^2}{2} - (x e^x - e^x)\right]_{1}^{2} = \frac{3e}{2} - e^2$$
+                            </div>
+                            <div class="result-badge">Answer = $\frac{3e}{2} - e^2$</div>
+                        </div>
+
+                        <!-- 2(iv) -->
+                        <div class="sol-step">
+                            <div class="sol-step-title">(iv) Evaluate $\int_{-\pi/2}^{\pi/2}\int_{2}^{2(1+\cos\theta)} r\,dr\,d\theta$</div>
+                            <div class="math-row">
+                                $$\int_{2}^{2(1+\cos\theta)} r\,dr = \left[\frac{r^2}{2}\right]_{2}^{2(1+\cos\theta)} = 2(1+\cos\theta)^2 - 2 = 4\cos\theta + 2\cos^2\theta$$
+                            </div>
+                            <div class="math-row">
+                                $$\int_{-\pi/2}^{\pi/2} (4\cos\theta + 1 + \cos 2\theta)\,d\theta = \left[4\sin\theta + \theta + \frac{\sin 2\theta}{2}\right]_{-\pi/2}^{\pi/2} = 8 + \pi$$
+                            </div>
+                            <div class="result-badge">Answer = $8 + \pi$</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Q2 (v) to (ix) -->
+            <div class="prob-card">
+                <div class="prob-header">
+                    <span class="prob-title">📌 Question 2: (v) to (ix) Changing Order of Integration</span>
+                    <button class="sol-btn" onclick="toggleSolution(this)">إظهار الحل</button>
+                </div>
+                <div class="prob-body">
+                    <div class="prompt-box">
+                        (v) $\int_{0}^{1}\int_{0}^{(\cos^{-1}y)^2} \tan\sqrt{x}\,dx\,dy$ <br>
+                        (vi) $\int_{0}^{4}\int_{\sqrt{y}}^{2} \frac{\sinh x}{x^2}\,dx\,dy$ <br>
+                        (vii) $\int_{0}^{4}\int_{\sqrt{x}}^{2} \frac{x e^{y^2}}{y^3}\,dy\,dx$ <br>
+                        (viii) $\int_{0}^{9}\int_{\sqrt{y}}^{3} \sin(x^3)\,dx\,dy$ <br>
+                        (ix) $\int_{0}^{1}\int_{x^2}^{1} x^3 \sin(y^3)\,dy\,dx$
+                    </div>
+                    <div class="solution-wrapper">
+                        <!-- 2(v) -->
+                        <div class="sol-step">
+                            <div class="sol-step-title">(v) Evaluate $\int_{0}^{1}\int_{0}^{(\cos^{-1}y)^2} \tan\sqrt{x}\,dx\,dy$</div>
+                            <div class="step-desc">New bounds: $0 \le x \le \pi^2/4$ and $0 \le y \le \cos\sqrt{x}$:</div>
+                            <div class="math-row">
+                                $$I = \int_{0}^{\pi^2/4} \cos\sqrt{x}\tan\sqrt{x}\,dx = \int_{0}^{\pi^2/4} \sin\sqrt{x}\,dx = \int_{0}^{\pi/2} 2t\sin t\,dt = 2$$
+                            </div>
+                            <div class="result-badge">Answer = 2</div>
+                        </div>
+
+                        <!-- 2(vi) -->
+                        <div class="sol-step">
+                            <div class="sol-step-title">(vi) Evaluate $\int_{0}^{4}\int_{\sqrt{y}}^{2} \frac{\sinh x}{x^2}\,dx\,dy$</div>
+                            <div class="step-desc">New bounds: $0 \le x \le 2$ and $0 \le y \le x^2$:</div>
+                            <div class="math-row">
+                                $$I = \int_{0}^{2} \left[\int_{0}^{x^2} \frac{\sinh x}{x^2}\,dy\right]dx = \int_{0}^{2} \sinh x\,dx = [\cosh x]_{0}^{2} = \cosh 2 - 1$$
+                            </div>
+                            <div class="result-badge">Answer = $\cosh 2 - 1$</div>
+                        </div>
+
+                        <!-- 2(vii) -->
+                        <div class="sol-step">
+                            <div class="sol-step-title">(vii) Evaluate $\int_{0}^{4}\int_{\sqrt{x}}^{2} \frac{x e^{y^2}}{y^3}\,dy\,dx$</div>
+                            <div class="step-desc">New bounds: $0 \le y \le 2$ and $0 \le x \le y^2$:</div>
+                            <div class="math-row">
+                                $$I = \int_{0}^{2} \frac{e^{y^2}}{y^3}\left(\frac{y^4}{2}\right)dy = \frac{1}{2}\int_{0}^{2} y e^{y^2}\,dy = \frac{e^4 - 1}{4}$$
+                            </div>
+                            <div class="result-badge">Answer = $\frac{e^4 - 1}{4}$</div>
+                        </div>
+
+                        <!-- 2(viii) -->
+                        <div class="sol-step">
+                            <div class="sol-step-title">(viii) Evaluate $\int_{0}^{9}\int_{\sqrt{y}}^{3} \sin(x^3)\,dx\,dy$</div>
+                            <div class="step-desc">New bounds: $0 \le x \le 3$ and $0 \le y \le x^2$:</div>
+                            <div class="math-row">
+                                $$I = \int_{0}^{3} x^2 \sin(x^3)\,dx = \left[-\frac{\cos(x^3)}{3}\right]_{0}^{3} = \frac{1 - \cos 27}{3}$$
+                            </div>
+                            <div class="result-badge">Answer = $\frac{1 - \cos 27}{3}$</div>
+                        </div>
+
+                        <!-- 2(ix) -->
+                        <div class="sol-step">
+                            <div class="sol-step-title">(ix) Evaluate $\int_{0}^{1}\int_{x^2}^{1} x^3 \sin(y^3)\,dy\,dx$</div>
+                            <div class="step-desc">New bounds: $0 \le y \le 1$ and $0 \le x \le \sqrt{y}$:</div>
+                            <div class="math-row">
+                                $$I = \int_{0}^{1} \sin(y^3)\left(\frac{y^2}{4}\right)dy = \frac{1}{12}\left[-\cos(y^3)\right]_{0}^{1} = \frac{1 - \cos 1}{12}$$
+                            </div>
+                            <div class="result-badge">Answer = $\frac{1 - \cos 1}{12}$</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- ========================================================= -->
+        <!-- Question 3: Polar Coordinates -->
+        <!-- ========================================================= -->
+        <div id="sec-3" class="question-section active">
+
+            <!-- Q3 (i) to (iii) -->
+            <div class="prob-card">
+                <div class="prob-header">
+                    <span class="prob-title">📌 Question 3: (i) to (iii) Circular Regions in Polar Form</span>
+                    <button class="sol-btn" onclick="toggleSolution(this)">إظهار الحل</button>
+                </div>
+                <div class="prob-body">
+                    <div class="prompt-box">
+                        (i) $\int_{0}^{1}\int_{0}^{\sqrt{1-x^2}} \sqrt{x^2+y^2}\,dy\,dx$ <br>
+                        (ii) $\int_{-1}^{1}\int_{0}^{\sqrt{1-x^2}} \sqrt{x^2+y^2}\,dy\,dx$ <br>
+                        (iii) $\int_{0}^{1}\int_{-\sqrt{1-x^2}}^{\sqrt{1-x^2}} \sqrt{x^2+y^2}\,dy\,dx$
+                    </div>
+                    <div class="solution-wrapper">
+                        <!-- 3(i) -->
+                        <div class="sol-step">
+                            <div class="sol-step-title">(i) First Quadrant ($R=1$)</div>
+                            <div class="math-row">
+                                $$I = \int_{0}^{\pi/2} d\theta \int_{0}^{1} r^2\,dr = \frac{\pi}{2} \cdot \frac{1}{3} = \frac{\pi}{6}$$
+                            </div>
+                            <div class="result-badge">Answer = $\pi/6$</div>
+                        </div>
+
+                        <!-- 3(ii) -->
+                        <div class="sol-step">
+                            <div class="sol-step-title">(ii) Upper Semi-Circle ($R=1$)</div>
+                            <div class="math-row">
+                                $$I = \int_{0}^{\pi} d\theta \int_{0}^{1} r^2\,dr = \pi \cdot \frac{1}{3} = \frac{\pi}{3}$$
+                            </div>
+                            <div class="result-badge">Answer = $\pi/3$</div>
+                        </div>
+
+                        <!-- 3(iii) -->
+                        <div class="sol-step">
+                            <div class="sol-step-title">(iii) Right Semi-Circle ($R=1$)</div>
+                            <div class="math-row">
+                                $$I = \int_{-\pi/2}^{\pi/2} d\theta \int_{0}^{1} r^2\,dr = \pi \cdot \frac{1}{3} = \frac{\pi}{3}$$
+                            </div>
+                            <div class="result-badge">Answer = $\pi/3$</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Q3 (iv) to (vi) -->
+            <div class="prob-card">
+                <div class="prob-header">
+                    <span class="prob-title">📌 Question 3: (iv) to (vi) Rational Integrands in Polar Form</span>
+                    <button class="sol-btn" onclick="toggleSolution(this)">إظهار الحل</button>
+                </div>
+                <div class="prob-body">
+                    <div class="prompt-box">
+                        (iv) $\int_{0}^{1}\int_{0}^{\sqrt{1-y^2}} \frac{dx\,dy}{\sqrt{x^2+y^2}}$ <br>
+                        (v) $\int_{0}^{1}\int_{0}^{\sqrt{1-y^2}} \frac{xy}{\sqrt{x^2+y^2}}\,dx\,dy$ <br>
+                        (vi) $\int_{0}^{2}\int_{0}^{\sqrt{4-x^2}} \frac{x+y}{\sqrt{x^2+y^2}}\,dy\,dx$
+                    </div>
+                    <div class="solution-wrapper">
+                        <!-- 3(iv) -->
+                        <div class="sol-step">
+                            <div class="sol-step-title">(iv) First Quadrant Quarter-Disc ($R=1$)</div>
+                            <div class="math-row">
+                                $$I = \int_{0}^{\pi/2} d\theta \int_{0}^{1} \frac{1}{r} \cdot r\,dr = \frac{\pi}{2} \cdot 1 = \frac{\pi}{2}$$
+                            </div>
+                            <div class="result-badge">Answer = $\pi/2$</div>
+                        </div>
+
+                        <!-- 3(v) -->
+                        <div class="sol-step">
+                            <div class="sol-step-title">(v) First Quadrant Quarter-Disc ($R=1$)</div>
+                            <div class="math-row">
+                                $$I = \int_{0}^{\pi/2} \frac{\sin 2\theta}{2}\,d\theta \int_{0}^{1} r^2\,dr = \frac{1}{2} \cdot \frac{1}{3} = \frac{1}{6}$$
+                            </div>
+                            <div class="result-badge">Answer = $1/6$</div>
+                        </div>
+
+                        <!-- 3(vi) -->
+                        <div class="sol-step">
+                            <div class="sol-step-title">(vi) First Quadrant Quarter-Disc ($R=2$)</div>
+                            <div class="math-row">
+                                $$I = \int_{0}^{\pi/2} (\cos\theta + \sin\theta)\,d\theta \int_{0}^{2} r\,dr = 2 \cdot 2 = 4$$
+                            </div>
+                            <div class="result-badge">Answer = 4</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- ========================================================= -->
+        <!-- Questions 4 & 5: Bounded Integrals -->
+        <!-- ========================================================= -->
+        <div id="sec-4" class="question-section active">
+
+            <!-- Q4 -->
+            <div class="prob-card">
+                <div class="prob-header">
+                    <span class="prob-title">📌 Question 4: Region bounded by Parabolas</span>
+                    <button class="sol-btn" onclick="toggleSolution(this)">إظهار الحل</button>
+                </div>
+                <div class="prob-body">
+                    <div class="prompt-box">
+                        Evaluate $\iint_{D} (2x + 3y^2)\,dx\,dy$, where $D$ is bounded by $y=x^3$ and $y=x^2$ for $x \in [0,1]$.
+                    </div>
+                    <div class="solution-wrapper">
+                        <div class="sol-step">
+                            <div class="sol-step-title">Limits of Integration</div>
+                            <div>For $x \in [0,1]$, $x^3 \le y \le x^2$:</div>
+                            <div class="math-row">
+                                $$I = \int_{0}^{1} \left[\int_{x^3}^{x^2} (2x + 3y^2)\,dy\right] dx = \int_{0}^{1} (2x^3 - 2x^4 + x^6 - x^9)\,dx = \frac{1}{7}$$
+                            </div>
+                            <div class="result-badge">Answer = $1/7$</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Q5 -->
+            <div class="prob-card">
+                <div class="prob-header">
+                    <span class="prob-title">📌 Question 5: Triangular Region</span>
+                    <button class="sol-btn" onclick="toggleSolution(this)">إظهار الحل</button>
+                </div>
+                <div class="prob-body">
+                    <div class="prompt-box">
+                        Evaluate $\iint_{D} (x^2 y)\,dx\,dy$, where $D$ is bounded by $y=0$, $y=x$, and $x+y=2$.
+                    </div>
+                    <div class="solution-wrapper">
+                        <div class="sol-step">
+                            <div class="sol-step-title">Integration along horizontal strips</div>
+                            <div>Integrating with respect to $x$ first: $y \le x \le 2-y$, with $0 \le y \le 1$:</div>
+                            <div class="math-row">
+                                $$I = \int_{0}^{1} y \left[\int_{y}^{2-y} x^2\,dx\right] dy = \frac{1}{3}\int_{0}^{1} (8y - 12y^2 + 6y^3 - 2y^4)\,dy = \frac{11}{30}$$
+                            </div>
+                            <div class="result-badge">Answer = $11/30$</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- ========================================================= -->
+        <!-- Questions 6 & 7: Annulus Regions -->
+        <!-- ========================================================= -->
+        <div id="sec-6" class="question-section active">
+
+            <!-- Q6 & Q7 -->
+            <div class="prob-card">
+                <div class="prob-header">
+                    <span class="prob-title">📌 Questions 6 & 7: Annular Region Integrals</span>
+                    <button class="sol-btn" onclick="toggleSolution(this)">إظهار الحل</button>
+                </div>
+                <div class="prob-body">
+                    <div class="prompt-box">
+                        (6) Evaluate $\iint_{D} \sqrt{x^2+y^2}\,dx\,dy$ <br>
+                        (7) Evaluate $\iint_{D} (x+y)\,dx\,dy$ <br>
+                        where $D$ is bounded by $4 \le x^2+y^2 \le 9$.
+                    </div>
+                    <div class="solution-wrapper">
+                        <!-- Q6 -->
+                        <div class="sol-step">
+                            <div class="sol-step-title">Solution for Question 6</div>
+                            <div>In Polar coordinates: $2 \le r \le 3$, and $0 \le \theta \le 2\pi$:</div>
+                            <div class="math-row">
+                                $$I = \int_{0}^{2\pi} d\theta \int_{2}^{3} r^2\,dr = 2\pi \left(\frac{27 - 8}{3}\right) = \frac{38\pi}{3}$$
+                            </div>
+                            <div class="result-badge">Answer = $\frac{38\pi}{3}$</div>
+                        </div>
+
+                        <!-- Q7 -->
+                        <div class="sol-step">
+                            <div class="sol-step-title">Solution for Question 7</div>
+                            <div class="math-row">
+                                $$I = \int_{0}^{2\pi} (\cos\theta + \sin\theta)\,d\theta \int_{2}^{3} r^2\,dr = 0 \cdot \left(\frac{19}{3}\right) = 0$$
+                            </div>
+                            <div class="result-badge">Answer = 0 (by symmetry)</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- ========================================================= -->
+        <!-- Questions 8 & 9: Area Calculations -->
+        <!-- ========================================================= -->
+        <div id="sec-8" class="question-section active">
+
+            <!-- Q8 -->
+            <div class="prob-card">
+                <div class="prob-header">
+                    <span class="prob-title">📌 Question 8: Area between Standard Parabolas</span>
+                    <button class="sol-btn" onclick="toggleSolution(this)">إظهار الحل</button>
+                </div>
+                <div class="prob-body">
+                    <div class="prompt-box">
+                        Find the area of the region bounded by $y=x^2$ and $x=y^2$.
+                    </div>
+                    <div class="solution-wrapper">
+                        <div class="sol-step">
+                            <div class="sol-step-title">Formulation and Integration</div>
+                            <div>Intersection points: $(0,0)$ and $(1,1)$:</div>
+                            <div class="math-row">
+                                $$A = \int_{0}^{1} (\sqrt{x} - x^2)\,dx = \left[\frac{2}{3}x^{3/2} - \frac{x^3}{3}\right]_{0}^{1} = \frac{1}{3}$$
+                            </div>
+                            <div class="result-badge">Area = $1/3$</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Q9 -->
+            <div class="prob-card">
+                <div class="prob-header">
+                    <span class="prob-title">📌 Question 9: Area via Jacobian Transformation</span>
+                    <button class="sol-btn" onclick="toggleSolution(this)">إظهار الحل</button>
+                </div>
+                <div class="prob-body">
+                    <div class="prompt-box">
+                        Find the area of the region bounded by $y=x^2$, $4y=x^2$, $x=y^2$, and $4x=y^2$.
+                    </div>
+                    <div class="solution-wrapper">
+                        <div class="sol-step">
+                            <div class="sol-step-title">Transformation of Variables (Jacobian Method)</div>
+                            <div>Let $u = \frac{x^2}{y} \in [1,4]$ and $v = \frac{y^2}{x} \in [1,4]$:</div>
+                            <div class="math-row">
+                                $$J\left(\frac{u,v}{x,y}\right) = \begin{vmatrix} \frac{2x}{y} & -\frac{x^2}{y^2} \\ -\frac{y^2}{x^2} & \frac{2y}{x} \end{vmatrix} = 4 - 1 = 3 \implies J\left(\frac{x,y}{u,v}\right) = \frac{1}{3}$$
+                            </div>
+                            <div class="math-row">
+                                $$A = \int_{1}^{4}\int_{1}^{4} \frac{1}{3}\,du\,dv = \frac{1}{3}(3)(3) = 3$$
+                            </div>
+                            <div class="result-badge">Area = 3</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- كود الجافاسكريبت للتحكم التفاعلي -->
+    <script>
+        function switchQuestion(qNum, btn) {
+            const tabs = document.querySelectorAll('.tab-btn');
+            const sections = document.querySelectorAll('.question-section');
+            tabs.forEach(t => t.classList.remove('active'));
+            if (btn) btn.classList.add('active');
+
+            if (qNum === 0) {
+                sections.forEach(sec => sec.classList.add('active'));
+            } else {
+                sections.forEach(sec => sec.classList.remove('active'));
+                const target = document.getElementById('sec-' + qNum);
+                if (target) target.classList.add('active');
+            }
+        }
+
+        function toggleSolution(btn) {
+            const card = btn.closest('.prob-card');
+            const sol = card.querySelector('.solution-wrapper');
+            if (sol.classList.contains('show')) {
+                sol.classList.remove('show');
+                btn.classList.remove('active');
+                btn.innerText = 'إظهار الحل';
+            } else {
+                sol.classList.add('show');
+                btn.classList.add('active');
+                btn.innerText = 'إخفاء الحل';
+            }
+        }
+
+        function toggleAllSolutions(show) {
+            const buttons = document.querySelectorAll('.sol-btn');
+            const solutions = document.querySelectorAll('.solution-wrapper');
+
+            solutions.forEach((sol, idx) => {
+                const btn = buttons[idx];
+                if (show) {
+                    sol.classList.add('show');
+                    if (btn) { btn.classList.add('active'); btn.innerText = 'إخفاء الحل'; }
+                } else {
+                    sol.classList.remove('show');
+                    if (btn) { btn.classList.remove('active'); btn.innerText = 'إظهار الحل'; }
+                }
+            });
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            if (typeof renderMathInElement === 'function') {
+                renderMathInElement(document.body, {
+                    delimiters: [
+                        {left: "$$", right: "$$", display: true},
+                        {left: "$", right: "$", display: false}
+                    ],
+                    throwOnError: false
+                });
+            }
+        });
+    </script>
+</body>
+</html>
