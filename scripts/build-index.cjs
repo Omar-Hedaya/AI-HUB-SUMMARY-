@@ -5,29 +5,35 @@ const contentDir = path.join(process.cwd(), 'content');
 const categories = [];
 const documents = [];
 
+function scanDir(dir, currentCategory, relPath) {
+  const entries = fs.readdirSync(dir, { withFileTypes: true });
+  for (const entry of entries) {
+    if (entry.name === '.gitkeep' || entry.name.startsWith('.')) continue;
+    const fullPath = path.join(dir, entry.name);
+    const entryRelPath = relPath ? `${relPath}/${entry.name}` : entry.name;
+    if (entry.isDirectory()) {
+      scanDir(fullPath, currentCategory, entryRelPath);
+    } else if (entry.isFile() && entry.name.toLowerCase().endsWith('.html')) {
+      const docPath = `content/${entryRelPath}`;
+      const title = entry.name.replace(/\.html$/i, '');
+      documents.push({
+        name: entry.name,
+        title: title,
+        category: currentCategory,
+        path: docPath
+      });
+    }
+  }
+}
+
 if (fs.existsSync(contentDir)) {
-  const folders = fs.readdirSync(contentDir, { withFileTypes: true })
-    .filter(dirent => dirent.isDirectory())
-    .map(dirent => dirent.name);
-
-  folders.forEach(folder => {
-    categories.push(folder);
-    const folderPath = path.join(contentDir, folder);
-    const files = fs.readdirSync(folderPath);
-
-    files.forEach(file => {
-      if (file.toLowerCase().endsWith('.html')) {
-        const filePath = `content/${folder}/${file}`;
-        const title = file.replace(/\.html$/i, '');
-        documents.push({
-          name: file,
-          title: title,
-          category: folder,
-          path: filePath
-        });
-      }
-    });
-  });
+  const topEntries = fs.readdirSync(contentDir, { withFileTypes: true });
+  for (const entry of topEntries) {
+    if (entry.isDirectory() && !entry.name.startsWith('.')) {
+      categories.push(entry.name);
+      scanDir(path.join(contentDir, entry.name), entry.name, entry.name);
+    }
+  }
 }
 
 const catalog = { categories, documents };
@@ -41,4 +47,4 @@ if (!fs.existsSync(publicDir)) {
 }
 fs.writeFileSync(path.join(publicDir, 'index.json'), jsonOutput);
 
-console.log('✅ Generated index.json successfully with', documents.length, 'documents.');
+console.log('✅ Generated index.json successfully with', documents.length, 'documents across', categories.length, 'categories.');

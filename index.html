@@ -481,41 +481,60 @@
 
     </section>
 
-    <!-- VIEW 2: FOLDER DOCUMENTS VIEW (Google Drive Style Drill-down) -->
+    <!-- VIEW 2: FOLDER DOCUMENTS VIEW (Google Drive Style Drill-down with Arbitrary Nested Paths) -->
     <section id="folder-docs-view" class="hidden transition-all duration-200">
       
-      <!-- Drill-down Header with Clear "← Back to Folders" Navigation -->
+      <!-- Drill-down Header with Clear "← Back" Navigation & Breadcrumbs Bar -->
       <div class="mb-6 pb-4 border-b border-slate-800/80 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-        <div class="flex items-center gap-3 min-w-0">
+        <div class="flex items-center gap-2.5 sm:gap-3 min-w-0 flex-1">
           <button 
             type="button" 
-            onclick="backToFolders(event)"
-            title="Return to folders list (Esc)"
-            class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white border border-slate-700 transition active:scale-95 shadow-sm shrink-0">
-            <svg class="w-4 h-4 text-sky-400 rtl:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+            onclick="handleBackNavigation(event)"
+            title="Return to parent directory (Esc) / العودة للمجلد السابق"
+            class="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white border border-slate-700 transition active:scale-95 shadow-sm shrink-0">
+            <svg class="w-4 h-4 text-sky-400 rtl:rotate-180 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
               <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
             </svg>
-            <span id="back-to-folders-text">Back to Folders</span>
+            <span id="back-to-folders-text">Back</span>
           </button>
 
-          <!-- Breadcrumbs & Active Folder Name -->
-          <div class="min-w-0 flex items-center gap-2">
-            <span class="text-slate-500 text-xs hidden xs:inline">/</span>
-            <div id="active-folder-header" class="flex items-center gap-2 truncate">
-              <!-- Populated by JS -->
-            </div>
-          </div>
+          <!-- Dynamic Breadcrumbs Bar (Clickable Nested Path Navigation) -->
+          <nav id="breadcrumbs-bar" aria-label="Breadcrumb" class="min-w-0 flex items-center gap-1.5 overflow-x-auto py-1 scrollbar-none text-xs sm:text-sm">
+            <!-- Dynamic breadcrumb segments rendered by JS -->
+          </nav>
         </div>
 
-        <!-- Files counter badge inside current folder -->
-        <div class="self-start sm:self-auto">
+        <!-- Files & Subfolders Counter Badges inside Current Directory -->
+        <div class="self-start sm:self-auto shrink-0 flex items-center gap-2">
+          <span id="folder-subfolders-count-badge" class="hidden text-xs font-mono font-medium px-2.5 py-1 rounded-lg bg-sky-950/70 border border-sky-800/60 text-sky-300">
+            0 folders
+          </span>
           <span id="folder-files-count-badge" class="text-xs font-mono font-medium px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-800 text-slate-400">
             0 files
           </span>
         </div>
       </div>
 
-      <!-- Cards Grid Container -->
+      <!-- Nested Sub-directories Container (Google Drive Style Folder Cards) -->
+      <div id="subfolders-section" class="hidden mb-6">
+        <h3 id="subfolders-heading-label" class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3 flex items-center gap-1.5">
+          <span>📁</span>
+          <span id="subfolders-heading-text">Folders</span>
+        </h3>
+        <div id="subfolders-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+          <!-- Clickable nested folder cards rendered here -->
+        </div>
+      </div>
+
+      <!-- Files / Documents Section Label (When both folders and files are present) -->
+      <div id="folder-files-heading" class="hidden mb-3">
+        <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
+          <span>📄</span>
+          <span id="folder-files-heading-text">Files</span>
+        </h3>
+      </div>
+
+      <!-- Cards Grid Container (Direct Files in Current Directory) -->
       <div id="cards-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5 sm:gap-4">
         <!-- Compact Document cards rendered here -->
       </div>
@@ -1054,6 +1073,10 @@
         menuReportIssue: "Report Issue via Telegram",
         gpaCalc: "GPA",
         gpaCalcTooltip: "GPA & Percentage Calculator / حاسبة المعدل والنسبة المئوية",
+        rootFolder: "Root",
+        folders: "Folders",
+        folder: "folder",
+        back: "Back",
         langNext: "AR",
         langTitle: "التبديل إلى العربية (Switch to Arabic)"
       },
@@ -1104,6 +1127,10 @@
         menuReportIssue: "الإبلاغ عن خطأ عبر تليجرام",
         gpaCalc: "المعدل",
         gpaCalcTooltip: "حاسبة المعدل التراكمي والنسبة المئوية / GPA Calculator",
+        rootFolder: "الرئيسية",
+        folders: "المجلدات",
+        folder: "مجلد",
+        back: "رجوع",
         langNext: "EN",
         langTitle: "Switch to English (التبديل للإنجليزية)"
       }
@@ -1115,6 +1142,8 @@
     let discoveredCategories = []; // e.g. ["Math 2", "lectures", "sheets", "summaries", "exams"]
     let allDocuments = [];         // All discovered HTML file objects
     let activeFolder = null;       // Active folder in drill-down view (null = root directory)
+    let currentPath = [];          // Dynamic navigation path stack for arbitrary depth, e.g. ["Math 2", "Sheets Answers"]
+    const pathContentsCache = new Map(); // Dynamic GitHub API path contents cache
     let currentDocument = null;    // Currently opened document in viewer
     let currentZoom = 1.0;         // Zoom factor (1.0 = 100%)
     let deferredPwaPrompt = null;  // PWA Install prompt event
@@ -1133,7 +1162,9 @@
       get currentDocument() { return currentDocument; },
       set currentDocument(val) { currentDocument = val; },
       get activeFolder() { return activeFolder; },
-      set activeFolder(val) { activeFolder = val; }
+      set activeFolder(val) { activeFolder = val; },
+      get currentPath() { return currentPath; },
+      set currentPath(val) { currentPath = val; }
     };
 
     // Auto-hide toolbar state
@@ -1677,7 +1708,7 @@
     function getTelegramReportUrl(contextName) {
       const base = "https://t.me/ai_summary_help";
       const isArabic = currentLang === "ar";
-      let contextStr = contextName || (currentDocument ? currentDocument.title : (activeFolder && activeFolder !== "all" && activeFolder !== "starred" ? activeFolder : null));
+      let contextStr = contextName || (currentDocument ? currentDocument.title : (currentPath.length > 0 ? currentPath.join(" > ") : (activeFolder && activeFolder !== "all" && activeFolder !== "starred" ? activeFolder : null)));
 
       let msg = "";
       if (isArabic) {
@@ -1766,8 +1797,16 @@
       const subjectHeading = document.getElementById("subject-folders-heading-text");
       if (subjectHeading) subjectHeading.textContent = dict.subjectFolders;
 
+      const subfoldersHeading = document.getElementById("subfolders-heading-text");
+      if (subfoldersHeading) subfoldersHeading.textContent = dict.folders || "Folders";
+
+      const folderFilesHeading = document.getElementById("folder-files-heading-text");
+      if (folderFilesHeading) folderFilesHeading.textContent = dict.files || "Files";
+
       const backToFoldersText = document.getElementById("back-to-folders-text");
-      if (backToFoldersText) backToFoldersText.textContent = dict.backToFolders;
+      if (backToFoldersText) {
+        backToFoldersText.textContent = (currentPath.length > 1) ? (dict.back || "Back") : (dict.backToFolders || "Back to Folders");
+      }
 
       const viewerBackText = document.getElementById("viewer-back-text");
       if (viewerBackText) viewerBackText.textContent = dict.viewerBack;
@@ -1800,6 +1839,10 @@
 
       const pwaDismissSecondary = document.getElementById("pwa-dismiss-btn-secondary");
       if (pwaDismissSecondary) pwaDismissSecondary.textContent = dict.dismiss;
+
+      if (currentPath.length > 0 || activeFolder) {
+        renderBreadcrumbs();
+      }
 
       renderUI();
     }
@@ -2990,9 +3033,382 @@
       `;
     }
 
-    function openFolder(categoryEncoded, pushHistory = true) {
-      const category = decodeURIComponent(categoryEncoded);
-      activeFolder = category;
+    // ==========================================================
+    // DYNAMIC BREADCRUMBS & ARBITRARY NESTED PATH NAVIGATION
+    // ==========================================================
+
+    function renderBreadcrumbs() {
+      const bar = document.getElementById("breadcrumbs-bar");
+      if (!bar) return;
+
+      const dict = I18N[currentLang] || I18N.en;
+      const rootLabel = dict.rootFolder || "Root";
+
+      let html = `
+        <button 
+          type="button" 
+          onclick="backToFolders(event)" 
+          class="flex items-center gap-1.5 text-slate-400 hover:text-sky-300 transition shrink-0 font-medium group">
+          <svg class="w-3.5 h-3.5 text-slate-400 group-hover:text-sky-300 transition shrink-0" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
+          </svg>
+          <span class="hover:underline">${rootLabel}</span>
+        </button>
+      `;
+
+      if (activeFolder === "starred") {
+        html += `
+          <span class="text-slate-600 shrink-0 text-xs rtl:rotate-180">/</span>
+          <span class="text-amber-300 font-bold flex items-center gap-1 shrink-0">
+            <span>⭐</span>
+            <span>${dict.starredNotes || "Starred Notes"}</span>
+          </span>
+        `;
+        bar.innerHTML = html;
+        return;
+      }
+
+      if (activeFolder === "all") {
+        html += `
+          <span class="text-slate-600 shrink-0 text-xs rtl:rotate-180">/</span>
+          <span class="text-sky-300 font-bold shrink-0">
+            ${dict.allDocuments || "All Documents"}
+          </span>
+        `;
+        bar.innerHTML = html;
+        return;
+      }
+
+      for (let i = 0; i < currentPath.length; i++) {
+        const seg = currentPath[i];
+        const isLast = i === currentPath.length - 1;
+        const displayName = formatCategoryName(seg);
+        const theme = getCategoryTheme(seg);
+
+        html += `
+          <span class="text-slate-600 shrink-0 text-xs rtl:rotate-180">
+            <svg class="w-3 h-3 text-slate-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+            </svg>
+          </span>
+        `;
+
+        if (isLast) {
+          html += `
+            <span class="text-white font-bold flex items-center gap-1.5 shrink-0 max-w-[220px] truncate" title="${displayName}">
+              <span class="w-2 h-2 rounded-full ${theme.accent ? 'bg-sky-400' : 'bg-slate-400'} shrink-0"></span>
+              <span class="truncate">${displayName}</span>
+            </span>
+          `;
+        } else {
+          html += `
+            <button 
+              type="button" 
+              onclick="navigateToPathIndex(${i})" 
+              class="text-slate-400 hover:text-sky-300 transition truncate max-w-[160px] shrink-0 font-medium hover:underline" 
+              title="${displayName}">
+              ${displayName}
+            </button>
+          `;
+        }
+      }
+
+      bar.innerHTML = html;
+    }
+
+    function navigateToPathIndex(idx) {
+      if (idx < 0) {
+        backToFolders();
+        return;
+      }
+      if (idx < currentPath.length) {
+        currentPath = currentPath.slice(0, idx + 1);
+        activeFolder = currentPath[currentPath.length - 1];
+        fetchAndRenderCurrentPath(true);
+      }
+    }
+
+    function navigateToSubfolder(subfolderEncoded) {
+      const subfolderName = decodeURIComponent(subfolderEncoded);
+      currentPath.push(subfolderName);
+      activeFolder = subfolderName;
+      fetchAndRenderCurrentPath(true);
+    }
+
+    function handleBackNavigation(e) {
+      if (e) e.preventDefault();
+      if (currentPath.length > 1) {
+        currentPath.pop();
+        activeFolder = currentPath[currentPath.length - 1];
+        fetchAndRenderCurrentPath(true);
+      } else {
+        currentPath = [];
+        activeFolder = null;
+        backToFolders(e, true);
+      }
+    }
+
+    function renderSubfolderCard(subfolderName) {
+      const theme = getCategoryTheme(subfolderName);
+      const displayName = formatCategoryName(subfolderName);
+      const escapedName = encodeURIComponent(subfolderName);
+
+      // Estimate document count within this subfolder if available locally
+      const prefix = `${currentPath.join('/')}/${subfolderName}`.toLowerCase();
+      const count = allDocuments.filter(d => {
+        const clean = d.path.replace(/^content\//i, '').toLowerCase();
+        return clean.startsWith(prefix + '/');
+      }).length;
+
+      return `
+        <div 
+          onclick="navigateToSubfolder('${escapedName}')"
+          class="folder-card group bg-[#0f172a] hover:bg-[#131d33] border border-slate-800 hover:border-sky-500/50 rounded-xl p-3 sm:p-3.5 flex items-center justify-between gap-3 transition-all duration-200 cursor-pointer shadow-sm hover:shadow-lg hover:shadow-sky-500/5 active:scale-[0.99] select-none">
+          
+          <div class="flex items-center gap-3 min-w-0 flex-1">
+            <div class="w-9 h-9 rounded-xl ${theme.iconBg} border flex items-center justify-center shrink-0 ${theme.iconColor} group-hover:scale-105 transition">
+              <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M19.5 21a3 3 0 003-3v-4.5a3 3 0 00-3-3h-1.5V9a3 3 0 00-3-3h-4.636a3 3 0 01-2.121-.879L6.879 3.757A3 3 0 004.757 3H3a3 3 0 00-3 3v12a3 3 0 003 3h16.5z" />
+              </svg>
+            </div>
+
+            <div class="min-w-0 flex-1">
+              <h4 class="text-xs sm:text-sm font-bold text-white group-hover:text-sky-300 transition truncate leading-snug">
+                ${displayName}
+              </h4>
+              ${count > 0 ? `
+                <p class="text-[11px] font-mono text-slate-400 mt-0.5">${count} ${count === 1 ? 'file' : 'files'}</p>
+              ` : ''}
+            </div>
+          </div>
+
+          <div class="flex items-center text-slate-500 group-hover:text-sky-400 group-hover:translate-x-0.5 rtl:group-hover:-translate-x-0.5 rtl:rotate-180 transition shrink-0">
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+            </svg>
+          </div>
+
+        </div>
+      `;
+    }
+
+    // ==========================================================
+    // UNIFIED FETCH & RENDER ENGINE FOR ARBITRARY NESTED PATHS
+    // ==========================================================
+
+    function getLocalContentsForPath(pathArray) {
+      const subdirsSet = new Set();
+      const directFiles = [];
+
+      if (!pathArray || pathArray.length === 0) {
+        return { subdirs: getUniqueCategories(), files: [] };
+      }
+
+      const targetPrefix = pathArray.join('/').toLowerCase();
+
+      allDocuments.forEach(doc => {
+        // Strip leading 'content/' if present to normalize relative path
+        const cleanPath = doc.path.replace(/^content\//i, '');
+        const cleanLower = cleanPath.toLowerCase();
+
+        if (cleanLower.startsWith(targetPrefix + '/')) {
+          const remainder = cleanPath.substring(targetPrefix.length + 1);
+          const slashIdx = remainder.indexOf('/');
+
+          if (slashIdx > -1) {
+            // It has deeper path segments: first segment is a sub-directory
+            const subDirName = remainder.substring(0, slashIdx);
+            if (subDirName && subDirName !== '.gitkeep' && !subDirName.startsWith('.')) {
+              subdirsSet.add(subDirName);
+            }
+          } else {
+            // No deeper slashes: it is a direct file in the current directory
+            if (remainder && remainder !== '.gitkeep' && !remainder.endsWith('.gitkeep')) {
+              directFiles.push(doc);
+            }
+          }
+        } else if (cleanLower === targetPrefix) {
+          if (doc.name !== '.gitkeep' && !doc.name.endsWith('.gitkeep')) {
+            directFiles.push(doc);
+          }
+        }
+      });
+
+      // Filter out .gitkeep and sort naturally
+      const naturalSort = (a, b) => a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' });
+      const subdirs = Array.from(subdirsSet).sort(naturalSort);
+      directFiles.sort((a, b) => naturalSort(a.title || a.name, b.title || b.name));
+
+      return { subdirs, files: directFiles };
+    }
+
+    async function fetchRemotePathContents(pathArray) {
+      if (!pathArray || pathArray.length === 0) return;
+      const pathStr = pathArray.join('/');
+
+      // Check in-memory cache first to save bandwidth and GitHub rate limits
+      if (pathContentsCache.has(pathStr)) {
+        const cached = pathContentsCache.get(pathStr);
+        if (cached) {
+          const merged = getLocalContentsForPath(pathArray);
+          cached.subdirs?.forEach(s => {
+            if (!merged.subdirs.some(m => m.toLowerCase() === s.toLowerCase())) {
+              merged.subdirs.push(s);
+            }
+          });
+          renderPathContents(merged.subdirs, merged.files);
+          return;
+        }
+      }
+
+      const encodedPath = pathArray.map(encodeURIComponent).join('/');
+      const candidateUrls = [
+        `https://api.github.com/repos/${currentUsername}/${currentRepo}/contents/content/${encodedPath}`,
+        `https://api.github.com/repos/${currentUsername}/${currentRepo}/contents/${encodedPath}`
+      ];
+
+      for (const apiUrl of candidateUrls) {
+        try {
+          const res = await fetch(apiUrl, {
+            headers: { "Accept": "application/vnd.github.v3+json" }
+          });
+
+          if (res.status === 403) {
+            // GitHub API rate limited, seamlessly fall back to local/cached catalog
+            return;
+          }
+
+          if (res.ok) {
+            const items = await res.json();
+            if (Array.isArray(items)) {
+              // Strictly filter out .gitkeep files and hidden files
+              const validItems = items.filter(item => item.name !== '.gitkeep' && !item.name.endsWith('.gitkeep') && !item.name.startsWith('.'));
+
+              const apiSubdirs = validItems
+                .filter(item => item.type === 'dir')
+                .map(item => item.name);
+
+              const apiFiles = validItems
+                .filter(item => item.type === 'file' && item.name.toLowerCase().endsWith('.html'))
+                .map(item => {
+                  const doc = inflateDocument({
+                    name: item.name,
+                    title: formatTitle(item.name),
+                    path: item.path,
+                    category: pathArray[0] || 'Docs',
+                    slug: generateSlug(item.name),
+                    download_url: item.download_url,
+                    downloadUrl: item.download_url,
+                    size: item.size || 0
+                  });
+                  // Merge into allDocuments library if not already present
+                  if (!allDocuments.some(d => d.path === doc.path)) {
+                    allDocuments.push(doc);
+                  }
+                  return doc;
+                });
+
+              pathContentsCache.set(pathStr, { subdirs: apiSubdirs, files: apiFiles });
+
+              // Combine with existing local items
+              const merged = getLocalContentsForPath(pathArray);
+              apiSubdirs.forEach(s => {
+                if (!merged.subdirs.some(m => m.toLowerCase() === s.toLowerCase())) {
+                  merged.subdirs.push(s);
+                }
+              });
+              apiFiles.forEach(f => {
+                if (!merged.files.some(m => m.path === f.path)) {
+                  merged.files.push(f);
+                }
+              });
+
+              renderPathContents(merged.subdirs, merged.files);
+              return;
+            }
+          }
+        } catch (err) {
+          console.warn("GitHub API path fetch note:", err);
+        }
+      }
+    }
+
+    function renderPathContents(subdirs, files) {
+      const subfoldersSection = document.getElementById("subfolders-section");
+      const subfoldersContainer = document.getElementById("subfolders-container");
+      const subfoldersCountBadge = document.getElementById("folder-subfolders-count-badge");
+      const folderFilesHeading = document.getElementById("folder-files-heading");
+      const countBadge = document.getElementById("folder-files-count-badge");
+      const container = document.getElementById("cards-container");
+      const emptyState = document.getElementById("empty-state");
+      const backBtnText = document.getElementById("back-to-folders-text");
+      const dict = I18N[currentLang] || I18N.en;
+
+      // Update Back button text: "Back" if nested > 1, or "Back to Folders" if at top level
+      if (backBtnText) {
+        backBtnText.textContent = (currentPath.length > 1) ? (dict.back || "Back") : (dict.backToFolders || "Back to Folders");
+      }
+
+      // Filter out any stray .gitkeep in files
+      const cleanFiles = (files || []).filter(f => f && f.name !== '.gitkeep' && !f.name.endsWith('.gitkeep'));
+      const cleanSubdirs = subdirs || [];
+
+      // Update Files count badge
+      if (countBadge) {
+        countBadge.textContent = `${cleanFiles.length} ${cleanFiles.length === 1 ? dict.file : dict.files}`;
+      }
+
+      // Handle Sub-directories rendering
+      if (cleanSubdirs.length > 0) {
+        if (subfoldersSection) subfoldersSection.classList.remove("hidden");
+        if (subfoldersCountBadge) {
+          subfoldersCountBadge.classList.remove("hidden");
+          subfoldersCountBadge.textContent = `${cleanSubdirs.length} ${cleanSubdirs.length === 1 ? (dict.folder || 'folder') : (dict.folders || 'folders')}`;
+        }
+        if (subfoldersContainer) {
+          subfoldersContainer.innerHTML = cleanSubdirs.map(renderSubfolderCard).join("");
+        }
+      } else {
+        if (subfoldersSection) subfoldersSection.classList.add("hidden");
+        if (subfoldersCountBadge) subfoldersCountBadge.classList.add("hidden");
+        if (subfoldersContainer) subfoldersContainer.innerHTML = "";
+      }
+
+      // Show "Files" heading if there are both subfolders and files
+      if (cleanSubdirs.length > 0 && cleanFiles.length > 0) {
+        folderFilesHeading?.classList.remove("hidden");
+      } else {
+        folderFilesHeading?.classList.add("hidden");
+      }
+
+      // Handle Files rendering
+      if (cleanFiles.length > 0) {
+        if (container) {
+          container.innerHTML = cleanFiles.map(doc => renderCompactDocCard(doc, false)).join("");
+        }
+        emptyState?.classList.add("hidden");
+      } else {
+        if (container) container.innerHTML = "";
+        if (cleanSubdirs.length === 0) {
+          emptyState?.classList.remove("hidden");
+          const msg = document.getElementById("empty-state-message");
+          if (msg) {
+            const folderName = currentPath[currentPath.length - 1] || "folder";
+            msg.textContent = currentLang === "ar"
+              ? `لا توجد ملفات أو مجلدات في "${folderName}".`
+              : `This directory currently contains no readable HTML summaries or sheets.`;
+          }
+        } else {
+          emptyState?.classList.add("hidden");
+        }
+      }
+    }
+
+    async function fetchAndRenderCurrentPath(pushHistory = true) {
+      if (currentPath.length === 0) {
+        backToFolders(null, pushHistory);
+        return;
+      }
 
       const searchView = document.getElementById("search-results-view");
       const searchInput = document.getElementById("doc-search-input");
@@ -3004,22 +3420,112 @@
 
       const foldersView = document.getElementById("folders-directory-view");
       const folderDocsView = document.getElementById("folder-docs-view");
-
       if (foldersView) foldersView.classList.add("hidden");
       if (folderDocsView) folderDocsView.classList.remove("hidden");
 
-      renderFolderDocuments(category);
+      // Handle special root views (Starred / All)
+      if (activeFolder === "starred") {
+        renderBreadcrumbs();
+        renderSpecialFolder("starred");
+        if (pushHistory && !currentDocument) {
+          window.history.pushState({ view: 'folder', path: ['starred'] }, '', '#starred');
+        }
+        window.scrollTo({ top: 0, behavior: "smooth" });
+        return;
+      }
 
-      const folderHash = category === "all" ? "#all" : (category === "starred" ? "#starred" : `#folder/${encodeURIComponent(category.toLowerCase())}`);
+      if (activeFolder === "all") {
+        renderBreadcrumbs();
+        renderSpecialFolder("all");
+        if (pushHistory && !currentDocument) {
+          window.history.pushState({ view: 'folder', path: ['all'] }, '', '#all');
+        }
+        window.scrollTo({ top: 0, behavior: "smooth" });
+        return;
+      }
+
+      activeFolder = currentPath[currentPath.length - 1];
+      renderBreadcrumbs();
+
       if (pushHistory && !currentDocument) {
-        window.history.pushState({ view: 'folder', folder: category }, '', folderHash);
+        const folderHash = `#folder/${currentPath.map(encodeURIComponent).join('/')}`;
+        window.history.pushState({ view: 'folder', path: [...currentPath] }, '', folderHash);
+      }
+
+      // Step 1: Immediate synchronous render from local catalog (0ms latency)
+      const local = getLocalContentsForPath(currentPath);
+      renderPathContents(local.subdirs, local.files);
+
+      // Step 2: Background network fetch to discover any dynamic changes via GitHub API
+      if (navigator.onLine && currentUsername && currentRepo) {
+        fetchRemotePathContents(currentPath);
       }
 
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
+    function renderSpecialFolder(type) {
+      const subfoldersSection = document.getElementById("subfolders-section");
+      const subfoldersCountBadge = document.getElementById("folder-subfolders-count-badge");
+      const folderFilesHeading = document.getElementById("folder-files-heading");
+      const countBadge = document.getElementById("folder-files-count-badge");
+      const container = document.getElementById("cards-container");
+      const emptyState = document.getElementById("empty-state");
+      const dict = I18N[currentLang] || I18N.en;
+
+      if (subfoldersSection) subfoldersSection.classList.add("hidden");
+      if (subfoldersCountBadge) subfoldersCountBadge.classList.add("hidden");
+      if (folderFilesHeading) folderFilesHeading.classList.add("hidden");
+
+      let filtered = [];
+      if (type === "starred") {
+        filtered = allDocuments.filter(d => starredPaths.has(d.path));
+      } else {
+        filtered = allDocuments;
+      }
+
+      if (countBadge) {
+        countBadge.textContent = `${filtered.length} ${filtered.length === 1 ? dict.file : dict.files}`;
+      }
+
+      if (filtered.length === 0) {
+        if (container) container.innerHTML = "";
+        if (emptyState) {
+          emptyState.classList.remove("hidden");
+          const msg = document.getElementById("empty-state-message");
+          if (msg) {
+            msg.textContent = type === "starred"
+              ? dict.noStarredNotes
+              : (currentLang === "ar" ? "لا توجد ملفات متوفرة حالياً." : "No documents available.");
+          }
+        }
+        return;
+      }
+
+      if (emptyState) emptyState.classList.add("hidden");
+      if (container) {
+        container.innerHTML = filtered.map(doc => renderCompactDocCard(doc, type === "all")).join("");
+      }
+    }
+
+    function openFolder(categoryEncoded, pushHistory = true) {
+      const category = decodeURIComponent(categoryEncoded);
+      activeFolder = category;
+
+      if (category === "starred") {
+        currentPath = ["starred"];
+      } else if (category === "all") {
+        currentPath = ["all"];
+      } else {
+        currentPath = [category];
+      }
+
+      fetchAndRenderCurrentPath(pushHistory);
+    }
+
     function backToFolders(e, pushHistory = true) {
       if (e) e.preventDefault();
+      currentPath = [];
       activeFolder = null;
 
       const searchView = document.getElementById("search-results-view");
@@ -3036,11 +3542,22 @@
       if (folderDocsView) folderDocsView.classList.add("hidden");
       if (foldersView) foldersView.classList.remove("hidden");
 
+      renderFoldersList();
+      updateTotalCountBadges();
+
       if (pushHistory && !currentDocument) {
-        window.history.pushState({ view: 'root' }, '', window.location.pathname + window.location.search);
+        window.history.pushState({ view: 'root', path: [] }, '', window.location.pathname + window.location.search);
       }
 
       window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function renderFolderDocuments(category) {
+      if (currentPath.length > 0) {
+        fetchAndRenderCurrentPath(false);
+      } else if (category) {
+        openFolder(encodeURIComponent(category), false);
+      }
     }
 
     // ==========================================================
@@ -3117,64 +3634,6 @@
 
         </div>
       `;
-    }
-
-    function renderFolderDocuments(category) {
-      const activeHeader = document.getElementById("active-folder-header");
-      const countBadge = document.getElementById("folder-files-count-badge");
-      const container = document.getElementById("cards-container");
-      const emptyState = document.getElementById("empty-state");
-
-      const isAll = category === "all";
-      const isStarred = category === "starred";
-      const dict = I18N[currentLang];
-
-      let filtered = [];
-      if (isStarred) {
-        filtered = allDocuments.filter(d => starredPaths.has(d.path));
-      } else if (isAll) {
-        filtered = allDocuments;
-      } else {
-        filtered = allDocuments.filter(d => d.category.toLowerCase() === category.toLowerCase());
-      }
-
-      const theme = isStarred ? CATEGORY_THEMES.starred : (isAll ? CATEGORY_THEMES.default : getCategoryTheme(category));
-      const displayName = isStarred ? dict.starredNotes : (isAll ? dict.allDocuments : formatCategoryName(category));
-
-      if (activeHeader) {
-        activeHeader.innerHTML = `
-          <div class="w-6 h-6 rounded-md ${theme.iconBg} border flex items-center justify-center shrink-0 ${theme.iconColor}">
-            <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M19.5 21a3 3 0 003-3v-4.5a3 3 0 00-3-3h-1.5V9a3 3 0 00-3-3h-4.636a3 3 0 01-2.121-.879L6.879 3.757A3 3 0 004.757 3H3a3 3 0 00-3 3v12a3 3 0 003 3h16.5z" />
-            </svg>
-          </div>
-          <h2 class="text-sm sm:text-base font-bold text-white truncate">${displayName}</h2>
-        `;
-      }
-
-      if (countBadge) {
-        countBadge.textContent = `${filtered.length} ${filtered.length === 1 ? dict.file : dict.files}`;
-      }
-
-      if (!container) return;
-
-      if (filtered.length === 0) {
-        container.innerHTML = "";
-        if (emptyState) {
-          emptyState.classList.remove("hidden");
-          const msg = document.getElementById("empty-state-message");
-          if (msg) {
-            msg.textContent = isStarred 
-              ? dict.noStarredNotes
-              : (currentLang === "ar" ? `لا توجد ملفات في مجلد "${displayName}".` : `No HTML documents were discovered in folder "${displayName}".`);
-          }
-        }
-        return;
-      }
-
-      if (emptyState) emptyState.classList.add("hidden");
-
-      container.innerHTML = filtered.map(doc => renderCompactDocCard(doc, isAll)).join("");
     }
 
     // ==========================================================
@@ -3707,11 +4166,14 @@
       renderContinueStudyingCard();
 
       if (pushHistory) {
-        if (activeFolder) {
+        if (currentPath.length > 0) {
+          const folderHash = `#folder/${currentPath.map(encodeURIComponent).join('/')}`;
+          window.history.pushState({ view: 'folder', path: [...currentPath] }, '', folderHash);
+        } else if (activeFolder) {
           const folderHash = activeFolder === "all" ? "#all" : (activeFolder === "starred" ? "#starred" : `#folder/${encodeURIComponent(activeFolder.toLowerCase())}`);
           window.history.pushState({ view: 'folder', folder: activeFolder }, '', folderHash);
         } else {
-          window.history.pushState({ view: 'root' }, '', window.location.pathname + window.location.search);
+          window.history.pushState({ view: 'root', path: [] }, '', window.location.pathname + window.location.search);
         }
       }
     }
@@ -3906,9 +4368,14 @@
         return;
       }
       if (hash.startsWith("folder/")) {
-        const cat = decodeURIComponent(hash.replace("folder/", ""));
-        openFolder(cat, false);
-        return;
+        const fullFolder = hash.replace("folder/", "");
+        const segments = fullFolder.split("/").map(decodeURIComponent).filter(Boolean);
+        if (segments.length > 0) {
+          currentPath = segments;
+          activeFolder = currentPath[currentPath.length - 1];
+          fetchAndRenderCurrentPath(false);
+          return;
+        }
       }
 
       const parts = hash.split("/");
@@ -3927,11 +4394,28 @@
     window.addEventListener("popstate", (e) => {
       if (currentDocument) {
         closeDocumentViewer(false);
-        if (activeFolder) {
+        if (currentPath.length > 0) {
+          fetchAndRenderCurrentPath(false);
+        } else if (activeFolder) {
           openFolder(activeFolder, false);
         } else {
           backToFolders(null, false);
         }
+        return;
+      }
+
+      if (e.state && e.state.path) {
+        currentPath = e.state.path;
+        if (currentPath.length > 0) {
+          fetchAndRenderCurrentPath(false);
+        } else {
+          backToFolders(null, false);
+        }
+        return;
+      }
+
+      if (currentPath.length > 0) {
+        handleBackNavigation();
         return;
       }
 
@@ -3961,6 +4445,8 @@
         }
         if (currentDocument) {
           closeDocumentViewer();
+        } else if (currentPath.length > 0) {
+          handleBackNavigation();
         } else if (activeFolder) {
           backToFolders();
         }
