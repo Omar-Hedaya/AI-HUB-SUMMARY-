@@ -1,9 +1,8 @@
 // AI HUB SUMMARY - Production Service Worker
-const CACHE_NAME = 'ai-hub-summary-v12';
+const CACHE_NAME = 'ai-hub-summary-v13';
 
+// تم استبعاد index.html و '/' حتى لا تُحبس الواجهة القديمة داخل الجهاز
 const PRECACHE_ASSETS = [
-  '/',
-  '/index.html',
   '/manifest.json',
   '/favicon.png',
   '/favicon.svg',
@@ -49,15 +48,40 @@ self.addEventListener('fetch', (event) => {
 
   const url = new URL(event.request.url);
 
-  // Skip chrome-extension and non-http(s) schemes
+  // تخطي بروتوكولات الإضافات والمتصفح غير المدعومة
   if (!url.protocol.startsWith('http')) return;
 
+  // 1. صفحات التنقل الرئيسية (HTML): نطلبها من الشبكة دائماً أولاً لرؤية آخر تحديث فوراً
+  if (event.request.mode === 'navigate') {
+    event.respondWith(
+      fetch(event.request)
+        .then((networkResponse) => {
+          // تحديث النسخة المحفوظة أوفلاين في الخلفية بالنسخة الجديدة
+          if (networkResponse && networkResponse.status === 200) {
+            const responseClone = networkResponse.clone();
+            caches.open(CACHE_NAME).then((cache) => {
+              cache.put(event.request, responseClone).catch(() => {});
+            });
+          }
+          return networkResponse;
+        })
+        .catch(async () => {
+          // في حال انقطاع الإنترنت تماماً: الرجوع للنسخة المخزنة في الكاش
+          const cache = await caches.open(CACHE_NAME);
+          const cached = await cache.match(event.request);
+          if (cached) return cached;
+          return (await cache.match('/index.html')) || (await cache.match('/'));
+        })
+    );
+    return;
+  }
+
+  // 2. باقي الملفات والمحتوى الدراسي
   event.respondWith(
     caches.open(CACHE_NAME).then(async (cache) => {
       try {
         const response = await fetch(event.request);
         if (response && response.status === 200) {
-          // Cache same-origin assets, CDN styles, and github raw content
           if (
             url.origin === self.location.origin ||
             url.hostname.includes('tailwind') ||
@@ -69,18 +93,10 @@ self.addEventListener('fetch', (event) => {
         }
         return response;
       } catch (networkError) {
-        // Fallback to cache on network failure
         const cachedResponse = await cache.match(event.request);
         if (cachedResponse) {
           return cachedResponse;
         }
-
-        // Navigation fallback for SPA/standalone mode
-        if (event.request.mode === 'navigate') {
-          const fallback = await cache.match('/') || await cache.match('/index.html');
-          if (fallback) return fallback;
-        }
-
         throw networkError;
       }
     })
