@@ -62,6 +62,30 @@
       "path": "content/Math 3/Math 3 Exam revision .html"
     },
     {
+      "name": "Sheet 1 solution.html",
+      "title": "Sheet 1 solution",
+      "category": "Math 3",
+      "path": "content/Math 3/Sheets Answers/Sheet 1 solution.html"
+    },
+    {
+      "name": "Sheet 2 sloution.html",
+      "title": "Sheet 2 sloution",
+      "category": "Math 3",
+      "path": "content/Math 3/Sheets Answers/Sheet 2 sloution.html"
+    },
+    {
+      "name": "Sheet 3 solution.html",
+      "title": "Sheet 3 solution",
+      "category": "Math 3",
+      "path": "content/Math 3/Sheets Answers/Sheet 3 solution.html"
+    },
+    {
+      "name": "Sheet 4.5 solution.html",
+      "title": "Sheet 4.5 solution",
+      "category": "Math 3",
+      "path": "content/Math 3/Sheets Answers/Sheet 4.5 solution.html"
+    },
+    {
       "name": "Circuits Lec1.2.3 Summary.html",
       "title": "Circuits Lec1.2.3 Summary",
       "category": "Principle of Electrical Engineering",
