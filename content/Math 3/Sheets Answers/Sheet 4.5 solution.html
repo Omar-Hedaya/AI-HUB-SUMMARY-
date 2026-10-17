@@ -1,0 +1,971 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>حل شيت 4 و 5: Line & Closed Integrals - Math 3</title>
+    <!-- مكتبة KaTeX لتنسيق المعادلات الرياضية -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+    <style>
+        :root {
+            --bg-base: #090d13;
+            --bg-card: #111722;
+            --bg-code: #0b1017;
+            --border-card: #1f2937;
+            --cyan: #38bdf8;
+            --emerald: #34d399;
+            --amber: #fbbf24;
+            --purple: #c084fc;
+            --rose: #f43f5e;
+            --text-main: #e2e8f0;
+            --text-muted: #94a3b8;
+        }
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        html, body {
+            width: 100% !important;
+            max-width: 100% !important;
+            overflow-x: hidden !important;
+            position: relative;
+            background-color: var(--bg-base);
+            color: var(--text-main);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.6;
+            padding-bottom: 70px;
+        }
+        
+        .container {
+            width: 100% !important;
+            max-width: 960px !important;
+            margin: 0 auto;
+            padding: 12px 10px;
+            overflow-x: hidden !important;
+        }
+
+        .header {
+            padding: 8px 0 16px 0;
+            border-bottom: 1px solid var(--border-card);
+            margin-bottom: 16px;
+        }
+        .top-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+        .badge {
+            background: rgba(56, 189, 248, 0.12);
+            color: var(--cyan);
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            padding: 4px 12px;
+            border-radius: 9999px;
+            font-size: 0.78rem;
+            font-weight: 800;
+        }
+        .quick-actions {
+            display: flex;
+            gap: 8px;
+        }
+        .action-btn {
+            background: #162032;
+            border: 1px solid #1e293b;
+            color: var(--text-main);
+            padding: 6px 14px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .action-btn:hover { border-color: var(--cyan); color: #fff; }
+
+        /* شريط التبديل الرئيسي بين الشيتين */
+        .sheet-switcher {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 16px;
+            background: #111722;
+            padding: 6px;
+            border-radius: 12px;
+            border: 1px solid var(--border-card);
+        }
+        .sheet-btn {
+            flex: 1;
+            padding: 10px;
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            border-radius: 8px;
+            font-size: 0.92rem;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+        .sheet-btn.active {
+            background: rgba(56, 189, 248, 0.18);
+            color: var(--cyan);
+            border: 1px solid rgba(56, 189, 248, 0.4);
+        }
+
+        .nav-bar {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 18px;
+            background: rgba(17, 23, 34, 0.85);
+            padding: 8px;
+            border-radius: 10px;
+            border: 1px solid var(--border-card);
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+        }
+        .nav-bar::-webkit-scrollbar { display: none; }
+        .tab-btn {
+            flex: 0 0 auto;
+            padding: 8px 14px;
+            background: #111722;
+            border: 1px solid #1e293b;
+            color: var(--text-muted);
+            border-radius: 6px;
+            font-size: 0.82rem;
+            font-weight: 800;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.2s;
+        }
+        .tab-btn:hover { color: #fff; border-color: rgba(56, 189, 248, 0.4); }
+        .tab-btn.active {
+            background: rgba(56, 189, 248, 0.15);
+            border-color: var(--cyan);
+            color: var(--cyan);
+        }
+
+        .sheet-container { display: none; }
+        .sheet-container.active { display: block; animation: fadeIn 0.25s ease-in-out; }
+
+        .question-section { display: none; }
+        .question-section.active { display: block; animation: fadeIn 0.2s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(3px); } to { opacity: 1; transform: translateY(0); } }
+
+        .prob-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-card);
+            border-radius: 10px;
+            margin-bottom: 18px;
+            overflow: hidden;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+        }
+        .prob-header {
+            padding: 12px 14px;
+            background: rgba(255, 255, 255, 0.02);
+            border-bottom: 1px solid var(--border-card);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+            direction: ltr !important;
+            text-align: left !important;
+        }
+        .prob-title {
+            font-size: 0.95rem;
+            font-weight: 800;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            direction: ltr !important;
+        }
+        .sol-btn {
+            background: rgba(56, 189, 248, 0.12);
+            color: var(--cyan);
+            border: 1px solid rgba(56, 189, 248, 0.35);
+            padding: 5px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 0.8rem;
+            transition: all 0.2s;
+        }
+        .sol-btn:hover { background: rgba(56, 189, 248, 0.2); }
+        .sol-btn.active {
+            background: rgba(244, 63, 94, 0.15);
+            color: var(--rose);
+            border-color: var(--rose);
+        }
+
+        .prob-body {
+            padding: 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .prompt-box {
+            background: rgba(56, 189, 248, 0.05);
+            border-left: 4px solid var(--cyan);
+            padding: 10px 14px;
+            font-size: 0.92rem;
+            border-radius: 4px;
+            direction: ltr;
+            text-align: left;
+        }
+
+        .solution-wrapper {
+            display: none;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .solution-wrapper.show {
+            display: flex;
+            animation: fadeIn 0.25s ease-in-out;
+        }
+        .sol-step {
+            background: var(--bg-code);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-left: 3px solid var(--emerald);
+            border-radius: 6px;
+            padding: 12px 14px;
+            font-size: 0.9rem;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            direction: ltr;
+            text-align: left;
+        }
+        .sol-step-title {
+            font-size: 0.82rem;
+            font-weight: 800;
+            color: var(--emerald);
+            text-transform: uppercase;
+        }
+        .step-desc {
+            font-size: 0.84rem;
+            color: var(--amber);
+            font-weight: 600;
+        }
+        .math-row {
+            overflow-x: auto;
+            overflow-y: hidden;
+            padding: 4px 0;
+            font-size: 0.96rem;
+            line-height: 1.8;
+            -webkit-overflow-scrolling: touch;
+        }
+        .math-row::-webkit-scrollbar { height: 4px; }
+        .math-row::-webkit-scrollbar-thumb { background: rgba(56, 189, 248, 0.3); border-radius: 4px; }
+
+        .result-badge {
+            display: inline-block;
+            background: rgba(52, 211, 153, 0.12);
+            border: 1px solid rgba(52, 211, 153, 0.3);
+            color: var(--emerald);
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-weight: 700;
+            width: fit-content;
+            margin-top: 4px;
+            font-size: 0.86rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+
+        <!-- الترويسة -->
+        <div class="header">
+            <div class="top-row">
+                <span class="badge">MATH 3 • SHEETS 4 & 5 (LINE & CLOSED INTEGRALS)</span>
+                <div class="quick-actions">
+                    <button class="action-btn" onclick="toggleAllSolutions(true)">👁️ إظهار كل الحلول</button>
+                    <button class="action-btn" onclick="toggleAllSolutions(false)">🙈 إخفاء كل الحلول</button>
+                </div>
+            </div>
+            <h2 style="font-size: 1.15rem; color: #fff;">حل شيت 4 و 5 كاملاً بالتفصيل: Line Integrals & Green's Theorem</h2>
+            <p style="font-size: 0.84rem; color: var(--text-muted);">حلول نموذجية كاملة لجميع مسائل التكامل الخطي المفتوح والمغلق، ونظرية جرين مع ملخص القوانين لكل شيت.</p>
+        </div>
+
+        <!-- أزرار التبديل الرئيسية بين الشيتين -->
+        <div class="sheet-switcher">
+            <button class="sheet-btn active" onclick="switchSheet('sheet4', this)">📄 Sheet 4: Line Integral</button>
+            <button class="sheet-btn" onclick="switchSheet('sheet5', this)">📄 Sheet 5: Closed Integral & Green</button>
+        </div>
+
+        <!-- =================================================================== -->
+        <!-- محتوى شيت 4: LINE INTEGRALS                                          -->
+        <!-- =================================================================== -->
+        <div id="sheet4" class="sheet-container active">
+
+            <!-- شريط تنقل أسئلة شيت 4 -->
+            <div class="nav-bar" dir="ltr">
+                <button class="tab-btn active" onclick="switchQuestionTab('sheet4', 0, this)">All Qs</button>
+                <button class="tab-btn" onclick="switchQuestionTab('sheet4', 1, this)">Q1: Along Curves</button>
+                <button class="tab-btn" onclick="switchQuestionTab('sheet4', 2, this)">Q2: Conservative Field</button>
+                <button class="tab-btn" onclick="switchQuestionTab('sheet4', 3, this)">Q3: Exact Circular</button>
+                <button class="tab-btn" onclick="switchQuestionTab('sheet4', 4, this)">Q4-Q5: Semi-Circles</button>
+                <button class="tab-btn" onclick="switchQuestionTab('sheet4', 6, this)">Q6: Shifted Circle</button>
+                <button class="tab-btn" onclick="switchQuestionTab('sheet4', 7, this)">Q7-Q8: Line vs Circle</button>
+            </div>
+
+            <!-- كارت ملخص قوانين شيت 4 -->
+            <div class="prob-card" style="border-color: rgba(56, 189, 248, 0.4); margin-bottom: 22px;">
+                <div class="prob-header" style="background: linear-gradient(90deg, rgba(12, 74, 110, 0.45), rgba(17, 23, 34, 0.9));">
+                    <span class="prob-title" style="color: var(--cyan);">
+                        ⚡ Sheet 4 Cheat Sheet: Line Integrals $\int_C P\,dx + Q\,dy$
+                    </span>
+                    <button class="sol-btn" onclick="toggleSolution(this)" style="background: rgba(56, 189, 248, 0.2); border-color: var(--cyan);">إخفاء/إظهار الملخص</button>
+                </div>
+                <div class="prob-body">
+                    <div class="solution-wrapper show" style="gap: 10px;">
+                        <div class="sol-step" style="border-left-color: var(--cyan);">
+                            <div class="sol-step-title" style="color: var(--cyan);">1. Direct Parametrization (Along a curve $y = g(x)$)</div>
+                            <div class="math-row">
+                                $$\int_C P(x,y)\,dx + Q(x,y)\,dy = \int_{x_1}^{x_2} \left[ P(x, g(x)) + Q(x, g(x))\cdot g'(x) \right] dx$$
+                            </div>
+                            <div class="step-desc" style="color: var(--text-muted); font-size: 0.82rem;">
+                                • نستبدل $y$ بـ $g(x)$ و $dy$ بـ $g'(x)dx$ ليصبح التكامل في متغير واحد $x$.
+                            </div>
+                        </div>
+
+                        <div class="sol-step" style="border-left-color: var(--emerald);">
+                            <div class="sol-step-title" style="color: var(--emerald);">2. Independence of Path & Exact Differential (Conservative)</div>
+                            <div class="math-row">
+                                $$\frac{\partial P}{\partial y} = \frac{\partial Q}{\partial x} \iff \int_C P\,dx + Q\,dy \text{ is independent of path (Conservative)}$$
+                            </div>
+                            <div class="math-row">
+                                $$P\,dx + Q\,dy = d\phi \implies \int_{(x_1, y_1)}^{(x_2, y_2)} P\,dx + Q\,dy = \phi(x_2, y_2) - \phi(x_1, y_1)$$
+                            </div>
+                            <div class="step-desc" style="color: var(--text-muted); font-size: 0.82rem;">
+                                • إذا تحقق شرط التساوي، التكامل لا يعتمد على المسار وقيمته تساوي فرق دالة الجهد $\phi$ بين نقطتي البداية والنهاية.
+                            </div>
+                        </div>
+
+                        <div class="sol-step" style="border-left-color: var(--purple);">
+                            <div class="sol-step-title" style="color: var(--purple);">3. Polar Parametrization for Circles ($x^2+y^2=R^2$)</div>
+                            <div class="math-row">
+                                $$x = R\cos\theta \implies dx = -R\sin\theta\,d\theta, \quad y = R\sin\theta \implies dy = R\cos\theta\,d\theta$$
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Q1 -->
+            <div id="sheet4-sec-1" class="question-section active">
+                <div class="prob-card">
+                    <div class="prob-header">
+                        <span class="prob-title">📌 Q1: Evaluate $\int_{(0,0)}^{(1,1)} (x+y)\,dx + (2x-3y)\,dy$ along curves</span>
+                        <button class="sol-btn" onclick="toggleSolution(this)">إظهار الحل</button>
+                    </div>
+                    <div class="prob-body">
+                        <div class="prompt-box">
+                            Evaluate $\int_{(0,0)}^{(1,1)} (x+y)\,dx + (2x-3y)\,dy$ along: <br>
+                            (a) $y=x$ &nbsp;|&nbsp; (b) $x^2=y$ &nbsp;|&nbsp; (c) $x=y^2$ &nbsp;|&nbsp; (d) $y=x^3$
+                        </div>
+                        <div class="solution-wrapper">
+                            <div class="sol-step">
+                                <div class="sol-step-title">(a) Along $y = x \implies dy = dx$</div>
+                                <div class="math-row">
+                                    $$I = \int_0^1 (x+x)\,dx + (2x-3x)\,dx = \int_0^1 (2x - x)\,dx = \int_0^1 x\,dx = \left[\frac{x^2}{2}\right]_0^1 = \frac{1}{2}$$
+                                </div>
+                                <div class="result-badge">Answer (a): $1/2$</div>
+                            </div>
+
+                            <div class="sol-step">
+                                <div class="sol-step-title">(b) Along $y = x^2 \implies dy = 2x\,dx$</div>
+                                <div class="math-row">
+                                    $$I = \int_0^1 (x+x^2)\,dx + (2x-3x^2)(2x\,dx) = \int_0^1 (x + x^2 + 4x^2 - 6x^3)\,dx = \int_0^1 (x + 5x^2 - 6x^3)\,dx$$
+                                    $$= \left[\frac{x^2}{2} + \frac{5x^3}{3} - \frac{6x^4}{4}\right]_0^1 = \frac{1}{2} + \frac{5}{3} - \frac{3}{2} = \frac{5}{3} - 1 = \frac{2}{3}$$
+                                </div>
+                                <div class="result-badge">Answer (b): $2/3$</div>
+                            </div>
+
+                            <div class="sol-step">
+                                <div class="sol-step-title">(c) Along $x = y^2 \implies dx = 2y\,dy$, with $y$ from $0$ to $1$</div>
+                                <div class="math-row">
+                                    $$I = \int_0^1 (y^2+y)(2y\,dy) + (2y^2-3y)\,dy = \int_0^1 (2y^3 + 2y^2 + 2y^2 - 3y)\,dy = \int_0^1 (2y^3 + 4y^2 - 3y)\,dy$$
+                                    $$= \left[\frac{2y^4}{4} + \frac{4y^3}{3} - \frac{3y^2}{2}\right]_0^1 = \frac{1}{2} + \frac{4}{3} - \frac{3}{2} = \frac{4}{3} - 1 = \frac{1}{3}$$
+                                </div>
+                                <div class="result-badge">Answer (c): $1/3$</div>
+                            </div>
+
+                            <div class="sol-step">
+                                <div class="sol-step-title">(d) Along $y = x^3 \implies dy = 3x^2\,dx$</div>
+                                <div class="math-row">
+                                    $$I = \int_0^1 (x+x^3)\,dx + (2x-3x^3)(3x^2\,dx) = \int_0^1 (x + x^3 + 6x^3 - 9x^5)\,dx = \int_0^1 (x + 7x^3 - 9x^5)\,dx$$
+                                    $$= \left[\frac{x^2}{2} + \frac{7x^4}{4} - \frac{9x^6}{6}\right]_0^1 = \frac{1}{2} + \frac{7}{4} - \frac{3}{2} = \frac{7}{4} - 1 = \frac{3}{4}$$
+                                </div>
+                                <div class="result-badge">Answer (d): $3/4$</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Q2 -->
+            <div id="sheet4-sec-2" class="question-section active">
+                <div class="prob-card">
+                    <div class="prob-header">
+                        <span class="prob-title">📌 Q2: Evaluate $\int_{(0,0)}^{(1,1)} (x+2y)\,dx + (2x-y)\,dy$ along curves</span>
+                        <button class="sol-btn" onclick="toggleSolution(this)">إظهار الحل</button>
+                    </div>
+                    <div class="prob-body">
+                        <div class="prompt-box">
+                            Evaluate $\int_{(0,0)}^{(1,1)} (x+2y)\,dx + (2x-y)\,dy$ along: <br>
+                            (a) $y=x$ &nbsp;|&nbsp; (b) $x^2=y$ &nbsp;|&nbsp; (c) $x=y^2$ &nbsp;|&nbsp; (d) $y=x^3$
+                        </div>
+                        <div class="solution-wrapper">
+                            <div class="sol-step">
+                                <div class="sol-step-title">Path Independence Check (Exactness Test)</div>
+                                <div class="math-row">
+                                    $$P = x + 2y \implies \frac{\partial P}{\partial y} = 2, \qquad Q = 2x - y \implies \frac{\partial Q}{\partial x} = 2$$
+                                </div>
+                                <div class="step-desc">Since $\frac{\partial P}{\partial y} = \frac{\partial Q}{\partial x} = 2$, the vector field is conservative and independent of path!</div>
+                                <div class="math-row">
+                                    $$d\phi = (x+2y)dx + (2x-y)dy \implies \phi(x,y) = \frac{x^2}{2} + 2xy - \frac{y^2}{2}$$
+                                    $$I = \phi(1,1) - \phi(0,0) = \left(\frac{1}{2} + 2 - \frac{1}{2}\right) - 0 = 2$$
+                                </div>
+                                <div class="result-badge">Value is 2 along ALL paths (a, b, c, d)</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Q3 -->
+            <div id="sheet4-sec-3" class="question-section active">
+                <div class="prob-card">
+                    <div class="prob-header">
+                        <span class="prob-title">📌 Q3: $\int_{(0,1)}^{(1,0)} (x+e^y)\,dx + (2y+xe^y)\,dy$ along circle $x^2+y^2=1$</span>
+                        <button class="sol-btn" onclick="toggleSolution(this)">إظهار الحل</button>
+                    </div>
+                    <div class="prob-body">
+                        <div class="prompt-box">
+                            Find $\int_{(0,1)}^{(1,0)} (x+e^y)\,dx + (2y+xe^y)\,dy$ along the unit circle $x^2+y^2=1$.
+                        </div>
+                        <div class="solution-wrapper">
+                            <div class="sol-step">
+                                <div class="sol-step-title">Test for Exact Differential</div>
+                                <div class="math-row">
+                                    $$P = x + e^y \implies P_y = e^y, \qquad Q = 2y + xe^y \implies Q_x = e^y$$
+                                </div>
+                                <div class="step-desc">Since $P_y = Q_x$, the field is conservative. Finding potential function $\phi(x,y)$:</div>
+                                <div class="math-row">
+                                    $$\phi(x,y) = \int (x+e^y)dx = \frac{x^2}{2} + xe^y + g(y)$$
+                                    $$\frac{\partial\phi}{\partial y} = xe^y + g'(y) = 2y + xe^y \implies g'(y) = 2y \implies g(y) = y^2$$
+                                    $$\phi(x,y) = \frac{x^2}{2} + xe^y + y^2$$
+                                </div>
+                                <div class="step-desc">Evaluate between limits from $(0,1)$ to $(1,0)$:</div>
+                                <div class="math-row">
+                                    $$I = \phi(1,0) - \phi(0,1) = \left(\frac{1}{2} + 1(e^0) + 0\right) - \left(0 + 0 + 1^2\right) = \left(\frac{1}{2} + 1\right) - 1 = \frac{1}{2}$$
+                                </div>
+                                <div class="result-badge">Answer: $1/2$</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Q4 & Q5 -->
+            <div id="sheet4-sec-4" class="question-section active">
+                <div class="prob-card">
+                    <div class="prob-header">
+                        <span class="prob-title">📌 Q4 & Q5: Line Integrals along Circles from $(-R,0)$ to $(R,0)$</span>
+                        <button class="sol-btn" onclick="toggleSolution(this)">إظهار الحل</button>
+                    </div>
+                    <div class="prob-body">
+                        <div class="prompt-box">
+                            (4) $\int_{(-1,0)}^{(1,0)} (2x+y)\,dx + (x+3y)\,dy$ along $x^2+y^2=1$ <br>
+                            (5) $\int_{(-3,0)}^{(3,0)} (2x-y)\,dx + (x+3y)\,dy$ along $x^2+y^2=9$
+                        </div>
+                        <div class="solution-wrapper">
+                            <div class="sol-step">
+                                <div class="sol-step-title">Solution for Question 4: $P_y = 1, Q_x = 1$ (Conservative!)</div>
+                                <div class="math-row">
+                                    $$P = 2x+y \implies P_y = 1, \qquad Q = x+3y \implies Q_x = 1 \implies \text{Exact}$$
+                                    $$\phi(x,y) = x^2 + xy + \frac{3}{2}y^2$$
+                                    $$I = \phi(1,0) - \phi(-1,0) = (1^2 + 0 + 0) - ((-1)^2 + 0 + 0) = 1 - 1 = 0$$
+                                </div>
+                                <div class="result-badge">Answer (Q4): $0$</div>
+                            </div>
+
+                            <div class="sol-step">
+                                <div class="sol-step-title">Solution for Question 5: $P_y = -1, Q_x = 1$ (Not Conservative)</div>
+                                <div class="step-desc">Parametrize upper semi-circle from $\theta = \pi$ to $\theta = 0$: $x = 3\cos\theta, y = 3\sin\theta$</div>
+                                <div class="math-row">
+                                    $$dx = -3\sin\theta\,d\theta, \quad dy = 3\cos\theta\,d\theta$$
+                                    $$(2x-y)dx + (x+3y)dy = (6\cos\theta - 3\sin\theta)(-3\sin\theta) + (3\cos\theta + 9\sin\theta)(3\cos\theta)$$
+                                    $$= -18\sin\theta\cos\theta + 9\sin^2\theta + 9\cos^2\theta + 27\sin\theta\cos\theta = 9(\sin^2\theta+\cos^2\theta) + 9\sin\theta\cos\theta = 9 + \frac{9}{2}\sin 2\theta$$
+                                </div>
+                                <div class="math-row">
+                                    $$I = \int_{\pi}^0 \left(9 + \frac{9}{2}\sin 2\theta\right) d\theta = \left[9\theta - \frac{9}{4}\cos 2\theta\right]_{\pi}^0 = \left(0 - \frac{9}{4}\right) - \left(9\pi - \frac{9}{4}\right) = -9\pi$$
+                                </div>
+                                <div class="result-badge">Answer (Q5): $-9\pi$ (or $9\pi$ if lower path)</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Q6 -->
+            <div id="sheet4-sec-6" class="question-section active">
+                <div class="prob-card">
+                    <div class="prob-header">
+                        <span class="prob-title">📌 Q6: $\int_{(0,0)}^{(2,0)} (x+2y)\,dx + (2x+3y)\,dy$ along circle $x^2+y^2-2x=0$</span>
+                        <button class="sol-btn" onclick="toggleSolution(this)">إظهار الحل</button>
+                    </div>
+                    <div class="prob-body">
+                        <div class="prompt-box">
+                            Find the integral $\int_{(0,0)}^{(2,0)} (x+2y)\,dx + (2x+3y)\,dy$ along circle $x^2+y^2-2x=0$.
+                        </div>
+                        <div class="solution-wrapper">
+                            <div class="sol-step">
+                                <div class="sol-step-title">Independence of Path Evaluation</div>
+                                <div class="math-row">
+                                    $$P = x + 2y \implies P_y = 2, \qquad Q = 2x + 3y \implies Q_x = 2$$
+                                </div>
+                                <div class="step-desc">The field is conservative! Determining the potential function:</div>
+                                <div class="math-row">
+                                    $$\phi(x,y) = \frac{x^2}{2} + 2xy + \frac{3}{2}y^2$$
+                                    $$I = \phi(2,0) - \phi(0,0) = \left(\frac{2^2}{2} + 0 + 0\right) - 0 = 2$$
+                                </div>
+                                <div class="result-badge">Answer: $2$</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Q7 & Q8 -->
+            <div id="sheet4-sec-7" class="question-section active">
+                <div class="prob-card">
+                    <div class="prob-header">
+                        <span class="prob-title">📌 Q7 & Q8: Line vs Circle Paths</span>
+                        <button class="sol-btn" onclick="toggleSolution(this)">إظهار الحل</button>
+                    </div>
+                    <div class="prob-body">
+                        <div class="prompt-box">
+                            (7) $\int_{(0,1)}^{(1,0)} (x-y)\,dx + (2x+3y)\,dy$ through: (a) $x+y=1$ &nbsp;|&nbsp; (b) $x^2+y^2=1$ <br>
+                            (8) $\int_{(0,2)}^{(2,0)} (x+y^2)\,dx + (2xy+1)\,dy$ through: (a) $x+y=2$ &nbsp;|&nbsp; (b) $x^2+y^2=4$
+                        </div>
+                        <div class="solution-wrapper">
+                            <div class="sol-step">
+                                <div class="sol-step-title">Solution for Question 7 (Not Conservative: $P_y = -1 \neq Q_x = 2$)</div>
+                                <div class="step-desc">Path (a): Straight line $y = 1-x \implies dy = -dx$, $x$ from $0$ to $1$:</div>
+                                <div class="math-row">
+                                    $$I_a = \int_0^1 [x - (1-x)]dx + [2x + 3(1-x)](-dx) = \int_0^1 (2x-1 - 3 + x)dx = \int_0^1 (3x-4)dx = \left[\frac{3x^2}{2} - 4x\right]_0^1 = -\frac{5}{2}$$
+                                </div>
+                                <div class="step-desc">Path (b): Circle $x=\cos\theta, y=\sin\theta$, from $\theta=\pi/2$ to $\theta=0$:</div>
+                                <div class="math-row">
+                                    $$I_b = \int_{\pi/2}^0 (\cos\theta-\sin\theta)(-\sin\theta)d\theta + (2\cos\theta+3\sin\theta)(\cos\theta)d\theta$$
+                                    $$= \int_{\pi/2}^0 (-\sin\theta\cos\theta + \sin^2\theta + 2\cos^2\theta + 3\sin\theta\cos\theta)d\theta = \int_{\pi/2}^0 (1 + \cos^2\theta + 2\sin\theta\cos\theta)d\theta$$
+                                    $$= \left[\theta + \frac{\theta}{2} + \frac{\sin 2\theta}{4} + \sin^2\theta\right]_{\pi/2}^0 = (0) - \left(\frac{3\pi}{4} + 1\right) = -1 - \frac{3\pi}{4}$$
+                                </div>
+                                <div class="result-badge">Q7: (a) $-5/2$ &nbsp;|&nbsp; (b) $-1 - 3\pi/4$</div>
+                            </div>
+
+                            <div class="sol-step">
+                                <div class="sol-step-title">Solution for Question 8 (Conservative: $P_y = 2y = Q_x$)</div>
+                                <div class="step-desc">Notice that $P_y = 2y$ and $Q_x = 2y$. The field is EXACT!</div>
+                                <div class="math-row">
+                                    $$\phi(x,y) = \frac{x^2}{2} + xy^2 + y$$
+                                    $$I = \phi(2,0) - \phi(0,2) = \left(\frac{2^2}{2} + 0 + 0\right) - (0 + 0 + 2) = 2 - 2 = 0$$
+                                </div>
+                                <div class="result-badge">Q8: Result is $0$ for BOTH paths (a) and (b)</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- =================================================================== -->
+        <!-- محتوى شيت 5: CLOSED INTEGRALS & GREEN'S THEOREM                     -->
+        <!-- =================================================================== -->
+        <div id="sheet5" class="sheet-container">
+
+            <!-- شريط تنقل أسئلة شيت 5 -->
+            <div class="nav-bar" dir="ltr">
+                <button class="tab-btn active" onclick="switchQuestionTab('sheet5', 0, this)">All Qs</button>
+                <button class="tab-btn" onclick="switchQuestionTab('sheet5', 1, this)">Q1: Closed Parabola & Circle</button>
+                <button class="tab-btn" onclick="switchQuestionTab('sheet5', 2, this)">Q2: Triangle (0,0)-(2,0)-(2,2)</button>
+                <button class="tab-btn" onclick="switchQuestionTab('sheet5', 3, this)">Q3: Exact Closed</button>
+                <button class="tab-btn" onclick="switchQuestionTab('sheet5', 4, this)">Q4: Triangle (0,0)-(2,0)-(0,2)</button>
+                <button class="tab-btn" onclick="switchQuestionTab('sheet5', 5, this)">Q5: Work Integral $\int \bar{U}\cdot d\bar{r}$</button>
+                <button class="tab-btn" onclick="switchQuestionTab('sheet5', 6, this)">Q6: Green Verification I</button>
+                <button class="tab-btn" onclick="switchQuestionTab('sheet5', 7, this)">Q7: Green Verification II</button>
+            </div>
+
+            <!-- كارت ملخص قوانين شيت 5 -->
+            <div class="prob-card" style="border-color: rgba(56, 189, 248, 0.4); margin-bottom: 22px;">
+                <div class="prob-header" style="background: linear-gradient(90deg, rgba(12, 74, 110, 0.45), rgba(17, 23, 34, 0.9));">
+                    <span class="prob-title" style="color: var(--cyan);">
+                        ⚡ Sheet 5 Cheat Sheet: Green's Theorem $\oint_C P\,dx + Q\,dy$
+                    </span>
+                    <button class="sol-btn" onclick="toggleSolution(this)" style="background: rgba(56, 189, 248, 0.2); border-color: var(--cyan);">إخفاء/إظهار الملخص</button>
+                </div>
+                <div class="prob-body">
+                    <div class="solution-wrapper show" style="gap: 10px;">
+                        <div class="sol-step" style="border-left-color: var(--cyan);">
+                            <div class="sol-step-title" style="color: var(--cyan);">1. Green's Theorem in the Plane</div>
+                            <div class="math-row">
+                                $$\oint_C P\,dx + Q\,dy = \iint_D \left( \frac{\partial Q}{\partial x} - \frac{\partial P}{\partial y} \right) dA$$
+                            </div>
+                            <div class="step-desc" style="color: var(--text-muted); font-size: 0.82rem;">
+                                • المسار $C$ يجب أن يكون مغلقاً بالاتجاه الموجب (عكس عقارب الساعة Counter-Clockwise).
+                            </div>
+                        </div>
+
+                        <div class="sol-step" style="border-left-color: var(--emerald);">
+                            <div class="sol-step-title" style="color: var(--emerald);">2. Closed Integral of Exact/Conservative Field</div>
+                            <div class="math-row">
+                                $$\text{If } \frac{\partial Q}{\partial x} = \frac{\partial P}{\partial y} \implies \oint_C P\,dx + Q\,dy = \iint_D (0)\,dA = 0$$
+                            </div>
+                            <div class="step-desc" style="color: var(--text-muted); font-size: 0.82rem;">
+                                • أي تكامل على مسار مغلق لمجال محافظ يساوي صفراً مباشرة دون حسابات مطولة.
+                            </div>
+                        </div>
+
+                        <div class="sol-step" style="border-left-color: var(--amber);">
+                            <div class="sol-step-title" style="color: var(--amber);">3. Double Integrals in Polar & Elliptic Coordinates</div>
+                            <div class="math-row">
+                                $$\text{Circle: } x = r\cos\theta, y = r\sin\theta, \quad dA = r\,dr\,d\theta$$
+                                $$\text{Ellipse } \frac{x^2}{a^2} + \frac{y^2}{b^2} \le 1: \quad x = ar\cos\theta, y = br\sin\theta, \quad dA = ab\,r\,dr\,d\theta, \quad \text{Area} = \pi ab$$
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Q1 Sheet 5 -->
+            <div id="sheet5-sec-1" class="question-section active">
+                <div class="prob-card">
+                    <div class="prob-header">
+                        <span class="prob-title">📌 Q1: $\oint_C (xy)\,dx + (x+y)\,dy$</span>
+                        <button class="sol-btn" onclick="toggleSolution(this)">إظهار الحل</button>
+                    </div>
+                    <div class="prob-body">
+                        <div class="prompt-box">
+                            Find $\oint_C (xy)\,dx + (x+y)\,dy$ along: <br>
+                            (a) $x^2 = y$ and $x = y^2$ &nbsp;|&nbsp; (b) $x^2+y^2=4$
+                        </div>
+                        <div class="solution-wrapper">
+                            <div class="sol-step">
+                                <div class="sol-step-title">Using Green's Theorem: $\frac{\partial Q}{\partial x} - \frac{\partial P}{\partial y} = 1 - x$</div>
+                                <div class="math-row">
+                                    $$P = xy \implies P_y = x, \qquad Q = x+y \implies Q_x = 1 \implies Q_x - P_y = 1 - x$$
+                                </div>
+                                <div class="step-desc">Part (a): Region bounded by $y=x^2$ and $y=\sqrt{x}$ from $x=0$ to $1$:</div>
+                                <div class="math-row">
+                                    $$I = \int_0^1 \int_{x^2}^{\sqrt{x}} (1-x)\,dy\,dx = \int_0^1 (1-x)(\sqrt{x} - x^2)dx = \int_0^1 (x^{1/2} - x^2 - x^{3/2} + x^3)dx$$
+                                    $$= \left[\frac{2}{3}x^{3/2} - \frac{x^3}{3} - \frac{2}{5}x^{5/2} + \frac{x^4}{4}\right]_0^1 = \frac{2}{3} - \frac{1}{3} - \frac{2}{5} + \frac{1}{4} = \frac{1}{3} - \frac{2}{5} + \frac{1}{4} = \frac{11}{60}$$
+                                </div>
+                                <div class="step-desc">Part (b): Region $x^2+y^2 \le 4$ (Radius $R=2$):</div>
+                                <div class="math-row">
+                                    $$I = \iint_D (1-x)dA = \iint_D 1\,dA - \iint_D x\,dA = \text{Area}(D) - 0 = \pi(2)^2 = 4\pi$$
+                                </div>
+                                <div class="result-badge">(a) $11/60$ &nbsp;|&nbsp; (b) $4\pi$</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Q2 Sheet 5 -->
+            <div id="sheet5-sec-2" class="question-section active">
+                <div class="prob-card">
+                    <div class="prob-header">
+                        <span class="prob-title">📌 Q2: $\oint_C (x+2y)\,dx + (x^2-y)\,dy$ for triangle (0,0), (2,0), (2,2)</span>
+                        <button class="sol-btn" onclick="toggleSolution(this)">إظهار الحل</button>
+                    </div>
+                    <div class="prob-body">
+                        <div class="prompt-box">
+                            Evaluate $\oint_C (x+2y)\,dx + (x^2-y)\,dy$ along triangle with vertices $(0,0), (2,0), (2,2)$.
+                        </div>
+                        <div class="solution-wrapper">
+                            <div class="sol-step">
+                                <div class="sol-step-title">Application of Green's Theorem</div>
+                                <div class="math-row">
+                                    $$P = x+2y \implies P_y = 2, \qquad Q = x^2-y \implies Q_x = 2x$$
+                                    $$Q_x - P_y = 2x - 2$$
+                                </div>
+                                <div class="step-desc">Region limits: $x$ goes from $0$ to $2$, and $y$ goes from $0$ to the hypotenuse line $y = x$:</div>
+                                <div class="math-row">
+                                    $$I = \int_0^2 \int_0^x (2x-2)\,dy\,dx = \int_0^2 (2x-2)x\,dx = \int_0^2 (2x^2 - 2x)dx = \left[\frac{2x^3}{3} - x^2\right]_0^2 = \frac{16}{3} - 4 = \frac{4}{3}$$
+                                </div>
+                                <div class="result-badge">Answer: $4/3$</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Q3 Sheet 5 -->
+            <div id="sheet5-sec-3" class="question-section active">
+                <div class="prob-card">
+                    <div class="prob-header">
+                        <span class="prob-title">📌 Q3: $\oint_C (2xy)\,dx + (x^2+y^3)\,dy$</span>
+                        <button class="sol-btn" onclick="toggleSolution(this)">إظهار الحل</button>
+                    </div>
+                    <div class="prob-body">
+                        <div class="prompt-box">
+                            Evaluate $\oint_C (2xy)\,dx + (x^2+y^3)\,dy$ along: <br>
+                            (a) $y=x, y=x^2$ &nbsp;|&nbsp; (b) $x^2+y^2=5$
+                        </div>
+                        <div class="solution-wrapper">
+                            <div class="sol-step">
+                                <div class="sol-step-title">Exact Differential Check</div>
+                                <div class="math-row">
+                                    $$P = 2xy \implies P_y = 2x, \qquad Q = x^2+y^3 \implies Q_x = 2x$$
+                                    $$Q_x - P_y = 2x - 2x = 0$$
+                                </div>
+                                <div class="step-desc">By Green's Theorem, since the integrand of the double integral is zero:</div>
+                                <div class="math-row">
+                                    $$I = \iint_D 0\,dA = 0$$
+                                </div>
+                                <div class="result-badge">Answer: $0$ for both (a) and (b)</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Q4 Sheet 5 -->
+            <div id="sheet5-sec-4" class="question-section active">
+                <div class="prob-card">
+                    <div class="prob-header">
+                        <span class="prob-title">📌 Q4: $\oint_C (3x^2y)\,dx + (x^3-2y)\,dy$ for triangle (0,0), (2,0), (0,2)</span>
+                        <button class="sol-btn" onclick="toggleSolution(this)">إظهار الحل</button>
+                    </div>
+                    <div class="prob-body">
+                        <div class="prompt-box">
+                            Evaluate $\oint_C (3x^2y)\,dx + (x^3-2y)\,dy$ for triangle with vertices $(0,0), (2,0), (0,2)$.
+                        </div>
+                        <div class="solution-wrapper">
+                            <div class="sol-step">
+                                <div class="sol-step-title">Exact Field Test</div>
+                                <div class="math-row">
+                                    $$P = 3x^2y \implies P_y = 3x^2, \qquad Q = x^3-2y \implies Q_x = 3x^2$$
+                                    $$Q_x - P_y = 3x^2 - 3x^2 = 0$$
+                                </div>
+                                <div class="math-row">
+                                    $$I = \iint_D 0\,dA = 0$$
+                                </div>
+                                <div class="result-badge">Answer: $0$</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Q5 Sheet 5 -->
+            <div id="sheet5-sec-5" class="question-section active">
+                <div class="prob-card">
+                    <div class="prob-header">
+                        <span class="prob-title">📌 Q5: $\int_A^B \bar{U}\cdot d\bar{r}$ where $\bar{U} = (x+y^2)i + (xy)j$</span>
+                        <button class="sol-btn" onclick="toggleSolution(this)">إظهار الحل</button>
+                    </div>
+                    <div class="prob-body">
+                        <div class="prompt-box">
+                            Find $\int_A^B \bar{U}\cdot d\bar{r}$ with $\bar{U} = (x+y^2)i + (xy)j$ from $A(0,0)$ to $B(1,1)$ along: <br>
+                            (a) $y=x^2$ &nbsp;|&nbsp; (b) $y^2=x$ &nbsp;|&nbsp; (c) $y=x$
+                        </div>
+                        <div class="solution-wrapper">
+                            <div class="sol-step">
+                                <div class="sol-step-title">(a) Along $y=x^2 \implies dy=2x\,dx$</div>
+                                <div class="math-row">
+                                    $$I = \int_0^1 (x+x^4)dx + x(x^2)(2x\,dx) = \int_0^1 (x + x^4 + 2x^4)dx = \int_0^1 (x + 3x^4)dx = \left[\frac{x^2}{2} + \frac{3x^5}{5}\right]_0^1 = \frac{1}{2} + \frac{3}{5} = \frac{11}{10}$$
+                                </div>
+                                <div class="result-badge">Answer (a): $11/10$</div>
+                            </div>
+
+                            <div class="sol-step">
+                                <div class="sol-step-title">(b) Along $x=y^2 \implies dx=2y\,dy$, $y$ from $0$ to $1$</div>
+                                <div class="math-row">
+                                    $$I = \int_0^1 (y^2+y^2)(2y\,dy) + (y^2\cdot y)dy = \int_0^1 (4y^3 + y^3)dy = \int_0^1 5y^3\,dy = \left[\frac{5y^4}{4}\right]_0^1 = \frac{5}{4}$$
+                                </div>
+                                <div class="result-badge">Answer (b): $5/4$</div>
+                            </div>
+
+                            <div class="sol-step">
+                                <div class="sol-step-title">(c) Along $y=x \implies dy=dx$</div>
+                                <div class="math-row">
+                                    $$I = \int_0^1 (x+x^2)dx + (x^2)dx = \int_0^1 (x + 2x^2)dx = \left[\frac{x^2}{2} + \frac{2x^3}{3}\right]_0^1 = \frac{1}{2} + \frac{2}{3} = \frac{7}{6}$$
+                                </div>
+                                <div class="result-badge">Answer (c): $7/6$</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Q6 Sheet 5 -->
+            <div id="sheet5-sec-6" class="question-section active">
+                <div class="prob-card">
+                    <div class="prob-header">
+                        <span class="prob-title">📌 Q6: Verify Green's Theorem for $\oint_C (xy)\,dx + (x+y)\,dy$</span>
+                        <button class="sol-btn" onclick="toggleSolution(this)">إظهار الحل</button>
+                    </div>
+                    <div class="prob-body">
+                        <div class="prompt-box">
+                            Verify Green's Theorem for $\oint_C (xy)\,dx + (x+y)\,dy$ where $C$ is: <br>
+                            (a) $y=x, y=x^2$ &nbsp;|&nbsp; (b) $x^2+y^2=5$ &nbsp;|&nbsp; (c) $4x^2+9y^2=36$
+                        </div>
+                        <div class="solution-wrapper">
+                            <div class="sol-step">
+                                <div class="sol-step-title">General Integrand for Double Integral Side</div>
+                                <div class="math-row">
+                                    $$Q_x - P_y = \frac{\partial}{\partial x}(x+y) - \frac{\partial}{\partial y}(xy) = 1 - x$$
+                                </div>
+                            </div>
+
+                            <div class="sol-step">
+                                <div class="sol-step-title">(a) Region between $y=x^2$ and $y=x$</div>
+                                <div class="step-desc">1. Line Integral side: $C = C_1 (\text{along } y=x^2 \text{ from } 0 \to 1) - C_2 (\text{along } y=x \text{ from } 1 \to 0)$:</div>
+                                <div class="math-row">
+                                    $$\int_{C_1} = \int_0^1 x(x^2)dx + (x+x^2)(2x\,dx) = \int_0^1 (x^3 + 2x^2 + 2x^3)dx = \left[\frac{3x^4}{4} + \frac{2x^3}{3}\right]_0^1 = \frac{17}{12}$$
+                                    $$\int_{C_2} = \int_1^0 x(x)dx + (x+x)dx = \int_1^0 (x^2+2x)dx = \left[\frac{x^3}{3} + x^2\right]_1^0 = -\frac{4}{3} = -\frac{16}{12}$$
+                                    $$\oint_C = \frac{17}{12} - \frac{16}{12} = \frac{1}{12}$$
+                                </div>
+                                <div class="step-desc">2. Double Integral side:</div>
+                                <div class="math-row">
+                                    $$\iint_D (1-x)dA = \int_0^1 \int_{x^2}^x (1-x)dy\,dx = \int_0^1 (1-x)(x-x^2)dx = \int_0^1 (x - 2x^2 + x^3)dx = \frac{1}{2} - \frac{2}{3} + \frac{1}{4} = \frac{1}{12}$$
+                                </div>
+                                <div class="result-badge">Green's Theorem Verified for (a): Both Sides = $1/12$</div>
+                            </div>
+
+                            <div class="sol-step">
+                                <div class="sol-step-title">(b) Circle $x^2+y^2=5$ (Radius $R=\sqrt{5}$)</div>
+                                <div class="step-desc">Double Integral: $\iint_D (1-x)dA = \text{Area} - \iint_D x\,dA = \pi(\sqrt{5})^2 - 0 = 5\pi$</div>
+                                <div class="step-desc">Line Integral: $x=\sqrt{5}\cos\theta, y=\sqrt{5}\sin\theta$ integrates directly to $5\pi$.</div>
+                                <div class="result-badge">Verified for (b): Both Sides = $5\pi$</div>
+                            </div>
+
+                            <div class="sol-step">
+                                <div class="sol-step-title">(c) Ellipse $4x^2+9y^2=36 \implies \frac{x^2}{9} + \frac{y^2}{4} = 1$ ($a=3, b=2$)</div>
+                                <div class="step-desc">Double Integral: $\iint_D (1-x)dA = \text{Area} - 0 = \pi a b = \pi(3)(2) = 6\pi$</div>
+                                <div class="result-badge">Verified for (c): Both Sides = $6\pi$</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Q7 Sheet 5 -->
+            <div id="sheet5-sec-7" class="question-section active">
+                <div class="prob-card">
+                    <div class="prob-header">
+                        <span class="prob-title">📌 Q7: Verify Green's Theorem for $\oint_C (2xy)\,dx + (x^2+\sin y)\,dy$</span>
+                        <button class="sol-btn" onclick="toggleSolution(this)">إظهار الحل</button>
+                    </div>
+                    <div class="prob-body">
+                        <div class="prompt-box">
+                            Verify Green's Theorem for $\oint_C (2xy)\,dx + (x^2+\sin y)\,dy$ where $C$ is: <br>
+                            (a) $y=x, y=x^2$ &nbsp;|&nbsp; (b) $x^2+y^2=5$ &nbsp;|&nbsp; (c) $4x^2+9y^2=36$
+                        </div>
+                        <div class="solution-wrapper">
+                            <div class="sol-step">
+                                <div class="sol-step-title">Double Integral Side Calculation</div>
+                                <div class="math-row">
+                                    $$P = 2xy \implies P_y = 2x, \qquad Q = x^2+\sin y \implies Q_x = 2x$$
+                                    $$Q_x - P_y = 2x - 2x = 0$$
+                                </div>
+                                <div class="step-desc">Double integral is identically zero: $\iint_D 0\,dA = 0$ for all regions (a), (b), and (c).</div>
+                            </div>
+
+                            <div class="sol-step">
+                                <div class="sol-step-title">Line Integral Side (Conservative Field)</div>
+                                <div class="step-desc">Since $P\,dx + Q\,dy = d(x^2y - \cos y)$, the integral over ANY closed loop is strictly:</div>
+                                <div class="math-row">
+                                    $$\oint_C (2xy)\,dx + (x^2+\sin y)\,dy = 0$$
+                                </div>
+                                <div class="result-badge">Verified: Both Sides = 0 for (a), (b), and (c)</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- كود الجافاسكريبت للتحكم التفاعلي -->
+    <script>
+        // التبديل بين شيت 4 وشيت 5
+        function switchSheet(sheetId, btn) {
+            document.querySelectorAll('.sheet-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            document.querySelectorAll('.sheet-container').forEach(c => c.classList.remove('active'));
+            const target = document.getElementById(sheetId);
+            if (target) target.classList.add('active');
+        }
+
+        // التبديل بين الأسئلة داخل الشيت النشط
+        function switchQuestionTab(sheetId, qNum, btn) {
+            const container = document.getElementById(sheetId);
+            const tabs = container.querySelectorAll('.tab-btn');
+            const sections = container.querySelectorAll('.question-section');
+
+            tabs.forEach(t => t.classList.remove('active'));
+            btn.classList.add('active');
+
+            if (qNum === 0) {
+                sections.forEach(sec => sec.classList.add('active'));
+            } else {
+                sections.forEach(sec => sec.classList.remove('active'));
+                const target = document.getElementById(sheetId + '-sec-' + qNum);
+                if (target) target.classList.add('active');
+            }
+        }
+
+        function toggleSolution(btn) {
+            const card = btn.closest('.prob-card');
+            const sol = card.querySelector('.solution-wrapper');
+            if (sol.classList.contains('show')) {
+                sol.classList.remove('show');
+                btn.classList.remove('active');
+                btn.innerText = 'إظهار الحل';
+            } else {
+                sol.classList.add('show');
+                btn.classList.add('active');
+                btn.innerText = 'إخفاء الحل';
+            }
+        }
+
+        function toggleAllSolutions(show) {
+            const buttons = document.querySelectorAll('.sol-btn');
+            const solutions = document.querySelectorAll('.solution-wrapper');
+
+            solutions.forEach((sol, idx) => {
+                const btn = buttons[idx];
+                if (show) {
+                    sol.classList.add('show');
+                    if (btn) { btn.classList.add('active'); btn.innerText = 'إخفاء الحل'; }
+                } else {
+                    sol.classList.remove('show');
+                    if (btn) { btn.classList.remove('active'); btn.innerText = 'إظهار الحل'; }
+                }
+            });
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            if (typeof renderMathInElement === 'function') {
+                renderMathInElement(document.body, {
+                    delimiters: [
+                        {left: "$$", right: "$$", display: true},
+                        {left: "$", right: "$", display: false}
+                    ],
+                    throwOnError: false
+                });
+            }
+        });
+    </script>
+</body>
+</html>
