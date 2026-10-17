@@ -273,6 +273,106 @@
         </div>
 
         <!-- ========================================================= -->
+        <!-- كارت ملخص القوانين السريعة لشيت 1 (Functions of Several Variables) -->
+        <!-- ========================================================= -->
+        <div class="prob-card" style="border-color: rgba(56, 189, 248, 0.4); margin-bottom: 22px;">
+            <div class="prob-header" style="background: linear-gradient(90deg, rgba(12, 74, 110, 0.45), rgba(17, 23, 34, 0.9));">
+                <span class="prob-title" style="color: var(--cyan); direction: ltr;">
+                    ⚡ Functions of Several Variables Cheat Sheet & Rules
+                </span>
+                <button class="sol-btn" onclick="toggleSolution(this)" style="background: rgba(56, 189, 248, 0.2); border-color: var(--cyan);">إخفاء/إظهار الملخص</button>
+            </div>
+            <div class="prob-body">
+                <div class="solution-wrapper show" style="gap: 10px;">
+                    
+                    <!-- 1. الاشتقاق الضمني -->
+                    <div class="sol-step" style="border-right-color: var(--cyan);">
+                        <div class="sol-step-title" style="color: var(--cyan);">1. Implicit Differentiation Formulas</div>
+                        <div class="math-row">
+                            $$\text{If } F(x,y) = 0 \implies \frac{dy}{dx} = -\frac{F_x}{F_y}$$
+                        </div>
+                        <div class="math-row">
+                            $$\text{If } F(x,y,z) = 0 \implies \frac{\partial z}{\partial x} = -\frac{F_x}{F_z}, \quad \frac{\partial z}{\partial y} = -\frac{F_y}{F_z}$$
+                        </div>
+                        <div class="step-desc" style="color: var(--text-muted); font-size: 0.82rem;">
+                            • يتم اشتقاق الدالة $F$ جزئياً بالنسبة للمتغير المطلوب مع اعتبار باقي المتغيرات ثوابت.
+                        </div>
+                    </div>
+
+                    <!-- 2. نظرية أويلر للدوال المتجانسة -->
+                    <div class="sol-step" style="border-right-color: var(--emerald);">
+                        <div class="sol-step-title" style="color: var(--emerald);">2. Euler's Theorem for Homogeneous Functions</div>
+                        <div class="math-row">
+                            $$f(tx, ty) = t^k f(x,y) \implies x \frac{\partial f}{\partial x} + y \frac{\partial f}{\partial y} = k f(x,y)$$
+                        </div>
+                        <div class="math-row">
+                            $$\text{In 3 variables: } x f_x + y f_y + z f_z = k f(x,y,z)$$
+                        </div>
+                        <div class="step-desc" style="color: var(--text-muted); font-size: 0.82rem;">
+                            • إذا كانت الدالة داخلية مثل $u = \tan^{-1}(S)$ أو $\ln(S)$؛ نطبق نظرية أويلر على الدالة المتجانسة $S$ أولاً.
+                        </div>
+                    </div>
+
+                    <!-- 3. لابلاس وتساوي المشتقات المختلطة -->
+                    <div class="sol-step" style="border-right-color: var(--amber);">
+                        <div class="sol-step-title" style="color: var(--amber);">3. Clairaut's Theorem & Laplace's Equation</div>
+                        <div class="math-row">
+                            $$\text{Symmetry of Second Partials: } f_{xy} = f_{yx} \quad \left(\frac{\partial^2 f}{\partial y \partial x} = \frac{\partial^2 f}{\partial x \partial y}\right)$$
+                        </div>
+                        <div class="math-row">
+                            $$\text{Laplace's Equation (Harmonic function): } f_{xx} + f_{yy} = 0 \quad (\nabla^2 f = 0)$$
+                        </div>
+                    </div>
+
+                    <!-- 4. الغلاف Envelope -->
+                    <div class="sol-step" style="border-right-color: var(--purple);">
+                        <div class="sol-step-title" style="color: var(--purple);">4. Envelope of a Family of Curves</div>
+                        <div class="math-row">
+                            $$\text{Family: } F(x, y, c) = 0 \quad \text{and} \quad \frac{\partial F}{\partial c}(x, y, c) = 0$$
+                        </div>
+                        <div class="step-desc" style="color: var(--text-muted); font-size: 0.82rem;">
+                            • يتم إيجاد الوسيط $c$ من المعادلة التفاضلية والتعويض به في المعادلة الأصلية لحذفه والحصول على معادلة الغلاف.
+                        </div>
+                    </div>
+
+                    <!-- 5. القيم العظمى والصغرى ونقاط الانقلاب -->
+                    <div class="sol-step" style="border-right-color: var(--rose);">
+                        <div class="sol-step-title" style="color: var(--rose);">5. Extrema and Saddle Points (Second Derivative Test)</div>
+                        <div class="step-desc" style="color: var(--text-muted); font-size: 0.82rem;">
+                            1. نجد النقط الحرجة (Critical Points) بحل: $f_x = 0$ و $f_y = 0$. <br>
+                            2. نحسب المميز: $\Delta = f_{xx} f_{yy} - (f_{xy})^2$.
+                        </div>
+                        <div class="math-row">
+                            $$\Delta > 0 \text{ and } f_{xx} > 0 \implies \mathbf{Local\,\,Minimum}$$
+                            $$\Delta > 0 \text{ and } f_{xx} < 0 \implies \mathbf{Local\,\,Maximum}$$
+                            $$\Delta < 0 \implies \mathbf{Saddle\,\,Point}, \qquad \Delta = 0 \implies \mathbf{Inconclusive}$$
+                        </div>
+                    </div>
+
+                    <!-- 6. مضاعفات لاغرانج -->
+                    <div class="sol-step" style="border-right-color: var(--cyan);">
+                        <div class="sol-step-title" style="color: var(--cyan);">6. Lagrange Multipliers for Constrained Extrema</div>
+                        <div class="math-row">
+                            $$\nabla f = \lambda \nabla g \implies f_x = \lambda g_x, \quad f_y = \lambda g_y, \quad f_z = \lambda g_z \quad \text{subject to } g = 0$$
+                        </div>
+                        <div class="step-desc" style="color: var(--text-muted); font-size: 0.82rem;">
+                            • تستخدم لإيجاد القيم العظمى أو الصغرى المقيدة بشرط (مثل مسافة، حجم صندوق، أو مساحة).
+                        </div>
+                    </div>
+
+                    <!-- 7. اليعقوبي وهيسيان -->
+                    <div class="sol-step" style="border-right-color: var(--emerald);">
+                        <div class="sol-step-title" style="color: var(--emerald);">7. Jacobian & Hessian Matrix</div>
+                        <div class="math-row">
+                            $$J\left(\frac{f,g}{x,y}\right) = \begin{vmatrix} f_x & f_y \\ g_x & g_y \end{vmatrix}, \qquad H(f) = \begin{bmatrix} f_{xx} & f_{xy} \\ f_{yx} & f_{yy} \end{bmatrix}$$
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- ========================================================= -->
         <!-- Question 1: First Partial Derivatives -->
         <!-- ========================================================= -->
         <div id="sec-1" class="question-section active">
