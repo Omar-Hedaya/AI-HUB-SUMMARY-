@@ -5,10 +5,73 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>حل شيت 1 كاملاً ومفصلاً: Functions of Several Variables - Math 3</title>
     <!-- مكتبة KaTeX لتنسيق المعادلات الرياضية -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
-    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/fonts/KaTeX_Main-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/fonts/KaTeX_Math-Italic.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/fonts/KaTeX_Size1-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/fonts/KaTeX_Size2-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/fonts/KaTeX_Size3-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/fonts/KaTeX_Size4-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
     <style>
+    /* Math Direction & Bi-directional Isolation (LTR vs RTL) */
+    .katex, .katex-display, .katex-html, .math, .math-inline, .math-display, .math-row, .equation, .formula, [data-math="true"], span[class*="katex"], div[class*="katex"] {
+      direction: ltr !important;
+      unicode-bidi: isolate !important;
+      text-align: left !important;
+      display: inline-block;
+      -webkit-font-smoothing: antialiased;
+    }
+    .katex-display, .math-display {
+      display: block !important;
+      text-align: center !important;
+      direction: ltr !important;
+      unicode-bidi: isolate !important;
+      width: 100% !important;
+      max-width: 100% !important;
+      overflow-x: auto !important;
+      overflow-y: hidden !important;
+      margin: 1rem 0 !important;
+    }
+    .katex-display > .katex {
+      display: block !important;
+      text-align: center !important;
+      direction: ltr !important;
+      unicode-bidi: isolate !important;
+      white-space: nowrap !important;
+    }
+    .katex * {
+      direction: ltr !important;
+      unicode-bidi: normal !important;
+    }
+    .katex .mopen, .katex .mclose, .katex .mpunct, .katex .minner, .katex .mbin, .katex .mrel, .katex .mop, .katex .mord, .katex .sqrt, .katex .sqrt-sign {
+      direction: ltr !important;
+      unicode-bidi: isolate !important;
+    }
+    .katex .sqrt, .katex .sqrt-sign, .katex .sqrt .root, .math-radical, .radical-symbol {
+      font-family: KaTeX_Main, KaTeX_Size1, KaTeX_Size2, KaTeX_Size3, KaTeX_Size4, KaTeX_Math, 'Cambria Math', 'STIX Two Math', 'Segoe UI Symbol', 'DejaVu Sans', serif, sans-serif !important;
+      font-style: normal !important;
+      overflow: visible !important;
+    }
+    .katex .sqrt > .svg-align {
+      overflow: visible !important;
+    }
+    .katex .sqrt > .svg-align svg {
+      display: inline-block !important;
+      overflow: visible !important;
+      fill: currentColor !important;
+    }
+    .math-pending, [data-math-pending="true"], .raw-latex:not(.math-rendered) {
+      opacity: 0 !important;
+      visibility: hidden !important;
+    }
+    .math-rendered, [data-math-rendered="true"] {
+      opacity: 1 !important;
+      visibility: visible !important;
+      transition: opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    }
+
         :root {
             --bg-base: #090d13;
             --bg-card: #111722;
@@ -344,8 +407,8 @@
                         </div>
                         <div class="math-row">
                             $$\Delta > 0 \text{ and } f_{xx} > 0 \implies \mathbf{Local\,\,Minimum}$$
-                            $$\Delta > 0 \text{ and } f_{xx} < 0 \implies \mathbf{Local\,\,Maximum}$$
-                            $$\Delta < 0 \implies \mathbf{Saddle\,\,Point}, \qquad \Delta = 0 \implies \mathbf{Inconclusive}$$
+                            $$\Delta > 0 \text{ and } f_{xx} &lt; 0 \implies \mathbf{Local\,\,Maximum}$$
+                            $$\Delta &lt; 0 \implies \mathbf{Saddle\,\,Point}, \qquad \Delta = 0 \implies \mathbf{Inconclusive}$$
                         </div>
                     </div>
 
@@ -1174,7 +1237,7 @@
                             <div class="math-row">$$(3y-2)(y-2) = 0 \implies y = 2 \text{ or } y = 2/3$$</div>
                             <div>Critical points: $(4, 2)$ and $(4/3, 2/3)$. Second derivatives: $f_{xx} = 2, f_{yy} = 6y, f_{xy} = -4 \implies \Delta = 12y - 16$</div>
                             <div class="step-desc">At $(4, 2)$: $\Delta = 24 - 16 = 8 > 0$ and $f_{xx} = 2 > 0 \implies \mathbf{Local\,Minimum}$ at $(4,2)$ with value $f(4,2) = 0$.</div>
-                            <div class="step-desc">At $(4/3, 2/3)$: $\Delta = 12(2/3) - 16 = -8 < 0 \implies \mathbf{Saddle\,Point}$ at $(4/3, 2/3)$.</div>
+                            <div class="step-desc">At $(4/3, 2/3)$: $\Delta = 12(2/3) - 16 = -8 &lt; 0 \implies \mathbf{Saddle\,Point}$ at $(4/3, 2/3)$.</div>
                             <div class="result-badge">Min at $(4,2,0)$; Saddle at $(4/3, 2/3)$</div>
                         </div>
 
@@ -1183,7 +1246,7 @@
                             <div class="sol-step-title">(d) $f = 1-x^2-y^2-4x+2y$ & (f) $f = x^2+y^2-4x+6y+2$</div>
                             <div class="step-desc">For (d):</div>
                             <div class="math-row">$$f_x = -2x-4=0 \implies x=-2; \quad f_y = -2y+2=0 \implies y=1 \implies \text{Point } (-2,1)$$</div>
-                            <div class="math-row">$$f_{xx} = -2, f_{yy} = -2, f_{xy} = 0 \implies \Delta = 4 > 0, \,\, f_{xx} < 0 \implies \mathbf{Local\,Maximum} \text{ at } (-2, 1, 6)$$</div>
+                            <div class="math-row">$$f_{xx} = -2, f_{yy} = -2, f_{xy} = 0 \implies \Delta = 4 > 0, \,\, f_{xx} &lt; 0 \implies \mathbf{Local\,Maximum} \text{ at } (-2, 1, 6)$$</div>
                             <div class="step-desc">For (f):</div>
                             <div class="math-row">$$f_x = 2x-4=0 \implies x=2; \quad f_y = 2y+6=0 \implies y=-3 \implies \text{Point } (2,-3)$$</div>
                             <div class="math-row">$$f_{xx} = 2, f_{yy} = 2, f_{xy} = 0 \implies \Delta = 4 > 0, \,\, f_{xx} > 0 \implies \mathbf{Local\,Minimum} \text{ at } (2, -3, -11)$$</div>
@@ -1196,7 +1259,7 @@
                             <div class="math-row">$$f_x = 3x^2 + 3y = 0 \implies y = -x^2$$</div>
                             <div class="math-row">$$f_y = -3y^2 + 3x = 0 \implies x = y^2 \implies x = (-x^2)^2 = x^4 \implies x(x^3-1)=0 \implies x=0 \text{ or } x=1$$</div>
                             <div>Critical points: $(0,0)$ and $(1,-1)$. Second derivatives: $f_{xx}=6x, f_{yy}=-6y, f_{xy}=3 \implies \Delta = -36xy - 9$</div>
-                            <div class="step-desc">At $(0,0)$: $\Delta = -9 < 0 \implies \mathbf{Saddle\,Point}$ at $(0,0,0)$.</div>
+                            <div class="step-desc">At $(0,0)$: $\Delta = -9 &lt; 0 \implies \mathbf{Saddle\,Point}$ at $(0,0,0)$.</div>
                             <div class="step-desc">At $(1,-1)$: $\Delta = -36(1)(-1) - 9 = 27 > 0$ and $f_{xx} = 6 > 0 \implies \mathbf{Local\,Minimum}$ at $(1,-1,-1)$.</div>
                             <div class="result-badge">Min at $(1,-1,-1)$; Saddle at $(0,0,0)$</div>
                         </div>
@@ -1212,7 +1275,7 @@
                             <div class="math-row">$$f_y = 3y^2-9=0 \implies y^2 = 3 \implies y = \pm\sqrt{3}$$</div>
                             <div>Points: $(-2, \sqrt{3})$ and $(-2, -\sqrt{3})$. $f_{xx} = 12x^2, f_{yy} = 6y, f_{xy} = 0 \implies \Delta = 72x^2 y$</div>
                             <div class="step-desc">At $(-2, \sqrt{3})$: $\Delta = 72(4)(\sqrt{3}) > 0, f_{xx} = 48 > 0 \implies \mathbf{Local\,Minimum}$.</div>
-                            <div class="step-desc">At $(-2, -\sqrt{3})$: $\Delta = 72(4)(-\sqrt{3}) < 0 \implies \mathbf{Saddle\,Point}$.</div>
+                            <div class="step-desc">At $(-2, -\sqrt{3})$: $\Delta = 72(4)(-\sqrt{3}) &lt; 0 \implies \mathbf{Saddle\,Point}$.</div>
                             <div class="result-badge">(g) Min at $(0,0,0)$ | (h) Min at $(-2,\sqrt{3})$ and Saddle at $(-2,-\sqrt{3})$</div>
                         </div>
                     </div>

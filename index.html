@@ -27,6 +27,20 @@
   <link rel="apple-touch-icon" sizes="512x512" href="/icon-512.png" />
   <link rel="manifest" href="/manifest.json" />
 
+  <!-- KaTeX Core Stylesheet & Font Preloading -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css" crossorigin="anonymous">
+
+  <!-- Preload Essential KaTeX Font Glyphs for Radicals, Matrices, and Brackets -->
+  <link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/fonts/KaTeX_Main-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/fonts/KaTeX_Math-Italic.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/fonts/KaTeX_Size1-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/fonts/KaTeX_Size2-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/fonts/KaTeX_Size3-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/fonts/KaTeX_Size4-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+
+  <!-- KaTeX Engine & Auto-Render Extension -->
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
 
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -148,6 +162,107 @@
     svg {
       direction: ltr !important;
       unicode-bidi: isolate !important;
+    }
+
+    /* ========================================================== */
+    /* MATH DIRECTION & BI-DIRECTIONAL ISOLATION (LTR vs RTL)     */
+    /* ========================================================== */
+    .katex,
+    .katex-display,
+    .katex-html,
+    .math,
+    .math-inline,
+    .math-display,
+    .math-row,
+    .equation,
+    .formula,
+    [data-math="true"],
+    span[class*="katex"],
+    div[class*="katex"] {
+      direction: ltr !important;
+      unicode-bidi: isolate !important;
+      text-align: left !important;
+      display: inline-block;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Centered display math with strict LTR isolation & touch scroll */
+    .katex-display,
+    .math-display {
+      display: block !important;
+      text-align: center !important;
+      margin: 1rem 0 !important;
+      width: 100% !important;
+      max-width: 100% !important;
+      overflow-x: auto !important;
+      overflow-y: hidden !important;
+      -webkit-overflow-scrolling: touch !important;
+      direction: ltr !important;
+      unicode-bidi: isolate !important;
+    }
+
+    .katex-display > .katex {
+      display: block !important;
+      text-align: center !important;
+      direction: ltr !important;
+      unicode-bidi: isolate !important;
+      white-space: nowrap !important;
+    }
+
+    /* Prevent RTL parent contexts from inverting signs, parentheses, or variable orders */
+    .katex * {
+      direction: ltr !important;
+      unicode-bidi: normal !important;
+    }
+
+    .katex .mopen,
+    .katex .mclose,
+    .katex .mpunct,
+    .katex .minner,
+    .katex .mbin,
+    .katex .mrel,
+    .katex .mop,
+    .katex .mord,
+    .katex .sqrt,
+    .katex .sqrt-sign {
+      direction: ltr !important;
+      unicode-bidi: isolate !important;
+    }
+
+    /* Square Root Radical (√) Symbol Fallback & Robust Rendering */
+    .katex .sqrt,
+    .katex .sqrt-sign,
+    .katex .sqrt .root,
+    .math-radical,
+    .radical-symbol {
+      font-family: KaTeX_Main, KaTeX_Size1, KaTeX_Size2, KaTeX_Size3, KaTeX_Size4, KaTeX_Math, 'Cambria Math', 'STIX Two Math', 'Segoe UI Symbol', 'DejaVu Sans', serif, sans-serif !important;
+      font-style: normal !important;
+      overflow: visible !important;
+    }
+
+    .katex .sqrt > .svg-align {
+      overflow: visible !important;
+    }
+
+    .katex .sqrt > .svg-align svg {
+      display: inline-block !important;
+      overflow: visible !important;
+      fill: currentColor !important;
+    }
+
+    /* Prevent Flash of Raw LaTeX (FOUC) */
+    .math-pending,
+    [data-math-pending="true"],
+    .raw-latex:not(.math-rendered) {
+      opacity: 0 !important;
+      visibility: hidden !important;
+    }
+
+    .math-rendered,
+    [data-math-rendered="true"] {
+      opacity: 1 !important;
+      visibility: visible !important;
+      transition: opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
     }
 
     /* Prevent Horizontal Overflow & Viewport Jitter */
@@ -3938,6 +4053,47 @@
             restoreDocumentScrollPosition(currentDocument.path, iWin, iDoc);
           }
 
+          // Ensure mathematical rendering inside iframe executes safely with LTR isolation, radical support & FOUC cleanup
+          if (iWin && iDoc && iDoc.body) {
+            const triggerIframeMath = () => {
+              try {
+                const renderFn = (iWin && typeof iWin.renderMathInElement === "function") 
+                  ? iWin.renderMathInElement 
+                  : (typeof window.renderMathInElement === "function" ? window.renderMathInElement : null);
+
+                if (typeof renderFn === "function") {
+                  renderFn(iDoc.body, {
+                    delimiters: [
+                      { left: "$$", right: "$$", display: true },
+                      { left: "$", right: "$", display: false },
+                      { left: "\\[", right: "\\]", display: true },
+                      { left: "\\(", right: "\\)", display: false }
+                    ],
+                    macros: {
+                      "\\√": "\\sqrt",
+                      "√": "\\sqrt"
+                    },
+                    throwOnError: false,
+                    errorColor: "#f43f5e",
+                    strict: false
+                  });
+                }
+                iDoc.body.removeAttribute("data-math-pending");
+                iDoc.body.setAttribute("data-math-rendered", "true");
+                if (iDoc.body.classList) {
+                  iDoc.body.classList.remove("math-pending");
+                  iDoc.body.classList.add("math-rendered");
+                }
+              } catch (mErr) {
+                if (iDoc && iDoc.body) {
+                  iDoc.body.removeAttribute("data-math-pending");
+                  iDoc.body.setAttribute("data-math-rendered", "true");
+                }
+              }
+            };
+            triggerIframeMath();
+            setTimeout(triggerIframeMath, 220);
+          }
         } catch (e) {
           console.warn("Iframe setup note:", e);
         }
@@ -4070,15 +4226,104 @@
               padding-right: 0.5rem !important;
               box-sizing: border-box !important;
             }
-            .katex-display {
+            /* ========================================================== */
+            /* MATH DIRECTION & BI-DIRECTIONAL ISOLATION (LTR vs RTL)     */
+            /* ========================================================== */
+            .katex,
+            .katex-display,
+            .katex-html,
+            .math,
+            .math-inline,
+            .math-display,
+            .math-row,
+            .equation,
+            .formula,
+            [data-math="true"],
+            span[class*="katex"],
+            div[class*="katex"] {
+              direction: ltr !important;
+              unicode-bidi: isolate !important;
+              text-align: left !important;
+              display: inline-block;
+              -webkit-font-smoothing: antialiased;
+            }
+
+            .katex-display,
+            .math-display {
               display: block !important;
               width: 100% !important;
               max-width: 100% !important;
               overflow-x: auto !important;
               overflow-y: hidden !important;
               text-align: center !important;
+              direction: ltr !important;
+              unicode-bidi: isolate !important;
               -webkit-overflow-scrolling: touch !important;
               margin: 1rem 0 !important;
+            }
+
+            .katex-display > .katex {
+              display: block !important;
+              text-align: center !important;
+              direction: ltr !important;
+              unicode-bidi: isolate !important;
+              white-space: nowrap !important;
+            }
+
+            /* Prevent RTL parent contexts from reversing signs, parentheses, or variable orders */
+            .katex * {
+              direction: ltr !important;
+              unicode-bidi: normal !important;
+            }
+
+            .katex .mopen,
+            .katex .mclose,
+            .katex .mpunct,
+            .katex .minner,
+            .katex .mbin,
+            .katex .mrel,
+            .katex .mop,
+            .katex .mord,
+            .katex .sqrt,
+            .katex .sqrt-sign {
+              direction: ltr !important;
+              unicode-bidi: isolate !important;
+            }
+
+            /* Radical (√) Symbol Fallback & Robust Glyph Support */
+            .katex .sqrt,
+            .katex .sqrt-sign,
+            .katex .sqrt .root,
+            .math-radical,
+            .radical-symbol {
+              font-family: KaTeX_Main, KaTeX_Size1, KaTeX_Size2, KaTeX_Size3, KaTeX_Size4, KaTeX_Math, 'Cambria Math', 'STIX Two Math', 'Segoe UI Symbol', 'DejaVu Sans', serif, sans-serif !important;
+              font-style: normal !important;
+              overflow: visible !important;
+            }
+
+            .katex .sqrt > .svg-align {
+              overflow: visible !important;
+            }
+
+            .katex .sqrt > .svg-align svg {
+              display: inline-block !important;
+              overflow: visible !important;
+              fill: currentColor !important;
+            }
+
+            /* Prevent Flash of Raw LaTeX (FOUC) */
+            .math-pending,
+            [data-math-pending="true"],
+            .raw-latex:not(.math-rendered) {
+              opacity: 0 !important;
+              visibility: hidden !important;
+            }
+
+            .math-rendered,
+            [data-math-rendered="true"] {
+              opacity: 1 !important;
+              visibility: visible !important;
+              transition: opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
             }
             table {
               display: block !important;

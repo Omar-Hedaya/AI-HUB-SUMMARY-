@@ -5,10 +5,73 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Fluid and Thermal Systems — Complete Lectures & Examples Portal — Dr. Ashraf Elsayed</title>
   <!-- KaTeX for ultra-fast, lightweight performance -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/fonts/KaTeX_Main-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/fonts/KaTeX_Math-Italic.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/fonts/KaTeX_Size1-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/fonts/KaTeX_Size2-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/fonts/KaTeX_Size3-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/fonts/KaTeX_Size4-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
   <style>
+    /* Math Direction & Bi-directional Isolation (LTR vs RTL) */
+    .katex, .katex-display, .katex-html, .math, .math-inline, .math-display, .math-row, .equation, .formula, [data-math="true"], span[class*="katex"], div[class*="katex"] {
+      direction: ltr !important;
+      unicode-bidi: isolate !important;
+      text-align: left !important;
+      display: inline-block;
+      -webkit-font-smoothing: antialiased;
+    }
+    .katex-display, .math-display {
+      display: block !important;
+      text-align: center !important;
+      direction: ltr !important;
+      unicode-bidi: isolate !important;
+      width: 100% !important;
+      max-width: 100% !important;
+      overflow-x: auto !important;
+      overflow-y: hidden !important;
+      margin: 1rem 0 !important;
+    }
+    .katex-display > .katex {
+      display: block !important;
+      text-align: center !important;
+      direction: ltr !important;
+      unicode-bidi: isolate !important;
+      white-space: nowrap !important;
+    }
+    .katex * {
+      direction: ltr !important;
+      unicode-bidi: normal !important;
+    }
+    .katex .mopen, .katex .mclose, .katex .mpunct, .katex .minner, .katex .mbin, .katex .mrel, .katex .mop, .katex .mord, .katex .sqrt, .katex .sqrt-sign {
+      direction: ltr !important;
+      unicode-bidi: isolate !important;
+    }
+    .katex .sqrt, .katex .sqrt-sign, .katex .sqrt .root, .math-radical, .radical-symbol {
+      font-family: KaTeX_Main, KaTeX_Size1, KaTeX_Size2, KaTeX_Size3, KaTeX_Size4, KaTeX_Math, 'Cambria Math', 'STIX Two Math', 'Segoe UI Symbol', 'DejaVu Sans', serif, sans-serif !important;
+      font-style: normal !important;
+      overflow: visible !important;
+    }
+    .katex .sqrt > .svg-align {
+      overflow: visible !important;
+    }
+    .katex .sqrt > .svg-align svg {
+      display: inline-block !important;
+      overflow: visible !important;
+      fill: currentColor !important;
+    }
+    .math-pending, [data-math-pending="true"], .raw-latex:not(.math-rendered) {
+      opacity: 0 !important;
+      visibility: hidden !important;
+    }
+    .math-rendered, [data-math-rendered="true"] {
+      opacity: 1 !important;
+      visibility: visible !important;
+      transition: opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    }
+
     :root {
       --bg-base: #090d13;
       --bg-card: #111722;
@@ -966,11 +1029,11 @@
                 <tr><th style="width:26%">Concept / Topic</th><th style="width:36%">Formula / Equation</th><th>Description & Key Parameters</th></tr>
               </thead>
               <tbody>
-                <tr><td>Compressed Liquid</td><td>$T < T_{sat} \quad \text{or} \quad P > P_{sat}$</td><td>Water in liquid phase not on the verge of boiling.</td></tr>
+                <tr><td>Compressed Liquid</td><td>$T &lt; T_{sat} \quad \text{or} \quad P > P_{sat}$</td><td>Water in liquid phase not on the verge of boiling.</td></tr>
                 <tr><td>Saturated Liquid</td><td>$T = T_{sat}, \quad x = 0, \quad v = v_f$</td><td>Liquid on the verge of vaporization.</td></tr>
-                <tr><td>Saturated Mixture</td><td>$T = T_{sat}, \quad v_f < v < v_g, \quad 0 < x < 1$</td><td>Liquid and vapor coexist in equilibrium.</td></tr>
+                <tr><td>Saturated Mixture</td><td>$T = T_{sat}, \quad v_f &lt; v &lt; v_g, \quad 0 &lt; x &lt; 1$</td><td>Liquid and vapor coexist in equilibrium.</td></tr>
                 <tr><td>Saturated Vapor</td><td>$T = T_{sat}, \quad x = 1, \quad v = v_g$</td><td>Vapor on the verge of condensation.</td></tr>
-                <tr><td>Superheated Vapor</td><td>$T > T_{sat} \quad \text{or} \quad P < P_{sat}$</td><td>Single-phase vapor region ($v > v_g$).</td></tr>
+                <tr><td>Superheated Vapor</td><td>$T > T_{sat} \quad \text{or} \quad P &lt; P_{sat}$</td><td>Single-phase vapor region ($v > v_g$).</td></tr>
                 <tr><td>Critical Point of Water</td><td>$P_{cr} = 22.06\text{ MPa}, \ T_{cr} = 373.95^\circ\text{C}$</td><td>Point where saturated liquid and saturated vapor states merge ($v_{cr} = 0.003106\text{ m}^3/\text{kg}$).</td></tr>
               </tbody>
             </table>
@@ -1045,8 +1108,8 @@
                 <tr><th style="width:26%">Concept / Topic</th><th style="width:36%">Formula / Equation</th><th>Description & Key Parameters</th></tr>
               </thead>
               <tbody>
-                <tr><td>Compressed Criteria</td><td>$P > P_{sat}, \ T < T_{sat}, \ v < v_f, \ h < h_f$</td><td>Conditions confirming subcooled liquid state.</td></tr>
-                <tr><td>Saturated Liquid Approximation</td><td>$v \approx v_f @ T, \ u \approx u_f @ T, \ h \approx h_f @ T$</td><td>Used when Table A-7 is unavailable ($P < 5\text{ MPa}$).</td></tr>
+                <tr><td>Compressed Criteria</td><td>$P > P_{sat}, \ T &lt; T_{sat}, \ v &lt; v_f, \ h &lt; h_f$</td><td>Conditions confirming subcooled liquid state.</td></tr>
+                <tr><td>Saturated Liquid Approximation</td><td>$v \approx v_f @ T, \ u \approx u_f @ T, \ h \approx h_f @ T$</td><td>Used when Table A-7 is unavailable ($P &lt; 5\text{ MPa}$).</td></tr>
               </tbody>
             </table>
           </div>
@@ -1063,8 +1126,8 @@
                 <tr><th style="width:26%">Given Pair</th><th style="width:36%">Decision Rule</th><th>Target Table & Outcome</th></tr>
               </thead>
               <tbody>
-                <tr><td>Given $P$ and $T$</td><td>Compare $T$ with $T_{sat} @ P$:<br>&bull; $T > T_{sat} \implies$ Superheated<br>&bull; $T = T_{sat} \implies$ Saturated<br>&bull; $T < T_{sat} \implies$ Compressed Liquid</td><td>Superheated: Table A-6.<br>Compressed Liquid: Table A-7 (or Sat Liquid @ $T$).</td></tr>
-                <tr><td>Given $P$ and $v$ (or $u, h$)</td><td>Compare with $v_f$ and $v_g$ at given $P$:<br>&bull; $v < v_f \implies$ Compressed Liquid<br>&bull; $v_f \le v \le v_g \implies$ Saturated Mixture<br>&bull; $v > v_g \implies$ Superheated Vapor</td><td>For Mixture: $x = \frac{v - v_f}{v_{fg}}$, $T = T_{sat}$.<br>For Superheated: Go to Table A-6 at $P$ and $v$.</td></tr>
+                <tr><td>Given $P$ and $T$</td><td>Compare $T$ with $T_{sat} @ P$:<br>&bull; $T > T_{sat} \implies$ Superheated<br>&bull; $T = T_{sat} \implies$ Saturated<br>&bull; $T &lt; T_{sat} \implies$ Compressed Liquid</td><td>Superheated: Table A-6.<br>Compressed Liquid: Table A-7 (or Sat Liquid @ $T$).</td></tr>
+                <tr><td>Given $P$ and $v$ (or $u, h$)</td><td>Compare with $v_f$ and $v_g$ at given $P$:<br>&bull; $v &lt; v_f \implies$ Compressed Liquid<br>&bull; $v_f \le v \le v_g \implies$ Saturated Mixture<br>&bull; $v > v_g \implies$ Superheated Vapor</td><td>For Mixture: $x = \frac{v - v_f}{v_{fg}}$, $T = T_{sat}$.<br>For Superheated: Go to Table A-6 at $P$ and $v$.</td></tr>
               </tbody>
             </table>
           </div>
@@ -1124,7 +1187,7 @@
                 <tr><td>Adiabatic Process</td><td>$Q = 0 \quad (\text{No heat transfer})$</td><td>Occurs if system is well insulated or both systems are at the identical temperature.</td></tr>
                 <tr><td>Specific Heat Transfer ($q$)</td><td>$q = \frac{Q}{m} \quad [\text{kJ/kg}]$</td><td>Amount of heat transferred per unit mass of the working substance.</td></tr>
                 <tr><td>Rate of Heat Transfer ($\dot{Q}$)</td><td>$\dot{Q} = \frac{Q}{\Delta t} \quad [\text{kJ/s} \equiv \text{kW}]$</td><td>Heat transfer per unit time (heat power).</td></tr>
-                <tr><td>Sign Convention for Heat</td><td>$Q_{in} > 0 \ (+), \quad Q_{out} < 0 \ (-)$</td><td>Heat added to the system is POSITIVE; heat released/rejected is NEGATIVE.</td></tr>
+                <tr><td>Sign Convention for Heat</td><td>$Q_{in} > 0 \ (+), \quad Q_{out} &lt; 0 \ (-)$</td><td>Heat added to the system is POSITIVE; heat released/rejected is NEGATIVE.</td></tr>
               </tbody>
             </table>
           </div>
@@ -1144,7 +1207,7 @@
                 <tr><td>Mechanical Work ($W$)</td><td>$W = F \times \text{distance} \quad [\text{kJ}]$</td><td>Energy transfer associated with a force acting through a distance.</td></tr>
                 <tr><td>Specific Work ($w$)</td><td>$w = \frac{W}{m} \quad [\text{kJ/kg}]$</td><td>Work performed per unit mass of the system.</td></tr>
                 <tr><td>Power ($\dot{W}$)</td><td>$\dot{W} = \frac{W}{\Delta t} \quad [\text{kJ/s} \equiv \text{kW}]$</td><td>Rate of doing work per unit time ($1\text{ MW} = 1000\text{ kW}$).</td></tr>
-                <tr><td>Sign Convention for Work</td><td>$W_{out} > 0 \ (+), \quad W_{in} < 0 \ (-)$</td><td>Work done BY the system (expansion) is POSITIVE; work done ON system (compression) is NEGATIVE.</td></tr>
+                <tr><td>Sign Convention for Work</td><td>$W_{out} > 0 \ (+), \quad W_{in} &lt; 0 \ (-)$</td><td>Work done BY the system (expansion) is POSITIVE; work done ON system (compression) is NEGATIVE.</td></tr>
               </tbody>
             </table>
           </div>

@@ -1,0 +1,1938 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Principles of Electrical Engineering (ELE111) — Portal — Ass. Prof. Essam M. Shaalan</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/fonts/KaTeX_Main-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/fonts/KaTeX_Math-Italic.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/fonts/KaTeX_Size1-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/fonts/KaTeX_Size2-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/fonts/KaTeX_Size3-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/fonts/KaTeX_Size4-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+  <style>
+    /* Math Direction & Bi-directional Isolation (LTR vs RTL) */
+    .katex, .katex-display, .katex-html, .math, .math-inline, .math-display, .math-row, .equation, .formula, [data-math="true"], span[class*="katex"], div[class*="katex"] {
+      direction: ltr !important;
+      unicode-bidi: isolate !important;
+      text-align: left !important;
+      display: inline-block;
+      -webkit-font-smoothing: antialiased;
+    }
+    .katex-display, .math-display {
+      display: block !important;
+      text-align: center !important;
+      direction: ltr !important;
+      unicode-bidi: isolate !important;
+      width: 100% !important;
+      max-width: 100% !important;
+      overflow-x: auto !important;
+      overflow-y: hidden !important;
+      margin: 1rem 0 !important;
+    }
+    .katex-display > .katex {
+      display: block !important;
+      text-align: center !important;
+      direction: ltr !important;
+      unicode-bidi: isolate !important;
+      white-space: nowrap !important;
+    }
+    .katex * {
+      direction: ltr !important;
+      unicode-bidi: normal !important;
+    }
+    .katex .mopen, .katex .mclose, .katex .mpunct, .katex .minner, .katex .mbin, .katex .mrel, .katex .mop, .katex .mord, .katex .sqrt, .katex .sqrt-sign {
+      direction: ltr !important;
+      unicode-bidi: isolate !important;
+    }
+    .katex .sqrt, .katex .sqrt-sign, .katex .sqrt .root, .math-radical, .radical-symbol {
+      font-family: KaTeX_Main, KaTeX_Size1, KaTeX_Size2, KaTeX_Size3, KaTeX_Size4, KaTeX_Math, 'Cambria Math', 'STIX Two Math', 'Segoe UI Symbol', 'DejaVu Sans', serif, sans-serif !important;
+      font-style: normal !important;
+      overflow: visible !important;
+    }
+    .katex .sqrt > .svg-align {
+      overflow: visible !important;
+    }
+    .katex .sqrt > .svg-align svg {
+      display: inline-block !important;
+      overflow: visible !important;
+      fill: currentColor !important;
+    }
+    .math-pending, [data-math-pending="true"], .raw-latex:not(.math-rendered) {
+      opacity: 0 !important;
+      visibility: hidden !important;
+    }
+    .math-rendered, [data-math-rendered="true"] {
+      opacity: 1 !important;
+      visibility: visible !important;
+      transition: opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    }
+
+    :root {
+      --bg-base: #090d13;
+      --bg-card: #111722;
+      --bg-code: #0b1017;
+      --border-card: #1f2937;
+      --cyan: #38bdf8;
+      --emerald: #34d399;
+      --amber: #fbbf24;
+      --purple: #c084fc;
+      --rose: #f43f5e;
+      --text-main: #e2e8f0;
+      --text-muted: #94a3b8;
+    }
+    *, *::before, *::after {
+      box-sizing: border-box !important;
+      margin: 0;
+      padding: 0;
+    }
+    html, body {
+      width: 100% !important;
+      max-width: 100% !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      overflow-x: hidden !important;
+      position: relative !important;
+      background-color: var(--bg-base);
+      color: var(--text-main);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      line-height: 1.6;
+      padding-bottom: 70px !important;
+    }
+    .container {
+      width: 100% !important;
+      max-width: 960px !important;
+      margin: 0 auto !important;
+      padding: 12px 10px !important;
+      overflow-x: hidden !important;
+    }
+    /* Top Sheet Switcher */
+    .sheet-switch-wrapper {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 12px;
+      position: sticky;
+      top: 6px;
+      z-index: 1002;
+      background: rgba(9, 13, 19, 0.95);
+      backdrop-filter: blur(14px);
+      padding: 6px;
+      border-radius: 12px;
+      border: 1px solid var(--border-card);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
+      width: 100% !important;
+    }
+    .sheet-tab {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 8px;
+      border-radius: 8px;
+      font-size: 0.82rem;
+      font-weight: 800;
+      cursor: pointer;
+      color: var(--text-muted);
+      background: #111722;
+      border: 1px solid #1e293b;
+      transition: all 0.2s ease;
+      text-align: center;
+    }
+    .sheet-tab:hover { color: #fff; border-color: rgba(56, 189, 248, 0.4); }
+    .sheet-tab.active {
+      background: rgba(56, 189, 248, 0.15);
+      border-color: var(--cyan);
+      color: var(--cyan);
+      box-shadow: 0 0 14px rgba(56, 189, 248, 0.25);
+    }
+    /* Subnav Bar */
+    .subnav-wrapper {
+      position: sticky;
+      top: 62px;
+      z-index: 1000;
+      background: rgba(9, 13, 19, 0.95);
+      backdrop-filter: blur(12px);
+      padding: 6px 8px;
+      border-radius: 12px;
+      border: 1px solid var(--border-card);
+      margin-bottom: 18px;
+      overflow-x: auto !important;
+      scrollbar-width: none;
+      width: 100% !important;
+    }
+    .subnav-wrapper::-webkit-scrollbar { display: none; }
+    .subnav-tabs {
+      display: flex;
+      gap: 6px;
+      width: 100%;
+      min-width: min-content;
+    }
+    .tab-btn {
+      flex: 1;
+      padding: 8px 10px;
+      background: #111722;
+      border: 1px solid #1e293b;
+      color: var(--text-muted);
+      border-radius: 8px;
+      font-weight: 800;
+      font-size: 0.76rem;
+      text-align: center;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+    }
+    .tab-btn.active {
+      background: rgba(56, 189, 248, 0.15);
+      border-color: var(--cyan);
+      color: var(--cyan);
+    }
+    .tab-btn.all-btn {
+      background: rgba(52, 211, 153, 0.12);
+      border-color: rgba(52, 211, 153, 0.35);
+      color: var(--emerald);
+    }
+    .tab-btn.all-btn.active {
+      background: rgba(52, 211, 153, 0.22);
+      border-color: var(--emerald);
+      color: #fff;
+    }
+    /* Header */
+    .header {
+      padding: 10px 0 16px 0;
+      border-bottom: 1px solid var(--border-card);
+      margin-bottom: 18px;
+      width: 100% !important;
+    }
+    .header-badge {
+      display: inline-block;
+      background: rgba(56, 189, 248, 0.12);
+      color: var(--cyan);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      padding: 4px 10px;
+      border-radius: 9999px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+      max-width: 100%;
+      white-space: normal;
+      word-break: break-word;
+    }
+    .header h1 {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 6px;
+      line-height: 1.35;
+      word-break: break-word;
+    }
+    .header p {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      word-break: break-word;
+    }
+    /* Global Toggle Bar */
+    .global-toggle-bar {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 16px;
+      background: rgba(255, 255, 255, 0.03);
+      padding: 8px 10px;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      width: 100% !important;
+    }
+    .global-toggle-bar button {
+      flex: 1;
+      padding: 8px 10px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      border-radius: 6px;
+      cursor: pointer;
+      border: 1px solid #1e293b;
+      background: #111722;
+      color: #cbd5e1;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+    .global-toggle-bar button:hover { border-color: var(--cyan); color: #fff; }
+    /* Question Cards */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-card);
+      border-radius: 10px;
+      margin-bottom: 18px;
+      overflow: hidden !important;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.4);
+      width: 100% !important;
+      max-width: 100% !important;
+    }
+    .card-header {
+      background: rgba(255, 255, 255, 0.02);
+      border-bottom: 1px solid var(--border-card);
+      padding: 10px 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .prob-tag {
+      font-weight: 800;
+      font-size: 0.86rem;
+      color: var(--cyan);
+      flex: 1;
+      min-width: 200px;
+      word-break: break-word;
+    }
+    .card-body {
+      padding: 12px 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      width: 100% !important;
+      overflow-x: hidden !important;
+    }
+    .question-prompt {
+      background: rgba(56, 189, 248, 0.05);
+      border-left: 3px solid var(--cyan);
+      padding: 10px 12px;
+      font-size: 0.86rem;
+      color: #f1f5f9;
+      border-radius: 0 6px 6px 0;
+      line-height: 1.5;
+      width: 100% !important;
+      word-break: break-word;
+    }
+    .sol-toggle-btn {
+      background: rgba(56, 189, 248, 0.12);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      color: var(--cyan);
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+    .sol-toggle-btn:hover { background: rgba(56, 189, 248, 0.25); color: #fff; }
+    .sol-toggle-btn.active { background: rgba(244, 63, 94, 0.15); border-color: var(--rose); color: var(--rose); }
+    .solution-content { display: none; margin-top: 6px; width: 100% !important; }
+    .solution-content.show { display: flex; flex-direction: column; gap: 10px; animation: fadeIn 0.25s ease-in-out; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+    .step-block {
+      background: var(--bg-code);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 8px;
+      padding: 12px 10px;
+      font-size: 0.84rem;
+      line-height: 1.6;
+      width: 100% !important;
+      max-width: 100% !important;
+      overflow-x: auto !important;
+      -webkit-overflow-scrolling: touch;
+      word-break: break-word;
+    }
+    .step-label {
+      font-size: 0.74rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+      letter-spacing: 0.04em;
+    }
+    .label-blue { color: var(--cyan); }
+    .label-amber { color: var(--amber); }
+    .label-green { color: var(--emerald); }
+    .label-purple { color: var(--purple); }
+    .label-rose { color: var(--rose); }
+    .result-badge {
+      display: inline-block;
+      background: rgba(52, 211, 153, 0.12);
+      border: 1px solid rgba(52, 211, 153, 0.35);
+      color: var(--emerald);
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-weight: 700;
+      font-size: 0.9rem;
+      margin-top: 6px;
+      max-width: 100%;
+      overflow-x: auto;
+    }
+    .result-badge .katex {
+      color: var(--emerald) !important;
+    }
+    .badge-open {
+      display: inline-block;
+      background: rgba(56, 189, 248, 0.15);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      color: var(--cyan);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-weight: 800;
+      font-size: 0.8rem;
+    }
+    .badge-closed {
+      display: inline-block;
+      background: rgba(251, 191, 36, 0.15);
+      border: 1px solid rgba(251, 191, 36, 0.3);
+      color: var(--amber);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-weight: 800;
+      font-size: 0.8rem;
+    }
+    /* Diagram Box */
+    .diagram-container {
+      width: 100% !important;
+      max-width: 100% !important;
+      background: #0d131d;
+      border: 1px solid #1e293b;
+      border-radius: 8px;
+      padding: 12px 6px;
+      margin: 4px 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      overflow: hidden !important;
+    }
+    .diagram-title {
+      font-size: 0.74rem;
+      font-weight: 700;
+      color: var(--cyan);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 8px;
+      padding: 0 4px;
+      word-break: break-word;
+    }
+    .diagram-svg {
+      width: 100% !important;
+      max-width: 100% !important;
+      height: auto !important;
+      display: block;
+    }
+    /* Summary & Given Badges */
+    .summary-card {
+      background: linear-gradient(145deg, #101927, #0d1520);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      border-radius: 10px;
+      margin-bottom: 16px;
+      padding: 12px 14px;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.4);
+    }
+    .summary-header {
+      font-size: 0.88rem;
+      font-weight: 800;
+      color: var(--cyan);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 8px;
+      font-size: 0.8rem;
+    }
+    .summary-item {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 6px;
+      padding: 6px 10px;
+      line-height: 1.5;
+    }
+    .given-box {
+      background: rgba(251, 191, 36, 0.06);
+      border-left: 3px solid var(--amber);
+      border-radius: 0 6px 6px 0;
+      padding: 8px 12px;
+      font-size: 0.82rem;
+      margin-bottom: 4px;
+      line-height: 1.6;
+    }
+    .process-tag {
+      display: inline-block;
+      background: rgba(192, 132, 252, 0.14);
+      border: 1px solid rgba(192, 132, 252, 0.35);
+      color: var(--purple);
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-weight: 800;
+      font-size: 0.74rem;
+      margin-bottom: 6px;
+      letter-spacing: 0.02em;
+    }
+    .given-box b {
+      color: var(--amber);
+    }
+    /* Comparison Tables */
+    .table-scroll-container {
+      width: 100% !important;
+      max-width: 100% !important;
+      overflow-x: auto !important;
+      display: block;
+      -webkit-overflow-scrolling: touch;
+      margin: 8px 0 !important;
+      border: 1px solid #1e293b !important;
+      border-radius: 8px !important;
+      background: var(--bg-card) !important;
+    }
+    table {
+      width: 100% !important;
+      min-width: 480px;
+      border-collapse: collapse !important;
+    }
+    th {
+      background: #1e293b !important;
+      color: var(--cyan) !important;
+      font-weight: 700 !important;
+      font-size: 0.8rem !important;
+      padding: 8px 10px !important;
+      border: 1px solid #334155 !important;
+      text-align: left !important;
+    }
+    td {
+      padding: 8px 10px !important;
+      border: 1px solid #1e293b !important;
+      color: #e2e8f0 !important;
+      font-size: 0.8rem !important;
+      vertical-align: top !important;
+    }
+    tr:nth-child(even) td { background: #0b1120 !important; }
+    .katex-display {
+      overflow-x: auto !important;
+      overflow-y: hidden !important;
+      padding: 4px 0 !important;
+      margin: 6px 0 !important;
+      max-width: 100% !important;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <!-- Top Switcher -->
+    <div class="sheet-switch-wrapper">
+      <div id="tab-sheet-1" class="sheet-tab active" onclick="switchSheet(1)">Sheet (1A): Ohm's Law, Power &amp; Resistance</div>
+      <div id="tab-sheet-2" class="sheet-tab" onclick="switchSheet(2)">Sheet (2A): KVL, KCL &amp; Fault Analysis</div>
+    </div>
+
+    <!-- Subnav Bar for Sheet 1A -->
+    <div id="subnav-sheet-1" class="subnav-wrapper">
+      <div class="subnav-tabs">
+        <div id="filter-btn-s1-0" class="tab-btn all-btn active" onclick="filterQuestions(1, 0)">All Questions (Q1 to Q13)</div>
+        <div id="filter-btn-s1-1" class="tab-btn" onclick="filterQuestions(1, 1)">Q1 - Q4 (Ohm, Power, Efficiency)</div>
+        <div id="filter-btn-s1-2" class="tab-btn" onclick="filterQuestions(1, 2)">Q5 - Q8 (Color Code &amp; Resistivity)</div>
+        <div id="filter-btn-s1-3" class="tab-btn" onclick="filterQuestions(1, 3)">Q9 - Q11 (Wire Stretching &amp; Ratios)</div>
+        <div id="filter-btn-s1-4" class="tab-btn" onclick="filterQuestions(1, 4)">Q12 - Q13 (Battery &amp; Energy Cost)</div>
+      </div>
+    </div>
+
+    <!-- Subnav Bar for Sheet 2A -->
+    <div id="subnav-sheet-2" class="subnav-wrapper" style="display: none;">
+      <div class="subnav-tabs">
+        <div id="filter-btn-s2-0" class="tab-btn all-btn active" onclick="filterQuestions(2, 0)">All Questions (Q1 to Q8)</div>
+        <div id="filter-btn-s2-1" class="tab-btn" onclick="filterQuestions(2, 1)">Q1 - Q2 (KVL &amp; Series Voltage Drops)</div>
+        <div id="filter-btn-s2-2" class="tab-btn" onclick="filterQuestions(2, 2)">Q3 - Q4 (Multi-Position Switches)</div>
+        <div id="filter-btn-s2-3" class="tab-btn" onclick="filterQuestions(2, 3)">Q5 (KCL &amp; Parallel Branches Fig 6–9)</div>
+        <div id="filter-btn-s2-4" class="tab-btn" onclick="filterQuestions(2, 4)">Q6 - Q8 (Circuit Troubleshooting)</div>
+      </div>
+    </div>
+
+    <!-- Header -->
+    <div class="header">
+      <span class="header-badge" id="header-badge">BENHA UNIVERSITY • FACULTY OF ENGINEERING AT SHOUBRA • ELECTRICAL &amp; CONTROL PROGRAM</span>
+      <h1 id="header-title">Sheet (1A): Principles of Electrical Engineering (Code: ELE111)</h1>
+      <p id="header-desc">Course Instructor: Ass. Prof. Essam M. Shaalan (2026-2027) — 100% verified step-by-step academic solutions with interactive circuit diagrams.</p>
+    </div>
+
+    <!-- Global Toggle Bar -->
+    <div class="global-toggle-bar">
+      <button onclick="toggleAllSolutions(true)">👁️ Show All Steps</button>
+      <button onclick="toggleAllSolutions(false)">🙈 Hide All Steps (Self-Test)</button>
+    </div>
+
+    <!-- ==================== SHEET 1A CONTAINER ==================== -->
+    <div id="sheet-1-container">
+
+      <!-- Sheet 1A Summary Card -->
+      <div class="summary-card">
+        <div class="summary-header">📌 Key Laws, Formulas &amp; Unit Conversions (Sheet 1A)</div>
+        <div class="summary-grid">
+          <div class="summary-item">&bull; <b>Ohm's Law:</b> $V = I \cdot R \implies I = \frac{V}{R} \implies R = \frac{V}{I}$</div>
+          <div class="summary-item">&bull; <b>Electric Power:</b> $P = V \cdot I = I^2 \cdot R = \frac{V^2}{R} \quad (\text{in Watts, W})$</div>
+          <div class="summary-item">&bull; <b>Electrical Energy:</b> $E = P \cdot t \quad (\text{Joule} = \text{W}\cdot\text{s} \text{ or } \text{kWh} = \text{kW}\cdot\text{h})$</div>
+          <div class="summary-item">&bull; <b>Appliance Efficiency:</b> $\eta = \frac{P_{\text{out}}}{P_{\text{in}}} \times 100\%$</div>
+          <div class="summary-item">&bull; <b>Wire Resistance:</b> $R = \rho \frac{L}{A}$, where $A = \pi r^2 = \frac{\pi d^2}{4}$</div>
+          <div class="summary-item">&bull; <b>Volume Invariance (Stretching):</b> $\text{Vol} = A \cdot L = \text{const} \implies R \propto L^2 \propto \frac{1}{A^2} \propto \frac{1}{r^4}$</div>
+          <div class="summary-item">&bull; <b>4-Band Color Code:</b> $R = (D_1 D_2) \times 10^M \pm \text{Tolerance}\%$</div>
+          <div class="summary-item">&bull; <b>Unit Conversions:</b> $1\text{ kW} = 10^3\text{ W}$, $1\text{ mm} = 10^{-3}\text{ m}$, $1\text{ hr} = 60\text{ min} = 3600\text{ s}$</div>
+        </div>
+      </div>
+
+      <!-- Q1 S1 -->
+      <div class="card s1-card" data-group="1">
+        <div class="card-header">
+          <span class="prob-tag">Q1: Current in a Heating Element</span>
+          <button class="sol-toggle-btn" onclick="toggleCardSolution(this)">👁️ Show Steps</button>
+        </div>
+        <div class="card-body">
+          <div class="question-prompt">
+            <b>Q1.</b> A heating element has a constant electrical resistance of $22\ \Omega$. If it is connected across a standard $110\text{ V}$ voltage source, calculate the electric current passing through the element.
+          </div>
+          <div class="solution-content">
+            <div class="given-box">
+              <div class="process-tag">⚡ 1. Given Data (SI Units)</div><br>
+              &bull; <b>Resistance ($R$):</b> $22\ \Omega$<br>
+              &bull; <b>Supply Voltage ($V$):</b> $110\text{ V}$
+            </div>
+            <div class="diagram-container">
+              <div class="diagram-title">2. Circuit Diagram: Heating Element Connected to 110 V Source</div>
+              <svg class="diagram-svg" viewBox="0 0 420 140" xmlns="http://www.w3.org/2000/svg">
+                <line x1="70" y1="30" x2="330" y2="30" stroke="#94a3b8" stroke-width="2.5"/>
+                <line x1="70" y1="110" x2="330" y2="110" stroke="#94a3b8" stroke-width="2.5"/>
+                <line x1="70" y1="30" x2="70" y2="55" stroke="#94a3b8" stroke-width="2.5"/>
+                <line x1="70" y1="85" x2="70" y2="110" stroke="#94a3b8" stroke-width="2.5"/>
+                <circle cx="70" cy="70" r="16" fill="#111722" stroke="#38bdf8" stroke-width="2"/>
+                <text x="70" y="67" fill="#38bdf8" font-size="11" font-weight="bold" text-anchor="middle">+</text>
+                <text x="70" y="80" fill="#38bdf8" font-size="11" font-weight="bold" text-anchor="middle">&minus;</text>
+                <text x="32" y="74" fill="#38bdf8" font-size="12" font-weight="bold" text-anchor="middle">110 V</text>
+                <polygon points="195,25 207,30 195,35" fill="#fbbf24"/>
+                <text x="200" y="20" fill="#fbbf24" font-size="12" font-weight="bold" text-anchor="middle">I = 5 A</text>
+                <line x1="330" y1="30" x2="330" y2="45" stroke="#94a3b8" stroke-width="2.5"/>
+                <rect x="316" y="45" width="28" height="50" rx="4" fill="#111722" stroke="#34d399" stroke-width="2"/>
+                <text x="330" y="74" fill="#34d399" font-size="11" font-weight="bold" text-anchor="middle">22 &Omega;</text>
+                <line x1="330" y1="95" x2="330" y2="110" stroke="#94a3b8" stroke-width="2.5"/>
+              </svg>
+            </div>
+            <div class="step-block">
+              <div class="step-label label-blue">3. Governing Law / Formula</div>
+              <div>By <b>Ohm's Law</b>, the electric current $I$ flowing through a resistor is directly proportional to the applied voltage $V$ and inversely proportional to its resistance $R$:</div>
+              <div>$$I = \frac{V}{R}$$</div>
+            </div>
+            <div class="step-block">
+              <div class="step-label label-amber">4. Step-by-Step Substitution</div>
+              <div>$$I = \frac{110\text{ V}}{22\ \Omega} = 5\text{ A}$$</div>
+            </div>
+            <div class="step-block">
+              <div class="step-label label-green">5. Final Result</div>
+              <span class="result-badge">$I = 5\text{ A}$</span>
+              <div style="margin-top:6px; font-size:0.78rem; color:var(--text-muted);">&bull; <b>Engineering Note:</b> A standard $110\text{ V}$ circuit drawing $5\text{ A}$ dissipates $P = V \cdot I = 550\text{ W}$ of thermal heat.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Q2 S1 -->
+      <div class="card s1-card" data-group="1">
+        <div class="card-header">
+          <span class="prob-tag">Q2: Electric Filament Lamp Rating (220 V, 100 W)</span>
+          <button class="sol-toggle-btn" onclick="toggleCardSolution(this)">👁️ Show Steps</button>
+        </div>
+        <div class="card-body">
+          <div class="question-prompt">
+            <b>Q2.</b> An electric filament lamp is labeled with the rating specification ($220\text{ V}$, $100\text{ W}$). When operated normally at its rated voltage, calculate:<br>
+            a) The electrical current passing through the lamp.<br>
+            b) The resistance of the lamp's incandescent filament.
+          </div>
+          <div class="solution-content">
+            <div class="given-box">
+              <div class="process-tag">💡 1. Given Data (SI Units)</div><br>
+              &bull; <b>Rated Voltage ($V$):</b> $220\text{ V}$<br>
+              &bull; <b>Rated Power ($P$):</b> $100\text{ W}$
+            </div>
+            <div class="step-block">
+              <div class="step-label label-blue">3. Governing Law / Formula</div>
+              <div>&bull; <b>a) Electric Current from Power Rating:</b> $$P = V \cdot I \implies I = \frac{P}{V}$$</div>
+              <div>&bull; <b>b) Filament Resistance:</b> $$R = \frac{V^2}{P} = \frac{V}{I}$$</div>
+            </div>
+            <div class="step-block">
+              <div class="step-label label-amber">4. Step-by-Step Substitution</div>
+              <div>&bull; <b>Part (a) Current passing through the lamp:</b></div>
+              <div>$$I = \frac{100\text{ W}}{220\text{ V}} = \frac{5}{11}\text{ A} \approx 0.4545\text{ A}$$</div>
+              <div>&bull; <b>Part (b) Resistance of the incandescent filament:</b></div>
+              <div>$$R = \frac{(220\text{ V})^2}{100\text{ W}} = \frac{48,400\text{ V}^2}{100\text{ W}} = 484\ \Omega$$</div>
+            </div>
+            <div class="step-block">
+              <div class="step-label label-green">5. Final Result</div>
+              <span class="result-badge">a) $I = 0.4545\text{ A}\ (454.5\text{ mA})$ &nbsp;|&nbsp; b) $R = 484\ \Omega$</span>
+              <div style="margin-top:6px; font-size:0.78rem; color:var(--text-muted);">&bull; <b>Engineering Note:</b> $484\ \Omega$ is the <i>hot</i> operating resistance of the tungsten filament at incandescent temperature ($\sim 2500^\circ\text{C}$).</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Q3 S1 -->
+      <div class="card s1-card" data-group="1">
+        <div class="card-header">
+          <span class="prob-tag">Q3: DC Motor Electrical Energy Consumption</span>
+          <button class="sol-toggle-btn" onclick="toggleCardSolution(this)">👁️ Show Steps</button>
+        </div>
+        <div class="card-body">
+          <div class="question-prompt">
+            <b>Q3.</b> An electric motor draws a current of $5\text{ A}$ from a $24\text{ V}$ DC power source. Determine the total electrical energy consumed by the motor during $30\text{ minutes}$ of continuous operation. Express your answer in Kilowatt-hours ($\text{kWh}$).
+          </div>
+          <div class="solution-content">
+            <div class="given-box">
+              <div class="process-tag">⚙️ 1. Given Data (SI &amp; Practical Units)</div><br>
+              &bull; <b>Current ($I$):</b> $5\text{ A}$<br>
+              &bull; <b>Supply Voltage ($V$):</b> $24\text{ V}$<br>
+              &bull; <b>Operating Time ($t$):</b> $30\text{ min} = \frac{30}{60}\text{ h} = 0.5\text{ hours} = 1800\text{ s}$
+            </div>
+            <div class="step-block">
+              <div class="step-label label-blue">3. Governing Law / Formula</div>
+              <div>&bull; <b>Electrical Power:</b> $$P = V \cdot I \quad (\text{W}) \implies P_{(\text{kW})} = \frac{V \cdot I}{1000}$$</div>
+              <div>&bull; <b>Electrical Energy:</b> $$E_{(\text{kWh})} = P_{(\text{kW})} \times t_{(\text{hours})}$$</div>
+            </div>
+            <div class="step-block">
+              <div class="step-label label-amber">4. Step-by-Step Substitution</div>
+              <div>1. Calculate input power $P$:</div>
+              <div>$$P = 24\text{ V} \times 5\text{ A} = 120\text{ W} = \frac{120}{1000}\text{ kW} = 0.12\text{ kW}$$</div>
+              <div>2. Calculate total energy consumed in $t = 0.5\text{ h}$:</div>
+              <div>$$E = 0.12\text{ kW} \times 0.5\text{ h} = 0.06\text{ kWh}\quad (\text{or } 60\text{ Wh} = 216\text{ kJ})$$</div>
+            </div>
+            <div class="step-block">
+              <div class="step-label label-green">5. Final Result</div>
+              <span class="result-badge">$E = 0.06\text{ kWh}\ (60\text{ Wh} = 216\text{ kJ})$</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Q4 S1 -->
+      <div class="card s1-card" data-group="1">
+        <div class="card-header">
+          <span class="prob-tag">Q4: Electrical Appliance Efficiency</span>
+          <button class="sol-toggle-btn" onclick="toggleCardSolution(this)">👁️ Show Steps</button>
+        </div>
+        <div class="card-body">
+          <div class="question-prompt">
+            <b>Q4.</b> An electrical appliance consumes $1.2\text{ kW}$ of power when operating. If it converts $960\text{ W}$ into useful mechanical output power, calculate the efficiency of this appliance.
+          </div>
+          <div class="solution-content">
+            <div class="given-box">
+              <div class="process-tag">📊 1. Given Data (SI Units)</div><br>
+              &bull; <b>Input Electrical Power ($P_{\text{in}}$):</b> $1.2\text{ kW} = 1.2 \times 10^3\text{ W} = 1200\text{ W}$<br>
+              &bull; <b>Useful Mechanical Output Power ($P_{\text{out}}$):</b> $960\text{ W}$
+            </div>
+            <div class="step-block">
+              <div class="step-label label-blue">3. Governing Law / Formula</div>
+              <div>$$\eta (\%) = \frac{P_{\text{out}}}{P_{\text{in}}} \times 100\%$$</div>
+            </div>
+            <div class="step-block">
+              <div class="step-label label-amber">4. Step-by-Step Substitution</div>
+              <div>$$\eta = \frac{960\text{ W}}{1200\text{ W}} \times 100\% = 0.80 \times 100\% = 80\%$$</div>
+            </div>
+            <div class="step-block">
+              <div class="step-label label-green">5. Final Result</div>
+              <span class="result-badge">$\eta = 80\%$</span>
+              <div style="margin-top:6px; font-size:0.78rem; color:var(--text-muted);">&bull; <b>Engineering Note:</b> The remaining $P_{\text{loss}} = 1200 - 960 = 240\text{ W}$ ($20\%$) is dissipated as heat and friction losses.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Q5 S1 -->
+      <div class="card s1-card" data-group="2">
+        <div class="card-header">
+          <span class="prob-tag">Q5: 4-Band Color-Coded Resistors</span>
+          <button class="sol-toggle-btn" onclick="toggleCardSolution(this)">👁️ Show Steps</button>
+        </div>
+        <div class="card-body">
+          <div class="question-prompt">
+            <b>Q5.</b> Find the resistance value in ohms and the percent tolerance for each of the color-coded resistors shown in the figure below:<br>
+            <b>(a)</b> Red – Violet – Orange – Silver &nbsp;|&nbsp; <b>(b)</b> Brown – Black – Brown – Silver &nbsp;|&nbsp; <b>(c)</b> Green – Blue – Green – Gold
+          </div>
+          <div class="solution-content">
+            <div class="given-box">
+              <div class="process-tag">🎨 1. Given Data (Color Bands from Sheet Figure)</div><br>
+              &bull; <b>Resistor (a):</b> Band 1 = Red ($2$), Band 2 = Violet ($7$), Band 3 = Orange ($\times 10^3$), Band 4 = Silver ($\pm 10\%$).<br>
+              &bull; <b>Resistor (b):</b> Band 1 = Brown ($1$), Band 2 = Black ($0$), Band 3 = Brown ($\times 10^1$), Band 4 = Silver ($\pm 10\%$).<br>
+              &bull; <b>Resistor (c):</b> Band 1 = Green ($5$), Band 2 = Blue ($6$), Band 3 = Green ($\times 10^5$), Band 4 = Gold ($\pm 5\%$).
+            </div>
+            <div class="diagram-container">
+              <div class="diagram-title">2. Visual Diagram: 4-Band Color-Coded Resistors (a), (b), and (c)</div>
+              <svg class="diagram-svg" viewBox="0 0 600 130" xmlns="http://www.w3.org/2000/svg">
+                <!-- (a) -->
+                <g transform="translate(10, 15)">
+                  <text x="90" y="12" fill="#38bdf8" font-size="11" font-weight="bold" text-anchor="middle">(a) Red - Violet - Orange - Silver</text>
+                  <line x1="5" y1="50" x2="175" y2="50" stroke="#94a3b8" stroke-width="4"/>
+                  <rect x="30" y="28" width="120" height="44" rx="12" fill="#d6b48a" stroke="#475569" stroke-width="1.5"/>
+                  <rect x="48" y="28" width="10" height="44" fill="#ef4444"/>
+                  <rect x="68" y="28" width="10" height="44" fill="#8b5cf6"/>
+                  <rect x="88" y="28" width="10" height="44" fill="#f97316"/>
+                  <rect x="122" y="28" width="10" height="44" fill="#cbd5e1"/>
+                  <text x="90" y="92" fill="#34d399" font-size="11" font-weight="bold" text-anchor="middle">27 k&Omega; &plusmn; 10%</text>
+                </g>
+                <!-- (b) -->
+                <g transform="translate(210, 15)">
+                  <text x="90" y="12" fill="#38bdf8" font-size="11" font-weight="bold" text-anchor="middle">(b) Brown - Black - Brown - Silver</text>
+                  <line x1="5" y1="50" x2="175" y2="50" stroke="#94a3b8" stroke-width="4"/>
+                  <rect x="30" y="28" width="120" height="44" rx="12" fill="#d6b48a" stroke="#475569" stroke-width="1.5"/>
+                  <rect x="48" y="28" width="10" height="44" fill="#78350f"/>
+                  <rect x="68" y="28" width="10" height="44" fill="#090d13"/>
+                  <rect x="88" y="28" width="10" height="44" fill="#78350f"/>
+                  <rect x="122" y="28" width="10" height="44" fill="#cbd5e1"/>
+                  <text x="90" y="92" fill="#34d399" font-size="11" font-weight="bold" text-anchor="middle">100 &Omega; &plusmn; 10%</text>
+                </g>
+                <!-- (c) -->
+                <g transform="translate(410, 15)">
+                  <text x="90" y="12" fill="#38bdf8" font-size="11" font-weight="bold" text-anchor="middle">(c) Green - Blue - Green - Gold</text>
+                  <line x1="5" y1="50" x2="175" y2="50" stroke="#94a3b8" stroke-width="4"/>
+                  <rect x="30" y="28" width="120" height="44" rx="12" fill="#d6b48a" stroke="#475569" stroke-width="1.5"/>
+                  <rect x="48" y="28" width="10" height="44" fill="#16a34a"/>
+                  <rect x="68" y="28" width="10" height="44" fill="#2563eb"/>
+                  <rect x="88" y="28" width="10" height="44" fill="#16a34a"/>
+                  <rect x="122" y="28" width="10" height="44" fill="#eab308"/>
+                  <text x="90" y="92" fill="#34d399" font-size="11" font-weight="bold" text-anchor="middle">5.6 M&Omega; &plusmn; 5%</text>
+                </g>
+              </svg>
+            </div>
+            <div class="step-block">
+              <div class="step-label label-blue">3. Governing Law / Formula</div>
+              <div>For a standard 4-band resistor:</div>
+              <div>$$R = (10 \cdot D_1 + D_2) \times 10^{M}\ \Omega \pm \text{Tolerance}\%$$</div>
+            </div>
+            <div class="step-block">
+              <div class="step-label label-amber">4. Step-by-Step Substitution</div>
+              <div>&bull; <b>Resistor (a) [Red – Violet – Orange – Silver]:</b></div>
+              <div>$$R_a = 27 \times 10^3\ \Omega \pm 10\% = 27,000\ \Omega \pm 10\% = 27\text{ k}\Omega \pm 10\%$$</div>
+              <div>&bull; <b>Resistor (b) [Brown – Black – Brown – Silver]:</b></div>
+              <div>$$R_b = 10 \times 10^1\ \Omega \pm 10\% = 100\ \Omega \pm 10\%$$</div>
+              <div>&bull; <b>Resistor (c) [Green – Blue – Green – Gold]:</b></div>
+              <div>$$R_c = 56 \times 10^5\ \Omega \pm 5\% = 5,600,000\ \Omega \pm 5\% = 5.6\text{ M}\Omega \pm 5\%$$</div>
+            </div>
+            <div class="step-block">
+              <div class="step-label label-green">5. Final Result</div>
+              <span class="result-badge">(a) $27,000\ \Omega\ (27\text{ k}\Omega) \pm 10\%$</span>
+              <span class="result-badge">(b) $100\ \Omega \pm 10\%$</span>
+              <span class="result-badge">(c) $5,600,000\ \Omega\ (5.6\text{ M}\Omega) \pm 5\%$</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Q6 S1 -->
+      <div class="card s1-card" data-group="2">
+        <div class="card-header">
+          <span class="prob-tag">Q6: Electric Heater Resistance &amp; Energy Consumed</span>
+          <button class="sol-toggle-btn" onclick="toggleCardSolution(this)">👁️ Show Steps</button>
+        </div>
+        <div class="card-body">
+          <div class="question-prompt">
+            <b>Q6.</b> An electric heater operates at a voltage of $230\text{ V}$ and draws a current of $8.5\text{ A}$. Calculate the resistance of the heater element and the total energy consumed if it runs continuously for $2.5\text{ hours}$.
+          </div>
+          <div class="solution-content">
+            <div class="given-box">
+              <div class="process-tag">🔥 1. Given Data (SI &amp; Practical Units)</div><br>
+              &bull; <b>Voltage ($V$):</b> $230\text{ V}$<br>
+              &bull; <b>Current ($I$):</b> $8.5\text{ A}$<br>
+              &bull; <b>Time ($t$):</b> $2.5\text{ hours} = 2.5 \times 3600\text{ s} = 9000\text{ s}$
+            </div>
+            <div class="step-block">
+              <div class="step-label label-blue">3. Governing Law / Formula</div>
+              <div>$$R = \frac{V}{I} \qquad\text{and}\qquad E = P \cdot t = (V \cdot I) \cdot t$$</div>
+            </div>
+            <div class="step-block">
+              <div class="step-label label-amber">4. Step-by-Step Substitution</div>
+              <div>1. <b>Heater Element Resistance ($R$):</b></div>
+              <div>$$R = \frac{230\text{ V}}{8.5\text{ A}} = 27.0588\ \Omega \approx 27.06\ \Omega$$</div>
+              <div>2. <b>Operating Power ($P$):</b></div>
+              <div>$$P = 230\text{ V} \times 8.5\text{ A} = 1955\text{ W} = 1.955\text{ kW}$$</div>
+              <div>3. <b>Total Electrical Energy Consumed ($E$):</b></div>
+              <div>&bull; In Kilowatt-hours ($\text{kWh}$): $$E = 1.955\text{ kW} \times 2.5\text{ h} = 4.8875\text{ kWh}$$</div>
+              <div>&bull; In Joules ($\text{J}$): $$E = 1955\text{ W} \times 9000\text{ s} = 17,595,000\text{ J} = 17.595\text{ MJ}$$</div>
+            </div>
+            <div class="step-block">
+              <div class="step-label label-green">5. Final Result</div>
+              <span class="result-badge">$R = 27.06\ \Omega$ &nbsp;|&nbsp; $E = 4.8875\text{ kWh}\ (17.595\text{ MJ})$</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Q7 S1 -->
+      <div class="card s1-card" data-group="2">
+        <div class="card-header">
+          <span class="prob-tag">Q7: 100-Meter Resistor Wire Current &amp; Resistance</span>
+          <button class="sol-toggle-btn" onclick="toggleCardSolution(this)">👁️ Show Steps</button>
+        </div>
+        <div class="card-body">
+          <div class="question-prompt">
+            <b>Q7.</b> A $100\text{-meter}$ resistor wire dissipates $60\text{ W}$ when connected across a $12\text{ V}$ DC source. Determine the current flowing through the wire and its resistance.
+          </div>
+          <div class="solution-content">
+            <div class="given-box">
+              <div class="process-tag">⚡ 1. Given Data (SI Units)</div><br>
+              &bull; <b>Wire Length ($L$):</b> $100\text{ m}$<br>
+              &bull; <b>Dissipated Power ($P$):</b> $60\text{ W}$<br>
+              &bull; <b>DC Source Voltage ($V$):</b> $12\text{ V}$
+            </div>
+            <div class="step-block">
+              <div class="step-label label-blue">3. Governing Law / Formula</div>
+              <div>$$I = \frac{P}{V} \qquad\text{and}\qquad R = \frac{V}{I} = \frac{V^2}{P}$$</div>
+            </div>
+            <div class="step-block">
+              <div class="step-label label-amber">4. Step-by-Step Substitution</div>
+              <div>1. <b>Current flowing through the wire ($I$):</b></div>
+              <div>$$I = \frac{60\text{ W}}{12\text{ V}} = 5\text{ A}$$</div>
+              <div>2. <b>Total resistance of the wire ($R$):</b></div>
+              <div>$$R = \frac{12\text{ V}}{5\text{ A}} = 2.4\ \Omega \quad\left(\text{or } R = \frac{12^2}{60} = \frac{144}{60} = 2.4\ \Omega\right)$$</div>
+            </div>
+            <div class="step-block">
+              <div class="step-label label-green">5. Final Result</div>
+              <span class="result-badge">$I = 5\text{ A}$ &nbsp;|&nbsp; $R = 2.4\ \Omega$</span>
+              <div style="margin-top:6px; font-size:0.78rem; color:var(--text-muted);">&bull; <b>Engineering Note:</b> The resistance per unit length of this wire is $2.4\ \Omega / 100\text{ m} = 0.024\ \Omega/\text{m}$.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Q8 S1 -->
+      <div class="card s1-card" data-group="2">
+        <div class="card-header">
+          <span class="prob-tag">Q8: Electrical Resistance of a Copper Wire</span>
+          <button class="sol-toggle-btn" onclick="toggleCardSolution(this)">👁️ Show Steps</button>
+        </div>
+        <div class="card-body">
+          <div class="question-prompt">
+            <b>Q8.</b> A copper wire has a length of $50\text{ m}$ and a cross-sectional diameter of $2\text{ mm}$. The resistivity of copper is $1.7 \times 10^{-8}\ \Omega\cdot\text{m}$, calculate the total electrical resistance of the wire.
+          </div>
+          <div class="solution-content">
+            <div class="given-box">
+              <div class="process-tag">📏 1. Given Data (SI Units)</div><br>
+              &bull; <b>Length ($L$):</b> $50\text{ m}$<br>
+              &bull; <b>Diameter ($d$):</b> $2\text{ mm} = 2 \times 10^{-3}\text{ m} \implies \text{Radius } r = 1\text{ mm} = 1 \times 10^{-3}\text{ m}$<br>
+              &bull; <b>Resistivity ($\rho$):</b> $1.7 \times 10^{-8}\ \Omega\cdot\text{m}$
+            </div>
+            <div class="diagram-container">
+              <div class="diagram-title">2. Physical Geometry of Cylindrical Copper Conductor</div>
+              <svg class="diagram-svg" viewBox="0 0 460 110" xmlns="http://www.w3.org/2000/svg">
+                <rect x="80" y="30" width="280" height="45" fill="#b45309" stroke="#f59e0b" stroke-width="2"/>
+                <ellipse cx="80" cy="52.5" rx="14" ry="22.5" fill="#d97706" stroke="#fbbf24" stroke-width="2"/>
+                <ellipse cx="360" cy="52.5" rx="14" ry="22.5" fill="#92400e" stroke="#fbbf24" stroke-width="2"/>
+                <line x1="80" y1="88" x2="360" y2="88" stroke="#38bdf8" stroke-width="1.5"/>
+                <text x="220" y="102" fill="#38bdf8" font-size="11" font-weight="bold" text-anchor="middle">L = 50 m , &rho; = 1.7 &times; 10&#8315;&#8312; &Omega;&middot;m</text>
+                <text x="45" y="56" fill="#34d399" font-size="11" font-weight="bold" text-anchor="middle">d = 2 mm</text>
+              </svg>
+            </div>
+            <div class="step-block">
+              <div class="step-label label-blue">3. Governing Law / Formula</div>
+              <div>$$A = \pi r^2 = \frac{\pi d^2}{4} \qquad\text{and}\qquad R = \rho \frac{L}{A}$$</div>
+            </div>
+            <div class="step-block">
+              <div class="step-label label-amber">4. Step-by-Step Substitution</div>
+              <div>1. <b>Cross-sectional area ($A$):</b></div>
+              <div>$$A = \pi \times (1 \times 10^{-3}\text{ m})^2 = \pi \times 10^{-6}\text{ m}^2 \approx 3.1416 \times 10^{-6}\text{ m}^2$$</div>
+              <div>2. <b>Total wire resistance ($R$):</b></div>
+              <div>$$R = \frac{1.7 \times 10^{-8}\ \Omega\cdot\text{m} \times 50\text{ m}}{3.1416 \times 10^{-6}\text{ m}^2} = \frac{8.5 \times 10^{-7}}{3.1416 \times 10^{-6}} \approx 0.27056\ \Omega$$</div>
+            </div>
+            <div class="step-block">
+              <div class="step-label label-green">5. Final Result</div>
+              <span class="result-badge">$R = 0.2706\ \Omega\ (270.6\text{ m}\Omega)$</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Q9 S1 -->
+      <div class="card s1-card" data-group="3">
+        <div class="card-header">
+          <span class="prob-tag">Q9: Stretching a Cylindrical Aluminum Wire</span>
+          <button class="sol-toggle-btn" onclick="toggleCardSolution(this)">👁️ Show Steps</button>
+        </div>
+        <div class="card-body">
+          <div class="question-prompt">
+            <b>Q9.</b> A cylindrical aluminum wire of length $L$ and radius $r$ has resistance $R$. If the wire is uniformly stretched to twice its original length without changing its total volume, determine its new resistance in terms of $R$.
+          </div>
+          <div class="solution-content">
+            <div class="given-box">
+              <div class="process-tag">🔄 1. Given Data</div><br>
+              &bull; <b>Initial State:</b> Length $L_1 = L$, Cross-sectional area $A_1 = \pi r^2$, Resistance $R_1 = R = \rho \frac{L}{A_1}$<br>
+              &bull; <b>Final State (Stretched):</b> New length $L_2 = 2L$, Constant Volume $\text{Vol}_1 = \text{Vol}_2$
+            </div>
+            <div class="step-block">
+              <div class="step-label label-blue">3. Governing Law / Formula</div>
+              <div>$$\text{Volume Invariance: } A_1 \cdot L_1 = A_2 \cdot L_2 \qquad\text{and}\qquad R = \rho \frac{L}{A}$$</div>
+            </div>
+            <div class="step-block">
+              <div class="step-label label-amber">4. Step-by-Step Substitution</div>
+              <div>1. Find the new cross-sectional area $A_2$ from constant volume:</div>
+              <div>$$A_1 \cdot L = A_2 \cdot (2L) \implies A_2 = \frac{A_1}{2}$$</div>
+              <div>2. Substitute $L_2 = 2L$ and $A_2 = \frac{A_1}{2}$ into the resistance formula:</div>
+              <div>$$R_{\text{new}} = \rho \frac{L_2}{A_2} = \rho \frac{2L}{A_1 / 2} = 4 \left(\rho \frac{L}{A_1}\right) = 4R$$</div>
+            </div>
+            <div class="step-block">
+              <div class="step-label label-green">5. Final Result</div>
+              <span class="result-badge">$R_{\text{new}} = 4R$</span>
+              <div style="margin-top:6px; font-size:0.78rem; color:var(--text-muted);">&bull; <b>Engineering Rule:</b> Stretching a wire uniformly by a factor $n$ multiplies its resistance by $n^2$ ($R_{\text{new}} = n^2 R$).</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Q10 S1 -->
+      <div class="card s1-card" data-group="3">
+        <div class="card-header">
+          <span class="prob-tag">Q10: Ratio of Resistances of Two Conductors</span>
+          <button class="sol-toggle-btn" onclick="toggleCardSolution(this)">👁️ Show Steps</button>
+        </div>
+        <div class="card-body">
+          <div class="question-prompt">
+            <b>Q10.</b> Two conductors made of the same material have lengths in the ratio $3:1$ and radii in the ratio $1:2$. Find the ratio of their electrical resistances ($R_1 : R_2$).
+          </div>
+          <div class="solution-content">
+            <div class="given-box">
+              <div class="process-tag">📐 1. Given Data</div><br>
+              &bull; <b>Same Material:</b> $\rho_1 = \rho_2 = \rho$<br>
+              &bull; <b>Length Ratio:</b> $\frac{L_1}{L_2} = \frac{3}{1}$<br>
+              &bull; <b>Radius Ratio:</b> $\frac{r_1}{r_2} = \frac{1}{2}$
+            </div>
+            <div class="step-block">
+              <div class="step-label label-blue">3. Governing Law / Formula</div>
+              <div>$$R = \rho \frac{L}{A} = \rho \frac{L}{\pi r^2} \implies \frac{R_1}{R_2} = \left(\frac{\rho_1}{\rho_2}\right) \cdot \left(\frac{L_1}{L_2}\right) \cdot \left(\frac{r_2}{r_1}\right)^2$$</div>
+            </div>
+            <div class="step-block">
+              <div class="step-label label-amber">4. Step-by-Step Substitution</div>
+              <div>$$\frac{R_1}{R_2} = (1) \times \left(\frac{3}{1}\right) \times \left(\frac{2}{1}\right)^2 = 3 \times 4 = \frac{12}{1}$$</div>
+            </div>
+            <div class="step-block">
+              <div class="step-label label-green">5. Final Result</div>
+              <span class="result-badge">$R_1 : R_2 = 12 : 1$</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Q11 S1 -->
+      <div class="card s1-card" data-group="3">
+        <div class="card-header">
+          <span class="prob-tag">Q11: Power Ratio of Two Parallel Copper Wires</span>
+          <button class="sol-toggle-btn" onclick="toggleCardSolution(this)">👁️ Show Steps</button>
+        </div>
+        <div class="card-body">
+          <div class="question-prompt">
+            <b>Q11.</b> Two cylindrical copper wires, A and B, are connected in parallel across a constant voltage supply. Wire A has a length $L$ and a cross-sectional radius $r$. Wire B has a length $2L$ and a cross-sectional radius $2r$. Deduce the ratio of the electric power dissipated in wire A to that in wire B ($P_A : P_B$).
+          </div>
+          <div class="solution-content">
+            <div class="given-box">
+              <div class="process-tag">🔀 1. Given Data</div><br>
+              &bull; <b>Parallel Connection:</b> $V_A = V_B = V$ (same voltage across both wires)<br>
+              &bull; <b>Same Material (Copper):</b> $\rho_A = \rho_B = \rho$<br>
+              &bull; <b>Wire A Geometry:</b> $L_A = L$, $r_A = r$<br>
+              &bull; <b>Wire B Geometry:</b> $L_B = 2L$, $r_B = 2r$
+            </div>
+            <div class="step-block">
+              <div class="step-label label-blue">3. Governing Law / Formula</div>
+              <div>For parallel resistors across a constant voltage $V$:</div>
+              <div>$$P = \frac{V^2}{R} \implies \frac{P_A}{P_B} = \frac{R_B}{R_A} \qquad\text{where}\qquad R = \rho \frac{L}{\pi r^2}$$</div>
+            </div>
+            <div class="step-block">
+              <div class="step-label label-amber">4. Step-by-Step Substitution</div>
+              <div>1. Find the resistance ratio $\frac{R_A}{R_B}$:</div>
+              <div>$$R_A = \rho \frac{L}{\pi r^2}, \qquad R_B = \rho \frac{2L}{\pi (2r)^2} = \rho \frac{2L}{4\pi r^2} = \frac{1}{2} \left(\rho \frac{L}{\pi r^2}\right) = \frac{1}{2} R_A$$</div>
+              <div>$$\implies \frac{R_B}{R_A} = \frac{1}{2}$$</div>
+              <div>2. Substitute into the parallel power ratio:</div>
+              <div>$$\frac{P_A}{P_B} = \frac{V^2 / R_A}{V^2 / R_B} = \frac{R_B}{R_A} = \frac{1}{2}$$</div>
+            </div>
+            <div class="step-block">
+              <div class="step-label label-green">5. Final Result</div>
+              <span class="result-badge">$P_A : P_B = 1 : 2$</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Q12 S1 -->
+      <div class="card s1-card" data-group="4">
+        <div class="card-header">
+          <span class="prob-tag">Q12: Current &amp; Power Dissipated in a 12 &Omega; Resistor</span>
+          <button class="sol-toggle-btn" onclick="toggleCardSolution(this)">👁️ Show Steps</button>
+        </div>
+        <div class="card-body">
+          <div class="question-prompt">
+            <b>Q12.</b> A resistive element of $12\ \Omega$ is connected across a $24\text{ V}$ battery with negligible internal resistance. Calculate:<br>
+            a) The electric current supplied by the battery.<br>
+            b) The power dissipated across the $12\ \Omega$ resistor.
+          </div>
+          <div class="solution-content">
+            <div class="given-box">
+              <div class="process-tag">🔋 1. Given Data (SI Units)</div><br>
+              &bull; <b>Resistance ($R$):</b> $12\ \Omega$<br>
+              &bull; <b>Battery Voltage ($V$):</b> $24\text{ V}$ ($r_{\text{internal}} = 0\ \Omega$)
+            </div>
+            <div class="step-block">
+              <div class="step-label label-blue">3. Governing Law / Formula</div>
+              <div>$$\text{a) } I = \frac{V}{R} \qquad\text{and}\qquad \text{b) } P = V \cdot I = I^2 \cdot R = \frac{V^2}{R}$$</div>
+            </div>
+            <div class="step-block">
+              <div class="step-label label-amber">4. Step-by-Step Substitution</div>
+              <div>&bull; <b>Part (a) Electric current supplied by the battery:</b></div>
+              <div>$$I = \frac{24\text{ V}}{12\ \Omega} = 2\text{ A}$$</div>
+              <div>&bull; <b>Part (b) Power dissipated across the $12\ \Omega$ resistor:</b></div>
+              <div>$$P = I^2 \cdot R = (2\text{ A})^2 \times 12\ \Omega = 4 \times 12 = 48\text{ W}$$</div>
+            </div>
+            <div class="step-block">
+              <div class="step-label label-green">5. Final Result</div>
+              <span class="result-badge">a) $I = 2\text{ A}$ &nbsp;|&nbsp; b) $P = 48\text{ W}$</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Q13 S1 -->
+      <div class="card s1-card" data-group="4">
+        <div class="card-header">
+          <span class="prob-tag">Q13: Monthly Electricity Cost of a Water Heater</span>
+          <button class="sol-toggle-btn" onclick="toggleCardSolution(this)">👁️ Show Steps</button>
+        </div>
+        <div class="card-body">
+          <div class="question-prompt">
+            <b>Q13.</b> An electric water heater is rated at $3\text{ kW}$, $220\text{ V}$. It is used daily for an average of $4\text{ hours}$. If the cost of electricity is $\$0.15\text{ per kWh}$, calculate the total cost of operating this water heater for a full month of $30\text{ days}$.
+          </div>
+          <div class="solution-content">
+            <div class="given-box">
+              <div class="process-tag">💰 1. Given Data</div><br>
+              &bull; <b>Rated Power ($P$):</b> $3\text{ kW}$<br>
+              &bull; <b>Rated Voltage ($V$):</b> $220\text{ V}$<br>
+              &bull; <b>Daily Operating Time:</b> $4\text{ hours/day}$ for $30\text{ days}$<br>
+              &bull; <b>Electricity Tariff Rate:</b> $\$0.15\text{ / kWh}$
+            </div>
+            <div class="step-block">
+              <div class="step-label label-blue">3. Governing Law / Formula</div>
+              <div>$$E_{\text{total (kWh)}} = P_{\text{(kW)}} \times t_{\text{daily}} \times N_{\text{days}} \qquad\text{and}\qquad \text{Total Cost} = E_{\text{total (kWh)}} \times \text{Rate}$$</div>
+            </div>
+            <div class="step-block">
+              <div class="step-label label-amber">4. Step-by-Step Substitution</div>
+              <div>1. <b>Total operating hours in 30 days:</b></div>
+              <div>$$t_{\text{total}} = 4\text{ hours/day} \times 30\text{ days} = 120\text{ hours}$$</div>
+              <div>2. <b>Total electrical energy consumed in a month ($E_{\text{total}}$):</b></div>
+              <div>$$E_{\text{total}} = 3\text{ kW} \times 120\text{ h} = 360\text{ kWh}$$</div>
+              <div>3. <b>Total monthly operating cost:</b></div>
+              <div>$$\text{Total Cost} = 360\text{ kWh} \times \$0.15/\text{kWh} = \$54.00$$</div>
+            </div>
+            <div class="step-block">
+              <div class="step-label label-green">5. Final Result</div>
+              <span class="result-badge">$\text{Total Monthly Energy} = 360\text{ kWh}$ &nbsp;|&nbsp; $\text{Total Cost} = \$54.00$</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sheet 1A Quick Answer Key Table -->
+      <div class="card s1-card">
+        <div class="card-header">
+          <span class="prob-tag">📋 Quick Answer Key: Sheet (1A) — Final Numerical Results</span>
+        </div>
+        <div class="card-body">
+          <div class="table-scroll-container">
+            <table>
+              <thead>
+                <tr><th>Question</th><th>Topic / Description</th><th>Final Verified Answer</th></tr>
+              </thead>
+              <tbody>
+                <tr><td><b>Q1</b></td><td>Heating Element ($22\ \Omega$, $110\text{ V}$)</td><td>$I = 5\text{ A}$</td></tr>
+                <tr><td><b>Q2</b></td><td>Filament Lamp ($220\text{ V}$, $100\text{ W}$)</td><td>a) $I = 0.4545\text{ A}$ &nbsp;|&nbsp; b) $R = 484\ \Omega$</td></tr>
+                <tr><td><b>Q3</b></td><td>DC Motor Energy ($5\text{ A}$, $24\text{ V}$, $30\text{ min}$)</td><td>$E = 0.06\text{ kWh}\ (60\text{ Wh} = 216\text{ kJ})$</td></tr>
+                <tr><td><b>Q4</b></td><td>Appliance Efficiency ($1.2\text{ kW}$ in, $960\text{ W}$ out)</td><td>$\eta = 80\%$</td></tr>
+                <tr><td><b>Q5</b></td><td>4-Band Color-Coded Resistors</td><td>(a) $27\text{ k}\Omega \pm 10\%$ &nbsp;|&nbsp; (b) $100\ \Omega \pm 10\%$ &nbsp;|&nbsp; (c) $5.6\text{ M}\Omega \pm 5\%$</td></tr>
+                <tr><td><b>Q6</b></td><td>Electric Heater ($230\text{ V}$, $8.5\text{ A}$, $2.5\text{ h}$)</td><td>$R = 27.06\ \Omega$ &nbsp;|&nbsp; $E = 4.8875\text{ kWh}\ (17.595\text{ MJ})$</td></tr>
+                <tr><td><b>Q7</b></td><td>Resistor Wire ($60\text{ W}$, $12\text{ V}$)</td><td>$I = 5\text{ A}$ &nbsp;|&nbsp; $R = 2.4\ \Omega$</td></tr>
+                <tr><td><b>Q8</b></td><td>Copper Wire ($L=50\text{ m}$, $d=2\text{ mm}$)</td><td>$R = 0.2706\ \Omega$</td></tr>
+                <tr><td><b>Q9</b></td><td>Wire Stretched to $2L$ (Constant Volume)</td><td>$R_{\text{new}} = 4R$</td></tr>
+                <tr><td><b>Q10</b></td><td>Resistance Ratio ($L_1:L_2 = 3:1$, $r_1:r_2 = 1:2$)</td><td>$R_1 : R_2 = 12 : 1$</td></tr>
+                <tr><td><b>Q11</b></td><td>Parallel Copper Wires Power Ratio</td><td>$P_A : P_B = 1 : 2$</td></tr>
+                <tr><td><b>Q12</b></td><td>Battery &amp; $12\ \Omega$ Resistor ($24\text{ V}$)</td><td>a) $I = 2\text{ A}$ &nbsp;|&nbsp; b) $P = 48\text{ W}$</td></tr>
+                <tr><td><b>Q13</b></td><td>Water Heater Monthly Cost ($3\text{ kW}$, $4\text{ h/day}$)</td><td>$E = 360\text{ kWh}$ &nbsp;|&nbsp; $\text{Cost} = \$54.00$</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ==================== SHEET 2A CONTAINER ==================== -->
+    <div id="sheet-2-container" style="display: none;">
+
+      <!-- Sheet 2A Summary Card -->
+      <div class="summary-card">
+        <div class="summary-header">📌 Key Laws, Circuit Rules &amp; Fault Diagnosis (Sheet 2A)</div>
+        <div class="summary-grid">
+          <div class="summary-item">&bull; <b>Kirchhoff's Voltage Law (KVL):</b> $\sum_{\text{loop}} V = 0 \implies \sum V_{\text{rises}} = \sum V_{\text{drops}}$</div>
+          <div class="summary-item">&bull; <b>Kirchhoff's Current Law (KCL):</b> $\sum I_{\text{in}} = \sum I_{\text{out}}$ at any node/junction</div>
+          <div class="summary-item">&bull; <b>Series Resistors:</b> $R_T = R_1 + R_2 + \dots + R_n$, same current $I$ flows through all</div>
+          <div class="summary-item">&bull; <b>Parallel Resistors:</b> $\frac{1}{R_T} = \sum \frac{1}{R_i}$, same voltage $V$ across all branches</div>
+          <div class="summary-item">&bull; <b>Point-to-Point Voltage:</b> $V_{AB} = V_A - V_B$ (sum of potential drops from $A$ to $B$)</div>
+          <div class="summary-item">&bull; <b>Series Open Fault:</b> $I = 0\text{ A}$, $V_{\text{intact}} = 0\text{ V}$, $V_{\text{open element}} = V_{\text{source}}$</div>
+          <div class="summary-item">&bull; <b>Series Short Fault:</b> $R_{\text{shorted}} = 0\ \Omega$, $V_{\text{shorted}} = 0\text{ V}$, circuit current $I$ increases</div>
+          <div class="summary-item">&bull; <b>Parallel Open Fault:</b> Open branch draws $I = 0\text{ A}$, reducing total current $I_T$ by $V_S/R_{\text{open}}$</div>
+        </div>
+      </div>
+
+      <!-- Q1 (Part 1: Fig 1) S2 -->
+      <div class="card s2-card" data-group="1">
+        <div class="card-header">
+          <span class="prob-tag">Q1 — Part (1): KVL Analysis on Single-Loop Circuit — Fig. (1)</span>
+          <button class="sol-toggle-btn" onclick="toggleCardSolution(this)">👁️ Show Steps</button>
+        </div>
+        <div class="card-body">
+          <div class="question-prompt">
+            <b>Q1 (1).</b> Using Kirchhoff's Voltage Law (KVL), analyze the circuit given in <b>Fig. (1)</b> to determine the unknown voltage $V_x$.
+          </div>
+          <div class="solution-content">
+            <div class="given-box">
+              <div class="process-tag">🔍 1. Given Data (From Fig. 1 Polarities &amp; Values)</div><br>
+              &bull; <b>Loop Current:</b> $I = 2\text{ A}$ (flowing clockwise)<br>
+              &bull; <b>Left Source ($9\text{ V}$):</b> Top terminal is $(-)$, bottom terminal is $(+)$<br>
+              &bull; <b>Element 1:</b> $V_1 = 12\text{ V}$ with $(+)$ on left, $(-)$ on right<br>
+              &bull; <b>Top Source ($24\text{ V}$):</b> Left terminal is $(-)$, right terminal is $(+)$<br>
+              &bull; <b>Element 2:</b> Voltage $V_x$ with $(+)$ on left, $(-)$ on right<br>
+              &bull; <b>Element 3:</b> $V_3 = 16\text{ V}$ with $(+)$ on left, $(-)$ on right<br>
+              &bull; <b>Right Source ($12\text{ V}$):</b> Top terminal is $(-)$, bottom terminal is $(+)$
+            </div>
+            <div class="diagram-container">
+              <div class="diagram-title">2. Circuit Diagram: Fig. (1) — Single-Loop KVL Analysis</div>
+              <svg class="diagram-svg" viewBox="0 0 600 210" xmlns="http://www.w3.org/2000/svg">
+                <!-- Loop wires -->
+                <rect x="60" y="45" width="480" height="130" fill="none" stroke="#94a3b8" stroke-width="2.5"/>
+                <!-- Current arrow -->
+                <polygon points="95,40 107,45 95,50" fill="#fbbf24"/>
+                <text x="95" y="34" fill="#fbbf24" font-size="12" font-weight="bold" text-anchor="middle">2 A</text>
+                <!-- Left 9V source (- top, + bottom) -->
+                <circle cx="60" cy="115" r="20" fill="#111722" stroke="#f43f5e" stroke-width="2"/>
+                <text x="60" y="110" fill="#f43f5e" font-size="13" font-weight="bold" text-anchor="middle">&minus;</text>
+                <text x="60" y="125" fill="#f43f5e" font-size="13" font-weight="bold" text-anchor="middle">+</text>
+                <text x="25" y="119" fill="#e2e8f0" font-size="12" font-weight="bold" text-anchor="middle">9 V</text>
+                <!-- Box 1: 12V (+ left, - right) -->
+                <rect x="130" y="27" width="42" height="36" fill="#111722" stroke="#38bdf8" stroke-width="2"/>
+                <text x="151" y="50" fill="#38bdf8" font-size="13" font-weight="bold" text-anchor="middle">1</text>
+                <text x="122" y="76" fill="#38bdf8" font-size="12" font-weight="bold">+ &nbsp;&nbsp;12 V&nbsp;&nbsp; &minus;</text>
+                <!-- Top 24V circle (- left, + right) -->
+                <circle cx="245" cy="45" r="20" fill="#111722" stroke="#f43f5e" stroke-width="2"/>
+                <text x="235" y="49" fill="#f43f5e" font-size="13" font-weight="bold" text-anchor="middle">&minus;</text>
+                <text x="255" y="49" fill="#f43f5e" font-size="13" font-weight="bold" text-anchor="middle">+</text>
+                <text x="245" y="82" fill="#e2e8f0" font-size="12" font-weight="bold" text-anchor="middle">24 V</text>
+                <!-- Box 2: Vx (+ left, - right) -->
+                <rect x="325" y="27" width="42" height="36" fill="#111722" stroke="#34d399" stroke-width="2"/>
+                <text x="346" y="50" fill="#34d399" font-size="13" font-weight="bold" text-anchor="middle">2</text>
+                <text x="346" y="82" fill="#34d399" font-size="13" font-weight="bold" text-anchor="middle">+ &nbsp; V_x &nbsp; &minus;</text>
+                <!-- Box 3: 16V (+ left, - right) -->
+                <rect x="435" y="27" width="42" height="36" fill="#111722" stroke="#38bdf8" stroke-width="2"/>
+                <text x="456" y="50" fill="#38bdf8" font-size="13" font-weight="bold" text-anchor="middle">3</text>
+                <text x="456" y="18" fill="#38bdf8" font-size="12" font-weight="bold" text-anchor="middle">+ &nbsp;16 V&nbsp; &minus;</text>
+                <!-- Right 12V source (- top, + bottom) -->
+                <circle cx="540" cy="115" r="20" fill="#111722" stroke="#f43f5e" stroke-width="2"/>
+                <text x="540" y="110" fill="#f43f5e" font-size="13" font-weight="bold" text-anchor="middle">&minus;</text>
+                <text x="540" y="125" fill="#f43f5e" font-size="13" font-weight="bold" text-anchor="middle">+</text>
+                <text x="576" y="119" fill="#e2e8f0" font-size="12" font-weight="bold" text-anchor="middle">12 V</text>
+              </svg>
+            </div>
+            <div class="step-block">
+              <div class="step-label label-blue">3. Governing Law / Formula</div>
+              <div>By <b>Kirchhoff's Voltage Law (KVL)</b> around the closed loop in the clockwise (CW) direction (using the sign of the first terminal encountered for each element):</div>
+              <div>$$\sum_{\text{CW}} V = 0$$</div>
+            </div>
+            <div class="step-block">
+              <div class="step-label label-amber">4. Step-by-Step Substitution</div>
+              <div>Starting from the bottom-left corner and moving <b>clockwise (CW)</b>:</div>
+              <div>&bull; Pass through $9\text{ V}$ source from $(+)$ to $(-)$: $+9\text{ V}$</div>
+              <div>&bull; Pass through Element 1 from $(+)$ to $(-)$: $+12\text{ V}$</div>
+              <div>&bull; Pass through $24\text{ V}$ source from $(-)$ to $(+)$: $-24\text{ V}$</div>
+              <div>&bull; Pass through Element 2 from $(+)$ to $(-)$: $+V_x$</div>
+              <div>&bull; Pass through Element 3 from $(+)$ to $(-)$: $+16\text{ V}$</div>
+              <div>&bull; Pass through $12\text{ V}$ source from $(-)$ to $(+)$: $-12\text{ V}$</div>
+              <div>$$(+9) + (+12) + (-24) + V_x + (+16) + (-12) = 0$$</div>
+              <div>$$1 + V_x = 0 \implies V_x = -1\text{ V}$$</div>
+            </div>
+            <div class="step-block">
+              <div class="step-label label-green">5. Final Result</div>
+              <span class="result-badge">$V_x = -1\text{ V}$</span>
+              <div style="margin-top:6px; font-size:0.78rem; color:var(--text-muted);">&bull; <b>Engineering Note:</b> Since $I = 2\text{ A}$ enters the $(+)$ terminal of Element 2 and $V_x = -1\text{ V}$, Element 2 is actually supplying $P = |V_x \cdot I| = 2\text{ W}$ to the circuit.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Q1 (Part 2: Fig 2) S2 -->
+      <div class="card s2-card" data-group="1">
+        <div class="card-header">
+          <span class="prob-tag">Q1 — Part (2): Series Resistor Loop Analysis — Fig. (2)</span>
+          <button class="sol-toggle-btn" onclick="toggleCardSolution(this)">👁️ Show Steps</button>
+        </div>
+        <div class="card-body">
+          <div class="question-prompt">
+            <b>Q1 (2).</b> Using KVL, analyze the circuit given in <b>Fig. (2)</b> to determine:<br>
+            a) The circuit current.<br>
+            b) The total resistance of the circuit.<br>
+            c) The value of the unknown resistance, $R$.<br>
+            d) The voltage drop across all resistors in the circuit.<br>
+            e) The power dissipated by all resistors.
+          </div>
+          <div class="solution-content">
+            <div class="given-box">
+              <div class="process-tag">⚡ 1. Given Data (SI Units)</div><br>
+              &bull; <b>Source Voltage ($E$):</b> $130\text{ V}$<br>
+              &bull; <b>Known Resistors:</b> $R_1 = 3\text{ k}\Omega = 3000\ \Omega$, $R_2 = 4\text{ k}\Omega = 4000\ \Omega$, $R_3 = 1\text{ k}\Omega = 1000\ \Omega$<br>
+              &bull; <b>Power Dissipated in $R_3$ ($1\text{ k}\Omega$):</b> $P_{1\text{k}\Omega} = 100\text{ mW} = 0.1\text{ W}$<br>
+              &bull; <b>Unknown Resistor:</b> $R$ (in series)
+            </div>
+            <div class="diagram-container">
+              <div class="diagram-title">2. Circuit Diagram: Fig. (2) — Series Loop with Unknown Resistance R</div>
+              <svg class="diagram-svg" viewBox="0 0 500 200" xmlns="http://www.w3.org/2000/svg">
+                <rect x="70" y="35" width="360" height="130" fill="none" stroke="#94a3b8" stroke-width="2.5"/>
+                <!-- Source E = 130V -->
+                <rect x="55" y="88" width="30" height="24" fill="#0d131d"/>
+                <line x1="55" y1="94" x2="85" y2="94" stroke="#38bdf8" stroke-width="3"/>
+                <line x1="62" y1="106" x2="78" y2="106" stroke="#38bdf8" stroke-width="3"/>
+                <text x="130" y="104" fill="#38bdf8" font-size="12" font-weight="bold" text-anchor="middle">E = 130 V</text>
+                <!-- R1 = 3 kOhm -->
+                <rect x="135" y="23" width="65" height="24" rx="4" fill="#111722" stroke="#34d399" stroke-width="2"/>
+                <text x="167" y="39" fill="#34d399" font-size="11" font-weight="bold" text-anchor="middle">3 k&Omega;</text>
+                <!-- R2 = 4 kOhm -->
+                <rect x="275" y="23" width="65" height="24" rx="4" fill="#111722" stroke="#34d399" stroke-width="2"/>
+                <text x="307" y="39" fill="#34d399" font-size="11" font-weight="bold" text-anchor="middle">4 k&Omega;</text>
+                <!-- R3 = 1 kOhm -->
+                <rect x="398" y="75" width="64" height="50" rx="4" fill="#111722" stroke="#fbbf24" stroke-width="2"/>
+                <text x="430" y="98" fill="#fbbf24" font-size="11" font-weight="bold" text-anchor="middle">1 k&Omega;</text>
+                <text x="430" y="114" fill="#fbbf24" font-size="10" text-anchor="middle">100 mW</text>
+                <!-- Unknown R -->
+                <rect x="210" y="153" width="75" height="24" rx="4" fill="#111722" stroke="#f43f5e" stroke-width="2"/>
+                <text x="247" y="169" fill="#f43f5e" font-size="11" font-weight="bold" text-anchor="middle">R = 5 k&Omega;</text>
+              </svg>
+            </div>
+            <div class="step-block">
+              <div class="step-label label-blue">3. Governing Law / Formula</div>
+              <div>&bull; <b>Current from Power:</b> $P_{1\text{k}\Omega} = I^2 \cdot R_3 \implies I = \sqrt{\frac{P_{1\text{k}\Omega}}{R_3}}$</div>
+              <div>&bull; <b>Total Resistance &amp; KVL:</b> $R_T = \frac{E}{I} = R_1 + R_2 + R_3 + R$</div>
+              <div>&bull; <b>Voltage Drops &amp; Power:</b> $V_i = I \cdot R_i$, $P_i = I^2 \cdot R_i$</div>
+            </div>
+            <div class="step-block">
+              <div class="step-label label-amber">4. Step-by-Step Substitution</div>
+              <div>&bull; <b>a) Circuit Current ($I$):</b> Since all elements are in series, the current is the same everywhere:</div>
+              <div>$$I = \sqrt{\frac{0.1\text{ W}}{1000\ \Omega}} = \sqrt{10^{-4}\text{ A}^2} = 0.01\text{ A} = 10\text{ mA}$$</div>
+              <div>&bull; <b>b) Total Resistance of the Circuit ($R_T$):</b></div>
+              <div>$$R_T = \frac{E}{I} = \frac{130\text{ V}}{0.01\text{ A}} = 13,000\ \Omega = 13\text{ k}\Omega$$</div>
+              <div>&bull; <b>c) Value of Unknown Resistance ($R$):</b></div>
+              <div>$$R = R_T - (R_1 + R_2 + R_3) = 13\text{ k}\Omega - (3\text{ k}\Omega + 4\text{ k}\Omega + 1\text{ k}\Omega) = 13\text{ k}\Omega - 8\text{ k}\Omega = 5\text{ k}\Omega$$</div>
+              <div>&bull; <b>d) Voltage Drop Across Each Resistor:</b></div>
+              <div>$$V_{3\text{k}\Omega} = 10\text{ mA} \times 3\text{ k}\Omega = 30\text{ V}, \qquad V_{4\text{k}\Omega} = 10\text{ mA} \times 4\text{ k}\Omega = 40\text{ V}$$</div>
+              <div>$$V_{1\text{k}\Omega} = 10\text{ mA} \times 1\text{ k}\Omega = 10\text{ V}, \qquad V_R = 10\text{ mA} \times 5\text{ k}\Omega = 50\text{ V}$$</div>
+              <div><i>(KVL Check: $30 + 40 + 10 + 50 = 130\text{ V} = E$ &check;)</i></div>
+              <div>&bull; <b>e) Power Dissipated by All Resistors:</b></div>
+              <div>$$P_{3\text{k}\Omega} = (0.01)^2 \times 3000 = 0.3\text{ W}\ (300\text{ mW}), \qquad P_{4\text{k}\Omega} = (0.01)^2 \times 4000 = 0.4\text{ W}\ (400\text{ mW})$$</div>
+              <div>$$P_{1\text{k}\Omega} = 0.1\text{ W}\ (100\text{ mW}), \qquad P_R = (0.01)^2 \times 5000 = 0.5\text{ W}\ (500\text{ mW})$$</div>
+              <div>$$P_{\text{total}} = 0.3 + 0.4 + 0.1 + 0.5 = 1.3\text{ W}\ (1300\text{ mW})$$</div>
+            </div>
+            <div class="step-block">
+              <div class="step-label label-green">5. Final Result</div>
+              <span class="result-badge">a) $I = 10\text{ mA}$ &nbsp;|&nbsp; b) $R_T = 13\text{ k}\Omega$ &nbsp;|&nbsp; c) $R = 5\text{ k}\Omega$</span>
+              <span class="result-badge">d) $V_{3\text{k}} = 30\text{ V},\ V_{4\text{k}} = 40\text{ V},\ V_{1\text{k}} = 10\text{ V},\ V_R = 50\text{ V}$</span>
+              <span class="result-badge">e) $P_{3\text{k}} = 300\text{ mW},\ P_{4\text{k}} = 400\text{ mW},\ P_{1\text{k}} = 100\text{ mW},\ P_R = 500\text{ mW}\ (P_T = 1.3\text{ W})$</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Q2 S2 -->
+      <div class="card s2-card" data-group="1">
+        <div class="card-header">
+          <span class="prob-tag">Q2: Series Voltage Divider &amp; Node Voltages — Fig. (3)</span>
+          <button class="sol-toggle-btn" onclick="toggleCardSolution(this)">👁️ Show Steps</button>
+        </div>
+        <div class="card-body">
+          <div class="question-prompt">
+            <b>Q2.</b> For the circuit given in <b>Figure (3)</b>, determine:<br>
+            a) The circuit current.<br>
+            b) The total resistance of the circuit.<br>
+            c) The voltage drop across all resistors in the circuit.<br>
+            d) The voltages between the following points: $A\text{ to }B$, $A\text{ to }C$, $B\text{ to }C$, $B\text{ to }D$, $C\text{ to }D$.<br>
+            e) The power dissipated by all resistors.
+          </div>
+          <div class="solution-content">
+            <div class="given-box">
+              <div class="process-tag">⚡ 1. Given Data (From Fig. 3)</div><br>
+              &bull; <b>Source Voltage ($V_S$):</b> $25\text{ V}$<br>
+              &bull; <b>Resistors in Series:</b> $R_1 = 1.0\text{ k}\Omega = 1000\ \Omega$ (between $A$ and $B$), $R_2 = 8.2\text{ k}\Omega = 8200\ \Omega$ (between $B$ and $C$), $R_3 = 3.3\text{ k}\Omega = 3300\ \Omega$ (between $C$ and $D$, where $D$ is grounded).
+            </div>
+            <div class="diagram-container">
+              <div class="diagram-title">2. Circuit Diagram: Fig. (3) — Series Voltage Divider with Nodes A, B, C, D</div>
+              <svg class="diagram-svg" viewBox="0 0 460 230" xmlns="http://www.w3.org/2000/svg">
+                <line x1="80" y1="25" x2="340" y2="25" stroke="#94a3b8" stroke-width="2.5"/>
+                <line x1="80" y1="25" x2="80" y2="95" stroke="#94a3b8" stroke-width="2.5"/>
+                <line x1="80" y1="125" x2="80" y2="195" stroke="#94a3b8" stroke-width="2.5"/>
+                <circle cx="80" cy="110" r="16" fill="#111722" stroke="#38bdf8" stroke-width="2"/>
+                <text x="80" y="106" fill="#38bdf8" font-size="11" font-weight="bold" text-anchor="middle">+</text>
+                <text x="80" y="120" fill="#38bdf8" font-size="11" font-weight="bold" text-anchor="middle">&minus;</text>
+                <text x="38" y="114" fill="#38bdf8" font-size="12" font-weight="bold" text-anchor="middle">25 V</text>
+                <!-- Ground left -->
+                <line x1="68" y1="195" x2="92" y2="195" stroke="#94a3b8" stroke-width="2"/>
+                <line x1="72" y1="200" x2="88" y2="200" stroke="#94a3b8" stroke-width="2"/>
+                <line x1="76" y1="205" x2="84" y2="205" stroke="#94a3b8" stroke-width="2"/>
+                <!-- Vertical branch -->
+                <line x1="260" y1="25" x2="260" y2="195" stroke="#94a3b8" stroke-width="2.5"/>
+                <!-- R1 -->
+                <rect x="225" y="42" width="70" height="28" rx="4" fill="#111722" stroke="#34d399" stroke-width="2"/>
+                <text x="260" y="60" fill="#34d399" font-size="11" font-weight="bold" text-anchor="middle">R1 = 1.0 k&Omega;</text>
+                <!-- R2 -->
+                <rect x="225" y="96" width="70" height="28" rx="4" fill="#111722" stroke="#34d399" stroke-width="2"/>
+                <text x="260" y="114" fill="#34d399" font-size="11" font-weight="bold" text-anchor="middle">R2 = 8.2 k&Omega;</text>
+                <!-- R3 -->
+                <rect x="225" y="150" width="70" height="28" rx="4" fill="#111722" stroke="#34d399" stroke-width="2"/>
+                <text x="260" y="168" fill="#34d399" font-size="11" font-weight="bold" text-anchor="middle">R3 = 3.3 k&Omega;</text>
+                <!-- Terminals A, B, C, D -->
+                <line x1="260" y1="83" x2="340" y2="83" stroke="#94a3b8" stroke-width="2"/>
+                <line x1="260" y1="137" x2="340" y2="137" stroke="#94a3b8" stroke-width="2"/>
+                <line x1="260" y1="188" x2="340" y2="188" stroke="#94a3b8" stroke-width="2"/>
+                <circle cx="340" cy="25" r="4" fill="#111722" stroke="#f43f5e" stroke-width="2"/>
+                <text x="385" y="29" fill="#f43f5e" font-size="12" font-weight="bold">A (25 V)</text>
+                <circle cx="340" cy="83" r="4" fill="#111722" stroke="#f43f5e" stroke-width="2"/>
+                <text x="385" y="87" fill="#f43f5e" font-size="12" font-weight="bold">B (23 V)</text>
+                <circle cx="340" cy="137" r="4" fill="#111722" stroke="#f43f5e" stroke-width="2"/>
+                <text x="385" y="141" fill="#f43f5e" font-size="12" font-weight="bold">C (6.6 V)</text>
+                <circle cx="340" cy="188" r="4" fill="#111722" stroke="#f43f5e" stroke-width="2"/>
+                <text x="385" y="192" fill="#f43f5e" font-size="12" font-weight="bold">D (0 V)</text>
+                <!-- Ground right -->
+                <line x1="248" y1="195" x2="272" y2="195" stroke="#94a3b8" stroke-width="2"/>
+                <line x1="252" y1="200" x2="268" y2="200" stroke="#94a3b8" stroke-width="2"/>
+                <line x1="256" y1="205" x2="264" y2="205" stroke="#94a3b8" stroke-width="2"/>
+              </svg>
+            </div>
+            <div class="step-block">
+              <div class="step-label label-blue">3. Governing Law / Formula</div>
+              <div>$$R_T = R_1 + R_2 + R_3, \qquad I = \frac{V_S}{R_T}, \qquad V_i = I \cdot R_i, \qquad P_i = I^2 \cdot R_i$$</div>
+            </div>
+            <div class="step-block">
+              <div class="step-label label-amber">4. Step-by-Step Substitution</div>
+              <div>&bull; <b>b) Total Resistance ($R_T$):</b></div>
+              <div>$$R_T = 1.0\text{ k}\Omega + 8.2\text{ k}\Omega + 3.3\text{ k}\Omega = 12.5\text{ k}\Omega = 12,500\ \Omega$$</div>
+              <div>&bull; <b>a) Circuit Current ($I$):</b></div>
+              <div>$$I = \frac{25\text{ V}}{12.5\text{ k}\Omega} = 2\text{ mA} = 0.002\text{ A}$$</div>
+              <div>&bull; <b>c) Voltage Drop Across Each Resistor:</b></div>
+              <div>$$V_1 = I \cdot R_1 = 2\text{ mA} \times 1.0\text{ k}\Omega = 2.0\text{ V}$$</div>
+              <div>$$V_2 = I \cdot R_2 = 2\text{ mA} \times 8.2\text{ k}\Omega = 16.4\text{ V}$$</div>
+              <div>$$V_3 = I \cdot R_3 = 2\text{ mA} \times 3.3\text{ k}\Omega = 6.6\text{ V}$$</div>
+              <div>&bull; <b>d) Point-to-Point Voltages:</b></div>
+              <div>$$V_{AB} = V_1 = 2.0\text{ V}$$</div>
+              <div>$$V_{AC} = V_1 + V_2 = 2.0 + 16.4 = 18.4\text{ V}$$</div>
+              <div>$$V_{BC} = V_2 = 16.4\text{ V}$$</div>
+              <div>$$V_{BD} = V_2 + V_3 = 16.4 + 6.6 = 23.0\text{ V}$$</div>
+              <div>$$V_{CD} = V_3 = 6.6\text{ V}$$</div>
+              <div>&bull; <b>e) Power Dissipated by All Resistors:</b></div>
+              <div>$$P_1 = I^2 R_1 = (2\text{ mA})^2 \times 1.0\text{ k}\Omega = 4.0\text{ mW}$$</div>
+              <div>$$P_2 = I^2 R_2 = (2\text{ mA})^2 \times 8.2\text{ k}\Omega = 32.8\text{ mW}$$</div>
+              <div>$$P_3 = I^2 R_3 = (2\text{ mA})^2 \times 3.3\text{ k}\Omega = 13.2\text{ mW}$$</div>
+              <div>$$P_{\text{total}} = 4.0 + 32.8 + 13.2 = 50.0\text{ mW}\ (= V_S \cdot I = 25\text{ V} \times 2\text{ mA})$$</div>
+            </div>
+            <div class="step-block">
+              <div class="step-label label-green">5. Final Result</div>
+              <span class="result-badge">a) $I = 2\text{ mA}$ &nbsp;|&nbsp; b) $R_T = 12.5\text{ k}\Omega$</span>
+              <span class="result-badge">c) $V_1 = 2.0\text{ V},\ V_2 = 16.4\text{ V},\ V_3 = 6.6\text{ V}$</span>
+              <span class="result-badge">d) $V_{AB} = 2.0\text{ V},\ V_{AC} = 18.4\text{ V},\ V_{BC} = 16.4\text{ V},\ V_{BD} = 23.0\text{ V},\ V_{CD} = 6.6\text{ V}$</span>
+              <span class="result-badge">e) $P_1 = 4.0\text{ mW},\ P_2 = 32.8\text{ mW},\ P_3 = 13.2\text{ mW}\ (P_T = 50\text{ mW})$</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Q3 S2 -->
+      <div class="card s2-card" data-group="2">
+        <div class="card-header">
+          <span class="prob-tag">Q3: Current for Each Position of a Ganged Switch — Fig. (4)</span>
+          <button class="sol-toggle-btn" onclick="toggleCardSolution(this)">👁️ Show Steps</button>
+        </div>
+        <div class="card-body">
+          <div class="question-prompt">
+            <b>Q3.</b> Determine the current measured by the meter in the circuit given in <b>Figure (4)</b> for each position ($A$, $B$, and $C$) of the ganged switch.
+          </div>
+          <div class="solution-content">
+            <div class="given-box">
+              <div class="process-tag">🔀 1. Given Data (From Fig. 4 Circuit Topology)</div><br>
+              &bull; <b>Source Voltage ($V_S$):</b> $9\text{ V}$<br>
+              &bull; <b>Resistors:</b> $R_1 = 1.0\text{ k}\Omega$, $R_2 = 33\text{ k}\Omega$, $R_3 = 68\text{ k}\Omega$, $R_4 = 27\text{ k}\Omega$, $R_5 = 22\text{ k}\Omega$<br>
+              &bull; <b>Ganged Switch Operation:</b> The top and bottom switch wipers move together simultaneously between terminals $A$–$A$, $B$–$B$, and $C$–$C$:<br>
+              &nbsp;&nbsp;– <b>Position A:</b> Connects the node after $R_1$ directly to ground (bypassing $R_2, R_3, R_4, R_5$). Only $R_1$ is in the circuit.<br>
+              &nbsp;&nbsp;– <b>Position B:</b> Connects the node after $R_2$ to the node between $R_5$ and $R_4$. Current flows through $R_1 + R_2 + R_5$.<br>
+              &nbsp;&nbsp;– <b>Position C:</b> Connects the node after $R_3$ to the right side of $R_4$. Current flows through all 5 resistors ($R_1 + R_2 + R_3 + R_4 + R_5$).
+            </div>
+            <div class="step-block">
+              <div class="step-label label-blue">3. Governing Law / Formula</div>
+              <div>$$I_{\text{pos}} = \frac{V_S}{R_{T,\text{pos}}}$$</div>
+            </div>
+            <div class="step-block">
+              <div class="step-label label-amber">4. Step-by-Step Substitution</div>
+              <div>&bull; <b>Switch Position A:</b> Only $R_1$ is active in the loop:</div>
+              <div>$$R_{T(A)} = R_1 = 1.0\text{ k}\Omega \implies I_A = \frac{9\text{ V}}{1.0\text{ k}\Omega} = 9.0\text{ mA}$$</div>
+              <div>&bull; <b>Switch Position B:</b> $R_1, R_2,$ and $R_5$ are connected in series:</div>
+              <div>$$R_{T(B)} = R_1 + R_2 + R_5 = 1.0 + 33 + 22 = 56.0\text{ k}\Omega$$</div>
+              <div>$$I_B = \frac{9\text{ V}}{56.0\text{ k}\Omega} = 0.1607\text{ mA} = 160.7\ \mu\text{A}$$</div>
+              <div>&bull; <b>Switch Position C:</b> All resistors $R_1, R_2, R_3, R_4,$ and $R_5$ are connected in series:</div>
+              <div>$$R_{T(C)} = R_1 + R_2 + R_3 + R_4 + R_5 = 1.0 + 33 + 68 + 27 + 22 = 151.0\text{ k}\Omega$$</div>
+              <div>$$I_C = \frac{9\text{ V}}{151.0\text{ k}\Omega} = 0.0596\text{ mA} = 59.6\ \mu\text{A}$$</div>
+            </div>
+            <div class="step-block">
+              <div class="step-label label-green">5. Final Result</div>
+              <span class="result-badge">$\text{Position A: } I_A = 9.0\text{ mA}$</span>
+              <span class="result-badge">$\text{Position B: } I_B = 160.7\ \mu\text{A}\ (0.1607\text{ mA})$</span>
+              <span class="result-badge">$\text{Position C: } I_C = 59.6\ \mu\text{A}\ (0.0596\text{ mA})$</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Q4 S2 -->
+      <div class="card s2-card" data-group="2">
+        <div class="card-header">
+          <span class="prob-tag">Q4: Selector Switch Circuit &amp; Fuse Protection — Fig. (5)</span>
+          <button class="sol-toggle-btn" onclick="toggleCardSolution(this)">👁️ Show Steps</button>
+        </div>
+        <div class="card-body">
+          <div class="question-prompt">
+            <b>Q4.</b> For the circuit given in <b>Figure (5)</b>, the meter reads $7.84\text{ mA}$ when the switch is in position $A$.<br>
+            a) What is the resistance of $R_4$?<br>
+            b) What should be the meter reading for switch positions $B$, $C$, and $D$?<br>
+            c) Will a $1/4\text{ A}$ fuse blow in any position of the switch?
+          </div>
+          <div class="solution-content">
+            <div class="given-box">
+              <div class="process-tag">🛡️ 1. Given Data (From Fig. 5)</div><br>
+              &bull; <b>Source Voltage ($V_S$):</b> $12\text{ V}$<br>
+              &bull; <b>Known Resistors:</b> $R_1 = 220\ \Omega$, $R_2 = 470\ \Omega$, $R_3 = 510\ \Omega$<br>
+              &bull; <b>Current at Position A ($I_A$):</b> $7.84\text{ mA} = 0.00784\text{ A}$<br>
+              &bull; <b>Fuse Rating ($I_{\text{fuse}}$):</b> $\frac{1}{4}\text{ A} = 0.25\text{ A} = 250\text{ mA}$
+            </div>
+            <div class="step-block">
+              <div class="step-label label-blue">3. Governing Law / Formula</div>
+              <div>&bull; <b>Position A:</b> Connects before $R_1$, so $R_{T(A)} = R_1 + R_2 + R_3 + R_4 = \frac{V_S}{I_A}$</div>
+              <div>&bull; <b>Position B:</b> Bypasses $R_1$, so $R_{T(B)} = R_2 + R_3 + R_4$</div>
+              <div>&bull; <b>Position C:</b> Bypasses $R_1$ and $R_2$, so $R_{T(C)} = R_3 + R_4$</div>
+              <div>&bull; <b>Position D:</b> Bypasses $R_1, R_2,$ and $R_3$, so $R_{T(D)} = R_4$</div>
+            </div>
+            <div class="step-block">
+              <div class="step-label label-amber">4. Step-by-Step Substitution</div>
+              <div>&bull; <b>a) Resistance of $R_4$:</b></div>
+              <div>$$R_{T(A)} = \frac{12\text{ V}}{7.84\text{ mA}} = 1530.61\ \Omega$$</div>
+              <div>$$R_4 = R_{T(A)} - (R_1 + R_2 + R_3) = 1530.61 - (220 + 470 + 510) = 1530.61 - 1200 = 330.61\ \Omega \approx 330\ \Omega\ (\text{standard value})$$</div>
+              <div>&bull; <b>b) Meter Readings for Switch Positions B, C, and D (using $R_4 = 330\ \Omega$):</b></div>
+              <div>1. <b>Position B:</b> $$R_{T(B)} = 470 + 510 + 330 = 1310\ \Omega \implies I_B = \frac{12\text{ V}}{1310\ \Omega} = 9.16\text{ mA}$$</div>
+              <div>2. <b>Position C:</b> $$R_{T(C)} = 510 + 330 = 840\ \Omega \implies I_C = \frac{12\text{ V}}{840\ \Omega} = 14.29\text{ mA}$$</div>
+              <div>3. <b>Position D:</b> $$R_{T(D)} = R_4 = 330\ \Omega \implies I_D = \frac{12\text{ V}}{330\ \Omega} = 36.36\text{ mA}$$</div>
+              <div>&bull; <b>c) Fuse Check ($I_{\text{fuse}} = 250\text{ mA}$):</b></div>
+              <div>The maximum circuit current occurs in Position D ($I_{\max} = 36.36\text{ mA}$). Since $36.36\text{ mA} \ll 250\text{ mA}$, the $1/4\text{ A}$ fuse will <b>NOT</b> blow in any position.</div>
+            </div>
+            <div class="step-block">
+              <div class="step-label label-green">5. Final Result</div>
+              <span class="result-badge">a) $R_4 = 330\ \Omega\ (330.6\ \Omega)$</span>
+              <span class="result-badge">b) $I_B = 9.16\text{ mA},\ I_C = 14.29\text{ mA},\ I_D = 36.36\text{ mA}$</span>
+              <span class="result-badge">c) No, the $1/4\text{ A}\ (250\text{ mA})$ fuse will NOT blow ($I_{\max} = 36.36\text{ mA} &lt; 250\text{ mA}$)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Q5 (Part 1 & 2: Fig 6 & Fig 7) S2 -->
+      <div class="card s2-card" data-group="3">
+        <div class="card-header">
+          <span class="prob-tag">Q5 — Parts (1 &amp; 2): KCL Node Analysis — Fig. (6) &amp; Fig. (7)</span>
+          <button class="sol-toggle-btn" onclick="toggleCardSolution(this)">👁️ Show Steps</button>
+        </div>
+        <div class="card-body">
+          <div class="question-prompt">
+            <b>Q5 (1 &amp; 2).</b> Using Kirchhoff's Current Law (KCL), analyze the circuits given in:<br>
+            1) <b>Fig. (6)</b> to determine the current $I_x$.<br>
+            2) <b>Fig. (7)</b> to determine the current $I_o$.
+          </div>
+          <div class="solution-content">
+            <div class="given-box">
+              <div class="process-tag">🔀 1. Given Data (From Fig. 6 &amp; Fig. 7)</div><br>
+              &bull; <b>Fig. (6) Top Central Node:</b> A current of $2\text{ A}$ enters from the left branch, and a vertical current source of $2\text{ A}$ points upward into the same node. The current $I_x$ leaves the node to the right.<br>
+              &bull; <b>Fig. (7) Top Node Check:</b> $6\text{ A}$ enters from Element 1; $4\text{ A}$ leaves downward through Element 2 and $I_x = 2\text{ A}$ leaves to the right ($6 = 4 + 2$ &check;).<br>
+              &bull; <b>Fig. (7) Bottom Node &amp; Middle Node:</b> At the bottom node between Elements 5, 6, and 4: $1\text{ A}$ enters from Element 5 above, $2\text{ A}$ enters from Element 4 on the right, and $3\text{ A}$ leaves to the left through Element 6. At the middle node between Elements 2, 3, and 5: $4\text{ A}$ enters from Element 2 above, $I_o$ enters from Element 3 on the left, and $1\text{ A}$ leaves downward through Element 5.
+            </div>
+            <div class="diagram-container">
+              <div class="diagram-title">2. Node Schematics: KCL Junctions in Fig. (6) and Fig. (7)</div>
+              <svg class="diagram-svg" viewBox="0 0 560 150" xmlns="http://www.w3.org/2000/svg">
+                <!-- Fig 6 Node -->
+                <g transform="translate(20, 10)">
+                  <text x="115" y="15" fill="#38bdf8" font-size="12" font-weight="bold" text-anchor="middle">Fig. (6) Central Node</text>
+                  <line x1="25" y1="65" x2="205" y2="65" stroke="#94a3b8" stroke-width="3"/>
+                  <line x1="115" y1="65" x2="115" y2="125" stroke="#94a3b8" stroke-width="3"/>
+                  <circle cx="115" cy="65" r="6" fill="#fbbf24"/>
+                  <polygon points="75,60 87,65 75,70" fill="#34d399"/>
+                  <text x="65" y="52" fill="#34d399" font-size="11" font-weight="bold" text-anchor="middle">2 A (in)</text>
+                  <polygon points="110,95 115,83 120,95" fill="#34d399"/>
+                  <text x="155" y="105" fill="#34d399" font-size="11" font-weight="bold" text-anchor="middle">2 A (up)</text>
+                  <polygon points="165,60 177,65 165,70" fill="#f43f5e"/>
+                  <text x="170" y="52" fill="#f43f5e" font-size="11" font-weight="bold" text-anchor="middle">I_x = 4 A</text>
+                </g>
+                <!-- Fig 7 Node -->
+                <g transform="translate(300, 10)">
+                  <text x="115" y="15" fill="#38bdf8" font-size="12" font-weight="bold" text-anchor="middle">Fig. (7) Middle Node (2, 3, 5)</text>
+                  <line x1="25" y1="75" x2="115" y2="75" stroke="#94a3b8" stroke-width="3"/>
+                  <line x1="115" y1="25" x2="115" y2="125" stroke="#94a3b8" stroke-width="3"/>
+                  <circle cx="115" cy="75" r="6" fill="#fbbf24"/>
+                  <polygon points="75,70 87,75 75,80" fill="#f43f5e"/>
+                  <text x="65" y="62" fill="#f43f5e" font-size="11" font-weight="bold" text-anchor="middle">I_o = -3 A</text>
+                  <polygon points="110,45 115,57 120,45" fill="#34d399"/>
+                  <text x="165" y="50" fill="#34d399" font-size="11" font-weight="bold" text-anchor="middle">4 A (from 2)</text>
+                  <polygon points="110,105 115,117 120,105" fill="#38bdf8"/>
+                  <text x="165" y="112" fill="#38bdf8" font-size="11" font-weight="bold" text-anchor="middle">1 A (into 5)</text>
+                </g>
+              </svg>
+            </div>
+            <div class="step-block">
+              <div class="step-label label-blue">3. Governing Law / Formula</div>
+              <div>By <b>Kirchhoff's Current Law (KCL)</b> at any junction:</div>
+              <div>$$\sum I_{\text{entering}} = \sum I_{\text{leaving}}$$</div>
+            </div>
+            <div class="step-block">
+              <div class="step-label label-amber">4. Step-by-Step Substitution</div>
+              <div>&bull; <b>1) Circuit in Fig. (6):</b> Apply KCL at the top middle junction:</div>
+              <div>$$I_{\text{left}} + I_{\text{source}} = I_x \implies 2\text{ A} + 2\text{ A} = I_x \implies I_x = 4\text{ A}$$</div>
+              <div>&bull; <b>2) Circuit in Fig. (7):</b> Apply KCL at the middle junction between Elements 2, 3, and 5:</div>
+              <div>$$I_2 + I_o = I_5 \implies 4\text{ A} + I_o = 1\text{ A} \implies I_o = 1\text{ A} - 4\text{ A} = -3\text{ A}$$</div>
+              <div><i>(Verification at middle-left node: $6\text{ A}$ leaves upward into $24\text{ V}$ source, $3\text{ A}$ enters from $4I_x$ source below, and $I_o = -3\text{ A}$ means $3\text{ A}$ enters from Element 3: $3\text{ A} + 3\text{ A} = 6\text{ A}$ &check;)</i></div>
+            </div>
+            <div class="step-block">
+              <div class="step-label label-green">5. Final Result</div>
+              <span class="result-badge">1) Fig. (6): $I_x = 4\text{ A}$</span>
+              <span class="result-badge">2) Fig. (7): $I_o = -3\text{ A}$</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Q5 (Part 3 & 4: Fig 8 & Fig 9) S2 -->
+      <div class="card s2-card" data-group="3">
+        <div class="card-header">
+          <span class="prob-tag">Q5 — Parts (3 &amp; 4): Ammeter Readings &amp; Parallel Branches — Fig. (8) &amp; Fig. (9)</span>
+          <button class="sol-toggle-btn" onclick="toggleCardSolution(this)">👁️ Show Steps</button>
+        </div>
+        <div class="card-body">
+          <div class="question-prompt">
+            <b>Q5 (3 &amp; 4).</b> Use Kirchhoff's Current Law to analyze:<br>
+            3) <b>Fig. (8)</b> to find the current measured by ammeters $A_3$ and $A_5$.<br>
+            4) <b>Fig. (9) (a) &amp; (b)</b> to determine the current and power dissipated in each branch.
+          </div>
+          <div class="solution-content">
+            <div class="given-box">
+              <div class="process-tag">⚡ 1. Given Data (From Fig. 8 &amp; Fig. 9)</div><br>
+              &bull; <b>Fig. (8):</b> Total current $I_{A1} = 5\text{ mA}$ enters Node $X$; Branch 1 current $I_{A2} = 1.5\text{ mA}$ leaves Node $X$; Branch 2 current $I_{A4} = 1\text{ mA}$ leaves Node $Y$.<br>
+              &bull; <b>Fig. (9a):</b> Two parallel resistors $R_1 = 1.0\text{ M}\Omega$, $R_2 = 2.2\text{ M}\Omega$ fed by total current $I_T = 10\ \mu\text{A}$.<br>
+              &bull; <b>Fig. (9b):</b> Four parallel resistors $R_1 = 10\text{ k}\Omega$, $R_2 = 2.2\text{ k}\Omega$, $R_3 = 3.3\text{ k}\Omega$, $R_4 = 6.8\text{ k}\Omega$ fed by total current $I_T = 10\text{ mA}$.
+            </div>
+            <div class="step-block">
+              <div class="step-label label-blue">3. Governing Law / Formula</div>
+              <div>&bull; <b>KCL at Nodes $X$ and $Y$:</b> $I_{A3} = I_{A1} - I_{A2}$ and $I_{A5} = I_{A3} - I_{A4}$</div>
+              <div>&bull; <b>Parallel Equivalent Resistance &amp; Branch Currents:</b> $\frac{1}{R_{eq}} = \sum \frac{1}{R_i}$, $V_S = I_T \cdot R_{eq}$, $I_i = \frac{V_S}{R_i}$, $P_i = \frac{V_S^2}{R_i} = V_S \cdot I_i$</div>
+            </div>
+            <div class="step-block">
+              <div class="step-label label-amber">4. Step-by-Step Substitution</div>
+              <div>&bull; <b>3) Ammeter Readings in Fig. (8):</b></div>
+              <div>At Node $X$: $$I_{A3} = I_{A1} - I_{A2} = 5\text{ mA} - 1.5\text{ mA} = 3.5\text{ mA}$$</div>
+              <div>At Node $Y$: $$I_{A5} = I_{A3} - I_{A4} = 3.5\text{ mA} - 1.0\text{ mA} = 2.5\text{ mA}$$</div>
+              <hr style="border:0; border-top:1px solid #1e293b; margin:8px 0;">
+              <div>&bull; <b>4-a) Circuit in Fig. (9a) [$I_T = 10\ \mu\text{A}$, $R_1 = 1.0\text{ M}\Omega$, $R_2 = 2.2\text{ M}\Omega$]:</b></div>
+              <div>$$R_{eq} = \frac{R_1 \cdot R_2}{R_1 + R_2} = \frac{1.0 \times 2.2}{1.0 + 2.2} = \frac{2.2}{3.2}\text{ M}\Omega = 0.6875\text{ M}\Omega = 687.5\text{ k}\Omega$$</div>
+              <div>$$V_S = I_T \cdot R_{eq} = 10\ \mu\text{A} \times 0.6875\text{ M}\Omega = 6.875\text{ V}$$</div>
+              <div>– <b>Branch 1 ($1.0\text{ M}\Omega$):</b> $I_1 = \frac{6.875\text{ V}}{1.0\text{ M}\Omega} = 6.875\ \mu\text{A}$, &nbsp; $P_1 = 6.875\text{ V} \times 6.875\ \mu\text{A} = 47.27\ \mu\text{W}$</div>
+              <div>– <b>Branch 2 ($2.2\text{ M}\Omega$):</b> $I_2 = \frac{6.875\text{ V}}{2.2\text{ M}\Omega} = 3.125\ \mu\text{A}$, &nbsp; $P_2 = 6.875\text{ V} \times 3.125\ \mu\text{A} = 21.48\ \mu\text{W}$</div>
+              <hr style="border:0; border-top:1px solid #1e293b; margin:8px 0;">
+              <div>&bull; <b>4-b) Circuit in Fig. (9b) [$I_T = 10\text{ mA}$, $R_1 = 10\text{ k}\Omega$, $R_2 = 2.2\text{ k}\Omega$, $R_3 = 3.3\text{ k}\Omega$, $R_4 = 6.8\text{ k}\Omega$]:</b></div>
+              <div>$$G_T = \frac{1}{R_{eq}} = \frac{1}{10} + \frac{1}{2.2} + \frac{1}{3.3} + \frac{1}{6.8} = 0.1000 + 0.45455 + 0.30303 + 0.14706 = 1.00464\text{ mS}$$</div>
+              <div>$$R_{eq} = \frac{1}{1.00464\text{ mS}} = 0.99538\text{ k}\Omega = 995.38\ \Omega$$</div>
+              <div>$$V_S = I_T \cdot R_{eq} = 10\text{ mA} \times 0.99538\text{ k}\Omega = 9.954\text{ V}$$</div>
+              <div>– <b>Branch 1 ($10\text{ k}\Omega$):</b> $I_1 = \frac{9.954\text{ V}}{10\text{ k}\Omega} = 0.995\text{ mA}$, &nbsp; $P_1 = 9.954\text{ V} \times 0.995\text{ mA} = 9.91\text{ mW}$</div>
+              <div>– <b>Branch 2 ($2.2\text{ k}\Omega$):</b> $I_2 = \frac{9.954\text{ V}}{2.2\text{ k}\Omega} = 4.525\text{ mA}$, &nbsp; $P_2 = 9.954\text{ V} \times 4.525\text{ mA} = 45.04\text{ mW}$</div>
+              <div>– <b>Branch 3 ($3.3\text{ k}\Omega$):</b> $I_3 = \frac{9.954\text{ V}}{3.3\text{ k}\Omega} = 3.016\text{ mA}$, &nbsp; $P_3 = 9.954\text{ V} \times 3.016\text{ mA} = 30.02\text{ mW}$</div>
+              <div>– <b>Branch 4 ($6.8\text{ k}\Omega$):</b> $I_4 = \frac{9.954\text{ V}}{6.8\text{ k}\Omega} = 1.464\text{ mA}$, &nbsp; $P_4 = 9.954\text{ V} \times 1.464\text{ mA} = 14.57\text{ mW}$</div>
+            </div>
+            <div class="step-block">
+              <div class="step-label label-green">5. Final Result</div>
+              <span class="result-badge">3) Fig. (8): $I_{A3} = 3.5\text{ mA}$ &nbsp;|&nbsp; $I_{A5} = 2.5\text{ mA}$</span>
+              <span class="result-badge">4-a) Fig. (9a): $I_1 = 6.875\ \mu\text{A}\ (47.27\ \mu\text{W})$ &nbsp;|&nbsp; $I_2 = 3.125\ \mu\text{A}\ (21.48\ \mu\text{W})$</span>
+              <span class="result-badge">4-b) Fig. (9b): $I_1 = 0.995\text{ mA}\ (9.91\text{ mW}),\ I_2 = 4.525\text{ mA}\ (45.04\text{ mW}),\ I_3 = 3.016\text{ mA}\ (30.02\text{ mW}),\ I_4 = 1.464\text{ mA}\ (14.57\text{ mW})$</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Q6 S2 -->
+      <div class="card s2-card" data-group="4">
+        <div class="card-header">
+          <span class="prob-tag">Q6: Troubleshooting a 5-Resistor Series String</span>
+          <button class="sol-toggle-btn" onclick="toggleCardSolution(this)">👁️ Show Steps</button>
+        </div>
+        <div class="card-body">
+          <div class="question-prompt">
+            <b>Q6.</b> A string of five series resistors is connected across a $12\text{ V}$ battery. Zero volts is measured across all of the resistors except $R_2$. What is wrong with the circuit? What voltage will be measured across $R_2$?
+          </div>
+          <div class="solution-content">
+            <div class="given-box">
+              <div class="process-tag">🛠️ 1. Given Data</div><br>
+              &bull; <b>Battery Voltage ($V_S$):</b> $12\text{ V}$<br>
+              &bull; <b>Measured Voltages:</b> $V_{R1} = V_{R3} = V_{R4} = V_{R5} = 0\text{ V}$, while $V_{R2} \neq 0\text{ V}$.
+            </div>
+            <div class="step-block">
+              <div class="step-label label-blue">3. Governing Law / Formula</div>
+              <div>&bull; <b>Ohm's Law:</b> $V_i = I \cdot R_i$. If $V_i = 0\text{ V}$ across intact resistors, the series current must be $I = 0\text{ A}$.</div>
+              <div>&bull; <b>KVL Around the Loop:</b> $V_S = V_{R1} + V_{R2} + V_{R3} + V_{R4} + V_{R5}$</div>
+            </div>
+            <div class="step-block">
+              <div class="step-label label-amber">4. Step-by-Step Analysis &amp; Substitution</div>
+              <div>1. Since $0\text{ V}$ is measured across $R_1, R_3, R_4,$ and $R_5$, no current is flowing in the series circuit ($I = 0\text{ A}$), which indicates an <b>open-circuit fault</b>.</div>
+              <div>2. Because the entire source voltage drops across the open point in a series circuit, <b>resistor $R_2$ is burned out / open-circuited ($R_2 = \infty\ \Omega$)</b>.</div>
+              <div>3. By KVL:</div>
+              <div>$$V_{R2} = V_S - (0 + 0 + 0 + 0) = 12\text{ V}$$</div>
+            </div>
+            <div class="step-block">
+              <div class="step-label label-green">5. Final Result</div>
+              <span class="result-badge">Fault: Resistor $R_2$ is open-circuited (open fault) &nbsp;|&nbsp; $V_{R2} = 12\text{ V}$</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Q7 S2 -->
+      <div class="card s2-card" data-group="4">
+        <div class="card-header">
+          <span class="prob-tag">Q7: Meter-Based Fault Identification in Series Circuits (a) &amp; (b)</span>
+          <button class="sol-toggle-btn" onclick="toggleCardSolution(this)">👁️ Show Steps</button>
+        </div>
+        <div class="card-body">
+          <div class="question-prompt">
+            <b>Q7.</b> By observing the meters in the figure below, determine the types of failures in the circuits and which components have failed:<br>
+            <b>(a)</b> $12\text{ V}$ source with four series resistors ($R_1, R_2, R_3, R_4$); Ammeter reads $0\text{ A}$, $V_{R1} = 0\text{ V}$, $V_{R2} = 0\text{ V}$, and $V_{R4} = 12\text{ V}$.<br>
+            <b>(b)</b> $10\text{ V}$ source with five $100\ \Omega$ series resistors ($R_1$ to $R_5$); Ammeter reads $33.3\text{ mA}$, and voltmeter across $R_4$ and $R_5$ (between $A$ and $B$) reads $0\text{ V}$.
+          </div>
+          <div class="solution-content">
+            <div class="given-box">
+              <div class="process-tag">🔎 1. Given Data (From Meter Readings in Fig. Q7)</div><br>
+              &bull; <b>Circuit (a):</b> $V_S = 12\text{ V}$, $I = 0\text{ A}$, $V_{R1} = 0\text{ V}$, $V_{R2} = 0\text{ V}$, $V_{R4} = 12\text{ V}$.<br>
+              &bull; <b>Circuit (b):</b> $V_S = 10\text{ V}$, $R_1 = R_2 = R_3 = R_4 = R_5 = 100\ \Omega$, $I_{\text{measured}} = 33.3\text{ mA}$, $V_{AB} = V_{R4 + R5} = 0\text{ V}$.
+            </div>
+            <div class="step-block">
+              <div class="step-label label-blue">3. Governing Law / Formula</div>
+              <div>&bull; <b>Open-Circuit Rule:</b> $I = 0\text{ A}$ and $V_{\text{open}} = V_S$.</div>
+              <div>&bull; <b>Short-Circuit Rule:</b> $R_{\text{active}} = \frac{V_S}{I_{\text{measured}}}$ and $V_{\text{short}} = 0\text{ V}$.</div>
+            </div>
+            <div class="step-block">
+              <div class="step-label label-amber">4. Step-by-Step Substitution</div>
+              <div>&bull; <b>Analysis of Circuit (a):</b></div>
+              <div>The ammeter reads $0\text{ A}$, meaning there is an <b>open circuit</b> in the loop. Since the voltmeter connected across $R_4$ reads the full source voltage ($12\text{ V}$) while $V_{R1} = 0\text{ V}$ and $V_{R2} = 0\text{ V}$, <b>resistor $R_4$ is open-circuited</b>.</div>
+              <hr style="border:0; border-top:1px solid #1e293b; margin:8px 0;">
+              <div>&bull; <b>Analysis of Circuit (b):</b></div>
+              <div>1. Normally, with five $100\ \Omega$ resistors in series, $R_T = 500\ \Omega$ and $I_{\text{normal}} = \frac{10\text{ V}}{500\ \Omega} = 20\text{ mA}$.</div>
+              <div>2. However, the ammeter reads $I = 33.3\text{ mA} = 0.0333\text{ A}$. The actual active resistance in the circuit is:</div>
+              <div>$$R_{\text{active}} = \frac{10\text{ V}}{33.33\text{ mA}} = 300\ \Omega$$</div>
+              <div>3. Since $R_1 + R_2 + R_3 = 100 + 100 + 100 = 300\ \Omega$, and the voltmeter across terminals $A$ and $B$ (which spans across $R_4$ and $R_5$) reads $0\text{ V}$, <b>there is a short circuit between points $A$ and $B$ (shorting out both $R_4$ and $R_5$)</b>.</div>
+            </div>
+            <div class="step-block">
+              <div class="step-label label-green">5. Final Result</div>
+              <span class="result-badge">(a) Failure Type: Open Circuit — Resistor $R_4$ is open</span>
+              <span class="result-badge">(b) Failure Type: Short Circuit — Resistors $R_4$ and $R_5$ are shorted out between points $A$ and $B$</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Q8 S2 -->
+      <div class="card s2-card" data-group="4">
+        <div class="card-header">
+          <span class="prob-tag">Q8: Troubleshooting a 5-Branch Parallel Circuit</span>
+          <button class="sol-toggle-btn" onclick="toggleCardSolution(this)">👁️ Show Steps</button>
+        </div>
+        <div class="card-body">
+          <div class="question-prompt">
+            <b>Q8.</b> In the figure below, the current and voltage measurements are indicated ($I_T = 200.4\text{ mA}$, $V_S = 10\text{ V}$, $R_1 = 220\ \Omega$, $R_2 = 100\ \Omega$, $R_3 = 1.0\text{ k}\Omega$, $R_4 = 560\ \Omega$, $R_5 = 270\ \Omega$). What is wrong with the circuit? Determine the current and power dissipated in each branch.
+          </div>
+          <div class="solution-content">
+            <div class="given-box">
+              <div class="process-tag">⚡ 1. Given Data (From Fig. Q8)</div><br>
+              &bull; <b>Measured Parallel Voltage ($V_S$):</b> $10\text{ V}$<br>
+              &bull; <b>Measured Total Current ($I_{\text{measured}}$):</b> $200.4\text{ mA}$<br>
+              &bull; <b>Branch Resistors:</b> $R_1 = 220\ \Omega$, $R_2 = 100\ \Omega$, $R_3 = 1.0\text{ k}\Omega = 1000\ \Omega$, $R_4 = 560\ \Omega$, $R_5 = 270\ \Omega$.
+            </div>
+            <div class="step-block">
+              <div class="step-label label-blue">3. Governing Law / Formula</div>
+              <div>For parallel branches across $V_S = 10\text{ V}$:</div>
+              <div>$$I_i = \frac{V_S}{R_i}, \qquad I_{T,\text{expected}} = \sum_{i=1}^5 I_i, \qquad I_{\text{missing}} = I_{T,\text{expected}} - I_{\text{measured}}, \qquad P_i = V_S \cdot I_i$$</div>
+            </div>
+            <div class="step-block">
+              <div class="step-label label-amber">4. Step-by-Step Substitution</div>
+              <div>1. <b>Calculate the expected current in each branch if all resistors are intact:</b></div>
+              <div>$$I_1 = \frac{10\text{ V}}{220\ \Omega} = 45.45\text{ mA}, \qquad I_2 = \frac{10\text{ V}}{100\ \Omega} = 100.00\text{ mA}, \qquad I_3 = \frac{10\text{ V}}{1000\ \Omega} = 10.00\text{ mA}$$</div>
+              <div>$$I_4 = \frac{10\text{ V}}{560\ \Omega} = 17.86\text{ mA}, \qquad I_5 = \frac{10\text{ V}}{270\ \Omega} = 37.04\text{ mA}$$</div>
+              <div>2. <b>Compare expected total current with the ammeter reading ($200.4\text{ mA}$):</b></div>
+              <div>$$I_{T,\text{expected}} = 45.45 + 100.00 + 10.00 + 17.86 + 37.04 = 210.35\text{ mA} \approx 210.4\text{ mA}$$</div>
+              <div>$$I_{\text{missing}} = 210.4\text{ mA} - 200.4\text{ mA} = 10.0\text{ mA}$$</div>
+              <div>3. <b>Identify the faulty component:</b></div>
+              <div>The missing $10.0\text{ mA}$ matches the exact current of branch 3 ($I_3 = 10.0\text{ mA}$). Therefore, <b>resistor $R_3\ (1.0\text{ k}\Omega)$ is open-circuited!</b></div>
+              <div>4. <b>Actual Current and Power Dissipated in Each Branch:</b></div>
+              <div>&bull; <b>Branch 1 ($220\ \Omega$):</b> $I_1 = 45.45\text{ mA}$, &nbsp; $P_1 = 10\text{ V} \times 45.45\text{ mA} = 454.5\text{ mW}\ (0.4545\text{ W})$</div>
+              <div>&bull; <b>Branch 2 ($100\ \Omega$):</b> $I_2 = 100.0\text{ mA}$, &nbsp; $P_2 = 10\text{ V} \times 100.0\text{ mA} = 1000\text{ mW}\ (1.0\text{ W})$</div>
+              <div>&bull; <b>Branch 3 ($1.0\text{ k}\Omega$ — OPEN):</b> $I_3 = 0\text{ mA}$, &nbsp; $P_3 = 0\text{ W}$</div>
+              <div>&bull; <b>Branch 4 ($560\ \Omega$):</b> $I_4 = 17.86\text{ mA}$, &nbsp; $P_4 = 10\text{ V} \times 17.86\text{ mA} = 178.6\text{ mW}\ (0.1786\text{ W})$</div>
+              <div>&bull; <b>Branch 5 ($270\ \Omega$):</b> $I_5 = 37.04\text{ mA}$, &nbsp; $P_5 = 10\text{ V} \times 37.04\text{ mA} = 370.4\text{ mW}\ (0.3704\text{ W})$</div>
+              <div><i>(Sum of active branch currents: $45.45 + 100.0 + 0 + 17.86 + 37.04 = 200.35\text{ mA} \approx 200.4\text{ mA}$ &check;)</i></div>
+            </div>
+            <div class="step-block">
+              <div class="step-label label-green">5. Final Result</div>
+              <span class="result-badge">Fault: Resistor $R_3\ (1.0\text{ k}\Omega)$ is open-circuited ($I_3 = 0\text{ A},\ P_3 = 0\text{ W}$)</span>
+              <span class="result-badge">$I_1 = 45.45\text{ mA}\ (454.5\text{ mW}),\ I_2 = 100\text{ mA}\ (1.0\text{ W}),\ I_4 = 17.86\text{ mA}\ (178.6\text{ mW}),\ I_5 = 37.04\text{ mA}\ (370.4\text{ mW})$</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sheet 2A Quick Answer Key Table -->
+      <div class="card s2-card">
+        <div class="card-header">
+          <span class="prob-tag">📋 Quick Answer Key: Sheet (2A) — Final Numerical &amp; Diagnostic Results</span>
+        </div>
+        <div class="card-body">
+          <div class="table-scroll-container">
+            <table>
+              <thead>
+                <tr><th>Question</th><th>Circuit / Figure</th><th>Final Verified Answer</th></tr>
+              </thead>
+              <tbody>
+                <tr><td><b>Q1 (1)</b></td><td>Fig. (1) Single-Loop KVL</td><td>$V_x = -1\text{ V}$</td></tr>
+                <tr><td><b>Q1 (2)</b></td><td>Fig. (2) Series Resistor Loop</td><td>$I = 10\text{ mA}$, $R_T = 13\text{ k}\Omega$, $R = 5\text{ k}\Omega$, $P_T = 1.3\text{ W}$</td></tr>
+                <tr><td><b>Q2</b></td><td>Fig. (3) Series Voltage Divider</td><td>$I = 2\text{ mA}$, $R_T = 12.5\text{ k}\Omega$, $V_{AB}=2\text{ V}$, $V_{AC}=18.4\text{ V}$, $V_{BC}=16.4\text{ V}$, $V_{BD}=23\text{ V}$, $V_{CD}=6.6\text{ V}$, $P_T=50\text{ mW}$</td></tr>
+                <tr><td><b>Q3</b></td><td>Fig. (4) Ganged Switch</td><td>Pos A: $9.0\text{ mA}$ &nbsp;|&nbsp; Pos B: $160.7\ \mu\text{A}$ &nbsp;|&nbsp; Pos C: $59.6\ \mu\text{A}$</td></tr>
+                <tr><td><b>Q4</b></td><td>Fig. (5) Switch &amp; Fuse Check</td><td>a) $R_4 = 330\ \Omega$ &nbsp;|&nbsp; b) $I_B = 9.16\text{ mA}, I_C = 14.29\text{ mA}, I_D = 36.36\text{ mA}$ &nbsp;|&nbsp; c) Fuse will NOT blow</td></tr>
+                <tr><td><b>Q5 (1 &amp; 2)</b></td><td>Fig. (6) &amp; Fig. (7) KCL</td><td>Fig. (6): $I_x = 4\text{ A}$ &nbsp;|&nbsp; Fig. (7): $I_o = -3\text{ A}$</td></tr>
+                <tr><td><b>Q5 (3)</b></td><td>Fig. (8) Ammeter Readings</td><td>$I_{A3} = 3.5\text{ mA}$ &nbsp;|&nbsp; $I_{A5} = 2.5\text{ mA}$</td></tr>
+                <tr><td><b>Q5 (4)</b></td><td>Fig. (9a) &amp; Fig. (9b) Parallel</td><td>(9a) $I_1=6.875\ \mu\text{A}, I_2=3.125\ \mu\text{A}$ &nbsp;|&nbsp; (9b) $I_1=0.995\text{ mA}, I_2=4.525\text{ mA}, I_3=3.016\text{ mA}, I_4=1.464\text{ mA}$</td></tr>
+                <tr><td><b>Q6</b></td><td>5 Series Resistors Fault</td><td>$R_2$ is open-circuited; $V_{R2} = 12\text{ V}$</td></tr>
+                <tr><td><b>Q7</b></td><td>Meter Fault Diagnosis (a &amp; b)</td><td>(a) $R_4$ is open-circuited &nbsp;|&nbsp; (b) $R_4$ and $R_5$ are shorted out between $A$ and $B$</td></tr>
+                <tr><td><b>Q8</b></td><td>5-Branch Parallel Fault</td><td>$R_3\ (1.0\text{ k}\Omega)$ is open ($I_3 = 0\text{ A}$); $I_1=45.45\text{ mA}, I_2=100\text{ mA}, I_4=17.86\text{ mA}, I_5=37.04\text{ mA}$</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <script>
+    let currentSheet = 1;
+
+    function switchSheet(num) {
+      currentSheet = num;
+      document.getElementById('tab-sheet-1').classList.toggle('active', num === 1);
+      document.getElementById('tab-sheet-2').classList.toggle('active', num === 2);
+
+      const s1Container = document.getElementById('sheet-1-container');
+      const s2Container = document.getElementById('sheet-2-container');
+      const s1Subnav = document.getElementById('subnav-sheet-1');
+      const s2Subnav = document.getElementById('subnav-sheet-2');
+      const badge = document.getElementById('header-badge');
+      const title = document.getElementById('header-title');
+      const desc = document.getElementById('header-desc');
+
+      if (num === 1) {
+        s1Container.style.display = 'block';
+        s2Container.style.display = 'none';
+        s1Subnav.style.display = 'block';
+        s2Subnav.style.display = 'none';
+        badge.innerText = 'BENHA UNIVERSITY • FACULTY OF ENGINEERING AT SHOUBRA • ELECTRICAL & CONTROL PROGRAM';
+        title.innerText = 'Sheet (1A): Principles of Electrical Engineering (Code: ELE111)';
+        desc.innerText = 'Course Instructor: Ass. Prof. Essam M. Shaalan (2026-2027) — 100% verified step-by-step academic solutions with interactive circuit diagrams.';
+        filterQuestions(1, 0);
+      } else {
+        s1Container.style.display = 'none';
+        s2Container.style.display = 'block';
+        s1Subnav.style.display = 'none';
+        s2Subnav.style.display = 'block';
+        badge.innerText = 'BENHA UNIVERSITY • FACULTY OF ENGINEERING AT SHOUBRA • ELECTRICAL & CONTROL PROGRAM';
+        title.innerText = 'Sheet (2A): KVL, KCL & Circuit Troubleshooting (Code: ELE111)';
+        desc.innerText = 'Course Instructor: Ass. Prof. Essam M. Shaalan (2026-2027) — Complete circuit analysis, node/loop equations & fault diagnosis.';
+        filterQuestions(2, 0);
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function filterQuestions(sheetNum, groupNum) {
+      const maxGroups = 4;
+      for (let i = 0; i <= maxGroups; i++) {
+        const btn = document.getElementById(`filter-btn-s${sheetNum}-${i}`);
+        if (btn) btn.classList.remove('active');
+      }
+      const activeBtn = document.getElementById(`filter-btn-s${sheetNum}-${groupNum}`);
+      if (activeBtn) activeBtn.classList.add('active');
+
+      const cardClass = sheetNum === 1 ? '.s1-card' : '.s2-card';
+      const cards = document.querySelectorAll(cardClass);
+      cards.forEach(card => {
+        const g = card.getAttribute('data-group');
+        if (groupNum === 0 || !g || g == groupNum) {
+          card.style.display = 'block';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function toggleCardSolution(btn) {
+      const card = btn.closest('.card');
+      const sol = card.querySelector('.solution-content');
+      if (sol.classList.contains('show')) {
+        sol.classList.remove('show');
+        btn.classList.remove('active');
+        btn.innerHTML = '👁️ Show Steps';
+      } else {
+        sol.classList.add('show');
+        btn.classList.add('active');
+        btn.innerHTML = '🙈 Hide Steps';
+      }
+    }
+
+    function toggleAllSolutions(show) {
+      const activeSheetContainer = currentSheet === 1 ? document.getElementById('sheet-1-container') : document.getElementById('sheet-2-container');
+      const buttons = activeSheetContainer.querySelectorAll('.sol-toggle-btn');
+      const solutions = activeSheetContainer.querySelectorAll('.solution-content');
+
+      solutions.forEach((sol, idx) => {
+        const btn = buttons[idx];
+        if (show) {
+          sol.classList.add('show');
+          if (btn) {
+            btn.classList.add('active');
+            btn.innerHTML = '🙈 Hide Steps';
+          }
+        } else {
+          sol.classList.remove('show');
+          if (btn) {
+            btn.classList.remove('active');
+            btn.innerHTML = '👁️ Show Steps';
+          }
+        }
+      });
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+      if (typeof renderMathInElement === 'function') {
+        renderMathInElement(document.body, {
+          delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "$", right: "$", display: false}
+          ],
+          throwOnError: false
+        });
+      }
+    });
+  </script>
+</body>
+</html>
