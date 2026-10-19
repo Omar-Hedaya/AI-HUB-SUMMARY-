@@ -47,4 +47,10 @@ if (!fs.existsSync(publicDir)) {
 }
 fs.writeFileSync(path.join(publicDir, 'index.json'), jsonOutput);
 
-console.log('✅ Generated index.json successfully with', documents.length, 'documents across', categories.length, 'categories.');
+// Sync content directory to public/content so Vite production build bundles all document files
+const publicContentDir = path.join(publicDir, 'content');
+if (fs.existsSync(contentDir)) {
+  fs.cpSync(contentDir, publicContentDir, { recursive: true });
+}
+
+console.log('✅ Generated index.json successfully with', documents.length, 'documents across', categories.length, 'categories and synced content.');

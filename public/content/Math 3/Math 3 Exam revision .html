@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ملخص القوانين الشامل (Cheat Sheet) - Math 3</title>
+    <!-- مكتبة KaTeX لتنسيق المعادلات الرياضية -->
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/fonts/KaTeX_Main-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/fonts/KaTeX_Math-Italic.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/fonts/KaTeX_Size1-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/fonts/KaTeX_Size2-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/fonts/KaTeX_Size3-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/fonts/KaTeX_Size4-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <style>
+    .katex .sqrt, .katex .sqrt-sign svg {
+      display: inline-block !important;
+      visibility: visible !important;
+      opacity: 1 !important;
+      overflow: visible !important;
+    }
+    .katex svg {
+      max-width: none !important;
+    }
+    .sqrt-sym {
+      font-family: system-ui, -apple-system, sans-serif !important;
+      display: inline !important;
+    }
+
+    /* Math Direction & Bi-directional Isolation (LTR vs RTL) */
+    .katex, .katex-display, .katex-html, .math, .math-inline, .math-display, .math-row, .equation, .formula, [data-math="true"], span[class*="katex"], div[class*="katex"] {
+      direction: ltr !important;
+      unicode-bidi: isolate !important;
+      text-align: left !important;
+      display: inline-block;
+      -webkit-font-smoothing: antialiased;
+    }
+    .katex-display, .math-display {
+      display: block !important;
+      text-align: center !important;
+      direction: ltr !important;
+      unicode-bidi: isolate !important;
+      width: 100% !important;
+      max-width: 100% !important;
+      overflow-x: auto !important;
+      overflow-y: hidden !important;
+      margin: 1rem 0 !important;
+    }
+    .katex-display > .katex {
+      display: block !important;
+      text-align: center !important;
+      direction: ltr !important;
+      unicode-bidi: isolate !important;
+      white-space: nowrap !important;
+    }
+    .katex * {
+      direction: ltr !important;
+      unicode-bidi: normal !important;
+    }
+    .katex .mopen, .katex .mclose, .katex .mpunct, .katex .minner, .katex .mbin, .katex .mrel, .katex .mop, .katex .mord, .katex .sqrt, .katex .sqrt-sign {
+      direction: ltr !important;
+      unicode-bidi: isolate !important;
+    }
+    .math-pending, [data-math-pending="true"], .raw-latex:not(.math-rendered) {
+      opacity: 0 !important;
+      visibility: hidden !important;
+    }
+    .math-rendered, [data-math-rendered="true"] {
+      opacity: 1 !important;
+      visibility: visible !important;
+      transition: opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    }
+
+        :root {
+            --bg-base: #090d13;
+            --bg-card: #111722;
+            --border-card: #1f2937;
+            --cyan: #38bdf8;
+            --emerald: #34d399;
+            --amber: #fbbf24;
+            --purple: #c084fc;
+            --rose: #f43f5e;
+            --text-main: #e2e8f0;
+            --text-muted: #94a3b8;
+        }
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        /* منع أي انزياح أو كسر للشاشة بالكامل */
+        html, body {
+            width: 100% !important;
+            max-width: 100% !important;
+            overflow-x: hidden !important;
+            position: relative;
+            background-color: var(--bg-base);
+            color: var(--text-main);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.6;
+            padding-bottom: 70px;
+        }
+        
+        .container {
+            width: 100% !important;
+            max-width: 960px !important;
+            margin: 0 auto;
+            padding: 12px 10px;
+            overflow-x: hidden !important;
+        }
+
+        /* رأس الصفحة */
+        .header {
+            padding: 8px 0 14px 0;
+            border-bottom: 1px solid var(--border-card);
+            margin-bottom: 14px;
+        }
+        .top-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+        .badge {
+            background: rgba(56, 189, 248, 0.12);
+            color: var(--cyan);
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            padding: 4px 10px;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 800;
+        }
+        .quick-actions {
+            display: flex;
+            gap: 8px;
+        }
+        .action-btn {
+            background: #162032;
+            border: 1px solid #1e293b;
+            color: var(--text-main);
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .action-btn:hover { border-color: var(--cyan); }
+        .action-btn.active { background: rgba(52, 211, 153, 0.15); border-color: var(--emerald); color: var(--emerald); }
+
+        /* البحث الفوري */
+        .search-box {
+            position: relative;
+            margin-bottom: 12px;
+        }
+        .search-input {
+            width: 100%;
+            padding: 10px 14px;
+            border-radius: 8px;
+            background: #0f1623;
+            border: 1px solid var(--border-card);
+            color: #fff;
+            font-size: 0.88rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .search-input:focus { border-color: var(--cyan); }
+
+        /* شريط التنقل غير الثابت */
+        .nav-bar {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+            position: static;
+            background: rgba(17, 23, 34, 0.85);
+            padding: 8px;
+            border-radius: 10px;
+            border: 1px solid var(--border-card);
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+        }
+        .nav-bar::-webkit-scrollbar { display: none; }
+        .tab-btn {
+            flex: 0 0 auto;
+            padding: 8px 14px;
+            background: #111722;
+            border: 1px solid #1e293b;
+            color: var(--text-muted);
+            border-radius: 6px;
+            font-size: 0.82rem;
+            font-weight: 800;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.2s;
+        }
+        .tab-btn:hover { color: #fff; border-color: rgba(56, 189, 248, 0.4); }
+        .tab-btn.active {
+            background: rgba(56, 189, 248, 0.15);
+            border-color: var(--cyan);
+            color: var(--cyan);
+        }
+
+        /* كروت الجداول */
+        .lecture-section { display: none; }
+        .lecture-section.active { display: block; animation: fadeIn 0.2s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(3px); } to { opacity: 1; transform: translateY(0); } }
+
+        .sheet-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-card);
+            border-radius: 10px;
+            margin-bottom: 18px;
+            overflow: hidden;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+        }
+        .card-title {
+            padding: 12px 14px;
+            font-size: 0.95rem;
+            font-weight: 800;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .purple-card .card-title { background: linear-gradient(90deg, #3b0764, #111722); border-bottom: 2px solid var(--purple); }
+        .blue-card .card-title { background: linear-gradient(90deg, #0c4a6e, #111722); border-bottom: 2px solid var(--cyan); }
+        .emerald-card .card-title { background: linear-gradient(90deg, #064e3b, #111722); border-bottom: 2px solid var(--emerald); }
+        .amber-card .card-title { background: linear-gradient(90deg, #7c2d12, #111722); border-bottom: 2px solid var(--amber); }
+
+        /* حصر التمرير في حاوية الجدول فقط */
+        .table-scroll {
+            width: 100% !important;
+            max-width: 100% !important;
+            overflow-x: auto !important;
+            -webkit-overflow-scrolling: touch;
+            border-bottom: 1px solid var(--border-card);
+            display: block;
+        }
+        .scroll-hint {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.74rem;
+            color: var(--cyan);
+            background: rgba(56, 189, 248, 0.05);
+            padding: 6px 8px;
+            border-bottom: 1px solid #1a2332;
+            font-weight: 700;
+            user-select: none;
+        }
+        table {
+            width: 100%;
+            min-width: 580px;
+            border-collapse: collapse;
+            font-size: 0.88rem;
+        }
+        th {
+            background: #141d2c;
+            color: var(--cyan);
+            padding: 10px 12px;
+            text-align: right;
+            border-bottom: 1px solid var(--border-card);
+            font-weight: 700;
+            white-space: nowrap;
+        }
+        td {
+            padding: 10px 12px;
+            border-bottom: 1px solid #1a2230;
+            vertical-align: middle;
+            line-height: 1.5;
+        }
+        td.math-cell {
+            direction: ltr;
+            text-align: left;
+            white-space: nowrap;
+            font-size: 0.94rem;
+            background: rgba(0, 0, 0, 0.15);
+        }
+        td.title-cell {
+            white-space: nowrap;
+            font-weight: 700;
+            color: #f1f5f9;
+        }
+        tr:last-child td { border-bottom: none; }
+        tr:hover td { background: rgba(56, 189, 248, 0.04); }
+
+        /* حماية المعادلات المعترضة داخل النصوص العربية */
+        .math-inline {
+            display: inline-block;
+            direction: ltr;
+            unicode-bidi: isolate;
+        }
+
+        /* صندوق الملاحظات */
+        .notes-box {
+            padding: 12px 14px;
+            background: #0b1018;
+            font-size: 0.84rem;
+            color: #cbd5e1;
+        }
+        .notes-box.hidden { display: none; }
+        .notes-title {
+            font-weight: 800;
+            color: var(--amber);
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .notes-list {
+            list-style: none;
+            padding-right: 4px;
+        }
+        .notes-list li {
+            position: relative;
+            padding-right: 20px;
+            margin-bottom: 6px;
+            line-height: 1.6;
+        }
+        .notes-list li::before {
+            content: "💡";
+            position: absolute;
+            right: 0;
+            font-size: 0.82rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+
+        <!-- ترويسة الصفحة -->
+        <div class="header">
+            <div class="top-row">
+                <span class="badge">MATH 3 • FORMULA CHEAT SHEET</span>
+                <div class="quick-actions">
+                    <button id="toggle-notes-btn" class="action-btn" onclick="toggleAllNotes()">👁️ إخفاء/إظهار الملاحظات</button>
+                    <button id="ultra-mode-btn" class="action-btn" onclick="toggleUltraMode()">⚡ وضع القوانين الصافية فقط</button>
+                </div>
+            </div>
+            <!-- خانة البحث الفوري -->
+            <div class="search-box">
+                <input type="text" id="formula-search" class="search-input" placeholder="🔍 ابحث عن أي قانون (مثال: Euler, Green, Jacobian, Lagrange, Tangent)..." onkeyup="searchFormulas()">
+            </div>
+        </div>
+
+        <!-- شريط التنقل -->
+        <div class="nav-bar" dir="ltr">
+            <button class="tab-btn active" onclick="switchTab(0, this)">All Lectures</button>
+            <button class="tab-btn" onclick="switchTab(1, this)">Lec 1: Partial Diff</button>
+            <button class="tab-btn" onclick="switchTab(2, this)">Lec 2: Euler & Jacobians</button>
+            <button class="tab-btn" onclick="switchTab(3, this)">Lec 3: Extrema & Applications</button>
+            <button class="tab-btn" onclick="switchTab(4, this)">Lec 4: Multiple Integrals</button>
+            <button class="tab-btn" onclick="switchTab(5, this)">Lec 5: Vectors Analysis</button>
+        </div>
+
+        <!-- المحاضرة الأولى -->
+        <div id="lec-1" class="lecture-section active">
+            <div class="sheet-card purple-card" data-keywords="partial derivative higher domain chain implicit">
+                <div class="card-title">📌 Lecture 1: المشتقات الجزئية وقاعدة السلسلة (Partial Derivatives)</div>
+                <div class="table-scroll">
+                    <div class="scroll-hint">👈 اسحب الجدول أفقياً لعرض المعادلة كاملة 👉</div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width:25%">الحالة</th>
+                                <th style="width:35%">القانون المباشر</th>
+                                <th style="width:40%">طريقة الحل / الاستخدام</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="title-cell">المشتقات الأولى</td>
+                                <td class="math-cell">$f_x = \frac{\partial f}{\partial x}, \quad f_y = \frac{\partial f}{\partial y}$</td>
+                                <td>عند إيجاد $f_x$ اعتبر $y$ ثابتاً، وعند إيجاد $f_y$ اعتبر $x$ ثابتاً.</td>
+                            </tr>
+                            <tr>
+                                <td class="title-cell">المشتقات المختلطة</td>
+                                <td class="math-cell">$f_{xy} = f_{yx}$</td>
+                                <td>متساوية دائماً إذا كانت المشتقات متصلة (مفتاح للتحقق من الحل).</td>
+                            </tr>
+                            <tr>
+                                <td class="title-cell">التفاضل الكلي $du$</td>
+                                <td class="math-cell">$du = f_x dx + f_y dy$</td>
+                                <td>يقيس التغير اللانهائي بدلالة الزيادات في المتغيرات.</td>
+                            </tr>
+                            <tr>
+                                <td class="title-cell">قاعدة السلسلة (مركب)</td>
+                                <td class="math-cell">$s_x = s_u u_x + s_v v_x, \quad s_y = s_u u_y + s_v v_y$</td>
+                                <td>إذا كانت $s=f(u,v)$ حيث $u, v$ يعتمدان على $(x, y)$.</td>
+                            </tr>
+                            <tr>
+                                <td class="title-cell">الاشتقاق الضمني ($y'$)</td>
+                                <td class="math-cell">$y' = \frac{dy}{dx} = -\frac{f_x}{f_y}$</td>
+                                <td>بدون الحاجة لفصل $y$ بمفردها (ضع الدالة صفرياً $f(x,y)=0$).</td>
+                            </tr>
+                            <tr>
+                                <td class="title-cell">الاشتقاق الضمني ($z_x, z_y$)</td>
+                                <td class="math-cell">$z_x = -\frac{f_x}{f_z}, \quad z_y = -\frac{f_y}{f_z}$</td>
+                                <td>إذا كانت $f(x,y,z)=0$ تحدد $z$ ضمنياً في متغيرين $x, y$.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="notes-box">
+                    <div class="notes-title">⚡ زيتونة المحاضرة الأولى:</div>
+                    <ul class="notes-list">
+                        <li><strong>المجال (Domain):</strong> تحت الجذر الزوجي <bdi class="math-inline">$\ge 0$</bdi>، ما داخل اللوغاريتم <bdi class="math-inline">$&gt; 0$</bdi>، ومقام الكسر <bdi class="math-inline">$\neq 0$</bdi>.</li>
+                        <li><strong>الاشتقاق الضمني:</strong> لا تنسَ الإشارة السالبة في البسط: <bdi class="math-inline">$y' = -\frac{f_x}{f_y}$</bdi>.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- المحاضرة الثانية -->
+        <div id="lec-2" class="lecture-section active">
+            <div class="sheet-card blue-card" data-keywords="euler homogeneous jacobian polar cylindrical spherical coordinate">
+                <div class="card-title">📌 Lecture 2: نظرية أويلر والجاكوبي (Euler & Jacobians)</div>
+                <div class="table-scroll">
+                    <div class="scroll-hint">👈 اسحب الجدول أفقياً لعرض المعادلة كاملة 👉</div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width:25%">المفهوم</th>
+                                <th style="width:35%">الصيغة الرياضية المباشرة</th>
+                                <th style="width:40%">ملاحظة الاستخدام</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="title-cell">شرط التجانس</td>
+                                <td class="math-cell">$f(tx, ty) = t^k f(x, y)$</td>
+                                <td>$k$ هي درجة التجانس؛ الدوال ذات الكسور متساوية الدرجة تكون $k=0$.</td>
+                            </tr>
+                            <tr>
+                                <td class="title-cell">أويلر (2 متغير)</td>
+                                <td class="math-cell">$x f_x + y f_y = k f$</td>
+                                <td>تطبق فوراً بمجرد إثبات أن الدالة متجانسة من الدرجة $k$.</td>
+                            </tr>
+                            <tr>
+                                <td class="title-cell">أويلر (3 متغيرات)</td>
+                                <td class="math-cell">$x f_x + y f_y + z f_z = k f$</td>
+                                <td>نفس القاعدة مع إضافة المتغير الثالث $z$.</td>
+                            </tr>
+                            <tr>
+                                <td class="title-cell">جاكوبي (2 متغير)</td>
+                                <td class="math-cell">$J\left(\frac{f,g}{x,y}\right) = \begin{vmatrix} f_x & f_y \\ g_x & g_y \end{vmatrix} = f_x g_y - f_y g_x$</td>
+                                <td>إذا كان الناتج $J = 0$ فالدوال معتمدة وظيفياً (Dependent).</td>
+                            </tr>
+                            <tr>
+                                <td class="title-cell">خاصية المعكوس</td>
+                                <td class="math-cell">$J\left(\frac{f,g}{x,y}\right) \cdot J\left(\frac{x,y}{f,g}\right) = 1$</td>
+                                <td>تغنيك عن إعادة حساب المحدد للمتغيرات المعكوسة.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- جدول مقارنة الإحداثيات المتعامدة الشامل -->
+                <div class="table-scroll">
+                    <div class="scroll-hint">👈 اسحب أفقياً لمقارنة أنظمة الإحداثيات بالكامل 👉</div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width:20%">النظام</th>
+                                <th style="width:30%">معادلات التحويل</th>
+                                <th style="width:15%">الجاكوبي $J$</th>
+                                <th style="width:15%">حدود الزوايا</th>
+                                <th style="width:20%">العنصر التفاضلي</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="title-cell">القطبي $(r, \theta)$</td>
+                                <td class="math-cell">$x = r\cos\theta, \,\, y = r\sin\theta$</td>
+                                <td class="math-cell">$J = r$</td>
+                                <td class="math-cell">$0 \le \theta \le 2\pi$</td>
+                                <td class="math-cell">$dA = r\,dr\,d\theta$</td>
+                            </tr>
+                            <tr>
+                                <td class="title-cell">الأسطواني $(r, \theta, z)$</td>
+                                <td class="math-cell">$x = r\cos\theta, \,\, y = r\sin\theta, \,\, z = z$</td>
+                                <td class="math-cell">$J = r$</td>
+                                <td class="math-cell">$0 \le \theta \le 2\pi$</td>
+                                <td class="math-cell">$dV = r\,dr\,d\theta\,dz$</td>
+                            </tr>
+                            <tr>
+                                <td class="title-cell">الكروي $(\rho, \theta, \varphi)$</td>
+                                <td class="math-cell">$x=\rho\cos\theta\sin\varphi, \, y=\rho\sin\theta\sin\varphi, \, z=\rho\cos\varphi$</td>
+                                <td class="math-cell">$J = \rho^2\sin\varphi$</td>
+                                <td class="math-cell">$0 \le \theta \le 2\pi$ <br> $0 \le \varphi \le \pi$</td>
+                                <td class="math-cell">$dV = \rho^2\sin\varphi\,d\rho\,d\theta\,d\varphi$</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="notes-box">
+                    <div class="notes-title">⚡ زيتونة المحاضرة الثانية:</div>
+                    <ul class="notes-list">
+                        <li><strong>أويلر مع معكوس الدوال:</strong> إذا كانت <bdi class="math-inline">$u = \tan^{-1}\left(\frac{x^3+y^3}{2x+3y}\right)$</bdi>، اجعل <bdi class="math-inline">$S = \tan u$</bdi> ثم طبق أويلر على $S$ بدرجة <bdi class="math-inline">$k = 3 - 1 = 2$</bdi>.</li>
+                        <li><strong>زوايا النظام الكروي:</strong> الزاوية $\theta$ تدور دورة كاملة في المستوى الأفقي <bdi class="math-inline">$[0, 2\pi]$</bdi>، بينما $\varphi$ تقاس من محور $z$ الموجب لنصف دورة فقط <bdi class="math-inline">$[0, \pi]$</bdi>.</li>
+                        <li><strong>الاعتماد والاستقلال:</strong> <bdi class="math-inline">$J \neq 0 \implies$</bdi> مستقلة (Independent)، بينما <bdi class="math-inline">$J = 0 \implies$</bdi> معتمدة (Dependent).</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- المحاضرة الثالثة -->
+        <div id="lec-3" class="lecture-section active">
+            <div class="sheet-card emerald-card" data-keywords="envelope tangent normal plane extrema maximum minimum saddle lagrange">
+                <div class="card-title">📌 Lecture 3: التطبيقات الهندسية والقيم القصوى (Applications & Extrema)</div>
+                <div class="table-scroll">
+                    <div class="scroll-hint">👈 اسحب الجدول أفقياً لعرض المعادلة كاملة 👉</div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width:25%">التطبيق</th>
+                                <th style="width:35%">القوانين والمعادلات</th>
+                                <th style="width:40%">القرار / الناتج</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="title-cell">الغلاف (Envelope)</td>
+                                <td class="math-cell">$\frac{\partial f}{\partial \alpha} = 0 \implies \alpha = g(x,y)$</td>
+                                <td>نعوض بقيمة $\alpha$ في معادلة العائلة الأصلية لحذف الوسيط.</td>
+                            </tr>
+                            <tr>
+                                <td class="title-cell">المستوى المماس</td>
+                                <td class="math-cell">$F_x(x-a) + F_y(y-b) + F_z(z-c) = 0$</td>
+                                <td>معادلة المستوى المماس للسطح عند النقطة $(a,b,c)$.</td>
+                            </tr>
+                            <tr>
+                                <td class="title-cell">الخط العمودي</td>
+                                <td class="math-cell">$\frac{x-a}{F_x} = \frac{y-b}{F_y} = \frac{z-c}{F_z}$</td>
+                                <td>الصورة المتماثلة للخط العمودي على السطح.</td>
+                            </tr>
+                            <tr>
+                                <td class="title-cell">المميز $\Delta$ للنقاط الحرجة</td>
+                                <td class="math-cell">$\Delta = f_{xx}f_{yy} - (f_{xy})^2$</td>
+                                <td>
+                                    • $\Delta &lt; 0 \implies \mathbf{Saddle\,Point}$<br>
+                                    • $\Delta > 0, f_{xx} > 0 \implies \mathbf{Local\,Min}$<br>
+                                    • $\Delta > 0, f_{xx} &lt; 0 \implies \mathbf{Local\,Max}$<br>
+                                    • $\Delta = 0 \implies \mathbf{No\,Decision}$
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="title-cell">مضاعفات لاجرانج</td>
+                                <td class="math-cell">$\nabla f = \lambda \nabla g \implies \begin{cases} f_x = \lambda g_x \\ f_y = \lambda g_y \end{cases}$</td>
+                                <td>نحل المعادلتين مع معادلة القيد $g(x,y)=0$.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="notes-box">
+                    <div class="notes-title">⚡ زيتونة المحاضرة الثالثة:</div>
+                    <ul class="notes-list">
+                        <li><strong>معادلة السطح:</strong> عند وضع <bdi class="math-inline">$F(x,y,z) = f(x,y) - z = 0$</bdi> تكون <bdi class="math-inline">$F_z = -1$</bdi> دائماً.</li>
+                        <li><strong>النقاط الحرجة:</strong> نوجد النقطة أولاً من <bdi class="math-inline">$f_x = 0$</bdi> و <bdi class="math-inline">$f_y = 0$</bdi> ثم نحسب $\Delta$.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- المحاضرة الرابعة -->
+        <div id="lec-4" class="lecture-section active">
+            <div class="sheet-card amber-card" data-keywords="double integral triple green line area surface work volume sphere ellipse">
+                <div class="card-title">📌 Lecture 4: التكاملات المتعددة والخطي ونظرية جرين (Multiple Integrals)</div>
+                <div class="table-scroll">
+                    <div class="scroll-hint">👈 اسحب الجدول أفقياً لعرض المعادلة كاملة 👉</div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width:25%">نوع التكامل</th>
+                                <th style="width:35%">القانون المباشر</th>
+                                <th style="width:40%">تطبيقات وحالات خاصة</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="title-cell">المساحة بالتكامل الثنائي</td>
+                                <td class="math-cell">$A = \iint_D dxdy = \iint_D r\,dr\,d\theta$</td>
+                                <td>تكامل العنصر التفاضلي على حدود المنطقة المستوية.</td>
+                            </tr>
+                            <tr>
+                                <td class="title-cell">الحجم بالتكامل الثنائي</td>
+                                <td class="math-cell">$V = \iint_D f(x,y) dxdy$</td>
+                                <td>حجم المجسم تحت السطح $z=f(x,y)$ وفوق $D$.</td>
+                            </tr>
+                            <tr>
+                                <td class="title-cell">التكامل الخطي (الشغل)</td>
+                                <td class="math-cell">$W = \int_C p(x,y)dx + q(x,y)dy$</td>
+                                <td>يُحسب بالتعويض بالمسار $y=f(x)$ أو بدلالة $t$.</td>
+                            </tr>
+                            <tr>
+                                <td class="title-cell">استقلال المسار</td>
+                                <td class="math-cell">$\frac{\partial p}{\partial y} = \frac{\partial q}{\partial x}$</td>
+                                <td>لا يعتمد على المسار، وعلى أي مسار مغلق قيمته $0$ مباشرة!</td>
+                            </tr>
+                            <tr>
+                                <td class="title-cell">نظرية جرين في المستوى</td>
+                                <td class="math-cell">$\oint_C p\,dx + q\,dy = \iint_D \left(\frac{\partial q}{\partial x} - \frac{\partial p}{\partial y}\right) dxdy$</td>
+                                <td>تحول التكامل الخطي المغلق إلى تكامل ثنائي مباشر.</td>
+                            </tr>
+                            <tr>
+                                <td class="title-cell">المساحة بجرين</td>
+                                <td class="math-cell">$A = \frac{1}{2} \oint_C x\,dy - y\,dx$</td>
+                                <td>حساب المساحة بتكامل خطي على المحيط المغلق.</td>
+                            </tr>
+                            <tr>
+                                <td class="title-cell">مساحة السطح (Surface)</td>
+                                <td class="math-cell">$S = \iint_D \sqrt{1 + z_x^2 + z_y^2} \, dxdy$</td>
+                                <td>حيث $D$ مسقط السطح على المستوى $xy$.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- جدول مساحات وحجوم الأشكال القياسية -->
+                <div class="table-scroll">
+                    <div class="scroll-hint">👈 اسحب أفقياً لعرض حجوم ومساحات الأشكال القياسية 👉</div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width:25%">الشكل الهندسي</th>
+                                <th style="width:35%">المعادلة القياسية</th>
+                                <th style="width:40%">قانون المساحة / الحجم المباشر</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="title-cell">الدائرة (Circle)</td>
+                                <td class="math-cell">$x^2 + y^2 = a^2$</td>
+                                <td class="math-cell">$\text{Area} = \pi a^2$</td>
+                            </tr>
+                            <tr>
+                                <td class="title-cell">القطع الناقص (Ellipse)</td>
+                                <td class="math-cell">$\frac{x^2}{a^2} + \frac{y^2}{b^2} = 1$</td>
+                                <td class="math-cell">$\text{Area} = \pi a b$</td>
+                            </tr>
+                            <tr>
+                                <td class="title-cell">الكرة (Sphere)</td>
+                                <td class="math-cell">$x^2 + y^2 + z^2 = a^2$</td>
+                                <td class="math-cell">$\text{Volume} = \frac{4}{3}\pi a^3, \quad \text{Surface} = 4\pi a^2$</td>
+                            </tr>
+                            <tr>
+                                <td class="title-cell">المجسم الإهليلجي (Ellipsoid)</td>
+                                <td class="math-cell">$\frac{x^2}{a^2} + \frac{y^2}{b^2} + \frac{z^2}{c^2} = 1$</td>
+                                <td class="math-cell">$\text{Volume} = \frac{4}{3}\pi a b c$</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="notes-box">
+                    <div class="notes-title">⚡ زيتونة المحاضرة الرابعة:</div>
+                    <ul class="notes-list">
+                        <li><strong>تبديل الترتيب (Change of Order):</strong> إذا كان التكامل صعباً بالنسبة لمتغير مثل <bdi class="math-inline">$\int e^{y/x}dx$</bdi>، اعكس الترتيب لـ $dydx$ بعد رسم المنطقة.</li>
+                        <li><strong>التحقق السريع:</strong> استخدم قوانين المساحة والحجم القياسية للتأكد السريع من ناتج التكامل في الأشكال المتماثلة.</li>
+                        <li><strong>التكامل الخطي المغلق:</strong> إذا تحقق <bdi class="math-inline">$p_y = q_x$</bdi> فإن قيمة <bdi class="math-inline">$\oint_C = 0$</bdi> مباشرة دون إجراء أي تكامل.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- المحاضرة الخامسة -->
+        <div id="lec-5" class="lecture-section active">
+            <div class="sheet-card purple-card" data-keywords="vector dot cross gradient divergence curl laplacian curvilinear nabla">
+                <div class="card-title">📌 Lecture 5: تحليل المتجهات والإحداثيات المنحنية (Vectors Analysis)</div>
+                <div class="table-scroll">
+                    <div class="scroll-hint">👈 اسحب الجدول أفقياً لعرض المعادلة كاملة 👉</div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width:25%">المعامل / العملية</th>
+                                <th style="width:35%">الصيغة الرياضية المباشرة</th>
+                                <th style="width:40%">نوع الناتج ودلالته</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="title-cell">الضرب القياسي (Dot)</td>
+                                <td class="math-cell">$\bar{U}\cdot\bar{V} = u_1v_1 + u_2v_2 + u_3v_3$</td>
+                                <td>قيمة عددية؛ مسقط $\bar{U}$ على $\bar{V}$ هو $\frac{\bar{U}\cdot\bar{V}}{v}$.</td>
+                            </tr>
+                            <tr>
+                                <td class="title-cell">الضرب الاتجاهي (Cross)</td>
+                                <td class="math-cell">$\bar{U}\times\bar{V} = \begin{vmatrix} \bar{i} & \bar{j} & \bar{k} \\ u_1 & u_2 & u_3 \\ v_1 & v_2 & v_3 \end{vmatrix}$</td>
+                                <td>متجه عمودي؛ $\bar{U}\times\bar{V} = -\bar{V}\times\bar{U}$.</td>
+                            </tr>
+                            <tr>
+                                <td class="title-cell">الضرب الثلاثي الاتجاهي</td>
+                                <td class="math-cell">$\bar{U}\times(\bar{V}\times\bar{W}) = (\bar{U}\cdot\bar{W})\bar{V} - (\bar{U}\cdot\bar{V})\bar{W}$</td>
+                                <td>تفكيك مباشر بدون حساب محددين متتاليين.</td>
+                            </tr>
+                            <tr>
+                                <td class="title-cell">التدرج (Gradient)</td>
+                                <td class="math-cell">$\nabla\varphi = \frac{\partial\varphi}{\partial x}\bar{i} + \frac{\partial\varphi}{\partial y}\bar{j} + \frac{\partial\varphi}{\partial z}\bar{k}$</td>
+                                <td>متجه عمودي؛ المشتقة الاتجاهية: $\frac{\nabla\varphi\cdot\bar{U}}{u}$.</td>
+                            </tr>
+                            <tr>
+                                <td class="title-cell">التباعد (Divergence)</td>
+                                <td class="math-cell">$\nabla\cdot\bar{U} = \frac{\partial u_1}{\partial x} + \frac{\partial u_2}{\partial y} + \frac{\partial u_3}{\partial z}$</td>
+                                <td>ناتج قياسي (Scalar Field).</td>
+                            </tr>
+                            <tr>
+                                <td class="title-cell">الالتفاف (Curl)</td>
+                                <td class="math-cell">$\nabla\times\bar{U} = \begin{vmatrix} \bar{i} & \bar{j} & \bar{k} \\ \frac{\partial}{\partial x} & \frac{\partial}{\partial y} & \frac{\partial}{\partial z} \\ u_1 & u_2 & u_3 \end{vmatrix}$</td>
+                                <td>ناتج متجه؛ إذا ساوى صفراً فالمجال غير دوراني.</td>
+                            </tr>
+                            <tr>
+                                <td class="title-cell">متطابقات صفرية هامة</td>
+                                <td class="math-cell">$\text{curl}(\text{grad }\varphi) = \mathbf{0}, \quad \text{div}(\text{curl }\bar{U}) = 0$</td>
+                                <td>التفاف التدرج وتباعد الالتفاف كلاهما صفر دائماً.</td>
+                            </tr>
+                            <tr>
+                                <td class="title-cell">عوامل المقياس $h_i$</td>
+                                <td class="math-cell">$h_1 = |\frac{\partial\bar{r}}{\partial\alpha}|, \,\, h_2 = |\frac{\partial\bar{r}}{\partial\beta}|, \,\, h_3 = |\frac{\partial\bar{r}}{\partial\gamma}|$</td>
+                                <td>تستخدم لكتابة المؤثرات في الأنظمة المنحنية المتعامدة.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="notes-box">
+                    <div class="notes-title">⚡ زيتونة المحاضرة الخامسة:</div>
+                    <ul class="notes-list">
+                        <li><strong>المشتقة الاتجاهية:</strong> اقسم دائماً على معيار المتجه <bdi class="math-inline">$u = |\bar{U}|$</bdi> (الضرب في متّجه وحدة الاتجاه).</li>
+                        <li><strong>عوامل المقياس المحفوظة:</strong>
+                            <br>• الأسطواني: <bdi class="math-inline">$h_\rho = 1, \,\, h_\theta = \rho, \,\, h_z = 1$</bdi>.
+                            <br>• الكروي: <bdi class="math-inline">$h_\rho = 1, \,\, h_\theta = \rho\sin\varphi, \,\, h_\varphi = \rho$</bdi>.
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- كود الجافاسكريبت للتحكم التفاعلي والبحث -->
+    <script>
+        function switchTab(index, btn) {
+            const tabs = document.querySelectorAll('.tab-btn');
+            const sections = document.querySelectorAll('.lecture-section');
+            tabs.forEach(t => t.classList.remove('active'));
+            if (btn) btn.classList.add('active');
+
+            if (index === 0) {
+                sections.forEach(sec => sec.classList.add('active'));
+            } else {
+                sections.forEach(sec => sec.classList.remove('active'));
+                const target = document.getElementById('lec-' + index);
+                if (target) target.classList.add('active');
+            }
+        }
+
+        let notesVisible = true;
+        function toggleAllNotes() {
+            notesVisible = !notesVisible;
+            const notes = document.querySelectorAll('.notes-box');
+            notes.forEach(note => {
+                if (notesVisible) {
+                    note.classList.remove('hidden');
+                } else {
+                    note.classList.add('hidden');
+                }
+            });
+            document.getElementById('toggle-notes-btn').classList.toggle('active', !notesVisible);
+        }
+
+        let ultraMode = false;
+        function toggleUltraMode() {
+            ultraMode = !ultraMode;
+            const notes = document.querySelectorAll('.notes-box');
+            notes.forEach(note => {
+                if (ultraMode) {
+                    note.classList.add('hidden');
+                } else {
+                    note.classList.remove('hidden');
+                }
+            });
+            document.getElementById('ultra-mode-btn').classList.toggle('active', ultraMode);
+        }
+
+        function searchFormulas() {
+            const query = document.getElementById('formula-search').value.toLowerCase().trim();
+            const cards = document.querySelectorAll('.sheet-card');
+            const sections = document.querySelectorAll('.lecture-section');
+
+            if (query === '') {
+                cards.forEach(card => card.style.display = 'block');
+                return;
+            }
+
+            sections.forEach(sec => sec.classList.add('active'));
+
+            cards.forEach(card => {
+                const text = card.innerText.toLowerCase();
+                const keywords = card.getAttribute('data-keywords') ? card.getAttribute('data-keywords').toLowerCase() : '';
+                if (text.includes(query) || keywords.includes(query)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            if (typeof renderMathInElement === 'function') {
+                renderMathInElement(document.body, {
+                    delimiters: [
+                        {left: "$$", right: "$$", display: true},
+                        {left: "$", right: "$", display: false}
+                    ],
+                    throwOnError: false
+                });
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,1767 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ملخص محاضرات الرياضيات - البوابة الشاملة</title>
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/fonts/KaTeX_Main-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/fonts/KaTeX_Math-Italic.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/fonts/KaTeX_Size1-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/fonts/KaTeX_Size2-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/fonts/KaTeX_Size3-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/fonts/KaTeX_Size4-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <style>
+    .katex .sqrt, .katex .sqrt-sign svg {
+      display: inline-block !important;
+      visibility: visible !important;
+      opacity: 1 !important;
+      overflow: visible !important;
+    }
+    .katex svg {
+      max-width: none !important;
+    }
+    .sqrt-sym {
+      font-family: system-ui, -apple-system, sans-serif !important;
+      display: inline !important;
+    }
+
+    /* Math Direction & Bi-directional Isolation (LTR vs RTL) */
+    .katex, .katex-display, .katex-html, .math, .math-inline, .math-display, .math-row, .equation, .formula, [data-math="true"], span[class*="katex"], div[class*="katex"] {
+      direction: ltr !important;
+      unicode-bidi: isolate !important;
+      text-align: left !important;
+      display: inline-block;
+      -webkit-font-smoothing: antialiased;
+    }
+    .katex-display, .math-display {
+      display: block !important;
+      text-align: center !important;
+      direction: ltr !important;
+      unicode-bidi: isolate !important;
+      width: 100% !important;
+      max-width: 100% !important;
+      overflow-x: auto !important;
+      overflow-y: hidden !important;
+      margin: 1rem 0 !important;
+    }
+    .katex-display > .katex {
+      display: block !important;
+      text-align: center !important;
+      direction: ltr !important;
+      unicode-bidi: isolate !important;
+      white-space: nowrap !important;
+    }
+    .katex * {
+      direction: ltr !important;
+      unicode-bidi: normal !important;
+    }
+    .katex .mopen, .katex .mclose, .katex .mpunct, .katex .minner, .katex .mbin, .katex .mrel, .katex .mop, .katex .mord, .katex .sqrt, .katex .sqrt-sign {
+      direction: ltr !important;
+      unicode-bidi: isolate !important;
+    }
+    .math-pending, [data-math-pending="true"], .raw-latex:not(.math-rendered) {
+      opacity: 0 !important;
+      visibility: hidden !important;
+    }
+    .math-rendered, [data-math-rendered="true"] {
+      opacity: 1 !important;
+      visibility: visible !important;
+      transition: opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    }
+
+        :root {
+            --bg-base: #090d13;
+            --bg-card: #111722;
+            --bg-code: #0b1017;
+            --border-card: #1f2937;
+            --cyan: #38bdf8;
+            --emerald: #34d399;
+            --amber: #fbbf24;
+            --purple: #c084fc;
+            --rose: #f43f5e;
+            --text-main: #e2e8f0;
+            --text-muted: #94a3b8;
+        }
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html, body {
+            width: 100% !important; max-width: 100% !important; overflow-x: hidden !important;
+            position: relative !important; margin: 0 !important; padding: 0 !important;
+            background-color: var(--bg-base); color: var(--text-main);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.6; padding-bottom: 70px;
+        }
+        .container {
+            width: 100% !important; max-width: 960px !important; margin: 0 auto !important;
+            padding: 14px 10px !important; box-sizing: border-box; overflow-x: hidden !important;
+        }
+
+        /* شريط التنقل العلوي للمحاضرات */
+        .lecture-switch-wrapper {
+            display: flex; gap: 8px; margin-bottom: 8px; position: sticky; top: 6px; z-index: 1002;
+            background: rgba(9, 13, 19, 0.95); backdrop-filter: blur(14px); padding: 6px;
+            border-radius: 12px; border: 1px solid var(--border-card); box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
+            overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none;
+        }
+        .lecture-switch-wrapper::-webkit-scrollbar { display: none; }
+        .lecture-tab {
+            flex: 0 0 auto; display: flex; align-items: center; justify-content: center; gap: 6px;
+            padding: 10px 14px; border-radius: 8px; font-size: 0.88rem; font-weight: 800; cursor: pointer;
+            color: var(--text-muted); background: #111722; border: 1px solid #1e293b; transition: all 0.2s ease;
+            text-align: center; user-select: none; white-space: nowrap;
+        }
+        .lecture-tab:hover { color: #fff; border-color: rgba(56, 189, 248, 0.4); }
+        .lecture-tab.active { background: rgba(56, 189, 248, 0.15); border-color: var(--cyan); color: var(--cyan); }
+
+        /* شريط التنقل الفرعي */
+        .nav-tabs-wrapper {
+            position: sticky; top: 62px; z-index: 1000; background: rgba(9, 13, 19, 0.95);
+            backdrop-filter: blur(12px); padding: 6px 8px; border-radius: 12px; border: 1px solid var(--border-card);
+            margin-bottom: 18px; box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6); overflow-x: auto;
+            -webkit-overflow-scrolling: touch; scrollbar-width: none;
+        }
+        .nav-tabs-wrapper::-webkit-scrollbar { display: none; }
+        .nav-tabs { display: flex; gap: 6px; width: 100%; min-width: min-content; }
+        .tab-btn {
+            flex: 0 0 auto; padding: 8px 12px; background: #111722; border: 1px solid #1e293b; color: var(--text-muted);
+            border-radius: 8px; font-weight: 800; font-size: 0.8rem; text-align: center; cursor: pointer;
+            white-space: nowrap; transition: all 0.2s ease;
+        }
+        .tab-btn:hover { color: #fff; border-color: rgba(56, 189, 248, 0.4); }
+        .tab-btn.active { background: rgba(56, 189, 248, 0.15); border-color: var(--cyan); color: var(--cyan); }
+        .tab-btn.all-parts-btn { background: rgba(52, 211, 153, 0.12); border-color: rgba(52, 211, 153, 0.35); color: var(--emerald); }
+        .tab-btn.all-parts-btn.active { background: rgba(52, 211, 153, 0.22); border-color: var(--emerald); color: #fff; }
+
+        /* الترويسة */
+        .header { padding: 10px 0 16px 0; border-bottom: 1px solid var(--border-card); margin-bottom: 18px; }
+        .header-badge {
+            display: inline-block; background: rgba(56, 189, 248, 0.12); color: var(--cyan);
+            border: 1px solid rgba(56, 189, 248, 0.3); padding: 4px 10px; border-radius: 9999px;
+            font-size: 0.72rem; font-weight: 700; margin-bottom: 8px; text-transform: uppercase;
+        }
+        .header h1 { font-size: 1.35rem; font-weight: 800; color: #fff; margin-bottom: 6px; }
+        .header p { font-size: 0.82rem; color: var(--text-muted); line-height: 1.4; }
+
+        /* حاويات العرض */
+        .view-panel { display: none; animation: fadeIn 0.25s ease-in-out; }
+        .view-panel.active-panel { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* العناوين الفرعية */
+        .lecture-content-wrapper h2 {
+            font-size: 1.25rem; font-weight: 700; color: #fff; padding: 12px 18px; border-radius: 8px;
+            margin-top: 1.2rem; margin-bottom: 1.2rem; border: 1px solid rgba(255,255,255,0.12);
+        }
+        .purple { background: linear-gradient(90deg, #3b0764, #0f172a); border-left: 6px solid var(--purple); }
+        .blue { background: linear-gradient(90deg, #0c4a6e, #0f172a); border-left: 6px solid var(--cyan); }
+        .emerald { background: linear-gradient(90deg, #064e3b, #0f172a); border-left: 6px solid var(--emerald); }
+        .orange { background: linear-gradient(90deg, #7c2d12, #0f172a); border-left: 6px solid var(--amber); }
+
+        /* الجداول */
+        .table-scroll-container {
+            width: 100%; overflow-x: auto; margin: 1rem 0 1.5rem 0; border: 1px solid #1e293b;
+            border-radius: 10px; background: var(--bg-card); box-shadow: 0 4px 18px rgba(0, 0, 0, 0.45);
+            direction: ltr;
+        }
+        .scroll-hint {
+            display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 0.76rem;
+            color: var(--cyan); background: rgba(56, 189, 248, 0.08); padding: 7px 12px;
+            text-align: center; border-bottom: 1px solid #1e293b; font-weight: 700; user-select: none;
+            direction: rtl;
+        }
+        table { width: 100%; min-width: 720px; border-collapse: collapse; }
+        th { background: #1e293b; color: var(--cyan); padding: 12px 14px; text-align: left; }
+        td { padding: 12px 14px; border: 1px solid #1e293b; font-size: 0.88rem; vertical-align: middle; }
+        tr:nth-child(even) td { background: #0b1120; }
+        tr:hover td { background: #162036; }
+
+        /* الملاحظات */
+        .callout {
+            background: #0d1527; border: 1px solid #334155; border-radius: 8px; padding: 1.1rem 1.4rem;
+            margin: 1.2rem 0; box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35); border-right: 5px solid var(--cyan);
+        }
+
+        /* البطاقات والحلول المنظمة */
+        .card { background: var(--bg-card); border: 1px solid var(--border-card); border-radius: 10px; margin-bottom: 16px; overflow: hidden; }
+        .card-header { padding: 10px 14px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.02); border-bottom: 1px solid var(--border-card); gap: 8px; }
+        .prob-tag { font-weight: 800; font-size: 0.9rem; color: var(--cyan); direction: ltr; }
+        .card-body { padding: 14px; display: flex; flex-direction: column; gap: 12px; direction: ltr; }
+        .question-prompt { background: rgba(56, 189, 248, 0.06); border-left: 4px solid var(--cyan); padding: 10px 12px; font-size: 0.88rem; border-radius: 4px; }
+        
+        /* تصميم خطوات الحل المحسن */
+        .solution-content { display: none; flex-direction: column; gap: 10px; }
+        .solution-content.show { display: flex; animation: fadeIn 0.3s ease-in-out; }
+        .solution-step {
+            background: var(--bg-code);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-left: 3px solid var(--cyan);
+            border-radius: 6px;
+            padding: 10px 12px;
+            font-size: 0.86rem;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        .step-title {
+            font-size: 0.78rem;
+            font-weight: 800;
+            color: var(--cyan);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .math-row {
+            overflow-x: auto;
+            overflow-y: hidden;
+            padding: 4px 0;
+            font-size: 0.92rem;
+            line-height: 1.8;
+            -webkit-overflow-scrolling: touch;
+        }
+        .math-row::-webkit-scrollbar { height: 4px; }
+        .math-row::-webkit-scrollbar-thumb { background: rgba(56, 189, 248, 0.3); border-radius: 4px; }
+
+        .result-badge { display: inline-block; background: rgba(52, 211, 153, 0.12); border: 1px solid rgba(52, 211, 153, 0.3); color: var(--emerald); padding: 3px 10px; border-radius: 6px; font-weight: 700; width: fit-content; margin-top: 4px; }
+        .sol-toggle-btn { background: rgba(56, 189, 248, 0.12); color: var(--cyan); border: 1px solid rgba(56, 189, 248, 0.35); padding: 6px 12px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 0.8rem; }
+        .sol-toggle-btn.active { background: rgba(244, 63, 94, 0.15); color: var(--rose); border-color: var(--rose); }
+        .global-toggle-bar { display: flex; gap: 8px; margin-bottom: 14px; background: rgba(255, 255, 255, 0.03); padding: 8px 12px; border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.06); justify-content: flex-end; }
+        .global-toggle-bar button { padding: 6px 12px; font-size: 0.78rem; font-weight: 700; border-radius: 6px; cursor: pointer; border: 1px solid #1e293b; background: #111722; color: #cbd5e1; transition: all 0.2s ease; }
+        .global-toggle-bar button:hover { border-color: var(--cyan); color: #fff; }
+    </style>
+</head>
+<body>
+    <div class="container">
+
+        <!-- شريط التنقل العلوي للمحاضرات -->
+        <div class="lecture-switch-wrapper" dir="ltr">
+            <div id="lec-tab-1" class="lecture-tab active" onclick="switchLectureGroup(1)">1: Partial Derivative</div>
+            <div id="lec-tab-2" class="lecture-tab" onclick="switchLectureGroup(2)">2: Euler & Jacobians</div>
+            <div id="lec-tab-3" class="lecture-tab" onclick="switchLectureGroup(3)">3: Applications (Extrema)</div>
+            <div id="lec-tab-4" class="lecture-tab" onclick="switchLectureGroup(4)">4: Multiple Integrals</div>
+            <div id="lec-tab-5" class="lecture-tab" onclick="switchLectureGroup(5)">5: Vectors Analysis</div>
+        </div>
+
+        <!-- شريط التنقل الفرعي للمحاضرة الأولى -->
+        <div class="nav-tabs-wrapper" id="subnav-wrapper-1" dir="ltr">
+            <div class="nav-tabs">
+                <div id="part-btn-1-0" class="tab-btn all-parts-btn" onclick="showLec1Part(0)">All Parts</div>
+                <div id="part-btn-1-1" class="tab-btn active" onclick="showLec1Part(1)">Part 1: Functions & Domains</div>
+                <div id="part-btn-1-2" class="tab-btn" onclick="showLec1Part(2)">Part 2: Partial Derivatives</div>
+                <div id="part-btn-1-3" class="tab-btn" onclick="showLec1Part(3)">Part 3: Chain Rule & Implicit Diff</div>
+                <div id="part-btn-1-4" class="tab-btn" onclick="showLec1Part(4)">Solved Examples (Full)</div>
+            </div>
+        </div>
+
+        <!-- شريط التنقل الفرعي للمحاضرة الثانية -->
+        <div class="nav-tabs-wrapper" id="subnav-wrapper-2" style="display: none;" dir="ltr">
+            <div class="nav-tabs">
+                <div id="part-btn-2-0" class="tab-btn all-parts-btn" onclick="showLec2Part(0)">All Parts</div>
+                <div id="part-btn-2-1" class="tab-btn active" onclick="showLec2Part(1)">Part 1: Homogeneous & Euler</div>
+                <div id="part-btn-2-2" class="tab-btn" onclick="showLec2Part(2)">Part 2: Separable & Jacobians</div>
+                <div id="part-btn-2-3" class="tab-btn" onclick="showLec2Part(3)">Part 3: Coordinate Transformations</div>
+                <div id="part-btn-2-4" class="tab-btn" onclick="showLec2Part(4)">Solved Examples (Full)</div>
+            </div>
+        </div>
+
+        <!-- شريط التنقل الفرعي للمحاضرة الثالثة -->
+        <div class="nav-tabs-wrapper" id="subnav-wrapper-3" style="display: none;" dir="ltr">
+            <div class="nav-tabs">
+                <div id="part-btn-3-0" class="tab-btn all-parts-btn" onclick="showLec3Part(0)">All Parts</div>
+                <div id="part-btn-3-1" class="tab-btn active" onclick="showLec3Part(1)">Part 1: Envelope</div>
+                <div id="part-btn-3-2" class="tab-btn" onclick="showLec3Part(2)">Part 2: Tangent Plane & Normal Line</div>
+                <div id="part-btn-3-3" class="tab-btn" onclick="showLec3Part(3)">Part 3: Extrema</div>
+                <div id="part-btn-3-4" class="tab-btn" onclick="showLec3Part(4)">Part 4: Conditional Extrema</div>
+                <div id="part-btn-3-5" class="tab-btn" onclick="showLec3Part(5)">Solved Examples (Full)</div>
+            </div>
+        </div>
+
+        <!-- شريط التنقل الفرعي للمحاضرة الرابعة -->
+        <div class="nav-tabs-wrapper" id="subnav-wrapper-4" style="display: none;" dir="ltr">
+            <div class="nav-tabs">
+                <div id="part-btn-4-0" class="tab-btn all-parts-btn" onclick="showLec4Part(0)">All Parts</div>
+                <div id="part-btn-4-1" class="tab-btn active" onclick="showLec4Part(1)">Part 1: Double Integral</div>
+                <div id="part-btn-4-2" class="tab-btn" onclick="showLec4Part(2)">Part 2: Triple Integral</div>
+                <div id="part-btn-4-3" class="tab-btn" onclick="showLec4Part(3)">Part 3: Line Integral & Green's Theorem</div>
+                <div id="part-btn-4-4" class="tab-btn" onclick="showLec4Part(4)">Part 4: Surface Integral</div>
+                <div id="part-btn-4-5" class="tab-btn" onclick="showLec4Part(5)">Solved Examples (Full)</div>
+            </div>
+        </div>
+
+        <!-- شريط التنقل الفرعي للمحاضرة الخامسة -->
+        <div class="nav-tabs-wrapper" id="subnav-wrapper-5" style="display: none;" dir="ltr">
+            <div class="nav-tabs">
+                <div id="part-btn-5-0" class="tab-btn all-parts-btn" onclick="showLec5Part(0)">All Parts</div>
+                <div id="part-btn-5-1" class="tab-btn active" onclick="showLec5Part(1)">Part 1: Vector Algebra</div>
+                <div id="part-btn-5-2" class="tab-btn" onclick="showLec5Part(2)">Part 2: Vector Function</div>
+                <div id="part-btn-5-3" class="tab-btn" onclick="showLec5Part(3)">Part 3: Gradient, Divergence & Curl</div>
+                <div id="part-btn-5-4" class="tab-btn" onclick="showLec5Part(4)">Part 4: Orthogonal Coordinates</div>
+                <div id="part-btn-5-5" class="tab-btn" onclick="showLec5Part(5)">Solved Examples (Full)</div>
+            </div>
+        </div>
+
+        <!-- الترويسة -->
+        <div class="header">
+            <span class="header-badge" id="header-badge">الرياضيات • المشتقات الجزئية</span>
+            <h1 id="page-main-title">الجزء 1: دوال المتغيرات المتعددة ومجالها</h1>
+            <p id="page-main-desc">ملخص شامل وأمثلة محلولة بالكامل من مذكرات د. م.ح. عيد.</p>
+        </div>
+
+        <!-- ============================================================ -->
+        <!-- المحاضرة الأولى (Partial Derivative) -->
+        <!-- ============================================================ -->
+        <div id="lec1-container">
+            <div id="part-view-1-1" class="view-panel active-panel">
+                <div class="lecture-content-wrapper">
+                    <h2 class="purple" dir="ltr">Part 1: Functions of Several Variables & Domain</h2>
+                    <div class="callout" dir="ltr">
+                        <strong>Definitions of Spaces:</strong>
+                        <ul>
+                            <li>$R^2 = \{(x,y): x,y \in R\}$ (Ordered Pairs)</li>
+                            <li>$R^3 = \{(x,y,z): x,y,z \in R\}$ (Triples)</li>
+                            <li>$R^n = \{(x_1, ..., x_n): x_i \in R, i=1,2,...n\}$ (n-tuples)</li>
+                        </ul>
+                    </div>
+                    <div class="table-scroll-container">
+                        <div class="scroll-hint">👈 اسحب أفقياً لعرض الجدول كاملاً 👉</div>
+                        <table>
+                            <thead><tr><th style="width:25%">المفهوم</th><th style="width:35%">الصيغة / الرمز</th><th>الوصف</th></tr></thead>
+                            <tbody>
+                                <tr><td>دالة لمتغيرين</td><td>$f: R^2 \rightarrow R$ <br> $u=f(x,y)$</td><td>تربط كل زوج $(x,y)$ في المجال $D$ برقم حقيقي. مثال: المساحة $A=xy$.</td></tr>
+                                <tr><td>دالة لثلاثة متغيرات</td><td>$f: R^3 \rightarrow R$ <br> $u=f(x,y,z)$</td><td>تربط كل نقطة $(x,y,z)$ في المجال $D$ برقم حقيقي. مثال: الحجم $V=xyz$.</td></tr>
+                                <tr><td>قواعد إيجاد المجال</td><td>تجنب $\sqrt{-x}$ و $\frac{1}{0}$</td><td>مجموعة كل النقاط التي تكون الدالة عندها مُعرفة وتعطي أرقاماً حقيقية.</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div id="part-view-1-2" class="view-panel">
+                <div class="lecture-content-wrapper">
+                    <h2 class="blue" dir="ltr">Part 2: Partial & Higher Derivatives</h2>
+                    <div class="table-scroll-container">
+                        <div class="scroll-hint">👈 اسحب أفقياً لعرض الجدول كاملاً 👉</div>
+                        <table>
+                            <thead><tr><th style="width:25%">نوع المشتقة</th><th style="width:35%">الصيغة / الرمز</th><th>الوصف</th></tr></thead>
+                            <tbody>
+                                <tr><td>المشتقة الجزئية الأولى لـ $x$</td><td>$f_x = \frac{\partial f}{\partial x} = \lim_{\Delta x \to 0} \frac{f(x+\Delta x, y) - f(x,y)}{\Delta x}$</td><td>اعتبار $y$ ثابتاً، والاشتقاق بالنسبة لـ $x$.</td></tr>
+                                <tr><td>المشتقة الجزئية الأولى لـ $y$</td><td>$f_y = \frac{\partial f}{\partial y} = \lim_{\Delta y \to 0} \frac{f(x, y+\Delta y) - f(x,y)}{\Delta y}$</td><td>اعتبار $x$ ثابتاً، والاشتقاق بالنسبة لـ $y$.</td></tr>
+                                <tr><td>المشتقات الجزئية الثانية</td><td>$u_{xx} = \frac{\partial^2 u}{\partial x^2}$, $u_{yy} = \frac{\partial^2 u}{\partial y^2}$</td><td>اشتقاق المشتقات الجزئية الأولى مرة أخرى بالنسبة لنفس المتغير.</td></tr>
+                                <tr><td>المشتقات الجزئية المختلطة</td><td>$u_{xy} = \frac{\partial^2 u}{\partial x \partial y}$, $u_{yx} = \frac{\partial^2 u}{\partial y \partial x}$</td><td>الاشتقاق لـ $x$ ثم $y$، أو العكس.</td></tr>
+                                <tr><td>النظرية 1 (التساوي)</td><td>$f_{xy} = f_{yx}$</td><td>إذا كانت المشتقات الجزئية متصلة، فإن المشتقات المختلطة متساوية.</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div id="part-view-1-3" class="view-panel">
+                <div class="lecture-content-wrapper">
+                    <h2 class="orange" dir="ltr">Part 3: Chain Rule & Implicit Differentiation</h2>
+                    <div class="table-scroll-container">
+                        <div class="scroll-hint">👈 اسحب أفقياً لعرض الجدول كاملاً 👉</div>
+                        <table>
+                            <thead><tr><th style="width:25%">المفهوم</th><th style="width:35%">الصيغة / الرمز</th><th>الوصف</th></tr></thead>
+                            <tbody>
+                                <tr><td>الزيادة $\Delta u$</td><td>$\Delta u = f(x+\Delta x, y+\Delta y) - f(x,y)$</td><td>التغير في قيمة الدالة عندما تتغير النقطة $(x,y)$.</td></tr>
+                                <tr><td>التفاضل $du$</td><td>$du = f_x dx + f_y dy = u_x dx + u_y dy$</td><td>التفاضل الكلي لدالة لمتغيرين.</td></tr>
+                                <tr><td>قاعدة السلسلة (مركب)</td><td>$\frac{ds}{dx} = \frac{\partial s}{\partial u}\frac{du}{dx} + \frac{\partial s}{\partial v}\frac{dv}{dx}$</td><td>عندما $s=f(u,v)$ و $u,v$ دوال في $x$.</td></tr>
+                                <tr><td>قاعدة السلسلة (متعدد)</td><td>$s_x = s_u u_x + s_v v_x$ <br> $s_y = s_u u_y + s_v v_y$</td><td>عندما $s=f(u,v)$ و $u,v$ دوال في كلا من $x$ و $y$.</td></tr>
+                                <tr><td>الاشتقاق الضمني (النظرية 2)</td><td>$y' = \frac{dy}{dx} = -\frac{f_x}{f_y}$</td><td>للمعادلة $f(x,y)=0$ التي تحدد $y=g(x)$.</td></tr>
+                                <tr><td>الاشتقاق الضمني (النظرية 3)</td><td>$z_x = -\frac{f_x}{f_z}, \quad z_y = -\frac{f_y}{f_z}$</td><td>للمعادلة $f(x,y,z)=0$ التي تحدد $z=g(x,y)$.</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div id="part-view-1-4" class="view-panel">
+                <div class="lecture-content-wrapper">
+                    <h2 class="emerald" dir="ltr">Lecture 1: Complete Solved Examples</h2>
+                    <div class="global-toggle-bar">
+                        <button onclick="toggleAllSolutionsInContainer('part-view-1-4', true)">👁️ إظهار كل الحلول</button>
+                        <button onclick="toggleAllSolutionsInContainer('part-view-1-4', false)">🙈 إخفاء كل الحلول</button>
+                    </div>
+
+                    <!-- Example 3 -->
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="prob-tag">Example 3: Find Domain</span>
+                            <button class="sol-toggle-btn" onclick="toggleCardSolution(this)">إظهار الحل</button>
+                        </div>
+                        <div class="card-body">
+                            <div class="question-prompt">Find the domain of: <br> (i) $f(x,y)=\sqrt{4-x^2-y^2}$ <br> (ii) $f(x,y)=\frac{1}{x+y-1}$ <br> (iii) $f(x,y)=\ln(x+y-2)$</div>
+                            <div class="solution-content">
+                                <div class="solution-step">
+                                    <div class="step-title">📌 Case (i): Square Root Domain</div>
+                                    <div class="math-row">$$4 - x^2 - y^2 \ge 0 \implies x^2 + y^2 \le 4$$</div>
+                                    <div class="result-badge">Points inside and on the circle $x^2+y^2=4$</div>
+                                </div>
+                                <div class="solution-step">
+                                    <div class="step-title">📌 Case (ii): Fractional Function Domain</div>
+                                    <div class="math-row">$$x + y - 1 \ne 0$$</div>
+                                    <div class="result-badge">All points in $R^2$ except on the line $x+y-1=0$</div>
+                                </div>
+                                <div class="solution-step">
+                                    <div class="step-title">📌 Case (iii): Logarithmic Function Domain</div>
+                                    <div class="math-row">$$x + y - 2 > 0$$</div>
+                                    <div class="result-badge">All points above the line $x+y-2=0$</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Example 4 -->
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="prob-tag">Example 4: First Partial Derivatives</span>
+                            <button class="sol-toggle-btn" onclick="toggleCardSolution(this)">إظهار الحل</button>
+                        </div>
+                        <div class="card-body">
+                            <div class="question-prompt">Find $u_x$ and $u_y$ for: <br> (ii) $u = x^4 + \frac{x}{x+y}$ <br> (iii) $u = x \sin(3x+4y)$</div>
+                            <div class="solution-content">
+                                <div class="solution-step">
+                                    <div class="step-title">📌 Part (ii): $u = x^4 + \frac{x}{x+y}$</div>
+                                    <div class="math-row">
+                                        $$u_x = \frac{\partial}{\partial x}(x^4) + \frac{\partial}{\partial x}\left(\frac{x}{x+y}\right) = 4x^3 + \frac{(x+y)(1) - x(1)}{(x+y)^2} = 4x^3 + \frac{y}{(x+y)^2}$$
+                                    </div>
+                                    <div class="math-row">
+                                        $$u_y = 0 + \frac{(x+y)(0) - x(1)}{(x+y)^2} = \frac{-x}{(x+y)^2}$$
+                                    </div>
+                                </div>
+                                <div class="solution-step">
+                                    <div class="step-title">📌 Part (iii): $u = x \sin(3x+4y)$</div>
+                                    <div class="math-row">
+                                        $$u_x = (1)\sin(3x+4y) + x\cos(3x+4y) \cdot 3 = \sin(3x+4y) + 3x\cos(3x+4y)$$
+                                    </div>
+                                    <div class="math-row">
+                                        $$u_y = x\cos(3x+4y) \cdot 4 = 4x\cos(3x+4y)$$
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Examples 5 & 6 -->
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="prob-tag">Examples 5 & 6: Higher Order Derivatives</span>
+                            <button class="sol-toggle-btn" onclick="toggleCardSolution(this)">إظهار الحل</button>
+                        </div>
+                        <div class="card-body">
+                            <div class="question-prompt">Ex 5: Find $f_{xx}, f_{yy}, f_{xy}, f_{yx}$ for $f(x,y)=x^3+xy^4+8$ <br> Ex 6: Find up to 3rd derivatives for $f(x,y)=e^{xy}$</div>
+                            <div class="solution-content">
+                                <div class="solution-step">
+                                    <div class="step-title">📌 Example 5: $f(x,y) = x^3 + xy^4 + 8$</div>
+                                    <div class="math-row">$$f_x = 3x^2 + y^4, \quad f_y = 4xy^3$$</div>
+                                    <div class="math-row">$$f_{xx} = 6x, \quad f_{yy} = 12xy^2$$</div>
+                                    <div class="math-row">$$f_{xy} = 4y^3, \quad f_{yx} = 4y^3 \implies f_{xy} = f_{yx}$$</div>
+                                </div>
+                                <div class="solution-step">
+                                    <div class="step-title">📌 Example 6: $f(x,y) = e^{xy}$</div>
+                                    <div class="math-row">$$f_x = y e^{xy}, \quad f_{xx} = y^2 e^{xy}, \quad f_{xxx} = y^3 e^{xy}$$</div>
+                                    <div class="math-row">$$f_{xy} = \frac{\partial}{\partial y}(y e^{xy}) = e^{xy} + xy e^{xy}$$</div>
+                                    <div class="math-row">$$f_{xxy} = \frac{\partial}{\partial y}(y^2 e^{xy}) = 2y e^{xy} + x y^2 e^{xy}$$</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Example 8 -->
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="prob-tag">Example 8: Chain Rule</span>
+                            <button class="sol-toggle-btn" onclick="toggleCardSolution(this)">إظهار الحل</button>
+                        </div>
+                        <div class="card-body">
+                            <div class="question-prompt">Find $s_x$ and $s_y$ where $s=u^2+2uv$, $u=x^2+y^2$, and $v=xy$.</div>
+                            <div class="solution-content">
+                                <div class="solution-step">
+                                    <div class="step-title">📌 Step 1: Derivative with respect to $x$</div>
+                                    <div class="math-row">
+                                        $$\begin{aligned}
+                                        s_x &= s_u u_x + s_v v_x \\
+                                        &= (2u + 2v)(2x) + (2u)(y) \\
+                                        &= 4x(x^2+y^2+xy) + 2y(x^2+y^2) \\
+                                        &= 4x^3 + 6x^2y + 4xy^2 + 2y^3
+                                        \end{aligned}$$
+                                    </div>
+                                </div>
+                                <div class="solution-step">
+                                    <div class="step-title">📌 Step 2: Derivative with respect to $y$</div>
+                                    <div class="math-row">
+                                        $$\begin{aligned}
+                                        s_y &= s_u u_y + s_v v_y \\
+                                        &= (2u + 2v)(2y) + (2u)(x) \\
+                                        &= 4y(x^2+y^2+xy) + 2x(x^2+y^2) \\
+                                        &= 2x^3 + 4x^2y + 6xy^2 + 4y^3
+                                        \end{aligned}$$
+                                    </div>
+                                    <div class="result-badge">Results grouped in canonical polynomial order</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Example 12 -->
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="prob-tag">Example 12: Chain Rule Proof</span>
+                            <button class="sol-toggle-btn" onclick="toggleCardSolution(this)">إظهار الحل</button>
+                        </div>
+                        <div class="card-body">
+                            <div class="question-prompt">If $S=f(x-y, y-z, z-x)$, show that $S_x + S_y + S_z = 0$.</div>
+                            <div class="solution-content">
+                                <div class="solution-step">
+                                    <div class="step-title">📌 Step 1: Variable substitution</div>
+                                    <div>Let $u = x-y, \quad v = y-z, \quad w = z-x$</div>
+                                </div>
+                                <div class="solution-step">
+                                    <div class="step-title">📌 Step 2: Differentiating each component</div>
+                                    <div class="math-row">
+                                        $$\begin{aligned}
+                                        S_x &= S_u(1) + S_v(0) + S_w(-1) = S_u - S_w \\
+                                        S_y &= S_u(-1) + S_v(1) + S_w(0) = -S_u + S_v \\
+                                        S_z &= S_u(0) + S_v(-1) + S_w(1) = -S_v + S_w
+                                        \end{aligned}$$
+                                    </div>
+                                </div>
+                                <div class="solution-step">
+                                    <div class="step-title">📌 Step 3: Summing the derivatives</div>
+                                    <div class="math-row">
+                                        $$S_x + S_y + S_z = (S_u - S_u) + (S_v - S_v) + (S_w - S_w) = 0$$
+                                    </div>
+                                    <div class="result-badge">Q.E.D. Formula Verified</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Examples 13 & 14 (Corrected) -->
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="prob-tag">Examples 13 & 14: Implicit Differentiation ($y'$)</span>
+                            <button class="sol-toggle-btn" onclick="toggleCardSolution(this)">إظهار الحل</button>
+                        </div>
+                        <div class="card-body">
+                            <div class="question-prompt">Ex 13: Find $y'$ for $x \cos y + y \sin x = 2$ <br> Ex 14: Find $y'$ for $x \ln y + y^3 \sin x = 4$</div>
+                            <div class="solution-content">
+                                <div class="solution-step">
+                                    <div class="step-title">📌 Example 13</div>
+                                    <div>Let $f(x,y) = x \cos y + y \sin x - 2 = 0$</div>
+                                    <div class="math-row">$$f_x = \cos y + y \cos x, \quad f_y = -x \sin y + \sin x$$</div>
+                                    <div class="result-badge">$$y' = -\frac{f_x}{f_y} = -\frac{\cos y + y \cos x}{-x \sin y + \sin x}$$</div>
+                                </div>
+                                <div class="solution-step">
+                                    <div class="step-title">📌 Example 14 (Corrected)</div>
+                                    <div>Let $f(x,y) = x \ln y + y^3 \sin x - 4 = 0$</div>
+                                    <div class="math-row">$$f_x = \ln y + y^3 \cos x, \quad f_y = \frac{x}{y} + 3y^2 \sin x$$</div>
+                                    <div class="result-badge">$$y' = -\frac{f_x}{f_y} = -\frac{\ln y + y^3 \cos x}{\frac{x}{y} + 3y^2 \sin x}$$</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Example 16 -->
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="prob-tag">Example 16: Implicit Diff (Two Variables)</span>
+                            <button class="sol-toggle-btn" onclick="toggleCardSolution(this)">إظهار الحل</button>
+                        </div>
+                        <div class="card-body">
+                            <div class="question-prompt">If $x \sin y + y^2 \cos y + z^3 + e^x \sin z = 0$, Find $z_x, z_y$.</div>
+                            <div class="solution-content">
+                                <div class="solution-step">
+                                    <div class="step-title">📌 Step 1: Compute partial derivatives of $F(x,y,z)$</div>
+                                    <div class="math-row">
+                                        $$\begin{aligned}
+                                        f_x &= \sin y + e^x \sin z \\
+                                        f_y &= x \cos y + 2y \cos y - y^2 \sin y \\
+                                        f_z &= 3z^2 + e^x \cos z
+                                        \end{aligned}$$
+                                    </div>
+                                </div>
+                                <div class="solution-step">
+                                    <div class="step-title">📌 Step 2: Apply implicit formulas</div>
+                                    <div class="math-row">
+                                        <span class="result-badge">$$z_x = -\frac{f_x}{f_z} = -\frac{\sin y + e^x \sin z}{3z^2 + e^x \cos z}$$</span>
+                                    </div>
+                                    <div class="math-row">
+                                        <span class="result-badge">$$z_y = -\frac{f_y}{f_z} = -\frac{x \cos y + 2y \cos y - y^2 \sin y}{3z^2 + e^x \cos z}$$</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================ -->
+        <!-- المحاضرة الثانية (Euler Theorem) -->
+        <!-- ============================================================ -->
+        <div id="lec2-container" style="display: none;">
+            <div id="part-view-2-1" class="view-panel active-panel">
+                <div class="lecture-content-wrapper">
+                    <h2 class="purple" dir="ltr">Part 1: Homogeneous Functions & Euler's Theorem</h2>
+                    <div class="table-scroll-container">
+                        <div class="scroll-hint">👈 اسحب أفقياً لعرض الجدول كاملاً 👉</div>
+                        <table>
+                            <thead><tr><th style="width:25%">المفهوم</th><th style="width:35%">التعريف / الصيغة</th><th>الوصف</th></tr></thead>
+                            <tbody>
+                                <tr><td>دالة متجانسة</td><td>$f(tx, ty) = t^k f(x,y)$</td><td>تكون الدالة متجانسة من الدرجة $k$ إذا كان تعويض $tx, ty$ يخرج المعامل $t^k$.</td></tr>
+                                <tr><td>نظرية أويلر (متغيران)</td><td>$x f_x + y f_y = k f$</td><td>العلاقة الأساسية للدوال المتجانسة من الدرجة $k$.</td></tr>
+                                <tr><td>نظرية أويلر (3 متغيرات)</td><td>$x f_x + y f_y + z f_z = k f$</td><td>تعميم النظرية لدوال ذات ثلاثة متغيرات.</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div id="part-view-2-2" class="view-panel">
+                <div class="lecture-content-wrapper">
+                    <h2 class="blue" dir="ltr">Part 2: Separable Functions & Jacobians</h2>
+                    <div class="table-scroll-container">
+                        <div class="scroll-hint">👈 اسحب أفقياً لعرض الجدول كاملاً 👉</div>
+                        <table>
+                            <thead><tr><th style="width:25%">المفهوم</th><th style="width:35%">الصيغة</th><th>الوصف</th></tr></thead>
+                            <tbody>
+                                <tr><td>دالة قابلة للفصل</td><td>$f(x,y) = g(x) \cdot h(y)$</td><td>يمكن تحليلها إلى حاصل ضرب دوال في متغيرات مستقلة. مثال: $x^2 \cos(3y)$.</td></tr>
+                                <tr><td>الجاكوبي (متغيران)</td><td>$J(\frac{f,g}{x,y}) = \begin{vmatrix} f_x & f_y \\ g_x & g_y \end{vmatrix}$</td><td>محدد المشتقات الجزئية الأولى لـ $f,g$ بالنسبة لـ $x,y$.</td></tr>
+                                <tr><td>الجاكوبي (3 متغيرات)</td><td>$J(\frac{f,g,h}{x,y,z}) = \begin{vmatrix} f_x & f_y & f_z \\ g_x & g_y & g_z \\ h_x & h_y & h_z \end{vmatrix}$</td><td>محدد لثلاث دوال بالنسبة لثلاثة متغيرات.</td></tr>
+                                <tr><td>استقلال وظيفي</td><td>$J \ne 0$</td><td>تكون الدوال مستقلة إذا كان الجاكوبي لا يساوي صفراً.</td></tr>
+                                <tr><td>اعتماد وظيفي</td><td>$J = 0$</td><td>تعتمد الدوال على بعضها إذا كان الجاكوبي يساوي صفراً.</td></tr>
+                                <tr><td>خاصية الجاكوبي العكسي</td><td>$J(\frac{f,g}{x,y}) \cdot J(\frac{x,y}{f,g}) = 1$</td><td>حاصل ضرب الجاكوبي في معكوسه يساوي 1.</td></tr>
+                                <tr><td>قاعدة السلسلة للجاكوبي</td><td>$J(\frac{f,g}{x,y}) = J(\frac{f,g}{u,v}) \cdot J(\frac{u,v}{x,y})$</td><td>تركيب الجاكوبي.</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div id="part-view-2-3" class="view-panel">
+                <div class="lecture-content-wrapper">
+                    <h2 class="emerald" dir="ltr">Part 3: Coordinate Transformations</h2>
+                    <div class="table-scroll-container">
+                        <div class="scroll-hint">👈 اسحب أفقياً لعرض الجدول كاملاً 👉</div>
+                        <table>
+                            <thead><tr><th style="width:25%">النظام</th><th style="width:35%">المعادلات</th><th>الجاكوبي $J$</th></tr></thead>
+                            <tbody>
+                                <tr><td>القطبي $(r,\theta)$</td><td>$x = r \cos \theta, y = r \sin \theta$</td><td>$J(\frac{x,y}{r,\theta}) = r$.</td></tr>
+                                <tr><td>الأسطواني $(r,\theta,z)$</td><td>$x = r \cos \theta, y = r \sin \theta, z=z$</td><td>$J(\frac{x,y,z}{r,\theta,z}) = r$.</td></tr>
+                                <tr><td>الكروي $(r,\theta,\varphi)$</td><td>$x = r \cos \theta \sin \varphi, \quad y = r \sin \theta \sin \varphi, \quad z = r \cos \varphi$</td><td>$J(\frac{x,y,z}{r,\theta,\varphi}) = r^2 \sin \varphi$.</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div id="part-view-2-4" class="view-panel">
+                <div class="lecture-content-wrapper">
+                    <h2 class="amber" dir="ltr">Lecture 2: Complete Solved Examples</h2>
+                    <div class="global-toggle-bar">
+                        <button onclick="toggleAllSolutionsInContainer('part-view-2-4', true)">👁️ إظهار كل الحلول</button>
+                        <button onclick="toggleAllSolutionsInContainer('part-view-2-4', false)">🙈 إخفاء كل الحلول</button>
+                    </div>
+
+                    <!-- Example 1 -->
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="prob-tag">Example 1: Identify Homogeneous Functions</span>
+                            <button class="sol-toggle-btn" onclick="toggleCardSolution(this)">إظهار الحل</button>
+                        </div>
+                        <div class="card-body">
+                            <div class="question-prompt">Check if homogeneous and find degree: <br>(i) $f = x^3 + xy^2$<br>(ii) $f = x^3 + xy^2 - 4$<br>(iii) $f = \sin(\frac{x}{x-y})$</div>
+                            <div class="solution-content">
+                                <div class="solution-step">
+                                    <div class="step-title">📌 Test (i): $f(x,y) = x^3 + xy^2$</div>
+                                    <div class="math-row">$$f(tx,ty) = (tx)^3 + (tx)(ty)^2 = t^3(x^3 + xy^2) = t^3 f(x,y)$$</div>
+                                    <div class="result-badge">Homogeneous, Degree $k = 3$</div>
+                                </div>
+                                <div class="solution-step">
+                                    <div class="step-title">📌 Test (ii): $f(x,y) = x^3 + xy^2 - 4$</div>
+                                    <div class="math-row">$$f(tx,ty) = t^3(x^3 + xy^2) - 4 \ne t^k f(x,y)$$</div>
+                                    <div class="result-badge">Not Homogeneous (constant term prevents factoring $t$)</div>
+                                </div>
+                                <div class="solution-step">
+                                    <div class="step-title">📌 Test (iii): $f(x,y) = \sin(\frac{x}{x-y})$</div>
+                                    <div class="math-row">$$f(tx,ty) = \sin\left(\frac{tx}{tx-ty}\right) = \sin\left(\frac{x}{x-y}\right) = t^0 f(x,y)$$</div>
+                                    <div class="result-badge">Homogeneous, Degree $k = 0$</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Examples 2 & 3 -->
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="prob-tag">Examples 2 & 3: Verify Euler's Theorem</span>
+                            <button class="sol-toggle-btn" onclick="toggleCardSolution(this)">إظهار الحل</button>
+                        </div>
+                        <div class="card-body">
+                            <div class="question-prompt">Verify Euler's Theorem for: <br>Ex 2: $f(x,y) = x^3 + xy^2$ <br>Ex 3: $f(x,y,z) = x^3 + xy^2 + 2z^3$</div>
+                            <div class="solution-content">
+                                <div class="solution-step">
+                                    <div class="step-title">📌 Example 2: 2-Variables Verification</div>
+                                    <div>Degree $k=3$. Partial derivatives:</div>
+                                    <div class="math-row">$$f_x = 3x^2+y^2, \quad f_y = 2xy$$</div>
+                                    <div class="math-row">
+                                        $$x f_x + y f_y = x(3x^2+y^2) + y(2xy) = 3x^3 + 3xy^2 = 3(x^3+xy^2) = 3f$$
+                                    </div>
+                                    <div class="result-badge">Euler Verified: $x f_x + y f_y = 3f$</div>
+                                </div>
+                                <div class="solution-step">
+                                    <div class="step-title">📌 Example 3: 3-Variables Verification</div>
+                                    <div>Degree $k=3$. Partial derivatives:</div>
+                                    <div class="math-row">$$f_x = 3x^2+y^2, \quad f_y = 2xy, \quad f_z = 6z^2$$</div>
+                                    <div class="math-row">
+                                        $$x f_x + y f_y + z f_z = 3x^3 + 3xy^2 + 6z^3 = 3(x^3+xy^2+2z^3) = 3f$$
+                                    </div>
+                                    <div class="result-badge">Euler Verified: $x f_x + y f_y + z f_z = 3f$</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Example 4 -->
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="prob-tag">Example 4: Euler with Implicit Form</span>
+                            <button class="sol-toggle-btn" onclick="toggleCardSolution(this)">إظهار الحل</button>
+                        </div>
+                        <div class="card-body">
+                            <div class="question-prompt">If $u = \tan^{-1}\left(\frac{x^3+y^3}{2x+3y}\right)$, Show that $x u_x + y u_y = \sin(2u)$</div>
+                            <div class="solution-content">
+                                <div class="solution-step">
+                                    <div class="step-title">📌 Step 1: Transformation to a homogeneous function</div>
+                                    <div class="math-row">$$S = \tan u = \frac{x^3+y^3}{2x+3y}$$</div>
+                                    <div>Degree of $S$: $k = 3 - 1 = 2$.</div>
+                                </div>
+                                <div class="solution-step">
+                                    <div class="step-title">📌 Step 2: Applying Euler's Theorem to $S$</div>
+                                    <div class="math-row">$$x S_x + y S_y = 2S$$</div>
+                                    <div>Since $S = \tan u \implies S_x = \sec^2 u \cdot u_x, \quad S_y = \sec^2 u \cdot u_y$:</div>
+                                    <div class="math-row">$$x(\sec^2 u \cdot u_x) + y(\sec^2 u \cdot u_y) = 2 \tan u$$</div>
+                                </div>
+                                <div class="solution-step">
+                                    <div class="step-title">📌 Step 3: Simplifying Trigonometric terms</div>
+                                    <div class="math-row">
+                                        $$x u_x + y u_y = \frac{2 \tan u}{\sec^2 u} = 2 \left(\frac{\sin u}{\cos u}\right) \cos^2 u = 2 \sin u \cos u = \sin(2u)$$
+                                    </div>
+                                    <div class="result-badge">Q.E.D. Formula Verified</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Example 11 -->
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="prob-tag">Example 11: Functional Dependence</span>
+                            <button class="sol-toggle-btn" onclick="toggleCardSolution(this)">إظهار الحل</button>
+                        </div>
+                        <div class="card-body">
+                            <div class="question-prompt">Are $f=xy$ and $g=\sin(xy)$ functionally dependent?</div>
+                            <div class="solution-content">
+                                <div class="solution-step">
+                                    <div class="step-title">📌 Step 1: Calculate the Jacobian determinant</div>
+                                    <div class="math-row">
+                                        $$J\left(\frac{f,g}{x,y}\right) = \begin{vmatrix} f_x & f_y \\ g_x & g_y \end{vmatrix} = \begin{vmatrix} y & x \\ y \cos(xy) & x \cos(xy) \end{vmatrix}$$
+                                    </div>
+                                </div>
+                                <div class="solution-step">
+                                    <div class="step-title">📌 Step 2: Determinant evaluation</div>
+                                    <div class="math-row">$$J = (y)(x \cos(xy)) - (x)(y \cos(xy)) = xy \cos(xy) - xy \cos(xy) = 0$$</div>
+                                    <div class="result-badge">Since $J = 0$, $f$ and $g$ are functionally dependent.</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Example 14 -->
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="prob-tag">Example 14: Jacobian Properties</span>
+                            <button class="sol-toggle-btn" onclick="toggleCardSolution(this)">إظهار الحل</button>
+                        </div>
+                        <div class="card-body">
+                            <div class="question-prompt">If $x=r \cos \theta, y=r \sin \theta$. Show $J(\frac{r,\theta}{x,y}) \cdot J(\frac{x,y}{r,\theta}) = 1$.</div>
+                            <div class="solution-content">
+                                <div class="solution-step">
+                                    <div class="step-title">📌 Step 1: Evaluate $J(\frac{x,y}{r,\theta})$</div>
+                                    <div class="math-row">
+                                        $$J\left(\frac{x,y}{r,\theta}\right) = \begin{vmatrix} \cos\theta & -r\sin\theta \\ \sin\theta & r\cos\theta \end{vmatrix} = r\cos^2\theta + r\sin^2\theta = r$$
+                                    </div>
+                                </div>
+                                <div class="solution-step">
+                                    <div class="step-title">📌 Step 2: Invert equations and evaluate $J(\frac{r,\theta}{x,y})$</div>
+                                    <div>$r = \sqrt{x^2+y^2}, \quad \theta = \tan^{-1}(y/x)$</div>
+                                    <div class="math-row">
+                                        $$J\left(\frac{r,\theta}{x,y}\right) = \begin{vmatrix} \frac{x}{\sqrt{x^2+y^2}} & \frac{y}{\sqrt{x^2+y^2}} \\ \frac{-y}{x^2+y^2} & \frac{x}{x^2+y^2} \end{vmatrix} = \frac{x^2 + y^2}{(x^2+y^2)^{3/2}} = \frac{1}{\sqrt{x^2+y^2}} = \frac{1}{r}$$
+                                    </div>
+                                </div>
+                                <div class="solution-step">
+                                    <div class="step-title">📌 Step 3: Compute the product</div>
+                                    <div class="math-row">$$J\left(\frac{x,y}{r,\theta}\right) \cdot J\left(\frac{r,\theta}{x,y}\right) = r \cdot \frac{1}{r} = 1$$</div>
+                                    <div class="result-badge">Property Verified: Product = 1</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================ -->
+        <!-- المحاضرة الثالثة (Applications) -->
+        <!-- ============================================================ -->
+        <div id="lec3-container" style="display: none;">
+            <div id="part-view-3-1" class="view-panel active-panel">
+                <div class="lecture-content-wrapper">
+                    <h2 class="purple" dir="ltr">Part 1: Envelope</h2>
+                    <div class="table-scroll-container">
+                        <div class="scroll-hint">👈 اسحب أفقياً لعرض الجدول كاملاً 👉</div>
+                        <table>
+                            <thead><tr><th style="width:25%">المفهوم</th><th style="width:35%">التعريف / الخطوات</th><th>الوصف</th></tr></thead>
+                            <tbody>
+                                <tr><td>الغلاف (Envelope)</td><td>منحنى يحيط بعائلة من المنحنيات المعرفة بـ $f(x,y,\alpha)=0$ حيث $\alpha$ هو الوسيط (parameter).</td><td>لإيجاد معادلته نتبع الخطوات الموضحة.</td></tr>
+                                <tr><td>الخطوة الأولى</td><td>نوجد $\alpha$ كدالة $g(x,y)$ من المعادلة $\frac{\partial f}{\partial\alpha}=0$.</td><td>نشتق الدالة جزئياً بالنسبة للوسيط ونساويها بالصفر.</td></tr>
+                                <tr><td>الخطوة الثانية</td><td>نحذف $\alpha$ من المعادلة الأصلية (1) لنحصل على معادلة الغلاف $f(x,y,g(x,y))=0$.</td><td>نعوض بـ $\alpha$ في المعادلة الأصلية.</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div id="part-view-3-2" class="view-panel">
+                <div class="lecture-content-wrapper">
+                    <h2 class="blue" dir="ltr">Part 2: Tangent Plane & Normal Line</h2>
+                    <div class="table-scroll-container">
+                        <div class="scroll-hint">👈 اسحب أفقياً لعرض الجدول كاملاً 👉</div>
+                        <table>
+                            <thead><tr><th style="width:25%">المفهوم</th><th style="width:35%">الصيغة</th><th>الوصف</th></tr></thead>
+                            <tbody>
+                                <tr><td>المستوى المماس (Tangent Plane)</td><td>$F_x \cdot (x-a) + F_y \cdot (y-b) + F_z \cdot (z-c) = 0$</td><td>المستوى المماس لسطح $F(x,y,z)=0$ عند النقطة $(a,b,c)$.</td></tr>
+                                <tr><td>الخط العمودي (Normal Line)</td><td>$\frac{x-a}{F_x} = \frac{y-b}{F_y} = \frac{z-c}{F_z}$</td><td>المعادلة المتماثلة للخط العمودي على السطح عند نفس النقطة.</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div id="part-view-3-3" class="view-panel">
+                <div class="lecture-content-wrapper">
+                    <h2 class="orange" dir="ltr">Part 3: Maximum and Minimum Points (Extrema)</h2>
+                    <div class="table-scroll-container">
+                        <div class="scroll-hint">👈 اسحب أفقياً لعرض الجدول كاملاً 👉</div>
+                        <table>
+                            <thead><tr><th style="width:25%">الخطوة / المفهوم</th><th style="width:35%">الوصف / الصيغة</th><th>النتيجة</th></tr></thead>
+                            <tbody>
+                                <tr><td>إيجاد النقاط الحرجة</td><td>حل المعادلتين: $f_x(x,y)=0$ و $f_y(x,y)=0$.</td><td>نحصل على النقطة $(a,b)$. يمكن أن توجد نقاط حرجة أيضاً إذا كانت $f_x$ أو $f_y$ غير موجودة.</td></tr>
+                                <tr><td>حساب المُميِّز (Discriminant)</td><td>$\Delta = f_{xx}f_{yy} - (f_{xy})^2$ عند النقطة $(a,b)$.</td><td>نستخدم قيمة $\Delta$ لتحديد نوع النقطة الحرجة.</td></tr>
+                                <tr><td>اختبار $\Delta &lt; 0$</td><td>إذا كانت $\Delta &lt; 0$.</td><td>النقطة هي نقطة سرجية (Saddle Point).</td></tr>
+                                <tr><td>اختبار $\Delta > 0$</td><td>إذا كانت $\Delta > 0$.</td><td>إذا كانت $f_{xx} &lt; 0$ فهي قيمة عظمى محلية (Local Maximum). إذا كانت $f_{xx} > 0$ فهي قيمة صغرى محلية (Local Minimum).</td></tr>
+                                <tr><td>اختبار $\Delta = 0$</td><td>إذا كانت $\Delta = 0$.</td><td>لا يمكن تحديد النوع (No decision).</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div id="part-view-3-4" class="view-panel">
+                <div class="lecture-content-wrapper">
+                    <h2 class="emerald" dir="ltr">Part 4: Conditional Extrema (Lagrange's Method)</h2>
+                    <div class="table-scroll-container">
+                        <div class="scroll-hint">👈 اسحب أفقياً لعرض الجدول كاملاً 👉</div>
+                        <table>
+                            <thead><tr><th style="width:25%">المفهوم</th><th style="width:35%">الصيغة</th><th>الوصف</th></tr></thead>
+                            <tbody>
+                                <tr><td>التدرج (Gradient)</td><td>$\nabla f = (f_{x_1}, f_{x_2}, ..., f_{x_n})$</td><td>متجه يتكون من المشتقات الجزئية الأولى.</td></tr>
+                                <tr><td>طريقة لاجرانج</td><td>$\nabla f(a,b) = \lambda \nabla g(a,b)$</td><td>لإيجاد القيم القصوى لدالة $f$ تحت قيد $g(x,y)=0$.</td></tr>
+                                <tr><td>نظام المعادلات</td><td>$f_x = \lambda g_x$<br>$f_y = \lambda g_y$<br>$g(x,y)=0$</td><td>حل هذا النظام يعطي النقاط التي يمكن أن تكون عندها قيم قصوى مشروطة. $\lambda$ يسمى مُعامل لاجرانج (Lagrange multiplier).</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div id="part-view-3-5" class="view-panel">
+                <div class="lecture-content-wrapper">
+                    <h2 class="amber" dir="ltr">Lecture 3: Complete Solved Examples</h2>
+                    <div class="global-toggle-bar">
+                        <button onclick="toggleAllSolutionsInContainer('part-view-3-5', true)">👁️ إظهار كل الحلول</button>
+                        <button onclick="toggleAllSolutionsInContainer('part-view-3-5', false)">🙈 إخفاء كل الحلول</button>
+                    </div>
+
+                    <!-- Example 1 -->
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="prob-tag">Example 1: Envelope</span>
+                            <button class="sol-toggle-btn" onclick="toggleCardSolution(this)">إظهار الحل</button>
+                        </div>
+                        <div class="card-body">
+                            <div class="question-prompt">Find the envelope of the family of curves: $(x-\alpha)^2 + y^2 = 4$</div>
+                            <div class="solution-content">
+                                <div class="solution-step">
+                                    <div class="step-title">📌 Step 1: Differentiate with respect to $\alpha$</div>
+                                    <div>Let $f(x,y,\alpha) = (x-\alpha)^2 + y^2 - 4 = 0$</div>
+                                    <div class="math-row">$$\frac{\partial f}{\partial \alpha} = -2(x-\alpha) = 0 \implies \alpha = x$$</div>
+                                </div>
+                                <div class="solution-step">
+                                    <div class="step-title">📌 Step 2: Substitute $\alpha = x$ in original curve equation</div>
+                                    <div class="math-row">$$(x-x)^2 + y^2 = 4 \implies y^2 = 4 \implies y = \pm 2$$</div>
+                                    <div class="result-badge">The envelope consists of the two parallel lines: $y = 2$ and $y = -2$</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Example 3 -->
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="prob-tag">Example 3: Tangent Plane & Normal Line</span>
+                            <button class="sol-toggle-btn" onclick="toggleCardSolution(this)">إظهار الحل</button>
+                        </div>
+                        <div class="card-body">
+                            <div class="question-prompt">Find the tangent plane and normal line to the surface $z = x^2 + y^2$ at the point (1, -1, 2).</div>
+                            <div class="solution-content">
+                                <div class="solution-step">
+                                    <div class="step-title">📌 Step 1: Compute gradients at $(1,-1,2)$</div>
+                                    <div>Surface: $F(x,y,z) = x^2 + y^2 - z = 0$</div>
+                                    <div class="math-row">
+                                        $$\begin{aligned}
+                                        F_x &= 2x \implies F_x(1,-1,2) = 2(1) = 2 \\
+                                        F_y &= 2y \implies F_y(1,-1,2) = 2(-1) = -2 \\
+                                        F_z &= -1 \implies F_z(1,-1,2) = -1
+                                        \end{aligned}$$
+                                    </div>
+                                </div>
+                                <div class="solution-step">
+                                    <div class="step-title">📌 Step 2: Equation of the Tangent Plane</div>
+                                    <div class="math-row">$$2(x-1) - 2(y+1) - 1(z-2) = 0 \implies 2x - 2y - z - 2 = 0$$</div>
+                                </div>
+                                <div class="solution-step">
+                                    <div class="step-title">📌 Step 3: Symmetric Equation of Normal Line</div>
+                                    <div class="math-row">
+                                        <span class="result-badge">$$\frac{x-1}{2} = \frac{y+1}{-2} = \frac{z-2}{-1}$$</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Example 8 -->
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="prob-tag">Example 8: Extrema</span>
+                            <button class="sol-toggle-btn" onclick="toggleCardSolution(this)">إظهار الحل</button>
+                        </div>
+                        <div class="card-body">
+                            <div class="question-prompt">Find the extrema of the function: $f(x,y) = x^2 + y^2 - 4x + 6y$</div>
+                            <div class="solution-content">
+                                <div class="solution-step">
+                                    <div class="step-title">📌 Step 1: Find Critical Points</div>
+                                    <div class="math-row">
+                                        $$\begin{aligned}
+                                        f_x &= 2x - 4 = 0 \implies x = 2 \\
+                                        f_y &= 2y + 6 = 0 \implies y = -3
+                                        \end{aligned}$$
+                                    </div>
+                                    <div>Critical point is $(2, -3)$ with value $f(2,-3) = 2^2 + (-3)^2 - 4(2) + 6(-3) = -13$.</div>
+                                </div>
+                                <div class="solution-step">
+                                    <div class="step-title">📌 Step 2: Second Derivatives & Discriminant $\Delta$</div>
+                                    <div class="math-row">$$f_{xx} = 2, \quad f_{yy} = 2, \quad f_{xy} = 0$$</div>
+                                    <div class="math-row">$$\Delta = f_{xx}f_{yy} - (f_{xy})^2 = (2)(2) - 0 = 4 > 0$$</div>
+                                </div>
+                                <div class="solution-step">
+                                    <div class="step-title">📌 Step 3: Classification</div>
+                                    <div class="result-badge">Since $\Delta > 0$ and $f_{xx} > 0$, $(2,-3,-13)$ is a Local Minimum Point.</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Example 12 -->
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="prob-tag">Example 12: Conditional Extrema (Lagrange)</span>
+                            <button class="sol-toggle-btn" onclick="toggleCardSolution(this)">إظهار الحل</button>
+                        </div>
+                        <div class="card-body">
+                            <div class="question-prompt">Find the extrema of $f(x,y) = x^2 + 3y^2$ subject to $2x + 3y = 7$.</div>
+                            <div class="solution-content">
+                                <div class="solution-step">
+                                    <div class="step-title">📌 Step 1: Formulate Lagrange Multiplier Equations</div>
+                                    <div>Constraint: $g(x,y) = 2x + 3y - 7 = 0$</div>
+                                    <div class="math-row">$$\nabla f = \lambda \nabla g \implies (2x, 6y) = \lambda (2, 3)$$</div>
+                                    <div class="math-row">
+                                        $$\begin{cases} 2x = 2\lambda \implies x = \lambda \\ 6y = 3\lambda \implies 2y = \lambda \end{cases} \implies x = 2y$$
+                                    </div>
+                                </div>
+                                <div class="solution-step">
+                                    <div class="step-title">📌 Step 2: Solve with Constraint</div>
+                                    <div class="math-row">$$2(2y) + 3y = 7 \implies 7y = 7 \implies y = 1, \quad x = 2$$</div>
+                                </div>
+                                <div class="solution-step">
+                                    <div class="step-title">📌 Step 3: Optimal Value</div>
+                                    <div class="result-badge">Extrema at $(2, 1)$ with optimum value $f(2,1) = 2^2 + 3(1)^2 = 7$</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================ -->
+        <!-- المحاضرة الرابعة (Multiple Integrals) -->
+        <!-- ============================================================ -->
+        <div id="lec4-container" style="display: none;">
+            <div id="part-view-4-1" class="view-panel active-panel">
+                <div class="lecture-content-wrapper">
+                    <h2 class="purple" dir="ltr">Part 1: Double Integral</h2>
+                    <div class="table-scroll-container">
+                        <div class="scroll-hint">👈 اسحب أفقياً لعرض الجدول كاملاً 👉</div>
+                        <table>
+                            <thead><tr><th style="width:25%">المفهوم</th><th style="width:35%">الصيغة</th><th>الوصف</th></tr></thead>
+                            <tbody>
+                                <tr><td>تكامل ثنائي (المنطقة محددة بدوال لـ $x$)</td><td>$\iint_D f(x,y)dxdy = \int_a^b \left[ \int_{y=f_1(x)}^{y=f_2(x)} f(x,y)dy \right] dx$</td><td>نكامل بالنسبة لـ $y$ أولاً (باعتبار $x$ ثابت) ثم بالنسبة لـ $x$.</td></tr>
+                                <tr><td>تكامل ثنائي (المنطقة محددة بدوال لـ $y$)</td><td>$\iint_D f(x,y)dxdy = \int_c^d \left[ \int_{x=g_1(y)}^{x=g_2(y)} f(x,y)dx \right] dy$</td><td>نكامل بالنسبة لـ $x$ أولاً (باعتبار $y$ ثابت) ثم بالنسبة لـ $y$.</td></tr>
+                                <tr><td>تغيير المتغيرات (الجاكوبي)</td><td>$\iint_D f(x,y)dxdy = \iint_D F(u,v) J(\frac{x,y}{u,v}) dudv$</td><td>استخدام تعويضات $x=g(u,v), y=h(u,v)$ وحساب الجاكوبي $J$.</td></tr>
+                                <tr><td>التكامل في الإحداثيات القطبية</td><td>$x=r\cos\theta, y=r\sin\theta, J=r$</td><td>$dxdy$ تصبح $r dr d\theta$.</td></tr>
+                                <tr><td>المساحة</td><td>$A = \iint_D dxdy$</td><td>مساحة المنطقة $D$ في المستوى xy.</td></tr>
+                                <tr><td>الحجم</td><td>$V = \iint_D f(x,y)dxdy$</td><td>حجم المجسم ذو القاعدة $D$ والارتفاع $z=f(x,y)$.</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div id="part-view-4-2" class="view-panel">
+                <div class="lecture-content-wrapper">
+                    <h2 class="blue" dir="ltr">Part 2: Triple Integral</h2>
+                    <div class="table-scroll-container">
+                        <div class="scroll-hint">👈 اسحب أفقياً لعرض الجدول كاملاً 👉</div>
+                        <table>
+                            <thead><tr><th style="width:25%">المفهوم</th><th style="width:35%">الصيغة / التعويض</th><th>الوصف</th></tr></thead>
+                            <tbody>
+                                <tr><td>التكامل الثلاثي</td><td>$\iiint_D f(x,y,z)dxdydz$</td><td>تكامل لدالة من ثلاثة متغيرات على منطقة ثلاثية الأبعاد.</td></tr>
+                                <tr><td>الإحداثيات الأسطوانية</td><td>$x=r\cos\theta, y=r\sin\theta, z=z, J=r$</td><td>مفيدة للمناطق التي تحتوي على تماثل أسطواني.</td></tr>
+                                <tr><td>الإحداثيات الكروية</td><td>$x=\rho\cos\theta\sin\varphi, y=\rho\sin\theta\sin\varphi, z=\rho\cos\varphi, J=\rho^2\sin\varphi$</td><td>مفيدة للمناطق الكروية ($x^2+y^2+z^2=\rho^2$).</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div id="part-view-4-3" class="view-panel">
+                <div class="lecture-content-wrapper">
+                    <h2 class="orange" dir="ltr">Part 3: Line Integral & Green's Theorem</h2>
+                    <div class="table-scroll-container">
+                        <div class="scroll-hint">👈 اسحب أفقياً لعرض الجدول كاملاً 👉</div>
+                        <table>
+                            <thead><tr><th style="width:25%">المفهوم</th><th style="width:35%">الصيغة</th><th>الوصف</th></tr></thead>
+                            <tbody>
+                                <tr><td>التكامل الخطي (ثنائي الأبعاد)</td><td>$\int_A^B p(x,y)dx + q(x,y)dy$</td><td>تكامل على مسار منحنى $C$ بين نقطتين $A$ و $B$. إذا كانت الدالة تمثل قوة، فالتكامل يمثل الشغل (Work).</td></tr>
+                                <tr><td>استقلالية المسار (Independence of Path)</td><td>$\frac{\partial p}{\partial y} = \frac{\partial q}{\partial x}$</td><td>يكون التكامل مستقلاً عن المسار إذا تحقق هذا الشرط. والتكامل على مسار مغلق يكون صفراً.</td></tr>
+                                <tr><td>تكامل خطي مغلق (Closed Line Integral)</td><td>$\oint_C p(x,y)dx + q(x,y)dy$</td><td>تكامل على مسار مغلق $C$.</td></tr>
+                                <tr><td>نظرية جرين في المستوى (Green's Theorem)</td><td>$\oint_C pdx + qdy = \iint_D (\frac{\partial q}{\partial x} - \frac{\partial p}{\partial y})dxdy$</td><td>تربط بين التكامل الخطي على منحنى مغلق $C$ والتكامل الثنائي على المنطقة $D$ التي يحيط بها.</td></tr>
+                                <tr><td>المساحة باستخدام التكامل الخطي</td><td>$A = \frac{1}{2} \oint_C xdy - ydx$</td><td>مساحة المنطقة المحاطة بمنحنى مغلق $C$.</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div id="part-view-4-4" class="view-panel">
+                <div class="lecture-content-wrapper">
+                    <h2 class="emerald" dir="ltr">Part 4: Surface Integral</h2>
+                    <div class="table-scroll-container">
+                        <div class="scroll-hint">👈 اسحب أفقياً لعرض الجدول كاملاً 👉</div>
+                        <table>
+                            <thead><tr><th style="width:25%">المفهوم</th><th style="width:35%">الصيغة</th><th>الوصف</th></tr></thead>
+                            <tbody>
+                                <tr><td>عنصر السطح $dS$</td><td>$dS = \sqrt{f_x^2 + f_y^2 + 1} dxdy$</td><td>للسطح المعرف بـ $z=f(x,y)$.</td></tr>
+                                <tr><td>التكامل السطحي</td><td>$\iint_S F(x,y)dS = \iint_D F(x,y)\sqrt{f_x^2 + f_y^2 + 1} dxdy$</td><td>تكامل الدالة $F(x,y)$ على السطح $S$ حيث $D$ هو مسقط السطح في مستوى xy.</td></tr>
+                                <tr><td>مساحة السطح (Surface Area)</td><td>$S = \iint_D dS = \iint_D \sqrt{f_x^2 + f_y^2 + 1} dxdy$</td><td>مساحة السطح $S$.</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div id="part-view-4-5" class="view-panel">
+                <div class="lecture-content-wrapper">
+                    <h2 class="amber" dir="ltr">Lecture 4: Complete Solved Examples</h2>
+                    <div class="global-toggle-bar">
+                        <button onclick="toggleAllSolutionsInContainer('part-view-4-5', true)">👁️ إظهار كل الحلول</button>
+                        <button onclick="toggleAllSolutionsInContainer('part-view-4-5', false)">🙈 إخفاء كل الحلول</button>
+                    </div>
+
+                    <!-- Example 1 -->
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="prob-tag">Example 1: Double Integral Evaluation</span>
+                            <button class="sol-toggle-btn" onclick="toggleCardSolution(this)">إظهار الحل</button>
+                        </div>
+                        <div class="card-body">
+                            <div class="question-prompt">Evaluate $\iint_D (x+2y)dxdy$ where $D$ is bounded by $y=2x$, $x=3$, and x-axis.</div>
+                            <div class="solution-content">
+                                <div class="solution-step">
+                                    <div class="step-title">📌 Step 1: Limits of Integration</div>
+                                    <div>$y$ ranges from $0$ to $2x$, while $x$ ranges from $0$ to $3$.</div>
+                                    <div class="math-row">$$I = \int_0^3 \left[ \int_0^{2x} (x+2y)dy \right] dx$$</div>
+                                </div>
+                                <div class="solution-step">
+                                    <div class="step-title">📌 Step 2: Inner Integral (w.r.t $y$)</div>
+                                    <div class="math-row">$$\int_0^{2x} (x+2y)dy = \left[ xy + y^2 \right]_0^{2x} = x(2x) + (2x)^2 = 2x^2 + 4x^2 = 6x^2$$</div>
+                                </div>
+                                <div class="solution-step">
+                                    <div class="step-title">📌 Step 3: Outer Integral (w.r.t $x$)</div>
+                                    <div class="math-row">$$I = \int_0^3 6x^2 dx = \left[ 2x^3 \right]_0^3 = 2(27) = 54$$</div>
+                                    <div class="result-badge">Result = 54</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Example 3 -->
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="prob-tag">Example 3: Change Order of Integration</span>
+                            <button class="sol-toggle-btn" onclick="toggleCardSolution(this)">إظهار الحل</button>
+                        </div>
+                        <div class="card-body">
+                            <div class="question-prompt">Find $\int_0^1 \int_y^1 e^{y/x} dxdy$.</div>
+                            <div class="solution-content">
+                                <div class="solution-step">
+                                    <div class="step-title">📌 Step 1: Change Order to $dydx$</div>
+                                    <div>Original region: $y \le x \le 1$ and $0 \le y \le 1$.</div>
+                                    <div>New bounds: $0 \le y \le x$ and $0 \le x \le 1$.</div>
+                                    <div class="math-row">$$I = \int_0^1 \left[ \int_0^x e^{y/x} dy \right] dx$$</div>
+                                </div>
+                                <div class="solution-step">
+                                    <div class="step-title">📌 Step 2: Inner Integration</div>
+                                    <div class="math-row">$$\int_0^x e^{y/x} dy = \left[ x e^{y/x} \right]_0^x = x e^1 - x e^0 = x(e-1)$$</div>
+                                </div>
+                                <div class="solution-step">
+                                    <div class="step-title">📌 Step 3: Outer Integration</div>
+                                    <div class="math-row">$$\int_0^1 x(e-1) dx = (e-1) \left[ \frac{x^2}{2} \right]_0^1 = \frac{1}{2}(e-1)$$</div>
+                                    <div class="result-badge">Result = $\frac{1}{2}(e-1)$</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Example 4 -->
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="prob-tag">Example 4: Change to Polar Coordinates</span>
+                            <button class="sol-toggle-btn" onclick="toggleCardSolution(this)">إظهار الحل</button>
+                        </div>
+                        <div class="card-body">
+                            <div class="question-prompt">Find $\int_{-2}^2 \int_0^{\sqrt{4-x^2}} \sqrt{x^2+y^2} dydx$.</div>
+                            <div class="solution-content">
+                                <div class="solution-step">
+                                    <div class="step-title">📌 Step 1: Polar Transformation</div>
+                                    <div>Region represents the upper semi-circle of radius 2.</div>
+                                    <div>$x = r\cos\theta, \quad y = r\sin\theta, \quad dxdy = r dr d\theta$</div>
+                                    <div>Bounds: $r \in [0,2], \quad \theta \in [0,\pi]$</div>
+                                </div>
+                                <div class="solution-step">
+                                    <div class="step-title">📌 Step 2: Evaluate Polar Integral</div>
+                                    <div class="math-row">
+                                        $$I = \int_0^\pi \int_0^2 r \cdot r dr d\theta = \left(\int_0^\pi d\theta\right) \left(\int_0^2 r^2 dr\right) = [\theta]_0^\pi \cdot \left[ \frac{r^3}{3} \right]_0^2$$
+                                    </div>
+                                    <div class="result-badge">$$I = \pi \cdot \frac{8}{3} = \frac{8\pi}{3}$$</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Example 7 -->
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="prob-tag">Example 7: Triple Integral</span>
+                            <button class="sol-toggle-btn" onclick="toggleCardSolution(this)">إظهار الحل</button>
+                        </div>
+                        <div class="card-body">
+                            <div class="question-prompt">Evaluate $\iiint_D (x+y+2z)dxdydz$ where $D$ is bounded by $x+y+z=1$ and $x,y,z \ge 0$.</div>
+                            <div class="solution-content">
+                                <div class="solution-step">
+                                    <div class="step-title">📌 Step 1: Set Iterated Limits</div>
+                                    <div class="math-row">$$I = \int_0^1 \int_0^{1-x} \int_0^{1-x-y} (x+y+2z) dz dy dx$$</div>
+                                </div>
+                                <div class="solution-step">
+                                    <div class="step-title">📌 Step 2: Inner Integral (w.r.t $z$)</div>
+                                    <div class="math-row">
+                                        $$\left[ (x+y)z + z^2 \right]_0^{1-x-y} = (x+y)(1-x-y) + (1-x-y)^2 = (1-x-y)(x+y+1-x-y) = 1-x-y$$
+                                    </div>
+                                </div>
+                                <div class="solution-step">
+                                    <div class="step-title">📌 Step 3: Middle Integral (w.r.t $y$)</div>
+                                    <div class="math-row">
+                                        $$\int_0^{1-x} (1-x-y)dy = \left[ (1-x)y - \frac{y^2}{2} \right]_0^{1-x} = (1-x)^2 - \frac{(1-x)^2}{2} = \frac{(1-x)^2}{2}$$
+                                    </div>
+                                </div>
+                                <div class="solution-step">
+                                    <div class="step-title">📌 Step 4: Outer Integral (w.r.t $x$)</div>
+                                    <div class="math-row">
+                                        $$\int_0^1 \frac{(1-x)^2}{2} dx = \left[ -\frac{(1-x)^3}{6} \right]_0^1 = 0 - \left(-\frac{1}{6}\right) = \frac{1}{6}$$
+                                    </div>
+                                    <div class="result-badge">Result = $\frac{1}{6}$</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Example 22 -->
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="prob-tag">Example 22: Verify Green's Theorem</span>
+                            <button class="sol-toggle-btn" onclick="toggleCardSolution(this)">إظهار الحل</button>
+                        </div>
+                        <div class="card-body">
+                            <div class="question-prompt">Verify Green's theorem for $\oint_C (2x-y^2)dx + (x^2-2y)dy$ where $C$ is the rectangle $(0,0), (1,0), (1,3), (0,3)$.</div>
+                            <div class="solution-content">
+                                <div class="solution-step">
+                                    <div class="step-title">📌 Step 1: Left-Hand Side (Line Integrals along 4 segments)</div>
+                                    <div class="math-row">
+                                        $$\begin{aligned}
+                                        C_1 \, (y=0, dy=0, x: 0 \to 1): &\quad I_1 = \int_0^1 2x dx = [x^2]_0^1 = 1 \\
+                                        C_2 \, (x=1, dx=0, y: 0 \to 3): &\quad I_2 = \int_0^3 (1-2y) dy = [y-y^2]_0^3 = 3-9 = -6 \\
+                                        C_3 \, (y=3, dy=0, x: 1 \to 0): &\quad I_3 = \int_1^0 (2x-9) dx = [x^2-9x]_1^0 = 0 - (1-9) = 8 \\
+                                        C_4 \, (x=0, dx=0, y: 3 \to 0): &\quad I_4 = \int_3^0 -2y dy = [-y^2]_3^0 = 0 - (-9) = 9
+                                        \end{aligned}$$
+                                    </div>
+                                    <div class="math-row">$$\text{Total L.H.S} = 1 - 6 + 8 + 9 = 12$$</div>
+                                </div>
+                                <div class="solution-step">
+                                    <div class="step-title">📌 Step 2: Right-Hand Side (Double Integral using Green)</div>
+                                    <div>$p = 2x-y^2 \implies p_y = -2y, \quad q = x^2-2y \implies q_x = 2x$</div>
+                                    <div class="math-row">
+                                        $$\iint_D (q_x - p_y)dxdy = \int_0^3 \int_0^1 (2x - (-2y)) dx dy = \int_0^3 \int_0^1 (2x+2y) dx dy$$
+                                    </div>
+                                    <div class="math-row">
+                                        $$\int_0^1 (2x+2y)dx = [x^2 + 2xy]_0^1 = 1 + 2y \implies \int_0^3 (1+2y)dy = [y+y^2]_0^3 = 3+9 = 12$$
+                                    </div>
+                                    <div class="result-badge">L.H.S = R.H.S = 12 (Theorem Verified)</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Example 25 -->
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="prob-tag">Example 25: Surface Area</span>
+                            <button class="sol-toggle-btn" onclick="toggleCardSolution(this)">إظهار الحل</button>
+                        </div>
+                        <div class="card-body">
+                            <div class="question-prompt">Find surface area of the paraboloid $x^2+y^2+z=4, z \ge 0$.</div>
+                            <div class="solution-content">
+                                <div class="solution-step">
+                                    <div class="step-title">📌 Step 1: Compute Surface Element $dS$</div>
+                                    <div class="math-row">
+                                        $$z = 4 - x^2 - y^2 \implies z_x = -2x, \quad z_y = -2y$$
+                                    </div>
+                                    <div class="math-row">
+                                        $$dS = \sqrt{1 + z_x^2 + z_y^2} dxdy = \sqrt{1 + 4(x^2+y^2)} dxdy$$
+                                    </div>
+                                </div>
+                                <div class="solution-step">
+                                    <div class="step-title">📌 Step 2: Convert to Polar Coordinates</div>
+                                    <div>At $z=0$, the boundary is the circle $x^2+y^2=4 \implies r \in [0,2], \quad \theta \in [0,2\pi]$.</div>
+                                    <div class="math-row">
+                                        $$S = \int_0^{2\pi} d\theta \int_0^2 r \sqrt{1+4r^2} dr = 2\pi \int_0^2 r(1+4r^2)^{1/2} dr$$
+                                    </div>
+                                </div>
+                                <div class="solution-step">
+                                    <div class="step-title">📌 Step 3: Complete Integration</div>
+                                    <div class="math-row">
+                                        $$S = 2\pi \cdot \frac{1}{8} \cdot \frac{2}{3} \left[ (1+4r^2)^{3/2} \right]_0^2 = \frac{\pi}{6} (17^{3/2} - 1)$$
+                                    </div>
+                                    <div class="result-badge">$$S = \frac{\pi}{6}(17\sqrt{17} - 1)$$</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================ -->
+        <!-- المحاضرة الخامسة (Vectors Analysis) -->
+        <!-- ============================================================ -->
+        <div id="lec5-container" style="display: none;">
+            <div id="part-view-5-1" class="view-panel active-panel">
+                <div class="lecture-content-wrapper">
+                    <h2 class="purple" dir="ltr">Part 1: Vector Algebra</h2>
+                    <div class="table-scroll-container">
+                        <div class="scroll-hint">👈 اسحب أفقياً لعرض الجدول كاملاً 👉</div>
+                        <table>
+                            <thead><tr><th style="width:25%">المفهوم</th><th style="width:35%">التعريف / الصيغة</th><th>الوصف</th></tr></thead>
+                            <tbody>
+                                <tr><td>المتجه</td><td>$\bar{U} = u_1\bar{i} + u_2\bar{j} + u_3\bar{k}$</td><td>كمية لها مقدار واتجاه.</td></tr>
+                                <tr><td>المقدار (Magnitude)</td><td>$u = |\bar{U}| = \sqrt{u_1^2 + u_2^2 + u_3^2}$</td><td>طول المتجه.</td></tr>
+                                <tr><td>الضرب القياسي (Dot Product)</td><td>$\bar{U}\cdot\bar{V} = u v \cos\theta = u_1v_1 + u_2v_2 + u_3v_3$</td><td>حاصل ضرب كمي ينتج عنه قيمة قياسية. يكون صفراً إذا كان المتجهان متعامدان.</td></tr>
+                                <tr><td>الإسقاط (Projection)</td><td>$Projection = \frac{\bar{U}\cdot\bar{V}}{v}$</td><td>مسقط المتجه $\bar{U}$ على المتجه $\bar{V}$.</td></tr>
+                                <tr><td>الضرب الاتجاهي (Cross Product)</td><td>$\bar{U}\times\bar{V} = \begin{vmatrix}\bar{i}&\bar{j}&\bar{k}\\u_1&u_2&u_3\\v_1&v_2&v_3\end{vmatrix}$</td><td>ينتج متجهاً عمودياً على كلا المتجهين. $\bar{U}\times\bar{V} = -\bar{V}\times\bar{U}$.</td></tr>
+                                <tr><td>الضرب القياسي الثلاثي</td><td>$[\bar{U},\bar{V},\bar{W}] = \bar{U}\cdot(\bar{V}\times\bar{W}) = \begin{vmatrix}u_1&u_2&u_3\\v_1&v_2&v_3\\w_1&w_2&w_3\end{vmatrix}$</td><td>الضرب الثلاثي القياسي.</td></tr>
+                                <tr><td>الضرب الاتجاهي الثلاثي</td><td>$\bar{U}\times(\bar{V}\times\bar{W}) = (\bar{U}\cdot\bar{W})\bar{V} - (\bar{U}\cdot\bar{V})\bar{W}$</td><td>الضرب الثلاثي الاتجاهي.</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div id="part-view-5-2" class="view-panel">
+                <div class="lecture-content-wrapper">
+                    <h2 class="blue" dir="ltr">Part 2: Vector Function</h2>
+                    <div class="table-scroll-container">
+                        <div class="scroll-hint">👈 اسحب أفقياً لعرض الجدول كاملاً 👉</div>
+                        <table>
+                            <thead><tr><th style="width:25%">المفهوم</th><th style="width:35%">الصيغة</th><th>الوصف</th></tr></thead>
+                            <tbody>
+                                <tr><td>دالة المتجه لمتغير واحد</td><td>$\bar{U}(t) = u_1(t)\bar{i} + u_2(t)\bar{j} + u_3(t)\bar{k}$</td><td>متجه تعتمد مركباته على متغير قياسي $t$.</td></tr>
+                                <tr><td>المشتقة</td><td>$\frac{d\bar{U}}{dt} = u'_1(t)\bar{i} + u'_2(t)\bar{j} + u'_3(t)\bar{k}$</td><td>مشتقة دالة المتجه، وتحدد اتجاه المماس.</td></tr>
+                                <tr><td>قواعد الاشتقاق</td><td>$\frac{d}{dt}(\bar{U}\cdot\bar{V}) = \frac{d\bar{U}}{dt}\cdot\bar{V} + \bar{U}\cdot\frac{d\bar{V}}{dt}$</td><td>قواعد اشتقاق الضرب القياسي والاتجاهي مشابهة لقواعد التفاضل العادية.</td></tr>
+                                <tr><td>المشتقات الجزئية للمتجهات</td><td>$\frac{\partial\bar{U}}{\partial x} = \frac{\partial u_1}{\partial x}\bar{i} + \frac{\partial u_2}{\partial x}\bar{j} + \frac{\partial u_3}{\partial x}\bar{k}$</td><td>إذا كانت $\bar{U}$ دالة في $x,y,z$ نشتق كل مركبة على حدة.</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div id="part-view-5-3" class="view-panel">
+                <div class="lecture-content-wrapper">
+                    <h2 class="orange" dir="ltr">Part 3: Gradient, Divergence & Curl</h2>
+                    <div class="table-scroll-container">
+                        <div class="scroll-hint">👈 اسحب أفقياً لعرض الجدول كاملاً 👉</div>
+                        <table>
+                            <thead><tr><th style="width:25%">المعامل (Operator)</th><th style="width:35%">التعريف / الصيغة</th><th>النتيجة</th></tr></thead>
+                            <tbody>
+                                <tr><td>نابلا (Nabla $\nabla$)</td><td>$\nabla = \frac{\partial}{\partial x}\bar{i} + \frac{\partial}{\partial y}\bar{j} + \frac{\partial}{\partial z}\bar{k}$</td><td>معامل تفاضلي اتجاهي.</td></tr>
+                                <tr><td>التدرج (Gradient)</td><td>$\text{grad }\varphi = \nabla\varphi = \frac{\partial\varphi}{\partial x}\bar{i} + \frac{\partial\varphi}{\partial y}\bar{j} + \frac{\partial\varphi}{\partial z}\bar{k}$</td><td>يؤثر على دالة قياسية $\varphi$ وينتج متجهاً يمثل الاتجاه العمودي على سطح المستوى.</td></tr>
+                                <tr><td>المشتقة الاتجاهية</td><td>$\frac{\nabla\varphi \cdot \bar{U}}{u}$</td><td>معدل تغير $\varphi$ في اتجاه المتجه $\bar{U}$.</td></tr>
+                                <tr><td>التباعد (Divergence)</td><td>$\text{div }\bar{U} = \nabla\cdot\bar{U} = \frac{\partial u_1}{\partial x} + \frac{\partial u_2}{\partial y} + \frac{\partial u_3}{\partial z}$</td><td>يؤثر على متجه وينتج كمية قياسية.</td></tr>
+                                <tr><td>الالتفاف (Curl)</td><td>$\text{curl }\bar{U} = \nabla\times\bar{U} = \begin{vmatrix}\bar{i}&\bar{j}&\bar{k}\\ \frac{\partial}{\partial x}&\frac{\partial}{\partial y}&\frac{\partial}{\partial z}\\ u_1&u_2&u_3\end{vmatrix}$</td><td>يؤثر على متجه وينتج متجهاً آخر.</td></tr>
+                                <tr><td>تطبيقات مزدوجة</td><td>$\text{div curl }\bar{U} = \nabla\cdot(\nabla\times\bar{U}) = 0$ <br> $\text{curl grad }\varphi = \nabla\times(\nabla\varphi) = 0$</td><td>التباعد للالتفاف دائماً صفر، والالتفاف للتدرج دائماً صفر.</td></tr>
+                                <tr><td>لابلاسيان (Laplacian)</td><td>$\nabla^2\varphi = \text{div grad }\varphi = \frac{\partial^2\varphi}{\partial x^2} + \frac{\partial^2\varphi}{\partial y^2} + \frac{\partial^2\varphi}{\partial z^2}$</td><td>مؤثر تفاضلي من الدرجة الثانية.</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div id="part-view-5-4" class="view-panel">
+                <div class="lecture-content-wrapper">
+                    <h2 class="emerald" dir="ltr">Part 4: Orthogonal Curvilinear Coordinates</h2>
+                    <div class="table-scroll-container">
+                        <div class="scroll-hint">👈 اسحب أفقياً لعرض الجدول كاملاً 👉</div>
+                        <table>
+                            <thead><tr><th style="width:25%">المفهوم</th><th style="width:35%">التعريف / الصيغة</th><th>الوصف</th></tr></thead>
+                            <tbody>
+                                <tr><td>النظام المتعامد</td><td>نظام إحداثيات $(\alpha, \beta, \gamma)$ حيث تتطابق الأسطح بزوايا قائمة.</td><td>متجهات الوحدة هي $\bar{e_1}, \bar{e_2}, \bar{e_3}$.</td></tr>
+                                <tr><td>عوامل المقياس (Scale Factors)</td><td>$h_1 = |\frac{\partial\bar{r}}{\partial\alpha}|, h_2 = |\frac{\partial\bar{r}}{\partial\beta}|, h_3 = |\frac{\partial\bar{r}}{\partial\gamma}|$</td><td>تستخدم لحساب الأطوال والحجوم في النظام الجديد.</td></tr>
+                                <tr><td>عنصر الحجم</td><td>$dV = h_1 h_2 h_3 d\alpha d\beta d\gamma$</td><td>عنصر الحجم في الإحداثيات المنحنية.</td></tr>
+                                <tr><td>التدرج (Gradient)</td><td>$\nabla\varphi = \frac{1}{h_1}\frac{\partial\varphi}{\partial\alpha}\bar{e_1} + \frac{1}{h_2}\frac{\partial\varphi}{\partial\beta}\bar{e_2} + \frac{1}{h_3}\frac{\partial\varphi}{\partial\gamma}\bar{e_3}$</td><td>التدرج في النظام المتعامد الجديد.</td></tr>
+                                <tr><td>التباعد (Divergence)</td><td>$\nabla\cdot\bar{U} = \frac{1}{h_1h_2h_3} [ \frac{\partial}{\partial\alpha}(u_1h_2h_3) + \frac{\partial}{\partial\beta}(u_2h_1h_3) + \frac{\partial}{\partial\gamma}(u_3h_1h_2) ]$</td><td>التباعد في النظام المتعامد.</td></tr>
+                                <tr><td>الالتفاف (Curl)</td><td>$\nabla\times\bar{U} = \frac{1}{h_1h_2h_3} \begin{vmatrix} h_1\bar{e_1}&h_2\bar{e_2}&h_3\bar{e_3}\\ \frac{\partial}{\partial\alpha}&\frac{\partial}{\partial\beta}&\frac{\partial}{\partial\gamma}\\ h_1u_1&h_2u_2&h_3u_3 \end{vmatrix}$</td><td>الالتفاف في النظام المتعامد.</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div id="part-view-5-5" class="view-panel">
+                <div class="lecture-content-wrapper">
+                    <h2 class="amber" dir="ltr">Lecture 5: Complete Solved Examples</h2>
+                    <div class="global-toggle-bar">
+                        <button onclick="toggleAllSolutionsInContainer('part-view-5-5', true)">👁️ إظهار كل الحلول</button>
+                        <button onclick="toggleAllSolutionsInContainer('part-view-5-5', false)">🙈 إخفاء كل الحلول</button>
+                    </div>
+
+                    <!-- Example 8 -->
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="prob-tag">Example 8: Cross Product (Perpendicular Vector)</span>
+                            <button class="sol-toggle-btn" onclick="toggleCardSolution(this)">إظهار الحل</button>
+                        </div>
+                        <div class="card-body">
+                            <div class="question-prompt">Find a perpendicular vector to $\bar{j}+2\bar{k}$ and lies in the plane of $\bar{i}-\bar{j}+2\bar{k}$ and $2\bar{i}+3\bar{j}-\bar{k}$.</div>
+                            <div class="solution-content">
+                                <div class="solution-step">
+                                    <div class="step-title">📌 Step 1: Find Normal Vector $\bar{N}$ to the plane</div>
+                                    <div>Let $\bar{U} = \bar{i}-\bar{j}+2\bar{k}, \quad \bar{V} = 2\bar{i}+3\bar{j}-\bar{k}, \quad \bar{W} = \bar{j}+2\bar{k}$.</div>
+                                    <div class="math-row">
+                                        $$\bar{N} = \bar{U} \times \bar{V} = \begin{vmatrix} \bar{i} & \bar{j} & \bar{k} \\ 1 & -1 & 2 \\ 2 & 3 & -1 \end{vmatrix} = -5\bar{i} + 5\bar{j} + 5\bar{k}$$
+                                    </div>
+                                </div>
+                                <div class="solution-step">
+                                    <div class="step-title">📌 Step 2: Compute perpendicular vector in plane $\bar{M}$</div>
+                                    <div>The required vector must be perpendicular to $\bar{N}$ and perpendicular to $\bar{W}$:</div>
+                                    <div class="math-row">
+                                        $$\bar{M} = \bar{N} \times \bar{W} = \begin{vmatrix} \bar{i} & \bar{j} & \bar{k} \\ -5 & 5 & 5 \\ 0 & 1 & 2 \end{vmatrix} = 5\bar{i} + 10\bar{j} - 5\bar{k}$$
+                                    </div>
+                                    <div class="result-badge">Required Vector = $5\bar{i} + 10\bar{j} - 5\bar{k}$</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Example 11 -->
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="prob-tag">Example 11: Vector Triple Product</span>
+                            <button class="sol-toggle-btn" onclick="toggleCardSolution(this)">إظهار الحل</button>
+                        </div>
+                        <div class="card-body">
+                            <div class="question-prompt">If $\bar{U}=2\bar{i}+\bar{j}-\bar{k}, \bar{V}=\bar{i}-\bar{j}+2\bar{k}, \bar{W}=2\bar{i}+4\bar{j}+\bar{k}$. Find $\bar{U}\times(\bar{V}\times\bar{W})$.</div>
+                            <div class="solution-content">
+                                <div class="solution-step">
+                                    <div class="step-title">📌 Method 1: Direct Determinants</div>
+                                    <div class="math-row">
+                                        $$\bar{V} \times \bar{W} = \begin{vmatrix} \bar{i} & \bar{j} & \bar{k} \\ 1 & -1 & 2 \\ 2 & 4 & 1 \end{vmatrix} = -9\bar{i} + 3\bar{j} + 6\bar{k}$$
+                                    </div>
+                                    <div class="math-row">
+                                        $$\bar{U} \times (\bar{V} \times \bar{W}) = \begin{vmatrix} \bar{i} & \bar{j} & \bar{k} \\ 2 & 1 & -1 \\ -9 & 3 & 6 \end{vmatrix} = 9\bar{i} - 3\bar{j} + 15\bar{k}$$
+                                    </div>
+                                </div>
+                                <div class="solution-step">
+                                    <div class="step-title">📌 Method 2: Vector Identity $(\bar{U}\cdot\bar{W})\bar{V} - (\bar{U}\cdot\bar{V})\bar{W}$</div>
+                                    <div class="math-row">
+                                        $$\begin{aligned}
+                                        \bar{U} \cdot \bar{W} &= (2)(2) + (1)(4) + (-1)(1) = 7 \\
+                                        \bar{U} \cdot \bar{V} &= (2)(1) + (1)(-1) + (-1)(2) = -1
+                                        \end{aligned}$$
+                                    </div>
+                                    <div class="math-row">
+                                        $$7(\bar{i}-\bar{j}+2\bar{k}) - (-1)(2\bar{i}+4\bar{j}+\bar{k}) = 9\bar{i} - 3\bar{j} + 15\bar{k}$$
+                                    </div>
+                                    <div class="result-badge">Result = $9\bar{i} - 3\bar{j} + 15\bar{k}$</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Example 17 -->
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="prob-tag">Example 17: Directional Derivative</span>
+                            <button class="sol-toggle-btn" onclick="toggleCardSolution(this)">إظهار الحل</button>
+                        </div>
+                        <div class="card-body">
+                            <div class="question-prompt">If $\varphi(x,y,z) = x^2y + yz^2$. Find directional derivative at (2,1,1) in direction of $\bar{U} = 3\bar{i}+4\bar{k}$.</div>
+                            <div class="solution-content">
+                                <div class="solution-step">
+                                    <div class="step-title">📌 Step 1: Calculate Gradient Vector $\nabla\varphi$</div>
+                                    <div class="math-row">$$\nabla\varphi = 2xy\bar{i} + (x^2+z^2)\bar{j} + 2yz\bar{k}$$</div>
+                                    <div class="math-row">$$\nabla\varphi(2,1,1) = 4\bar{i} + 5\bar{j} + 2\bar{k}$$</div>
+                                </div>
+                                <div class="solution-step">
+                                    <div class="step-title">📌 Step 2: Unit Vector in Direction of $\bar{U}$</div>
+                                    <div class="math-row">$$u = |\bar{U}| = \sqrt{3^2 + 0^2 + 4^2} = 5 \implies \bar{e}_u = \frac{3}{5}\bar{i} + \frac{4}{5}\bar{k}$$</div>
+                                </div>
+                                <div class="solution-step">
+                                    <div class="step-title">📌 Step 3: Compute Directional Derivative</div>
+                                    <div class="math-row">
+                                        $$\frac{\nabla\varphi \cdot \bar{U}}{u} = \frac{(4)(3) + (5)(0) + (2)(4)}{5} = \frac{12 + 8}{5} = \frac{20}{5} = 4$$
+                                    </div>
+                                    <div class="result-badge">Directional Derivative = 4</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Example 20 -->
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="prob-tag">Example 20: Curl of a Vector</span>
+                            <button class="sol-toggle-btn" onclick="toggleCardSolution(this)">إظهار الحل</button>
+                        </div>
+                        <div class="card-body">
+                            <div class="question-prompt">If $\bar{U} = 2ye^x\bar{i} + y^2z^2\bar{j} + y^2z\bar{k}$. Find $\nabla\times\bar{U}$ at (0,2,1).</div>
+                            <div class="solution-content">
+                                <div class="solution-step">
+                                    <div class="step-title">📌 Step 1: Curl Formula Determinant</div>
+                                    <div class="math-row">
+                                        $$\nabla\times\bar{U} = \begin{vmatrix} \bar{i} & \bar{j} & \bar{k} \\ \frac{\partial}{\partial x} & \frac{\partial}{\partial y} & \frac{\partial}{\partial z} \\ 2ye^x & y^2z^2 & y^2z \end{vmatrix}$$
+                                    </div>
+                                </div>
+                                <div class="solution-step">
+                                    <div class="step-title">📌 Step 2: Differentiation of components</div>
+                                    <div class="math-row">
+                                        $$\nabla\times\bar{U} = (2yz - 2y^2z)\bar{i} - (0 - 0)\bar{j} + (0 - 2e^x)\bar{k} = (2yz - 2y^2z)\bar{i} - 2e^x\bar{k}$$
+                                    </div>
+                                </div>
+                                <div class="solution-step">
+                                    <div class="step-title">📌 Step 3: Evaluation at (0, 2, 1)</div>
+                                    <div class="math-row">
+                                        $$\nabla\times\bar{U}(0,2,1) = (2(2)(1) - 2(4)(1))\bar{i} - 2e^0\bar{k} = (4-8)\bar{i} - 2\bar{k} = -4\bar{i} - 2\bar{k}$$
+                                    </div>
+                                    <div class="result-badge">Result = $-4\bar{i} - 2\bar{k}$</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Example 3 (Cylindrical Coordinates - Full & Rigorous Proof) -->
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="prob-tag">Example 3: Divergence in Cylindrical Coordinates</span>
+                            <button class="sol-toggle-btn" onclick="toggleCardSolution(this)">إظهار الحل</button>
+                        </div>
+                        <div class="card-body">
+                            <div class="question-prompt">
+                                Express $\bar{U} = y\bar{i} + x^2\bar{j} + xz\bar{k}$ in cylindrical coordinates and show that $\nabla\cdot\bar{U} = \rho\cos\theta$.
+                            </div>
+                            <div class="solution-content">
+                                <div class="solution-step">
+                                    <div class="step-title">📌 Step 1: Verification in Cartesian Coordinates</div>
+                                    <div class="math-row">
+                                        $$\nabla\cdot\bar{U} = \frac{\partial}{\partial x}(y) + \frac{\partial}{\partial y}(x^2) + \frac{\partial}{\partial z}(xz) = 0 + 0 + x = x$$
+                                    </div>
+                                    <div>In Cylindrical Coordinates: $x = \rho\cos\theta$, so $\nabla\cdot\bar{U} = \rho\cos\theta$.</div>
+                                </div>
+                                <div class="solution-step">
+                                    <div class="step-title">📌 Step 2: Scale Factors & Coordinate Transformation</div>
+                                    <div>Cylindrical coordinates: $x = \rho\cos\theta, \quad y = \rho\sin\theta, \quad z = z$</div>
+                                    <div>Scale factors: $h_\rho = 1, \quad h_\theta = \rho, \quad h_z = 1$</div>
+                                    <div>Unit vector relations:
+                                        $$\bar{i} = \cos\theta \bar{e}_\rho - \sin\theta \bar{e}_\theta, \quad \bar{j} = \sin\theta \bar{e}_\rho + \cos\theta \bar{e}_\theta, \quad \bar{k} = \bar{e}_z$$
+                                    </div>
+                                    <div>Substituting into $\bar{U} = (\rho\sin\theta)\bar{i} + (\rho^2\cos^2\theta)\bar{j} + (z\rho\cos\theta)\bar{k}$:</div>
+                                    <div class="math-row">
+                                        $$\begin{aligned}
+                                        u_\rho &= \bar{U} \cdot \bar{e}_\rho = \rho\sin\theta\cos\theta + \rho^2\cos^2\theta\sin\theta \\
+                                        u_\theta &= \bar{U} \cdot \bar{e}_\theta = -\rho\sin^2\theta + \rho^2\cos^3\theta \\
+                                        u_z &= \bar{U} \cdot \bar{e}_z = z\rho\cos\theta
+                                        \end{aligned}$$
+                                    </div>
+                                </div>
+                                <div class="solution-step">
+                                    <div class="step-title">📌 Step 3: Divergence Formula in Cylindrical Coordinates</div>
+                                    <div class="math-row">
+                                        $$\nabla\cdot\bar{U} = \frac{1}{\rho}\frac{\partial}{\partial\rho}(\rho u_\rho) + \frac{1}{\rho}\frac{\partial u_\theta}{\partial\theta} + \frac{\partial u_z}{\partial z}$$
+                                    </div>
+                                </div>
+                                <div class="solution-step">
+                                    <div class="step-title">📌 Step 4: Component-wise Partial Derivatives</div>
+                                    <div class="math-row">
+                                        $$\begin{aligned}
+                                        \frac{1}{\rho}\frac{\partial}{\partial\rho}(\rho u_\rho) &= \frac{1}{\rho}\frac{\partial}{\partial\rho}(\rho^2\sin\theta\cos\theta + \rho^3\cos^2\theta\sin\theta) \\
+                                        &= \frac{1}{\rho}(2\rho\sin\theta\cos\theta + 3\rho^2\cos^2\theta\sin\theta) = 2\sin\theta\cos\theta + 3\rho\cos^2\theta\sin\theta \\
+                                        \frac{1}{\rho}\frac{\partial u_\theta}{\partial\theta} &= \frac{1}{\rho}\frac{\partial}{\partial\theta}(-\rho\sin^2\theta + \rho^2\cos^3\theta) \\
+                                        &= \frac{1}{\rho}(-2\rho\sin\theta\cos\theta - 3\rho^2\cos^2\theta\sin\theta) = -2\sin\theta\cos\theta - 3\rho\cos^2\theta\sin\theta \\
+                                        \frac{\partial u_z}{\partial z} &= \frac{\partial}{\partial z}(z\rho\cos\theta) = \rho\cos\theta
+                                        \end{aligned}$$
+                                    </div>
+                                </div>
+                                <div class="solution-step">
+                                    <div class="step-title">📌 Step 5: Summing up and Final Simplification</div>
+                                    <div class="math-row">
+                                        $$\begin{aligned}
+                                        \nabla\cdot\bar{U} &= (2\sin\theta\cos\theta + 3\rho\cos^2\theta\sin\theta) + (-2\sin\theta\cos\theta - 3\rho\cos^2\theta\sin\theta) + \rho\cos\theta \\
+                                        &= 0 + \rho\cos\theta = \rho\cos\theta
+                                        \end{aligned}$$
+                                    </div>
+                                    <div class="result-badge">$$\nabla\cdot\bar{U} = \rho\cos\theta$$</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        function showLec1Part(num) {
+            document.getElementById('header-badge').innerText = (num === 4) ? "MATHEMATICS • SOLVED EXAMPLES" : "MATHEMATICS • PARTIAL DERIVATIVE";
+            let titles = ["Lecture 1: Full Overview", "Part 1: Functions of Several Variables & Domains", "Part 2: Partial & Higher Derivatives", "Part 3: Chain Rule & Implicit Diff", "Lecture 1: Complete Solved Examples"];
+            document.getElementById('page-main-title').innerText = titles[num];
+
+            for (let i = 0; i <= 4; i++) {
+                const btn = document.getElementById('part-btn-1-' + i);
+                const view = document.getElementById('part-view-1-' + i);
+                if(btn) btn.classList.remove('active');
+                if(view) view.classList.remove('active-panel');
+            }
+            document.getElementById('part-btn-1-' + num).classList.add('active');
+            
+            if(num === 0) {
+                for (let i = 1; i <= 4; i++) {
+                    document.getElementById('part-view-1-' + i).classList.add('active-panel');
+                }
+            } else {
+                document.getElementById('part-view-1-' + num).classList.add('active-panel');
+            }
+        }
+
+        function showLec2Part(num) {
+            document.getElementById('header-badge').innerText = (num === 4) ? "MATHEMATICS • SOLVED EXAMPLES" : "MATHEMATICS • EULER THEOREM";
+            let titles = ["Lecture 2: Full Overview", "Part 1: Homogeneous Functions & Euler's Theorem", "Part 2: Separable Functions & Jacobians", "Part 3: Coordinate Transformations", "Lecture 2: Complete Solved Examples"];
+            document.getElementById('page-main-title').innerText = titles[num];
+
+            for (let i = 0; i <= 4; i++) {
+                const btn = document.getElementById('part-btn-2-' + i);
+                const view = document.getElementById('part-view-2-' + i);
+                if(btn) btn.classList.remove('active');
+                if(view) view.classList.remove('active-panel');
+            }
+            document.getElementById('part-btn-2-' + num).classList.add('active');
+            
+            if(num === 0) {
+                for (let i = 1; i <= 4; i++) {
+                    document.getElementById('part-view-2-' + i).classList.add('active-panel');
+                }
+            } else {
+                document.getElementById('part-view-2-' + num).classList.add('active-panel');
+            }
+        }
+
+        function showLec3Part(num) {
+            document.getElementById('header-badge').innerText = (num === 5) ? "MATHEMATICS • SOLVED EXAMPLES" : "MATHEMATICS • APPLICATIONS";
+            let titles = ["Lecture 3: Full Overview", "Part 1: Envelope of Curves", "Part 2: Tangent Plane & Normal Line", "Part 3: Maximum and Minimum Points", "Part 4: Conditional Extrema (Lagrange)", "Lecture 3: Complete Solved Examples"];
+            document.getElementById('page-main-title').innerText = titles[num];
+
+            for (let i = 0; i <= 5; i++) {
+                const btn = document.getElementById('part-btn-3-' + i);
+                const view = document.getElementById('part-view-3-' + i);
+                if(btn) btn.classList.remove('active');
+                if(view) view.classList.remove('active-panel');
+            }
+            document.getElementById('part-btn-3-' + num).classList.add('active');
+            
+            if(num === 0) {
+                for (let i = 1; i <= 5; i++) {
+                    document.getElementById('part-view-3-' + i).classList.add('active-panel');
+                }
+            } else {
+                document.getElementById('part-view-3-' + num).classList.add('active-panel');
+            }
+        }
+
+        function showLec4Part(num) {
+            document.getElementById('header-badge').innerText = (num === 5) ? "MATHEMATICS • SOLVED EXAMPLES" : "MATHEMATICS • MULTIPLE INTEGRALS";
+            let titles = ["Lecture 4: Full Overview", "Part 1: Double Integral", "Part 2: Triple Integral", "Part 3: Line Integral & Green's Theorem", "Part 4: Surface Integral", "Lecture 4: Complete Solved Examples"];
+            document.getElementById('page-main-title').innerText = titles[num];
+
+            for (let i = 0; i <= 5; i++) {
+                const btn = document.getElementById('part-btn-4-' + i);
+                const view = document.getElementById('part-view-4-' + i);
+                if(btn) btn.classList.remove('active');
+                if(view) view.classList.remove('active-panel');
+            }
+            document.getElementById('part-btn-4-' + num).classList.add('active');
+            
+            if(num === 0) {
+                for (let i = 1; i <= 5; i++) {
+                    document.getElementById('part-view-4-' + i).classList.add('active-panel');
+                }
+            } else {
+                document.getElementById('part-view-4-' + num).classList.add('active-panel');
+            }
+        }
+
+        function showLec5Part(num) {
+            document.getElementById('header-badge').innerText = (num === 5) ? "MATHEMATICS • SOLVED EXAMPLES" : "MATHEMATICS • VECTORS ANALYSIS";
+            let titles = ["Lecture 5: Full Overview", "Part 1: Vector Algebra", "Part 2: Vector Function", "Part 3: Gradient, Divergence & Curl", "Part 4: Orthogonal Curvilinear Coordinates", "Lecture 5: Complete Solved Examples"];
+            document.getElementById('page-main-title').innerText = titles[num];
+
+            for (let i = 0; i <= 5; i++) {
+                const btn = document.getElementById('part-btn-5-' + i);
+                const view = document.getElementById('part-view-5-' + i);
+                if(btn) btn.classList.remove('active');
+                if(view) view.classList.remove('active-panel');
+            }
+            document.getElementById('part-btn-5-' + num).classList.add('active');
+            
+            if(num === 0) {
+                for (let i = 1; i <= 5; i++) {
+                    document.getElementById('part-view-5-' + i).classList.add('active-panel');
+                }
+            } else {
+                document.getElementById('part-view-5-' + num).classList.add('active-panel');
+            }
+        }
+
+        function switchLectureGroup(lecNum) {
+            for (let l = 1; l <= 5; l++) {
+                const tab = document.getElementById('lec-tab-' + l);
+                const subnav = document.getElementById('subnav-wrapper-' + l);
+                const cont = document.getElementById('lec' + l + '-container');
+                if(tab) tab.classList.remove('active');
+                if(subnav) subnav.style.display = 'none';
+                if(cont) cont.style.display = 'none';
+            }
+
+            const activeTab = document.getElementById('lec-tab-' + lecNum);
+            if(activeTab) activeTab.classList.add('active');
+            
+            const activeSubnav = document.getElementById('subnav-wrapper-' + lecNum);
+            if(activeSubnav) activeSubnav.style.display = 'block';
+
+            const activeCont = document.getElementById('lec' + lecNum + '-container');
+            if(activeCont) activeCont.style.display = 'block';
+
+            if (lecNum === 1) showLec1Part(1);
+            else if (lecNum === 2) showLec2Part(1);
+            else if (lecNum === 3) showLec3Part(1);
+            else if (lecNum === 4) showLec4Part(1);
+            else if (lecNum === 5) showLec5Part(1);
+        }
+
+        function toggleCardSolution(btn) {
+            const card = btn.closest('.card');
+            const sol = card.querySelector('.solution-content');
+            if (sol.classList.contains('show')) {
+                sol.classList.remove('show');
+                btn.classList.remove('active');
+                btn.innerHTML = 'إظهار الحل';
+            } else {
+                sol.classList.add('show');
+                btn.classList.add('active');
+                btn.innerHTML = 'إخفاء الحل';
+            }
+        }
+
+        function toggleAllSolutionsInContainer(containerId, show) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+            const buttons = container.querySelectorAll('.sol-toggle-btn');
+            const solutions = container.querySelectorAll('.solution-content');
+
+            solutions.forEach((sol, idx) => {
+                const btn = buttons[idx];
+                if (show) {
+                    sol.classList.add('show');
+                    if (btn) { btn.classList.add('active'); btn.innerHTML = 'إخفاء الحل'; }
+                } else {
+                    sol.classList.remove('show');
+                    if (btn) { btn.classList.remove('active'); btn.innerHTML = 'إظهار الحل'; }
+                }
+            });
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            if (typeof renderMathInElement === 'function') {
+                renderMathInElement(document.body, {
+                    delimiters: [
+                        {left: "$$", right: "$$", display: true},
+                        {left: "$", right: "$", display: false}
+                    ],
+                    throwOnError: false
+                });
+            }
+        });
+    </script>
+</body>
+</html>

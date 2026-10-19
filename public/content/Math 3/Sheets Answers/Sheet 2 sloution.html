@@ -1,0 +1,990 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>حل شيت 2: Vectors Analysis - Math 3</title>
+    <!-- مكتبة KaTeX لتنسيق المعادلات الرياضية -->
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/fonts/KaTeX_Main-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/fonts/KaTeX_Math-Italic.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/fonts/KaTeX_Size1-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/fonts/KaTeX_Size2-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/fonts/KaTeX_Size3-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/fonts/KaTeX_Size4-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <style>
+    .katex .sqrt, .katex .sqrt-sign svg {
+      display: inline-block !important;
+      visibility: visible !important;
+      opacity: 1 !important;
+      overflow: visible !important;
+    }
+    .katex svg {
+      max-width: none !important;
+    }
+    .sqrt-sym {
+      font-family: system-ui, -apple-system, sans-serif !important;
+      display: inline !important;
+    }
+
+        :root {
+            --bg-base: #090d13;
+            --bg-card: #111722;
+            --bg-code: #0b1017;
+            --border-card: #1f2937;
+            --cyan: #38bdf8;
+            --emerald: #34d399;
+            --amber: #fbbf24;
+            --purple: #c084fc;
+            --rose: #f43f5e;
+            --text-main: #e2e8f0;
+            --text-muted: #94a3b8;
+        }
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        html, body {
+            width: 100% !important;
+            max-width: 100% !important;
+            overflow-x: hidden !important;
+            position: relative;
+            background-color: var(--bg-base);
+            color: var(--text-main);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.6;
+            padding-bottom: 70px;
+        }
+        
+        .container {
+            width: 100% !important;
+            max-width: 960px !important;
+            margin: 0 auto;
+            padding: 12px 10px;
+            overflow-x: hidden !important;
+        }
+
+        .header {
+            padding: 8px 0 16px 0;
+            border-bottom: 1px solid var(--border-card);
+            margin-bottom: 16px;
+        }
+        .top-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+        .badge {
+            background: rgba(56, 189, 248, 0.12);
+            color: var(--cyan);
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            padding: 4px 12px;
+            border-radius: 9999px;
+            font-size: 0.78rem;
+            font-weight: 800;
+        }
+        .quick-actions {
+            display: flex;
+            gap: 8px;
+        }
+        .action-btn {
+            background: #162032;
+            border: 1px solid #1e293b;
+            color: var(--text-main);
+            padding: 6px 14px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .action-btn:hover { border-color: var(--cyan); color: #fff; }
+
+        .nav-bar {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 18px;
+            background: rgba(17, 23, 34, 0.85);
+            padding: 8px;
+            border-radius: 10px;
+            border: 1px solid var(--border-card);
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+        }
+        .nav-bar::-webkit-scrollbar { display: none; }
+        .tab-btn {
+            flex: 0 0 auto;
+            padding: 8px 14px;
+            background: #111722;
+            border: 1px solid #1e293b;
+            color: var(--text-muted);
+            border-radius: 6px;
+            font-size: 0.82rem;
+            font-weight: 800;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.2s;
+        }
+        .tab-btn:hover { color: #fff; border-color: rgba(56, 189, 248, 0.4); }
+        .tab-btn.active {
+            background: rgba(56, 189, 248, 0.15);
+            border-color: var(--cyan);
+            color: var(--cyan);
+        }
+
+        .question-section { display: none; }
+        .question-section.active { display: block; animation: fadeIn 0.2s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(3px); } to { opacity: 1; transform: translateY(0); } }
+
+        .prob-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-card);
+            border-radius: 10px;
+            margin-bottom: 18px;
+            overflow: hidden;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+        }
+        .prob-header {
+            padding: 12px 14px;
+            background: rgba(255, 255, 255, 0.02);
+            border-bottom: 1px solid var(--border-card);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+            direction: ltr !important;
+            text-align: left !important;
+        }
+        .prob-title {
+            font-size: 0.95rem;
+            font-weight: 800;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            direction: ltr !important;
+        }
+        .sol-btn {
+            background: rgba(56, 189, 248, 0.12);
+            color: var(--cyan);
+            border: 1px solid rgba(56, 189, 248, 0.35);
+            padding: 5px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 0.8rem;
+            transition: all 0.2s;
+        }
+        .sol-btn:hover { background: rgba(56, 189, 248, 0.2); }
+        .sol-btn.active {
+            background: rgba(244, 63, 94, 0.15);
+            color: var(--rose);
+            border-color: var(--rose);
+        }
+
+        .prob-body {
+            padding: 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .prompt-box {
+            background: rgba(56, 189, 248, 0.05);
+            border-left: 4px solid var(--cyan);
+            border-right: none;
+            padding: 10px 14px;
+            font-size: 0.92rem;
+            border-radius: 4px;
+            direction: ltr;
+            text-align: left;
+        }
+
+        .solution-wrapper {
+            display: none;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .solution-wrapper.show {
+            display: flex;
+            animation: fadeIn 0.25s ease-in-out;
+        }
+        .sol-step {
+            background: var(--bg-code);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-left: 3px solid var(--emerald);
+            border-right: none;
+            border-radius: 6px;
+            padding: 12px 14px;
+            font-size: 0.9rem;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            direction: ltr;
+            text-align: left;
+        }
+        .sol-step-title {
+            font-size: 0.82rem;
+            font-weight: 800;
+            color: var(--emerald);
+            text-transform: uppercase;
+        }
+        .step-desc {
+            font-size: 0.84rem;
+            color: var(--amber);
+            font-weight: 600;
+        }
+        .math-row {
+            overflow-x: auto;
+            overflow-y: hidden;
+            padding: 4px 0;
+            font-size: 0.96rem;
+            line-height: 1.8;
+            -webkit-overflow-scrolling: touch;
+        }
+        .math-row::-webkit-scrollbar { height: 4px; }
+        .math-row::-webkit-scrollbar-thumb { background: rgba(56, 189, 248, 0.3); border-radius: 4px; }
+
+        .result-badge {
+            display: inline-block;
+            background: rgba(52, 211, 153, 0.12);
+            border: 1px solid rgba(52, 211, 153, 0.3);
+            color: var(--emerald);
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-weight: 700;
+            width: fit-content;
+            margin-top: 4px;
+            font-size: 0.86rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+
+        <!-- الترويسة -->
+        <div class="header">
+            <div class="top-row">
+                <span class="badge">MATH 3 • SHEET 2 (VECTORS ANALYSIS)</span>
+                <div class="quick-actions">
+                    <button class="action-btn" onclick="toggleAllSolutions(true)">👁️ إظهار كل الحلول</button>
+                    <button class="action-btn" onclick="toggleAllSolutions(false)">🙈 إخفاء كل الحلول</button>
+                </div>
+            </div>
+            <h2 style="font-size: 1.15rem; color: #fff;">حل شيت 2: تحليل المتجهات (Vectors Analysis)</h2>
+            <p style="font-size: 0.84rem; color: var(--text-muted);">حلول تفصيلية كاملة خطوة بخطوة لمسائل التفاضل، التدرج، التباعد، الالتفاف، والإحداثيات المنحنية.</p>
+        </div>
+
+        <!-- شريط التنقل بين الأسئلة -->
+        <div class="nav-bar" dir="ltr">
+            <button class="tab-btn active" onclick="switchQuestion(0, this)">All</button>
+            <button class="tab-btn" onclick="switchQuestion(1, this)">Q1-Q2: Vector Derivatives</button>
+            <button class="tab-btn" onclick="switchQuestion(3, this)">Q3: Partial of Vectors</button>
+            <button class="tab-btn" onclick="switchQuestion(4, this)">Q4: Gradient (∇F)</button>
+            <button class="tab-btn" onclick="switchQuestion(5, this)">Q5: Div & Curl</button>
+            <button class="tab-btn" onclick="switchQuestion(6, this)">Q6: Laplacian & Identity</button>
+            <button class="tab-btn" onclick="switchQuestion(7, this)">Q7-Q9: Curvilinear Coordinates</button>
+        </div>
+
+        <!-- ========================================================= -->
+        <!-- كارت ملخص القوانين السريعة لشيت المتجهات (Sheet 2) -->
+        <!-- ========================================================= -->
+        <div class="prob-card" style="border-color: rgba(56, 189, 248, 0.4); margin-bottom: 22px;">
+            <div class="prob-header" style="background: linear-gradient(90deg, rgba(12, 74, 110, 0.45), rgba(17, 23, 34, 0.9));">
+                <span class="prob-title" style="color: var(--cyan);">
+                    ⚡ Vectors Analysis Cheat Sheet & Operators
+                </span>
+                <button class="sol-btn" onclick="toggleSolution(this)" style="background: rgba(56, 189, 248, 0.2); border-color: var(--cyan);">إخفاء/إظهار الملخص</button>
+            </div>
+            <div class="prob-body">
+                <div class="solution-wrapper show" style="gap: 10px;">
+                    
+                    <!-- التدرج Gradient -->
+                    <div class="sol-step" style="border-left-color: var(--cyan);">
+                        <div class="sol-step-title" style="color: var(--cyan);">1. Gradient of Scalar Field ($\nabla F$)</div>
+                        <div class="math-row">
+                            $$\nabla F = \frac{\partial F}{\partial x}i + \frac{\partial F}{\partial y}j + \frac{\partial F}{\partial z}k$$
+                        </div>
+                        <div class="step-desc" style="color: var(--text-muted); font-size: 0.82rem;">
+                            • ينتج عنه متجه عمودي على سطح المستوى $F(x,y,z) = c$.
+                        </div>
+                    </div>
+
+                    <!-- التباعد Divergence -->
+                    <div class="sol-step" style="border-left-color: var(--emerald);">
+                        <div class="sol-step-title" style="color: var(--emerald);">2. Divergence of Vector Field ($\nabla\cdot\bar{U}$)</div>
+                        <div class="math-row">
+                            $$\nabla\cdot\bar{U} = \frac{\partial u_1}{\partial x} + \frac{\partial u_2}{\partial y} + \frac{\partial u_3}{\partial z}$$
+                        </div>
+                        <div class="step-desc" style="color: var(--text-muted); font-size: 0.82rem;">
+                            • ينتج عنه دالة قياسية (Scalar). إذا كان $\nabla\cdot\bar{U} = 0$ يسمى المجال Solenoidal.
+                        </div>
+                    </div>
+
+                    <!-- الالتفاف Curl -->
+                    <div class="sol-step" style="border-left-color: var(--amber);">
+                        <div class="sol-step-title" style="color: var(--amber);">3. Curl of Vector Field ($\nabla\times\bar{U}$)</div>
+                        <div class="math-row">
+                            $$\nabla\times\bar{U} = \begin{vmatrix} i & j & k \\ \frac{\partial}{\partial x} & \frac{\partial}{\partial y} & \frac{\partial}{\partial z} \\ u_1 & u_2 & u_3 \end{vmatrix}$$
+                        </div>
+                        <div class="step-desc" style="color: var(--text-muted); font-size: 0.82rem;">
+                            • ينتج عنه متجه (Vector). إذا كان $\nabla\times\bar{U} = \bar{0}$ يسمى المجال Irrotational.
+                        </div>
+                    </div>
+
+                    <!-- لابلاسيان والمتطابقات الصفرية -->
+                    <div class="sol-step" style="border-left-color: var(--rose);">
+                        <div class="sol-step-title" style="color: var(--rose);">4. Laplacian and Null Identities</div>
+                        <div class="math-row">
+                            $$\nabla^2 F = \nabla\cdot\nabla F = \frac{\partial^2 F}{\partial x^2} + \frac{\partial^2 F}{\partial y^2} + \frac{\partial^2 F}{\partial z^2}$$
+                        </div>
+                        <div class="math-row">
+                            $$\nabla\times(\nabla F) = \bar{0} \quad (\operatorname{curl}\operatorname{grad} F = \bar{0}), \quad \nabla\cdot(\nabla\times\bar{U}) = 0 \quad (\operatorname{div}\operatorname{curl}\bar{U} = 0)$$
+                        </div>
+                    </div>
+
+                    <!-- الإحداثيات المنحنية وعوامل المقياس -->
+                    <div class="sol-step" style="border-left-color: var(--purple);">
+                        <div class="sol-step-title" style="color: var(--purple);">5. Scale Factors in Curvilinear Coordinates</div>
+                        <div class="math-row">
+                            $$h_1 = \left|\frac{\partial\bar{r}}{\partial u_1}\right|, \quad h_2 = \left|\frac{\partial\bar{r}}{\partial u_2}\right|, \quad h_3 = \left|\frac{\partial\bar{r}}{\partial u_3}\right|$$
+                        </div>
+                        <div class="step-desc" style="color: var(--text-muted); font-size: 0.82rem;">
+                            • الأسطواني $(\rho, \theta, z)$: $h_1 = 1, h_2 = \rho, h_3 = 1$ | الكروي $(\rho, \theta, \varphi)$: $h_1 = 1, h_2 = \rho\sin\varphi, h_3 = \rho$.
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- ========================================================= -->
+        <!-- Questions 1 & 2: Vector Derivatives with respect to t -->
+        <!-- ========================================================= -->
+        <div id="sec-1" class="question-section active">
+
+            <!-- Q1 -->
+            <div class="prob-card">
+                <div class="prob-header">
+                    <span class="prob-title">📌 Question 1: Derivatives of Vector Function</span>
+                    <button class="sol-btn" onclick="toggleSolution(this)">إظهار الحل</button>
+                </div>
+                <div class="prob-body">
+                    <div class="prompt-box">
+                        If $\bar{U} = (t^2 + 2t)i + (t\sin t)j + (2 + \cos t)k$, find $\frac{d\bar{U}}{dt}$ and $\frac{d^2\bar{U}}{dt^2}$.
+                    </div>
+                    <div class="solution-wrapper">
+                        <div class="sol-step">
+                            <div class="sol-step-title">Step 1: First Derivative $\frac{d\bar{U}}{dt}$</div>
+                            <div class="step-desc">Differentiate each component with respect to $t$:</div>
+                            <div class="math-row">
+                                $$\frac{d}{dt}(t^2 + 2t) = 2t + 2$$
+                                $$\frac{d}{dt}(t\sin t) = (1)\sin t + t\cos t = \sin t + t\cos t$$
+                                $$\frac{d}{dt}(2 + \cos t) = -\sin t$$
+                            </div>
+                            <div class="math-row">
+                                $$\frac{d\bar{U}}{dt} = (2t + 2)i + (\sin t + t\cos t)j - (\sin t)k$$
+                            </div>
+                        </div>
+
+                        <div class="sol-step">
+                            <div class="sol-step-title">Step 2: Second Derivative $\frac{d^2\bar{U}}{dt^2}$</div>
+                            <div class="step-desc">Differentiate the first derivative components with respect to $t$:</div>
+                            <div class="math-row">
+                                $$\frac{d}{dt}(2t + 2) = 2$$
+                                $$\frac{d}{dt}(\sin t + t\cos t) = \cos t + [1 \cdot \cos t + t(-\sin t)] = 2\cos t - t\sin t$$
+                                $$\frac{d}{dt}(-\sin t) = -\cos t$$
+                            </div>
+                            <div class="math-row">
+                                $$\frac{d^2\bar{U}}{dt^2} = 2i + (2\cos t - t\sin t)j - (\cos t)k$$
+                            </div>
+                            <div class="result-badge">Derivatives Computed Successfully</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Q2 -->
+            <div class="prob-card">
+                <div class="prob-header">
+                    <span class="prob-title">📌 Question 2: Vector Derivatives at $t = 0$</span>
+                    <button class="sol-btn" onclick="toggleSolution(this)">إظهار الحل</button>
+                </div>
+                <div class="prob-body">
+                    <div class="prompt-box">
+                        If $\bar{U} = (t + e^t)i + (t + \sinh t)j + (3t + \cos t)k$, find $\left|\frac{d\bar{U}}{dt}\right|$ and $\left|\frac{d^2\bar{U}}{dt^2}\right|$ at $t = 0$.
+                    </div>
+                    <div class="solution-wrapper">
+                        <div class="sol-step">
+                            <div class="sol-step-title">Step 1: Compute $\frac{d\bar{U}}{dt}$ and evaluate at $t = 0$</div>
+                            <div class="math-row">
+                                $$\frac{d\bar{U}}{dt} = (1 + e^t)i + (1 + \cosh t)j + (3 - \sin t)k$$
+                            </div>
+                            <div class="step-desc">Substitute $t = 0$ (noting $e^0 = 1$, $\cosh 0 = 1$, $\sin 0 = 0$):</div>
+                            <div class="math-row">
+                                $$\left.\frac{d\bar{U}}{dt}\right|_{t=0} = (1 + 1)i + (1 + 1)j + (3 - 0)k = 2i + 2j + 3k$$
+                            </div>
+                            <div class="step-desc">Magnitude:</div>
+                            <div class="math-row">
+                                $$\left|\frac{d\bar{U}}{dt}\right|_{t=0} = \sqrt{2^2 + 2^2 + 3^2} = \sqrt{4 + 4 + 9} = \sqrt{17}$$
+                            </div>
+                        </div>
+
+                        <div class="sol-step">
+                            <div class="sol-step-title">Step 2: Compute $\frac{d^2\bar{U}}{dt^2}$ and evaluate at $t = 0$</div>
+                            <div class="math-row">
+                                $$\frac{d^2\bar{U}}{dt^2} = (e^t)i + (\sinh t)j - (\cos t)k$$
+                            </div>
+                            <div class="step-desc">Substitute $t = 0$ (noting $\sinh 0 = 0$, $\cos 0 = 1$):</div>
+                            <div class="math-row">
+                                $$\left.\frac{d^2\bar{U}}{dt^2}\right|_{t=0} = (1)i + (0)j - (1)k = i - k$$
+                            </div>
+                            <div class="step-desc">Magnitude:</div>
+                            <div class="math-row">
+                                $$\left|\frac{d^2\bar{U}}{dt^2}\right|_{t=0} = \sqrt{1^2 + 0^2 + (-1)^2} = \sqrt{1 + 1} = \sqrt{2}$$
+                            </div>
+                            <div class="result-badge">Magnitudes: $\sqrt{17}$ and $\sqrt{2}$</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- ========================================================= -->
+        <!-- Question 3: Partial Derivatives of Vectors -->
+        <!-- ========================================================= -->
+        <div id="sec-3" class="question-section active">
+
+            <div class="prob-card">
+                <div class="prob-header">
+                    <span class="prob-title">📌 Question 3: First and Second Partial Derivatives of $\bar{U}(x,y,z)$</span>
+                    <button class="sol-btn" onclick="toggleSolution(this)">إظهار الحل</button>
+                </div>
+                <div class="prob-body">
+                    <div class="prompt-box">
+                        If $\bar{U} = (x^2 + yz)i + (y\sin x)j + (2^y + \cos z)k$, find $\frac{\partial\bar{U}}{\partial x}, \frac{\partial\bar{U}}{\partial y}, \frac{\partial\bar{U}}{\partial z}, \bar{U}_{xx}, \bar{U}_{yy}, \bar{U}_{zz}, \bar{U}_{xy}, \bar{U}_{xz}$.
+                    </div>
+                    <div class="solution-wrapper">
+                        <!-- First part: first partials -->
+                        <div class="sol-step">
+                            <div class="sol-step-title">Step 1: First Partial Derivatives</div>
+                            <div class="math-row">
+                                $$\frac{\partial\bar{U}}{\partial x} = 2x\,i + (y\cos x)j + 0\,k = 2x\,i + (y\cos x)j$$
+                            </div>
+                            <div class="math-row">
+                                $$\frac{\partial\bar{U}}{\partial y} = z\,i + (\sin x)j + (2^y \ln 2)k$$
+                            </div>
+                            <div class="math-row">
+                                $$\frac{\partial\bar{U}}{\partial z} = y\,i + 0\,j - (\sin z)k = y\,i - (\sin z)k$$
+                            </div>
+                        </div>
+
+                        <!-- Second part: pure second partials -->
+                        <div class="sol-step">
+                            <div class="sol-step-title">Step 2: Pure Second Partials ($\bar{U}_{xx}, \bar{U}_{yy}, \bar{U}_{zz}$)</div>
+                            <div class="math-row">
+                                $$\bar{U}_{xx} = \frac{\partial}{\partial x}(2x\,i + y\cos x\,j) = 2\,i - (y\sin x)j$$
+                            </div>
+                            <div class="math-row">
+                                $$\bar{U}_{yy} = \frac{\partial}{\partial y}(z\,i + \sin x\,j + 2^y \ln 2\,k) = 0\,i + 0\,j + [2^y (\ln 2)^2]k = 2^y (\ln 2)^2 k$$
+                            </div>
+                            <div class="math-row">
+                                $$\bar{U}_{zz} = \frac{\partial}{\partial z}(y\,i - \sin z\,k) = 0\,i - (\cos z)k = -(\cos z)k$$
+                            </div>
+                        </div>
+
+                        <!-- Third part: mixed second partials -->
+                        <div class="sol-step">
+                            <div class="sol-step-title">Step 3: Mixed Second Partials ($\bar{U}_{xy}, \bar{U}_{xz}$)</div>
+                            <div class="math-row">
+                                $$\bar{U}_{xy} = \frac{\partial}{\partial y}\left(\frac{\partial\bar{U}}{\partial x}\right) = \frac{\partial}{\partial y}(2x\,i + y\cos x\,j) = (\cos x)j$$
+                            </div>
+                            <div class="math-row">
+                                $$\bar{U}_{xz} = \frac{\partial}{\partial z}\left(\frac{\partial\bar{U}}{\partial x}\right) = \frac{\partial}{\partial z}(2x\,i + y\cos x\,j) = \bar{0}$$
+                            </div>
+                            <div class="result-badge">All 8 Derivatives Computed</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- ========================================================= -->
+        <!-- Question 4: Gradient Vector -->
+        <!-- ========================================================= -->
+        <div id="sec-4" class="question-section active">
+
+            <div class="prob-card">
+                <div class="prob-header">
+                    <span class="prob-title">📌 Question 4: Gradient Vector ($\nabla F$)</span>
+                    <button class="sol-btn" onclick="toggleSolution(this)">إظهار الحل</button>
+                </div>
+                <div class="prob-body">
+                    <div class="prompt-box">
+                        Find $\nabla F = \frac{\partial F}{\partial x}i + \frac{\partial F}{\partial y}j + \frac{\partial F}{\partial z}k$ for: <br>
+                        (a) $F = x^4 + yz + 2^y \ln z$ <br>
+                        (b) $F = y\sin x + z\cos y + e^z$ <br>
+                        (c) $F = 3x^2 + \sqrt{y} + \sinh(3y)$ <br>
+                        (d) $F = y\cosh x + y e^z + 12$
+                    </div>
+                    <div class="solution-wrapper">
+                        <!-- 4a -->
+                        <div class="sol-step">
+                            <div class="sol-step-title">Solution for (a): $F = x^4 + yz + 2^y \ln z$</div>
+                            <div class="math-row">
+                                $$F_x = 4x^3, \quad F_y = z + 2^y \ln 2 \ln z, \quad F_z = y + \frac{2^y}{z}$$
+                            </div>
+                            <div class="math-row">
+                                $$\nabla F = (4x^3)i + (z + 2^y \ln 2 \ln z)j + \left(y + \frac{2^y}{z}\right)k$$
+                            </div>
+                        </div>
+
+                        <!-- 4b -->
+                        <div class="sol-step">
+                            <div class="sol-step-title">Solution for (b): $F = y\sin x + z\cos y + e^z$</div>
+                            <div class="math-row">
+                                $$F_x = y\cos x, \quad F_y = \sin x - z\sin y, \quad F_z = \cos y + e^z$$
+                            </div>
+                            <div class="math-row">
+                                $$\nabla F = (y\cos x)i + (\sin x - z\sin y)j + (\cos y + e^z)k$$
+                            </div>
+                        </div>
+
+                        <!-- 4c -->
+                        <div class="sol-step">
+                            <div class="sol-step-title">Solution for (c): $F = 3x^2 + \sqrt{y} + \sinh(3y)$</div>
+                            <div class="math-row">
+                                $$F_x = 6x, \quad F_y = \frac{1}{2\sqrt{y}} + 3\cosh(3y), \quad F_z = 0$$
+                            </div>
+                            <div class="math-row">
+                                $$\nabla F = (6x)i + \left(\frac{1}{2\sqrt{y}} + 3\cosh(3y)\right)j$$
+                            </div>
+                        </div>
+
+                        <!-- 4d -->
+                        <div class="sol-step">
+                            <div class="sol-step-title">Solution for (d): $F = y\cosh x + y e^z + 12$</div>
+                            <div class="math-row">
+                                $$F_x = y\sinh x, \quad F_y = \cosh x + e^z, \quad F_z = y e^z$$
+                            </div>
+                            <div class="math-row">
+                                $$\nabla F = (y\sinh x)i + (\cosh x + e^z)j + (y e^z)k$$
+                            </div>
+                            <div class="result-badge">Gradients Fully Determined</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- ========================================================= -->
+        <!-- Question 5: Divergence and Curl -->
+        <!-- ========================================================= -->
+        <div id="sec-5" class="question-section active">
+
+            <!-- 5a & 5b -->
+            <div class="prob-card">
+                <div class="prob-header">
+                    <span class="prob-title">📌 Question 5: (a) & (b) Divergence ($\nabla\cdot\bar{U}$) and Curl ($\nabla\times\bar{U}$)</span>
+                    <button class="sol-btn" onclick="toggleSolution(this)">إظهار الحل</button>
+                </div>
+                <div class="prob-body">
+                    <div class="prompt-box">
+                        (a) $\bar{U} = (x^2 + yz)i + (y\sin x)j + (2^y + \cos z)k$ <br>
+                        (b) $\bar{U} = (x^3 \sinh z)i + (y^4 - 2\sin x)j + (y\ln z)k$
+                    </div>
+                    <div class="solution-wrapper">
+                        <div class="sol-step">
+                            <div class="sol-step-title">Solution for (a)</div>
+                            <div class="step-desc">Divergence:</div>
+                            <div class="math-row">
+                                $$\nabla\cdot\bar{U} = \frac{\partial}{\partial x}(x^2+yz) + \frac{\partial}{\partial y}(y\sin x) + \frac{\partial}{\partial z}(2^y+\cos z) = 2x + \sin x - \sin z$$
+                            </div>
+                            <div class="step-desc">Curl via Determinant:</div>
+                            <div class="math-row">
+                                $$\nabla\times\bar{U} = \begin{vmatrix} i & j & k \\ \frac{\partial}{\partial x} & \frac{\partial}{\partial y} & \frac{\partial}{\partial z} \\ x^2+yz & y\sin x & 2^y+\cos z \end{vmatrix}$$
+                            </div>
+                            <div class="math-row">
+                                $$= i\left[\frac{\partial}{\partial y}(2^y+\cos z) - \frac{\partial}{\partial z}(y\sin x)\right] - j\left[\frac{\partial}{\partial x}(2^y+\cos z) - \frac{\partial}{\partial z}(x^2+yz)\right] + k\left[\frac{\partial}{\partial x}(y\sin x) - \frac{\partial}{\partial y}(x^2+yz)\right]$$
+                            </div>
+                            <div class="math-row">
+                                $$= i(2^y \ln 2 - 0) - j(0 - y) + k(y\cos x - z) = (2^y \ln 2)i + y\,j + (y\cos x - z)k$$
+                            </div>
+                        </div>
+
+                        <div class="sol-step">
+                            <div class="sol-step-title">Solution for (b)</div>
+                            <div class="step-desc">Divergence:</div>
+                            <div class="math-row">
+                                $$\nabla\cdot\bar{U} = \frac{\partial}{\partial x}(x^3 \sinh z) + \frac{\partial}{\partial y}(y^4 - 2\sin x) + \frac{\partial}{\partial z}(y\ln z) = 3x^2 \sinh z + 4y^3 + \frac{y}{z}$$
+                            </div>
+                            <div class="step-desc">Curl:</div>
+                            <div class="math-row">
+                                $$\nabla\times\bar{U} = \begin{vmatrix} i & j & k \\ \frac{\partial}{\partial x} & \frac{\partial}{\partial y} & \frac{\partial}{\partial z} \\ x^3 \sinh z & y^4 - 2\sin x & y\ln z \end{vmatrix}$$
+                                $$= i(\ln z - 0) - j(0 - x^3 \cosh z) + k(-2\cos x - 0) = (\ln z)i + (x^3 \cosh z)j - (2\cos x)k$$
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 5c & 5d -->
+            <div class="prob-card">
+                <div class="prob-header">
+                    <span class="prob-title">📌 Question 5: (c) & (d) Divergence and Curl</span>
+                    <button class="sol-btn" onclick="toggleSolution(this)">إظهار الحل</button>
+                </div>
+                <div class="prob-body">
+                    <div class="prompt-box">
+                        (c) $\bar{U} = (yz + \ln x)i + (e^z \cos x)j + (xy + \cosh z)k$ <br>
+                        (d) $\bar{U} = (x y^2 z^3)i + (x^3 y^3 + 2z)j + [x - 3\log(y+2z)]k$
+                    </div>
+                    <div class="solution-wrapper">
+                        <div class="sol-step">
+                            <div class="sol-step-title">Solution for (c)</div>
+                            <div class="math-row">
+                                $$\nabla\cdot\bar{U} = \frac{1}{x} + 0 + \sinh z = \frac{1}{x} + \sinh z$$
+                            </div>
+                            <div class="math-row">
+                                $$\nabla\times\bar{U} = \begin{vmatrix} i & j & k \\ \frac{\partial}{\partial x} & \frac{\partial}{\partial y} & \frac{\partial}{\partial z} \\ yz+\ln x & e^z \cos x & xy+\cosh z \end{vmatrix}$$
+                                $$= i(x - e^z \cos x) - j(y - y) + k(-e^z \sin x - z) = (x - e^z \cos x)i - (e^z \sin x + z)k$$
+                            </div>
+                        </div>
+
+                        <div class="sol-step">
+                            <div class="sol-step-title">Solution for (d)</div>
+                            <div class="step-desc">Recall that $\log u \equiv \log_{10} u = \frac{\ln u}{\ln 10}$:</div>
+                            <div class="math-row">
+                                $$\nabla\cdot\bar{U} = y^2 z^3 + 3x^3 y^2 - \frac{3 \cdot 2}{(y+2z)\ln 10} = y^2 z^3 + 3x^3 y^2 - \frac{6}{(y+2z)\ln 10}$$
+                            </div>
+                            <div class="step-desc">Curl components:</div>
+                            <div class="math-row">
+                                $$\nabla\times\bar{U} = \begin{vmatrix} i & j & k \\ \frac{\partial}{\partial x} & \frac{\partial}{\partial y} & \frac{\partial}{\partial z} \\ x y^2 z^3 & x^3 y^3 + 2z & x - 3\log(y+2z) \end{vmatrix}$$
+                                $$= i\left[-\frac{3}{(y+2z)\ln 10} - 2\right] - j[1 - 3x y^2 z^2] + k[3x^2 y^3 - 2xyz^3]$$
+                            </div>
+                            <div class="result-badge">Calculations Completed</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- ========================================================= -->
+        <!-- Question 6: Laplacian and Curl of Grad Identity -->
+        <!-- ========================================================= -->
+        <div id="sec-6" class="question-section active">
+
+            <div class="prob-card">
+                <div class="prob-header">
+                    <span class="prob-title">📌 Question 6: Laplacian ($\nabla\cdot\nabla F = \nabla^2 F$) and Curl of Grad ($\nabla\times\nabla F$)</span>
+                    <button class="sol-btn" onclick="toggleSolution(this)">إظهار الحل</button>
+                </div>
+                <div class="prob-body">
+                    <div class="prompt-box">
+                        Find $\nabla\cdot\nabla F = \nabla^2 F$ and $\nabla\times\nabla F$ for functions in Question 4: <br>
+                        (a) $F = x^4 + yz + 2^y \ln z$ <br>
+                        (b) $F = y\sin x + z\cos y + e^z$ <br>
+                        (c) $F = 3x^2 + \sqrt{y} + \sinh(3y)$ <br>
+                        (d) $F = y\cosh x + y e^z + 12$
+                    </div>
+                    <div class="solution-wrapper">
+                        <div class="sol-step">
+                            <div class="sol-step-title">General Identity for All Parts: $\nabla\times\nabla F$</div>
+                            <div class="step-desc">From Vector Identity Theorem (Theorem 5, viii):</div>
+                            <div class="math-row">
+                                $$\operatorname{curl}(\operatorname{grad} F) = \nabla\times(\nabla F) = \bar{0} \quad \text{for all scalar functions } F$$
+                            </div>
+                            <div class="result-badge">Hence for (a), (b), (c), and (d): $\nabla\times\nabla F = \bar{0}$</div>
+                        </div>
+
+                        <!-- 6a -->
+                        <div class="sol-step">
+                            <div class="sol-step-title">(a) Laplacian for $F = x^4 + yz + 2^y \ln z$</div>
+                            <div class="math-row">$$F_{xx} = \frac{\partial}{\partial x}(4x^3) = 12x^2$$</div>
+                            <div class="math-row">$$F_{yy} = \frac{\partial}{\partial y}(z + 2^y \ln 2 \ln z) = 2^y (\ln 2)^2 \ln z$$</div>
+                            <div class="math-row">$$F_{zz} = \frac{\partial}{\partial z}\left(y + \frac{2^y}{z}\right) = -\frac{2^y}{z^2}$$</div>
+                            <div class="math-row">$$\nabla^2 F = F_{xx} + F_{yy} + F_{zz} = 12x^2 + 2^y (\ln 2)^2 \ln z - \frac{2^y}{z^2}$$</div>
+                        </div>
+
+                        <!-- 6b -->
+                        <div class="sol-step">
+                            <div class="sol-step-title">(b) Laplacian for $F = y\sin x + z\cos y + e^z$</div>
+                            <div class="math-row">$$F_{xx} = \frac{\partial}{\partial x}(y\cos x) = -y\sin x$$</div>
+                            <div class="math-row">$$F_{yy} = \frac{\partial}{\partial y}(\sin x - z\sin y) = -z\cos y$$</div>
+                            <div class="math-row">$$F_{zz} = \frac{\partial}{\partial z}(\cos y + e^z) = e^z$$</div>
+                            <div class="math-row">$$\nabla^2 F = -y\sin x - z\cos y + e^z$$</div>
+                        </div>
+
+                        <!-- 6c -->
+                        <div class="sol-step">
+                            <div class="sol-step-title">(c) Laplacian for $F = 3x^2 + \sqrt{y} + \sinh(3y)$</div>
+                            <div class="math-row">$$F_{xx} = 6, \quad F_{yy} = -\frac{1}{4}y^{-3/2} + 9\sinh(3y) = -\frac{1}{4y^{3/2}} + 9\sinh(3y), \quad F_{zz} = 0$$</div>
+                            <div class="math-row">$$\nabla^2 F = 6 - \frac{1}{4y^{3/2}} + 9\sinh(3y)$$</div>
+                        </div>
+
+                        <!-- 6d -->
+                        <div class="sol-step">
+                            <div class="sol-step-title">(d) Laplacian for $F = y\cosh x + y e^z + 12$</div>
+                            <div class="math-row">$$F_{xx} = y\cosh x, \quad F_{yy} = 0, \quad F_{zz} = y e^z$$</div>
+                            <div class="math-row">$$\nabla^2 F = y\cosh x + y e^z = y(\cosh x + e^z)$$</div>
+                            <div class="result-badge">All Laplacians Evaluated</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- ========================================================= -->
+        <!-- Questions 7, 8, 9: Curvilinear Coordinates -->
+        <!-- ========================================================= -->
+        <div id="sec-7" class="question-section active">
+
+            <!-- Q7 -->
+            <div class="prob-card">
+                <div class="prob-header">
+                    <span class="prob-title">📌 Question 7: Vector in Cylindrical Coordinates</span>
+                    <button class="sol-btn" onclick="toggleSolution(this)">إظهار الحل</button>
+                </div>
+                <div class="prob-body">
+                    <div class="prompt-box">
+                        Express the vector $\bar{U} = (xy)i + z\,j + (yz)k$ in cylindrical coordinates $(\rho, \theta, z)$.
+                    </div>
+                    <div class="solution-wrapper">
+                        <div class="sol-step">
+                            <div class="sol-step-title">Step 1: Coordinate Relations and Unit Vectors</div>
+                            <div>Transformation: $x = \rho\cos\theta, \,\, y = \rho\sin\theta, \,\, z = z$</div>
+                            <div class="step-desc">The Cartesian unit vectors expressed in cylindrical basis $(\bar{e}_\rho, \bar{e}_\theta, \bar{e}_z)$:</div>
+                            <div class="math-row">
+                                $$i = \cos\theta \bar{e}_\rho - \sin\theta \bar{e}_\theta$$
+                                $$j = \sin\theta \bar{e}_\rho + \cos\theta \bar{e}_\theta$$
+                                $$k = \bar{e}_z$$
+                            </div>
+                        </div>
+
+                        <div class="sol-step">
+                            <div class="sol-step-title">Step 2: Substitute $x, y, z$ in $\bar{U}$</div>
+                            <div class="math-row">
+                                $$xy = (\rho\cos\theta)(\rho\sin\theta) = \rho^2 \cos\theta\sin\theta$$
+                                $$z = z$$
+                                $$yz = z\rho\sin\theta$$
+                            </div>
+                            <div class="math-row">
+                                $$\bar{U} = (\rho^2 \cos\theta\sin\theta)i + (z)j + (z\rho\sin\theta)k$$
+                            </div>
+                        </div>
+
+                        <div class="sol-step">
+                            <div class="sol-step-title">Step 3: Collect components along $(\bar{e}_\rho, \bar{e}_\theta, \bar{e}_z)$</div>
+                            <div class="math-row">
+                                $$\bar{U} = (\rho^2 \cos\theta\sin\theta)[\cos\theta \bar{e}_\rho - \sin\theta \bar{e}_\theta] + z[\sin\theta \bar{e}_\rho + \cos\theta \bar{e}_\theta] + (z\rho\sin\theta)\bar{e}_z$$
+                            </div>
+                            <div class="math-row">
+                                $$\bar{U} = (\rho^2 \cos^2\theta\sin\theta + z\sin\theta)\bar{e}_\rho + (-\rho^2 \cos\theta\sin^2\theta + z\cos\theta)\bar{e}_\theta + (z\rho\sin\theta)\bar{e}_z$$
+                            </div>
+                            <div class="result-badge">Expressed in $(\bar{e}_\rho, \bar{e}_\theta, \bar{e}_z)$ basis</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Q8 -->
+            <div class="prob-card">
+                <div class="prob-header">
+                    <span class="prob-title">📌 Question 8: Vector in Spherical Coordinates and Jacobian</span>
+                    <button class="sol-btn" onclick="toggleSolution(this)">إظهار الحل</button>
+                </div>
+                <div class="prob-body">
+                    <div class="prompt-box">
+                        Write the vector $\bar{U} = (xy)i + (yz)j - x\,k$ in spherical coordinates $(\rho, \theta, \varphi)$ and find the Jacobian of the transformation.
+                    </div>
+                    <div class="solution-wrapper">
+                        <div class="sol-step">
+                            <div class="sol-step-title">Part 1: Jacobian of the Spherical Transformation</div>
+                            <div>Transformation: $x = \rho\cos\theta\sin\varphi, \,\, y = \rho\sin\theta\sin\varphi, \,\, z = \rho\cos\varphi$</div>
+                            <div class="math-row">
+                                $$J = \frac{\partial(x,y,z)}{\partial(\rho,\theta,\varphi)} = \begin{vmatrix} \cos\theta\sin\varphi & \sin\theta\sin\varphi & \cos\varphi \\ -\rho\sin\theta\sin\varphi & \rho\cos\theta\sin\varphi & 0 \\ \rho\cos\theta\cos\varphi & \rho\sin\theta\cos\varphi & -\rho\sin\varphi \end{vmatrix} = \rho^2 \sin\varphi$$
+                            </div>
+                            <div class="result-badge">Jacobian: $J = \rho^2 \sin\varphi$</div>
+                        </div>
+
+                        <div class="sol-step">
+                            <div class="sol-step-title">Part 2: Unit Vector Matrix Inversion</div>
+                            <div>The unit vectors $(\bar{e}_\rho, \bar{e}_\theta, \bar{e}_\varphi)$ relate to $(i, j, k)$ orthogonally:</div>
+                            <div class="math-row">
+                                $$i = \cos\theta\sin\varphi \bar{e}_\rho - \sin\theta \bar{e}_\theta + \cos\theta\cos\varphi \bar{e}_\varphi$$
+                                $$j = \sin\theta\sin\varphi \bar{e}_\rho + \cos\theta \bar{e}_\theta + \sin\theta\cos\varphi \bar{e}_\varphi$$
+                                $$k = \cos\varphi \bar{e}_\rho - \sin\varphi \bar{e}_\varphi$$
+                            </div>
+                        </div>
+
+                        <div class="sol-step">
+                            <div class="sol-step-title">Part 3: Express $\bar{U}$ in terms of $(\bar{e}_\rho, \bar{e}_\theta, \bar{e}_\varphi)$</div>
+                            <div>Components in Cartesian:</div>
+                            <div class="math-row">
+                                $$u_1 = xy = \rho^2 \sin\theta\cos\theta\sin^2\varphi$$
+                                $$u_2 = yz = \rho^2 \sin\theta\sin\varphi\cos\varphi$$
+                                $$u_3 = -x = -\rho\cos\theta\sin\varphi$$
+                            </div>
+                            <div>Projecting along $\bar{e}_\rho, \bar{e}_\theta, \bar{e}_\varphi$:</div>
+                            <div class="math-row">
+                                $$U_\rho = \bar{U}\cdot\bar{e}_\rho = u_1(\cos\theta\sin\varphi) + u_2(\sin\theta\sin\varphi) + u_3(\cos\varphi)$$
+                                $$= \rho^2 \cos^2\theta\sin\theta\sin^3\varphi + \rho^2 \sin^2\theta\sin^2\varphi\cos\varphi - \rho\cos\theta\sin\varphi\cos\varphi$$
+                            </div>
+                            <div class="math-row">
+                                $$U_\theta = \bar{U}\cdot\bar{e}_\theta = u_1(-\sin\theta) + u_2(\cos\theta) + u_3(0) = -\rho^2 \sin^2\theta\cos\theta\sin^2\varphi + \rho^2 \sin\theta\cos\theta\sin\varphi\cos\varphi$$
+                            </div>
+                            <div class="math-row">
+                                $$U_\varphi = \bar{U}\cdot\bar{e}_\varphi = u_1(\cos\theta\cos\varphi) + u_2(\sin\theta\cos\varphi) - u_3(\sin\varphi)$$
+                                $$= \rho^2 \cos^2\theta\sin\theta\sin^2\varphi\cos\varphi + \rho^2 \sin^2\theta\sin\varphi\cos^2\varphi + \rho\cos\theta\sin^2\varphi$$
+                            </div>
+                            <div class="result-badge">$\bar{U} = U_\rho \bar{e}_\rho + U_\theta \bar{e}_\theta + U_\varphi \bar{e}_\varphi$</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Q9 -->
+            <div class="prob-card">
+                <div class="prob-header">
+                    <span class="prob-title">📌 Question 9: Toroidal-type Orthogonal System Proof</span>
+                    <button class="sol-btn" onclick="toggleSolution(this)">إظهار الحل</button>
+                </div>
+                <div class="prob-body">
+                    <div class="prompt-box">
+                        Show that the new system corresponding to $(r, \theta, \phi)$ where: <br>
+                        $x = (2 - r\cos\theta)\cos\phi, \quad y = (2 - r\cos\theta)\sin\phi, \quad z = r\sin\theta$ <br>
+                        is orthogonal and the scale factors are $h_1 = 1$, $h_2 = r$, and $h_3 = 2 - r\cos\theta$.
+                    </div>
+                    <div class="solution-wrapper">
+                        <div class="sol-step">
+                            <div class="sol-step-title">Step 1: Position Vector $\bar{r}$ and Partial Derivatives</div>
+                            <div class="math-row">
+                                $$\bar{r} = (2 - r\cos\theta)\cos\phi\,i + (2 - r\cos\theta)\sin\phi\,j + (r\sin\theta)k$$
+                            </div>
+                            <div class="step-desc">1. Differentiate w.r.t $r$:</div>
+                            <div class="math-row">
+                                $$\frac{\partial\bar{r}}{\partial r} = -\cos\theta\cos\phi\,i - \cos\theta\sin\phi\,j + \sin\theta\,k$$
+                            </div>
+                            <div class="step-desc">2. Differentiate w.r.t $\theta$:</div>
+                            <div class="math-row">
+                                $$\frac{\partial\bar{r}}{\partial\theta} = r\sin\theta\cos\phi\,i + r\sin\theta\sin\phi\,j + r\cos\theta\,k$$
+                            </div>
+                            <div class="step-desc">3. Differentiate w.r.t $\phi$:</div>
+                            <div class="math-row">
+                                $$\frac{\partial\bar{r}}{\partial\phi} = -(2 - r\cos\theta)\sin\phi\,i + (2 - r\cos\theta)\cos\phi\,j + 0\,k$$
+                            </div>
+                        </div>
+
+                        <div class="sol-step">
+                            <div class="sol-step-title">Step 2: Compute Scale Factors ($h_1, h_2, h_3$)</div>
+                            <div class="math-row">
+                                $$h_1 = \left|\frac{\partial\bar{r}}{\partial r}\right| = \sqrt{\cos^2\theta\cos^2\phi + \cos^2\theta\sin^2\phi + \sin^2\theta} = \sqrt{\cos^2\theta(\cos^2\phi+\sin^2\phi) + \sin^2\theta} = \sqrt{\cos^2\theta + \sin^2\theta} = 1$$
+                            </div>
+                            <div class="math-row">
+                                $$h_2 = \left|\frac{\partial\bar{r}}{\partial\theta}\right| = \sqrt{r^2\sin^2\theta\cos^2\phi + r^2\sin^2\theta\sin^2\phi + r^2\cos^2\theta} = \sqrt{r^2\sin^2\theta + r^2\cos^2\theta} = \sqrt{r^2} = r$$
+                            </div>
+                            <div class="math-row">
+                                $$h_3 = \left|\frac{\partial\bar{r}}{\partial\phi}\right| = \sqrt{(2-r\cos\theta)^2\sin^2\phi + (2-r\cos\theta)^2\cos^2\phi + 0} = \sqrt{(2-r\cos\theta)^2} = 2 - r\cos\theta$$
+                            </div>
+                            <div class="result-badge">Scale Factors Verified: $h_1 = 1, \quad h_2 = r, \quad h_3 = 2 - r\cos\theta$</div>
+                        </div>
+
+                        <div class="sol-step">
+                            <div class="sol-step-title">Step 3: Prove Orthogonality via Dot Products</div>
+                            <div class="step-desc">Test 1: $\frac{\partial\bar{r}}{\partial r}\cdot\frac{\partial\bar{r}}{\partial\theta}$:</div>
+                            <div class="math-row">
+                                $$\frac{\partial\bar{r}}{\partial r}\cdot\frac{\partial\bar{r}}{\partial\theta} = (-\cos\theta\cos\phi)(r\sin\theta\cos\phi) + (-\cos\theta\sin\phi)(r\sin\theta\sin\phi) + (\sin\theta)(r\cos\theta)$$
+                                $$= -r\sin\theta\cos\theta(\cos^2\phi + \sin^2\phi) + r\sin\theta\cos\theta = -r\sin\theta\cos\theta + r\sin\theta\cos\theta = 0$$
+                            </div>
+
+                            <div class="step-desc">Test 2: $\frac{\partial\bar{r}}{\partial r}\cdot\frac{\partial\bar{r}}{\partial\phi}$:</div>
+                            <div class="math-row">
+                                $$\frac{\partial\bar{r}}{\partial r}\cdot\frac{\partial\bar{r}}{\partial\phi} = (-\cos\theta\cos\phi)[-(2-r\cos\theta)\sin\phi] + (-\cos\theta\sin\phi)[(2-r\cos\theta)\cos\phi] + 0$$
+                                $$= (2-r\cos\theta)\cos\theta\sin\phi\cos\phi - (2-r\cos\theta)\cos\theta\sin\phi\cos\phi = 0$$
+                            </div>
+
+                            <div class="step-desc">Test 3: $\frac{\partial\bar{r}}{\partial\theta}\cdot\frac{\partial\bar{r}}{\partial\phi}$:</div>
+                            <div class="math-row">
+                                $$\frac{\partial\bar{r}}{\partial\theta}\cdot\frac{\partial\bar{r}}{\partial\phi} = (r\sin\theta\cos\phi)[-(2-r\cos\theta)\sin\phi] + (r\sin\theta\sin\phi)[(2-r\cos\theta)\cos\phi] + 0$$
+                                $$= -r\sin\theta(2-r\cos\theta)\cos\phi\sin\phi + r\sin\theta(2-r\cos\theta)\cos\phi\sin\phi = 0$$
+                            </div>
+                            <div class="result-badge">Q.E.D. The Coordinate System is Orthogonal!</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- كود الجافاسكريبت للتحكم التفاعلي -->
+    <script>
+        function switchQuestion(qNum, btn) {
+            const tabs = document.querySelectorAll('.tab-btn');
+            const sections = document.querySelectorAll('.question-section');
+            tabs.forEach(t => t.classList.remove('active'));
+            if (btn) btn.classList.add('active');
+
+            if (qNum === 0) {
+                sections.forEach(sec => sec.classList.add('active'));
+            } else {
+                sections.forEach(sec => sec.classList.remove('active'));
+                const target = document.getElementById('sec-' + qNum);
+                if (target) target.classList.add('active');
+            }
+        }
+
+        function toggleSolution(btn) {
+            const card = btn.closest('.prob-card');
+            const sol = card.querySelector('.solution-wrapper');
+            if (sol.classList.contains('show')) {
+                sol.classList.remove('show');
+                btn.classList.remove('active');
+                btn.innerText = 'إظهار الحل';
+            } else {
+                sol.classList.add('show');
+                btn.classList.add('active');
+                btn.innerText = 'إخفاء الحل';
+            }
+        }
+
+        function toggleAllSolutions(show) {
+            const buttons = document.querySelectorAll('.sol-btn');
+            const solutions = document.querySelectorAll('.solution-wrapper');
+
+            solutions.forEach((sol, idx) => {
+                const btn = buttons[idx];
+                if (show) {
+                    sol.classList.add('show');
+                    if (btn) { btn.classList.add('active'); btn.innerText = 'إخفاء الحل'; }
+                } else {
+                    sol.classList.remove('show');
+                    if (btn) { btn.classList.remove('active'); btn.innerText = 'إظهار الحل'; }
+                }
+            });
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            if (typeof renderMathInElement === 'function') {
+                renderMathInElement(document.body, {
+                    delimiters: [
+                        {left: "$$", right: "$$", display: true},
+                        {left: "$", right: "$", display: false}
+                    ],
+                    throwOnError: false
+                });
+            }
+        });
+    </script>
+</body>
+</html>

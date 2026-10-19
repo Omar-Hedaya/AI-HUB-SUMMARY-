@@ -28,19 +28,19 @@
   <link rel="manifest" href="/manifest.json" />
 
   <!-- KaTeX Core Stylesheet & Font Preloading -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
 
   <!-- Preload Essential KaTeX Font Glyphs for Radicals, Matrices, and Brackets -->
-  <link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/fonts/KaTeX_Main-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
-  <link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/fonts/KaTeX_Math-Italic.woff2" as="font" type="font/woff2" crossorigin="anonymous">
-  <link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/fonts/KaTeX_Size1-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
-  <link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/fonts/KaTeX_Size2-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
-  <link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/fonts/KaTeX_Size3-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
-  <link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/fonts/KaTeX_Size4-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/fonts/KaTeX_Main-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/fonts/KaTeX_Math-Italic.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/fonts/KaTeX_Size1-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/fonts/KaTeX_Size2-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/fonts/KaTeX_Size3-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/fonts/KaTeX_Size4-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
 
   <!-- KaTeX Engine & Auto-Render Extension -->
-  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js" crossorigin="anonymous"></script>
-  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
 
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -229,25 +229,21 @@
       unicode-bidi: isolate !important;
     }
 
-    /* Square Root Radical (√) Symbol Fallback & Robust Rendering */
-    .katex .sqrt,
-    .katex .sqrt-sign,
-    .katex .sqrt .root,
-    .math-radical,
-    .radical-symbol {
-      font-family: KaTeX_Main, KaTeX_Size1, KaTeX_Size2, KaTeX_Size3, KaTeX_Size4, KaTeX_Math, 'Cambria Math', 'STIX Two Math', 'Segoe UI Symbol', 'DejaVu Sans', serif, sans-serif !important;
-      font-style: normal !important;
-      overflow: visible !important;
-    }
-
-    .katex .sqrt > .svg-align {
-      overflow: visible !important;
-    }
-
-    .katex .sqrt > .svg-align svg {
+    /* Square Root Radical (√) Symbol Visibility & Robust Rendering */
+    .katex .sqrt, .katex .sqrt-sign svg {
       display: inline-block !important;
+      visibility: visible !important;
+      opacity: 1 !important;
       overflow: visible !important;
-      fill: currentColor !important;
+    }
+
+    .katex svg {
+      max-width: none !important;
+    }
+
+    .sqrt-sym {
+      font-family: system-ui, -apple-system, sans-serif !important;
+      display: inline !important;
     }
 
     /* Prevent Flash of Raw LaTeX (FOUC) */
@@ -3859,7 +3855,7 @@
       // --------------------------------------------------------
       const offlineDocKey = `aihub_doc_path_${encodeURIComponent(doc.path)}`;
       const cachedHtml = localStorage.getItem(offlineDocKey);
-      if (cachedHtml) {
+      if (cachedHtml && !cachedHtml.includes('.svg-align')) {
         if (loader) loader.classList.add("hidden", "opacity-0");
         iframe.srcdoc = cachedHtml;
         attachIframeListeners(iframe, loader, true);
@@ -4006,7 +4002,7 @@
       } catch (err) {
         console.warn("Iframe loading note:", err);
         const cachedHtml = localStorage.getItem(offlineDocKey);
-        if (cachedHtml) {
+        if (cachedHtml && !cachedHtml.includes('.svg-align')) {
           if (loader) loader.classList.add("hidden", "opacity-0");
           iframe.srcdoc = cachedHtml;
           cachedDocPaths.add(doc.path);
@@ -4188,6 +4184,18 @@
           body.style.paddingBottom = "7rem";
         }
 
+        // Ensure official KaTeX stylesheet is loaded inside iframe
+        if (!iDoc.querySelector('link[href*="katex.min.css"]')) {
+          const katexCss = iDoc.createElement("link");
+          katexCss.rel = "stylesheet";
+          katexCss.href = "https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css";
+          if (iDoc.head) {
+            iDoc.head.insertBefore(katexCss, iDoc.head.firstChild);
+          } else if (iDoc.body) {
+            iDoc.body.insertBefore(katexCss, iDoc.body.firstChild);
+          }
+        }
+
         // Inject Dynamic Responsive 100% Fluid Width & Clamping Styles inside Iframe
         let responsiveStyle = iDoc.getElementById("ai-hub-responsive-rules");
         if (!responsiveStyle) {
@@ -4290,25 +4298,21 @@
               unicode-bidi: isolate !important;
             }
 
-            /* Radical (√) Symbol Fallback & Robust Glyph Support */
-            .katex .sqrt,
-            .katex .sqrt-sign,
-            .katex .sqrt .root,
-            .math-radical,
-            .radical-symbol {
-              font-family: KaTeX_Main, KaTeX_Size1, KaTeX_Size2, KaTeX_Size3, KaTeX_Size4, KaTeX_Math, 'Cambria Math', 'STIX Two Math', 'Segoe UI Symbol', 'DejaVu Sans', serif, sans-serif !important;
-              font-style: normal !important;
-              overflow: visible !important;
-            }
-
-            .katex .sqrt > .svg-align {
-              overflow: visible !important;
-            }
-
-            .katex .sqrt > .svg-align svg {
+            /* Square Root Radical (√) Symbol Visibility & Robust Rendering */
+            .katex .sqrt, .katex .sqrt-sign svg {
               display: inline-block !important;
+              visibility: visible !important;
+              opacity: 1 !important;
               overflow: visible !important;
-              fill: currentColor !important;
+            }
+
+            .katex svg {
+              max-width: none !important;
+            }
+
+            .sqrt-sym {
+              font-family: system-ui, -apple-system, sans-serif !important;
+              display: inline !important;
             }
 
             /* Prevent Flash of Raw LaTeX (FOUC) */
@@ -4338,7 +4342,7 @@
               word-break: break-word !important;
               overflow-x: auto !important;
             }
-            img, svg, canvas, iframe {
+            img, svg:not(.katex *), canvas, iframe {
               max-width: 100% !important;
               height: auto !important;
             }

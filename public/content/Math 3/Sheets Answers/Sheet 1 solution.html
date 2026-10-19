@@ -1,0 +1,1549 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>حل شيت 1 كاملاً ومفصلاً: Functions of Several Variables - Math 3</title>
+    <!-- مكتبة KaTeX لتنسيق المعادلات الرياضية -->
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/fonts/KaTeX_Main-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/fonts/KaTeX_Math-Italic.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/fonts/KaTeX_Size1-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/fonts/KaTeX_Size2-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/fonts/KaTeX_Size3-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/fonts/KaTeX_Size4-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <style>
+    .katex .sqrt, .katex .sqrt-sign svg {
+      display: inline-block !important;
+      visibility: visible !important;
+      opacity: 1 !important;
+      overflow: visible !important;
+    }
+    .katex svg {
+      max-width: none !important;
+    }
+    .sqrt-sym {
+      font-family: system-ui, -apple-system, sans-serif !important;
+      display: inline !important;
+    }
+
+    /* Math Direction & Bi-directional Isolation (LTR vs RTL) */
+    .katex, .katex-display, .katex-html, .math, .math-inline, .math-display, .math-row, .equation, .formula, [data-math="true"], span[class*="katex"], div[class*="katex"] {
+      direction: ltr !important;
+      unicode-bidi: isolate !important;
+      text-align: left !important;
+      display: inline-block;
+      -webkit-font-smoothing: antialiased;
+    }
+    .katex-display, .math-display {
+      display: block !important;
+      text-align: center !important;
+      direction: ltr !important;
+      unicode-bidi: isolate !important;
+      width: 100% !important;
+      max-width: 100% !important;
+      overflow-x: auto !important;
+      overflow-y: hidden !important;
+      margin: 1rem 0 !important;
+    }
+    .katex-display > .katex {
+      display: block !important;
+      text-align: center !important;
+      direction: ltr !important;
+      unicode-bidi: isolate !important;
+      white-space: nowrap !important;
+    }
+    .katex * {
+      direction: ltr !important;
+      unicode-bidi: normal !important;
+    }
+    .katex .mopen, .katex .mclose, .katex .mpunct, .katex .minner, .katex .mbin, .katex .mrel, .katex .mop, .katex .mord, .katex .sqrt, .katex .sqrt-sign {
+      direction: ltr !important;
+      unicode-bidi: isolate !important;
+    }
+    .math-pending, [data-math-pending="true"], .raw-latex:not(.math-rendered) {
+      opacity: 0 !important;
+      visibility: hidden !important;
+    }
+    .math-rendered, [data-math-rendered="true"] {
+      opacity: 1 !important;
+      visibility: visible !important;
+      transition: opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    }
+
+        :root {
+            --bg-base: #090d13;
+            --bg-card: #111722;
+            --bg-code: #0b1017;
+            --border-card: #1f2937;
+            --cyan: #38bdf8;
+            --emerald: #34d399;
+            --amber: #fbbf24;
+            --purple: #c084fc;
+            --rose: #f43f5e;
+            --text-main: #e2e8f0;
+            --text-muted: #94a3b8;
+        }
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        html, body {
+            width: 100% !important;
+            max-width: 100% !important;
+            overflow-x: hidden !important;
+            position: relative;
+            background-color: var(--bg-base);
+            color: var(--text-main);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.6;
+            padding-bottom: 70px;
+        }
+        
+        .container {
+            width: 100% !important;
+            max-width: 960px !important;
+            margin: 0 auto;
+            padding: 12px 10px;
+            overflow-x: hidden !important;
+        }
+
+        .header {
+            padding: 8px 0 16px 0;
+            border-bottom: 1px solid var(--border-card);
+            margin-bottom: 16px;
+        }
+        .top-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+        .badge {
+            background: rgba(56, 189, 248, 0.12);
+            color: var(--cyan);
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            padding: 4px 12px;
+            border-radius: 9999px;
+            font-size: 0.78rem;
+            font-weight: 800;
+        }
+        .quick-actions {
+            display: flex;
+            gap: 8px;
+        }
+        .action-btn {
+            background: #162032;
+            border: 1px solid #1e293b;
+            color: var(--text-main);
+            padding: 6px 14px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .action-btn:hover { border-color: var(--cyan); color: #fff; }
+
+        .nav-bar {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 18px;
+            background: rgba(17, 23, 34, 0.85);
+            padding: 8px;
+            border-radius: 10px;
+            border: 1px solid var(--border-card);
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+        }
+        .nav-bar::-webkit-scrollbar { display: none; }
+        .tab-btn {
+            flex: 0 0 auto;
+            padding: 8px 14px;
+            background: #111722;
+            border: 1px solid #1e293b;
+            color: var(--text-muted);
+            border-radius: 6px;
+            font-size: 0.82rem;
+            font-weight: 800;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.2s;
+        }
+        .tab-btn:hover { color: #fff; border-color: rgba(56, 189, 248, 0.4); }
+        .tab-btn.active {
+            background: rgba(56, 189, 248, 0.15);
+            border-color: var(--cyan);
+            color: var(--cyan);
+        }
+
+        .question-section { display: none; }
+        .question-section.active { display: block; animation: fadeIn 0.2s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(3px); } to { opacity: 1; transform: translateY(0); } }
+
+        .prob-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-card);
+            border-radius: 10px;
+            margin-bottom: 18px;
+            overflow: hidden;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+        }
+        .prob-header {
+            padding: 12px 14px;
+            background: rgba(255, 255, 255, 0.02);
+            border-bottom: 1px solid var(--border-card);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .prob-title {
+            font-size: 0.95rem;
+            font-weight: 800;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .sol-btn {
+            background: rgba(56, 189, 248, 0.12);
+            color: var(--cyan);
+            border: 1px solid rgba(56, 189, 248, 0.35);
+            padding: 5px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 0.8rem;
+            transition: all 0.2s;
+        }
+        .sol-btn:hover { background: rgba(56, 189, 248, 0.2); }
+        .sol-btn.active {
+            background: rgba(244, 63, 94, 0.15);
+            color: var(--rose);
+            border-color: var(--rose);
+        }
+
+        .prob-body {
+            padding: 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .prompt-box {
+            background: rgba(56, 189, 248, 0.05);
+            border-right: 4px solid var(--cyan);
+            padding: 10px 14px;
+            font-size: 0.92rem;
+            border-radius: 4px;
+            direction: ltr;
+            text-align: left;
+        }
+
+        .solution-wrapper {
+            display: none;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .solution-wrapper.show {
+            display: flex;
+            animation: fadeIn 0.25s ease-in-out;
+        }
+        .sol-step {
+            background: var(--bg-code);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-right: 3px solid var(--emerald);
+            border-radius: 6px;
+            padding: 12px 14px;
+            font-size: 0.9rem;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            direction: ltr;
+            text-align: left;
+        }
+        .sol-step-title {
+            font-size: 0.82rem;
+            font-weight: 800;
+            color: var(--emerald);
+            text-transform: uppercase;
+        }
+        .step-desc {
+            font-size: 0.84rem;
+            color: var(--amber);
+            font-weight: 600;
+        }
+        .math-row {
+            overflow-x: auto;
+            overflow-y: hidden;
+            padding: 4px 0;
+            font-size: 0.96rem;
+            line-height: 1.8;
+            -webkit-overflow-scrolling: touch;
+        }
+        .math-row::-webkit-scrollbar { height: 4px; }
+        .math-row::-webkit-scrollbar-thumb { background: rgba(56, 189, 248, 0.3); border-radius: 4px; }
+
+        .result-badge {
+            display: inline-block;
+            background: rgba(52, 211, 153, 0.12);
+            border: 1px solid rgba(52, 211, 153, 0.3);
+            color: var(--emerald);
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-weight: 700;
+            width: fit-content;
+            margin-top: 4px;
+            font-size: 0.86rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+
+        <!-- الترويسة -->
+        <div class="header">
+            <div class="top-row">
+                <span class="badge">MATH 3 • SHEET 1 COMPLETE (Q1 TO Q19)</span>
+                <div class="quick-actions">
+                    <button class="action-btn" onclick="toggleAllSolutions(true)">👁️ إظهار كل الحلول</button>
+                    <button class="action-btn" onclick="toggleAllSolutions(false)">🙈 إخفاء كل الحلول</button>
+                </div>
+            </div>
+            <h2 style="font-size: 1.15rem; color: #fff;">حل شيت 1 كاملاً بالتفصيل: Functions of Several Variables</h2>
+            <p style="font-size: 0.84rem; color: var(--text-muted);">حلول تفصيلية نموذجية بالكامل للمسائل من 1 إلى 19 لجميع الفقرات مع تفصيل خطوات الحل.</p>
+        </div>
+
+        <!-- شريط التنقل بين الأسئلة -->
+        <div class="nav-bar" dir="ltr">
+            <button class="tab-btn active" onclick="switchQuestion(0, this)">All</button>
+            <button class="tab-btn" onclick="switchQuestion(1, this)">Q1: First Partial</button>
+            <button class="tab-btn" onclick="switchQuestion(2, this)">Q2: Second Partial</button>
+            <button class="tab-btn" onclick="switchQuestion(3, this)">Q3: Laplace</button>
+            <button class="tab-btn" onclick="switchQuestion(4, this)">Q4: dy/dx</button>
+            <button class="tab-btn" onclick="switchQuestion(5, this)">Q5: dz/dx, dz/dy</button>
+            <button class="tab-btn" onclick="switchQuestion(6, this)">Q6: Euler</button>
+            <button class="tab-btn" onclick="switchQuestion(7, this)">Q7-Q9: Proofs</button>
+            <button class="tab-btn" onclick="switchQuestion(10, this)">Q10-Q12: Euler II</button>
+            <button class="tab-btn" onclick="switchQuestion(13, this)">Q13: Envelope</button>
+            <button class="tab-btn" onclick="switchQuestion(14, this)">Q14: Extrema</button>
+            <button class="tab-btn" onclick="switchQuestion(15, this)">Q15: Lagrange</button>
+            <button class="tab-btn" onclick="switchQuestion(16, this)">Q16-Q17: Applications</button>
+            <button class="tab-btn" onclick="switchQuestion(18, this)">Q18-Q19: Jacobian & Hessian</button>
+        </div>
+
+        <!-- ========================================================= -->
+        <!-- كارت ملخص القوانين السريعة لشيت 1 (Functions of Several Variables) -->
+        <!-- ========================================================= -->
+        <div class="prob-card" style="border-color: rgba(56, 189, 248, 0.4); margin-bottom: 22px;">
+            <div class="prob-header" style="background: linear-gradient(90deg, rgba(12, 74, 110, 0.45), rgba(17, 23, 34, 0.9));">
+                <span class="prob-title" style="color: var(--cyan); direction: ltr;">
+                    ⚡ Functions of Several Variables Cheat Sheet & Rules
+                </span>
+                <button class="sol-btn" onclick="toggleSolution(this)" style="background: rgba(56, 189, 248, 0.2); border-color: var(--cyan);">إخفاء/إظهار الملخص</button>
+            </div>
+            <div class="prob-body">
+                <div class="solution-wrapper show" style="gap: 10px;">
+                    
+                    <!-- 1. الاشتقاق الضمني -->
+                    <div class="sol-step" style="border-right-color: var(--cyan);">
+                        <div class="sol-step-title" style="color: var(--cyan);">1. Implicit Differentiation Formulas</div>
+                        <div class="math-row">
+                            $$\text{If } F(x,y) = 0 \implies \frac{dy}{dx} = -\frac{F_x}{F_y}$$
+                        </div>
+                        <div class="math-row">
+                            $$\text{If } F(x,y,z) = 0 \implies \frac{\partial z}{\partial x} = -\frac{F_x}{F_z}, \quad \frac{\partial z}{\partial y} = -\frac{F_y}{F_z}$$
+                        </div>
+                        <div class="step-desc" style="color: var(--text-muted); font-size: 0.82rem;">
+                            • يتم اشتقاق الدالة $F$ جزئياً بالنسبة للمتغير المطلوب مع اعتبار باقي المتغيرات ثوابت.
+                        </div>
+                    </div>
+
+                    <!-- 2. نظرية أويلر للدوال المتجانسة -->
+                    <div class="sol-step" style="border-right-color: var(--emerald);">
+                        <div class="sol-step-title" style="color: var(--emerald);">2. Euler's Theorem for Homogeneous Functions</div>
+                        <div class="math-row">
+                            $$f(tx, ty) = t^k f(x,y) \implies x \frac{\partial f}{\partial x} + y \frac{\partial f}{\partial y} = k f(x,y)$$
+                        </div>
+                        <div class="math-row">
+                            $$\text{In 3 variables: } x f_x + y f_y + z f_z = k f(x,y,z)$$
+                        </div>
+                        <div class="step-desc" style="color: var(--text-muted); font-size: 0.82rem;">
+                            • إذا كانت الدالة داخلية مثل $u = \tan^{-1}(S)$ أو $\ln(S)$؛ نطبق نظرية أويلر على الدالة المتجانسة $S$ أولاً.
+                        </div>
+                    </div>
+
+                    <!-- 3. لابلاس وتساوي المشتقات المختلطة -->
+                    <div class="sol-step" style="border-right-color: var(--amber);">
+                        <div class="sol-step-title" style="color: var(--amber);">3. Clairaut's Theorem & Laplace's Equation</div>
+                        <div class="math-row">
+                            $$\text{Symmetry of Second Partials: } f_{xy} = f_{yx} \quad \left(\frac{\partial^2 f}{\partial y \partial x} = \frac{\partial^2 f}{\partial x \partial y}\right)$$
+                        </div>
+                        <div class="math-row">
+                            $$\text{Laplace's Equation (Harmonic function): } f_{xx} + f_{yy} = 0 \quad (\nabla^2 f = 0)$$
+                        </div>
+                    </div>
+
+                    <!-- 4. الغلاف Envelope -->
+                    <div class="sol-step" style="border-right-color: var(--purple);">
+                        <div class="sol-step-title" style="color: var(--purple);">4. Envelope of a Family of Curves</div>
+                        <div class="math-row">
+                            $$\text{Family: } F(x, y, c) = 0 \quad \text{and} \quad \frac{\partial F}{\partial c}(x, y, c) = 0$$
+                        </div>
+                        <div class="step-desc" style="color: var(--text-muted); font-size: 0.82rem;">
+                            • يتم إيجاد الوسيط $c$ من المعادلة التفاضلية والتعويض به في المعادلة الأصلية لحذفه والحصول على معادلة الغلاف.
+                        </div>
+                    </div>
+
+                    <!-- 5. القيم العظمى والصغرى ونقاط الانقلاب -->
+                    <div class="sol-step" style="border-right-color: var(--rose);">
+                        <div class="sol-step-title" style="color: var(--rose);">5. Extrema and Saddle Points (Second Derivative Test)</div>
+                        <div class="step-desc" style="color: var(--text-muted); font-size: 0.82rem;">
+                            1. نجد النقط الحرجة (Critical Points) بحل: $f_x = 0$ و $f_y = 0$. <br>
+                            2. نحسب المميز: $\Delta = f_{xx} f_{yy} - (f_{xy})^2$.
+                        </div>
+                        <div class="math-row">
+                            $$\Delta > 0 \text{ and } f_{xx} > 0 \implies \mathbf{Local\,\,Minimum}$$
+                            $$\Delta > 0 \text{ and } f_{xx} &lt; 0 \implies \mathbf{Local\,\,Maximum}$$
+                            $$\Delta &lt; 0 \implies \mathbf{Saddle\,\,Point}, \qquad \Delta = 0 \implies \mathbf{Inconclusive}$$
+                        </div>
+                    </div>
+
+                    <!-- 6. مضاعفات لاغرانج -->
+                    <div class="sol-step" style="border-right-color: var(--cyan);">
+                        <div class="sol-step-title" style="color: var(--cyan);">6. Lagrange Multipliers for Constrained Extrema</div>
+                        <div class="math-row">
+                            $$\nabla f = \lambda \nabla g \implies f_x = \lambda g_x, \quad f_y = \lambda g_y, \quad f_z = \lambda g_z \quad \text{subject to } g = 0$$
+                        </div>
+                        <div class="step-desc" style="color: var(--text-muted); font-size: 0.82rem;">
+                            • تستخدم لإيجاد القيم العظمى أو الصغرى المقيدة بشرط (مثل مسافة، حجم صندوق، أو مساحة).
+                        </div>
+                    </div>
+
+                    <!-- 7. اليعقوبي وهيسيان -->
+                    <div class="sol-step" style="border-right-color: var(--emerald);">
+                        <div class="sol-step-title" style="color: var(--emerald);">7. Jacobian & Hessian Matrix</div>
+                        <div class="math-row">
+                            $$J\left(\frac{f,g}{x,y}\right) = \begin{vmatrix} f_x & f_y \\ g_x & g_y \end{vmatrix}, \qquad H(f) = \begin{bmatrix} f_{xx} & f_{xy} \\ f_{yx} & f_{yy} \end{bmatrix}$$
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- ========================================================= -->
+        <!-- Question 1: First Partial Derivatives -->
+        <!-- ========================================================= -->
+        <div id="sec-1" class="question-section active">
+
+            <!-- Q1 (i) & (ii) -->
+            <div class="prob-card">
+                <div class="prob-header">
+                    <span class="prob-title">📌 Q1: (i) & (ii) First Partial Derivatives</span>
+                    <button class="sol-btn" onclick="toggleSolution(this)">إظهار الحل</button>
+                </div>
+                <div class="prob-body">
+                    <div class="prompt-box">
+                        (i) $f(x,y) = x^2 + y^4 + xy + 3$ <br>
+                        (ii) $f(x,y,z) = 3^x + xy^4 + z^3 \ln y$
+                    </div>
+                    <div class="solution-wrapper">
+                        <div class="sol-step">
+                            <div class="sol-step-title">Solution for (i): $f(x,y) = x^2 + y^4 + xy + 3$</div>
+                            <div class="step-desc">Differentiate w.r.t $x$ (treating $y$ as a constant):</div>
+                            <div class="math-row">
+                                $$f_x = \frac{\partial}{\partial x}(x^2) + \frac{\partial}{\partial x}(y^4) + \frac{\partial}{\partial x}(xy) + \frac{\partial}{\partial x}(3) = 2x + 0 + y(1) + 0 = 2x + y$$
+                            </div>
+                            <div class="step-desc">Differentiate w.r.t $y$ (treating $x$ as a constant):</div>
+                            <div class="math-row">
+                                $$f_y = \frac{\partial}{\partial y}(x^2) + \frac{\partial}{\partial y}(y^4) + \frac{\partial}{\partial y}(xy) + \frac{\partial}{\partial y}(3) = 0 + 4y^3 + x(1) + 0 = 4y^3 + x$$
+                            </div>
+                            <div class="result-badge">Answer: $f_x = 2x + y, \quad f_y = 4y^3 + x$</div>
+                        </div>
+
+                        <div class="sol-step">
+                            <div class="sol-step-title">Solution for (ii): $f(x,y,z) = 3^x + xy^4 + z^3 \ln y$</div>
+                            <div class="step-desc">Derivative w.r.t $x$:</div>
+                            <div class="math-row">$$f_x = \frac{\partial}{\partial x}(3^x) + \frac{\partial}{\partial x}(xy^4) + \frac{\partial}{\partial x}(z^3 \ln y) = 3^x \ln 3 + y^4 + 0 = 3^x \ln 3 + y^4$$</div>
+                            <div class="step-desc">Derivative w.r.t $y$:</div>
+                            <div class="math-row">$$f_y = 0 + x(4y^3) + z^3\left(\frac{1}{y}\right) = 4xy^3 + \frac{z^3}{y}$$</div>
+                            <div class="step-desc">Derivative w.r.t $z$:</div>
+                            <div class="math-row">$$f_z = 0 + 0 + (3z^2)\ln y = 3z^2 \ln y$$</div>
+                            <div class="result-badge">Answer: $f_x = 3^x \ln 3 + y^4, \quad f_y = 4xy^3 + \frac{z^3}{y}, \quad f_z = 3z^2 \ln y$</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Q1 (iii) & (iv) -->
+            <div class="prob-card">
+                <div class="prob-header">
+                    <span class="prob-title">📌 Q1: (iii) & (iv) First Partial Derivatives</span>
+                    <button class="sol-btn" onclick="toggleSolution(this)">إظهار الحل</button>
+                </div>
+                <div class="prob-body">
+                    <div class="prompt-box">
+                        (iii) $f(x,y) = \cos x + y \sin y$ <br>
+                        (iv) $f(x,y,z) = x^4 \sin z + 3z \sinh(2y)$
+                    </div>
+                    <div class="solution-wrapper">
+                        <div class="sol-step">
+                            <div class="sol-step-title">Solution for (iii): $f(x,y) = \cos x + y \sin y$</div>
+                            <div class="math-row">$$f_x = -\sin x + 0 = -\sin x$$</div>
+                            <div class="step-desc">Product rule for $y\sin y$:</div>
+                            <div class="math-row">$$f_y = 0 + \left[1 \cdot \sin y + y \cos y\right] = \sin y + y \cos y$$</div>
+                            <div class="result-badge">Answer: $f_x = -\sin x, \quad f_y = \sin y + y \cos y$</div>
+                        </div>
+
+                        <div class="sol-step">
+                            <div class="sol-step-title">Solution for (iv): $f(x,y,z) = x^4 \sin z + 3z \sinh(2y)$</div>
+                            <div class="math-row">$$f_x = 4x^3 \sin z + 0 = 4x^3 \sin z$$</div>
+                            <div class="math-row">$$f_y = 0 + 3z[\cosh(2y) \cdot 2] = 6z \cosh(2y)$$</div>
+                            <div class="math-row">$$f_z = x^4 \cos z + 3(1)\sinh(2y) = x^4 \cos z + 3 \sinh(2y)$$</div>
+                            <div class="result-badge">Answer: $f_x = 4x^3 \sin z, \quad f_y = 6z \cosh(2y), \quad f_z = x^4 \cos z + 3 \sinh(2y)$</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Q1 (v) & (vi) -->
+            <div class="prob-card">
+                <div class="prob-header">
+                    <span class="prob-title">📌 Q1: (v) & (vi) First Partial Derivatives</span>
+                    <button class="sol-btn" onclick="toggleSolution(this)">إظهار الحل</button>
+                </div>
+                <div class="prob-body">
+                    <div class="prompt-box">
+                        (v) $f(x,y) = e^x + 2y^4 + x \cdot 3^y$ <br>
+                        (vi) $f(x,y,z) = 2x^4 + \ln(3y + z^3)$
+                    </div>
+                    <div class="solution-wrapper">
+                        <div class="sol-step">
+                            <div class="sol-step-title">Solution for (v): $f(x,y) = e^x + 2y^4 + x \cdot 3^y$</div>
+                            <div class="math-row">$$f_x = e^x + 0 + (1 \cdot 3^y) = e^x + 3^y$$</div>
+                            <div class="math-row">$$f_y = 0 + 8y^3 + x(3^y \ln 3) = 8y^3 + x \cdot 3^y \ln 3$$</div>
+                            <div class="result-badge">Answer: $f_x = e^x + 3^y, \quad f_y = 8y^3 + x \cdot 3^y \ln 3$</div>
+                        </div>
+
+                        <div class="sol-step">
+                            <div class="sol-step-title">Solution for (vi): $f(x,y,z) = 2x^4 + \ln(3y + z^3)$</div>
+                            <div class="math-row">$$f_x = 8x^3 + 0 = 8x^3$$</div>
+                            <div class="math-row">$$f_y = 0 + \frac{3}{3y + z^3} = \frac{3}{3y + z^3}$$</div>
+                            <div class="math-row">$$f_z = 0 + \frac{3z^2}{3y + z^3} = \frac{3z^2}{3y + z^3}$$</div>
+                            <div class="result-badge">Answer: $f_x = 8x^3, \quad f_y = \frac{3}{3y+z^3}, \quad f_z = \frac{3z^2}{3y+z^3}$</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Q1 (vii), (viii/x) & (ix) -->
+            <div class="prob-card">
+                <div class="prob-header">
+                    <span class="prob-title">📌 Q1: (vii), (viii/x) & (ix) First Partial Derivatives</span>
+                    <button class="sol-btn" onclick="toggleSolution(this)">إظهار الحل</button>
+                </div>
+                <div class="prob-body">
+                    <div class="prompt-box">
+                        (vii) $f(x,y) = y^{-3} + x \cosh x$ <br>
+                        (viii & x) $f(x,y,z) = x e^x + 3z - \sinh(yz)$ <br>
+                        (ix) $f(x,y) = x \ln(y^2+y) + y \sinh x$
+                    </div>
+                    <div class="solution-wrapper">
+                        <div class="sol-step">
+                            <div class="sol-step-title">Solution for (vii): $f(x,y) = y^{-3} + x \cosh x$</div>
+                            <div class="math-row">$$f_x = 0 + [1 \cdot \cosh x + x \sinh x] = \cosh x + x \sinh x$$</div>
+                            <div class="math-row">$$f_y = -3y^{-4} + 0 = -\frac{3}{y^4}$$</div>
+                            <div class="result-badge">Answer: $f_x = \cosh x + x \sinh x, \quad f_y = -\frac{3}{y^4}$</div>
+                        </div>
+
+                        <div class="sol-step">
+                            <div class="sol-step-title">Solution for (viii & x): $f(x,y,z) = x e^x + 3z - \sinh(yz)$</div>
+                            <div class="math-row">$$f_x = [1 \cdot e^x + x e^x] + 0 - 0 = (1+x)e^x$$</div>
+                            <div class="math-row">$$f_y = 0 + 0 - \cosh(yz) \cdot z = -z \cosh(yz)$$</div>
+                            <div class="math-row">$$f_z = 0 + 3 - \cosh(yz) \cdot y = 3 - y \cosh(yz)$$</div>
+                            <div class="result-badge">Answer: $f_x = (1+x)e^x, \quad f_y = -z\cosh(yz), \quad f_z = 3 - y\cosh(yz)$</div>
+                        </div>
+
+                        <div class="sol-step">
+                            <div class="sol-step-title">Solution for (ix): $f(x,y) = x \ln(y^2+y) + y \sinh x$</div>
+                            <div class="math-row">$$f_x = (1)\ln(y^2+y) + y \cosh x = \ln(y^2+y) + y \cosh x$$</div>
+                            <div class="math-row">$$f_y = x \cdot \frac{2y+1}{y^2+y} + (1)\sinh x = \frac{x(2y+1)}{y^2+y} + \sinh x$$</div>
+                            <div class="result-badge">Answer: $f_x = \ln(y^2+y) + y\cosh x, \quad f_y = \frac{x(2y+1)}{y^2+y} + \sinh x$</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- ========================================================= -->
+        <!-- Question 2: Second Partial Derivatives -->
+        <!-- ========================================================= -->
+        <div id="sec-2" class="question-section active">
+
+            <!-- Q2 (a) & (b) -->
+            <div class="prob-card">
+                <div class="prob-header">
+                    <span class="prob-title">📌 Q2: (a) & (b) Second Partial Derivatives ($f_{xx}, f_{yy}, f_{xy}, f_{yx}$)</span>
+                    <button class="sol-btn" onclick="toggleSolution(this)">إظهار الحل</button>
+                </div>
+                <div class="prob-body">
+                    <div class="prompt-box">
+                        Find $f_{xx}, f_{yy}, f_{xy}, f_{yx}$ for: <br>
+                        (a) $f(x,y) = x^3 + y^4 + xy + 3$ <br>
+                        (b) $f(x,y) = 3^x + xy^4 + \ln y$
+                    </div>
+                    <div class="solution-wrapper">
+                        <div class="sol-step">
+                            <div class="sol-step-title">Full Solution for (a): $f(x,y) = x^3 + y^4 + xy + 3$</div>
+                            <div class="step-desc">1. First order derivatives:</div>
+                            <div class="math-row">$$f_x = 3x^2 + y, \quad f_y = 4y^3 + x$$</div>
+                            <div class="step-desc">2. Second order pure derivatives:</div>
+                            <div class="math-row">$$f_{xx} = \frac{\partial}{\partial x}(3x^2 + y) = 6x$$</div>
+                            <div class="math-row">$$f_{yy} = \frac{\partial}{\partial y}(4y^3 + x) = 12y^2$$</div>
+                            <div class="step-desc">3. Second order mixed derivatives:</div>
+                            <div class="math-row">$$f_{xy} = \frac{\partial}{\partial y}(3x^2 + y) = 1, \quad f_{yx} = \frac{\partial}{\partial x}(4y^3 + x) = 1$$</div>
+                            <div class="result-badge">Verified: $f_{xy} = f_{yx} = 1$</div>
+                        </div>
+
+                        <div class="sol-step">
+                            <div class="sol-step-title">Full Solution for (b): $f(x,y) = 3^x + xy^4 + \ln y$</div>
+                            <div class="math-row">$$f_x = 3^x \ln 3 + y^4 \implies f_{xx} = 3^x (\ln 3)^2$$</div>
+                            <div class="math-row">$$f_y = 4xy^3 + \frac{1}{y} \implies f_{yy} = 12xy^2 - \frac{1}{y^2}$$</div>
+                            <div class="math-row">$$f_{xy} = \frac{\partial}{\partial y}(3^x \ln 3 + y^4) = 4y^3, \quad f_{yx} = \frac{\partial}{\partial x}\left(4xy^3 + \frac{1}{y}\right) = 4y^3$$</div>
+                            <div class="result-badge">Verified: $f_{xy} = f_{yx} = 4y^3$</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Q2 (c) & (d) -->
+            <div class="prob-card">
+                <div class="prob-header">
+                    <span class="prob-title">📌 Q2: (c) & (d) Second Partial Derivatives</span>
+                    <button class="sol-btn" onclick="toggleSolution(this)">إظهار الحل</button>
+                </div>
+                <div class="prob-body">
+                    <div class="prompt-box">
+                        (c) $f(x,y) = \cosh(x^3) + y \sin y$ <br>
+                        (d) $f(x,y) = x \sinh x + 3 \cos(2y)$
+                    </div>
+                    <div class="solution-wrapper">
+                        <div class="sol-step">
+                            <div class="sol-step-title">Full Solution for (c): $f(x,y) = \cosh(x^3) + y \sin y$</div>
+                            <div class="math-row">$$f_x = 3x^2 \sinh(x^3), \quad f_y = \sin y + y \cos y$$</div>
+                            <div class="math-row">$$f_{xx} = 6x \sinh(x^3) + 3x^2[\cosh(x^3) \cdot 3x^2] = 6x \sinh(x^3) + 9x^4 \cosh(x^3)$$</div>
+                            <div class="math-row">$$f_{yy} = \cos y + \cos y - y \sin y = 2\cos y - y\sin y$$</div>
+                            <div class="math-row">$$f_{xy} = f_{yx} = 0$$</div>
+                            <div class="result-badge">Verified: $f_{xy} = f_{yx} = 0$</div>
+                        </div>
+
+                        <div class="sol-step">
+                            <div class="sol-step-title">Full Solution for (d): $f(x,y) = x \sinh x + 3 \cos(2y)$</div>
+                            <div class="math-row">$$f_x = \sinh x + x \cosh x \implies f_{xx} = \cosh x + \cosh x + x \sinh x = 2\cosh x + x\sinh x$$</div>
+                            <div class="math-row">$$f_y = -6\sin(2y) \implies f_{yy} = -12\cos(2y)$$</div>
+                            <div class="math-row">$$f_{xy} = f_{yx} = 0$$</div>
+                            <div class="result-badge">Verified: $f_{xy} = f_{yx} = 0$</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Q2 (e) & (f) -->
+            <div class="prob-card">
+                <div class="prob-header">
+                    <span class="prob-title">📌 Q2: (e) & (f) Second Partial Derivatives</span>
+                    <button class="sol-btn" onclick="toggleSolution(this)">إظهار الحل</button>
+                </div>
+                <div class="prob-body">
+                    <div class="prompt-box">
+                        (e) $f(x,y) = x^2 + y^4 + x e^{2y}$ <br>
+                        (f) $f(x,y) = 2x^4 + \ln(3 + y^3)$
+                    </div>
+                    <div class="solution-wrapper">
+                        <div class="sol-step">
+                            <div class="sol-step-title">Full Solution for (e): $f(x,y) = x^2 + y^4 + x e^{2y}$</div>
+                            <div class="math-row">$$f_x = 2x + e^{2y} \implies f_{xx} = 2$$</div>
+                            <div class="math-row">$$f_y = 4y^3 + 2x e^{2y} \implies f_{yy} = 12y^2 + 4x e^{2y}$$</div>
+                            <div class="math-row">$$f_{xy} = 2e^{2y}, \quad f_{yx} = 2e^{2y}$$</div>
+                            <div class="result-badge">Verified: $f_{xy} = f_{yx} = 2e^{2y}$</div>
+                        </div>
+
+                        <div class="sol-step">
+                            <div class="sol-step-title">Full Solution for (f): $f(x,y) = 2x^4 + \ln(3 + y^3)$</div>
+                            <div class="math-row">$$f_x = 8x^3 \implies f_{xx} = 24x^2$$</div>
+                            <div class="math-row">$$f_y = \frac{3y^2}{3 + y^3} \implies f_{yy} = \frac{(3+y^3)(6y) - (3y^2)(3y^2)}{(3+y^3)^2} = \frac{18y - 3y^4}{(3+y^3)^2}$$</div>
+                            <div class="math-row">$$f_{xy} = f_{yx} = 0$$</div>
+                            <div class="result-badge">Verified: $f_{xy} = f_{yx} = 0$</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- ========================================================= -->
+        <!-- Question 3: Laplace Equation -->
+        <!-- ========================================================= -->
+        <div id="sec-3" class="question-section active">
+
+            <div class="prob-card">
+                <div class="prob-header">
+                    <span class="prob-title">📌 Q3: Show that $f_{xx} + f_{yy} = 0$ (Laplace's Equation)</span>
+                    <button class="sol-btn" onclick="toggleSolution(this)">إظهار الحل</button>
+                </div>
+                <div class="prob-body">
+                    <div class="prompt-box">
+                        (a) $f(x,y) = 2x + e^y \cos x$ <br>
+                        (b) $f(x,y) = 3x^2 - 3y^2 + x - 2y + 6$
+                    </div>
+                    <div class="solution-wrapper">
+                        <div class="sol-step">
+                            <div class="sol-step-title">Detailed Proof for (a): $f(x,y) = 2x + e^y \cos x$</div>
+                            <div class="math-row">$$f_x = 2 - e^y \sin x \implies f_{xx} = -e^y \cos x$$</div>
+                            <div class="math-row">$$f_y = e^y \cos x \implies f_{yy} = e^y \cos x$$</div>
+                            <div class="math-row">$$f_{xx} + f_{yy} = (-e^y \cos x) + (e^y \cos x) = 0$$</div>
+                            <div class="result-badge">Q.E.D. Laplace's Equation Holds: $f_{xx} + f_{yy} = 0$</div>
+                        </div>
+
+                        <div class="sol-step">
+                            <div class="sol-step-title">Detailed Proof for (b): $f(x,y) = 3x^2 - 3y^2 + x - 2y + 6$</div>
+                            <div class="math-row">$$f_x = 6x + 1 \implies f_{xx} = 6$$</div>
+                            <div class="math-row">$$f_y = -6y - 2 \implies f_{yy} = -6$$</div>
+                            <div class="math-row">$$f_{xx} + f_{yy} = 6 + (-6) = 0$$</div>
+                            <div class="result-badge">Q.E.D. Laplace's Equation Holds: $f_{xx} + f_{yy} = 0$</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- ========================================================= -->
+        <!-- Question 4: Implicit dy/dx -->
+        <!-- ========================================================= -->
+        <div id="sec-4" class="question-section active">
+
+            <!-- Q4 (a) & (b) -->
+            <div class="prob-card">
+                <div class="prob-header">
+                    <span class="prob-title">📌 Q4: (a) & (b) Implicit Differentiation $\frac{dy}{dx} = -\frac{F_x}{F_y}$</span>
+                    <button class="sol-btn" onclick="toggleSolution(this)">إظهار الحل</button>
+                </div>
+                <div class="prob-body">
+                    <div class="prompt-box">
+                        (a) $x^3 + y^4 + x \tanh y = 3$ <br>
+                        (b) $3^x \sin y + x y^4 + \ln y = 0$
+                    </div>
+                    <div class="solution-wrapper">
+                        <div class="sol-step">
+                            <div class="sol-step-title">Full Solution for (a): $x^3 + y^4 + x \tanh y = 3$</div>
+                            <div class="math-row">$$F(x,y) = x^3 + y^4 + x \tanh y - 3 = 0$$</div>
+                            <div class="math-row">$$F_x = 3x^2 + \tanh y, \quad F_y = 4y^3 + x \operatorname{sech}^2 y$$</div>
+                            <div class="math-row">$$\frac{dy}{dx} = -\frac{F_x}{F_y} = -\frac{3x^2 + \tanh y}{4y^3 + x \operatorname{sech}^2 y}$$</div>
+                            <div class="result-badge">Final Answer: $\frac{dy}{dx} = -\frac{3x^2 + \tanh y}{4y^3 + x\operatorname{sech}^2 y}$</div>
+                        </div>
+
+                        <div class="sol-step">
+                            <div class="sol-step-title">Full Solution for (b): $3^x \sin y + x y^4 + \ln y = 0$</div>
+                            <div class="math-row">$$F_x = 3^x \ln 3 \sin y + y^4, \quad F_y = 3^x \cos y + 4xy^3 + \frac{1}{y}$$</div>
+                            <div class="math-row">$$\frac{dy}{dx} = -\frac{F_x}{F_y} = -\frac{3^x \ln 3 \sin y + y^4}{3^x \cos y + 4xy^3 + \frac{1}{y}} = -\frac{y(3^x \ln 3 \sin y + y^4)}{y \cdot 3^x \cos y + 4xy^4 + 1}$$</div>
+                            <div class="result-badge">Final Answer: $\frac{dy}{dx} = -\frac{y(3^x \ln 3 \sin y + y^4)}{y 3^x \cos y + 4xy^4 + 1}$</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Q4 (c) & (d) -->
+            <div class="prob-card">
+                <div class="prob-header">
+                    <span class="prob-title">📌 Q4: (c) & (d) Implicit Differentiation $\frac{dy}{dx}$</span>
+                    <button class="sol-btn" onclick="toggleSolution(this)">إظهار الحل</button>
+                </div>
+                <div class="prob-body">
+                    <div class="prompt-box">
+                        (c) $y \cosh(x^3) + x \sin y = 8$ <br>
+                        (d) $x \sin x + y \cos y = 0$
+                    </div>
+                    <div class="solution-wrapper">
+                        <div class="sol-step">
+                            <div class="sol-step-title">Full Solution for (c): $y \cosh(x^3) + x \sin y - 8 = 0$</div>
+                            <div class="math-row">$$F_x = 3x^2 y \sinh(x^3) + \sin y, \quad F_y = \cosh(x^3) + x \cos y$$</div>
+                            <div class="math-row">$$\frac{dy}{dx} = -\frac{F_x}{F_y} = -\frac{3x^2 y \sinh(x^3) + \sin y}{\cosh(x^3) + x \cos y}$$</div>
+                            <div class="result-badge">Final Answer: $\frac{dy}{dx} = -\frac{3x^2 y \sinh(x^3) + \sin y}{\cosh(x^3) + x \cos y}$</div>
+                        </div>
+
+                        <div class="sol-step">
+                            <div class="sol-step-title">Full Solution for (d): $x \sin x + y \cos y = 0$</div>
+                            <div class="math-row">$$F_x = \sin x + x \cos x, \quad F_y = \cos y - y \sin y$$</div>
+                            <div class="math-row">$$\frac{dy}{dx} = -\frac{F_x}{F_y} = -\frac{\sin x + x \cos x}{\cos y - y \sin y} = \frac{\sin x + x \cos x}{y \sin y - \cos y}$$</div>
+                            <div class="result-badge">Final Answer: $\frac{dy}{dx} = \frac{\sin x + x \cos x}{y \sin y - \cos y}$</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Q4 (e) & (f) -->
+            <div class="prob-card">
+                <div class="prob-header">
+                    <span class="prob-title">📌 Q4: (e) & (f) Implicit Differentiation $\frac{dy}{dx}$</span>
+                    <button class="sol-btn" onclick="toggleSolution(this)">إظهار الحل</button>
+                </div>
+                <div class="prob-body">
+                    <div class="prompt-box">
+                        (e) $x^2 + y^4 + x e^y + 4 = 0$ <br>
+                        (f) $2x^4 + \ln(x + y^3) - 2y = 0$
+                    </div>
+                    <div class="solution-wrapper">
+                        <div class="sol-step">
+                            <div class="sol-step-title">Full Solution for (e): $x^2 + y^4 + x e^y + 4 = 0$</div>
+                            <div class="math-row">$$F_x = 2x + e^y, \quad F_y = 4y^3 + x e^y$$</div>
+                            <div class="math-row">$$\frac{dy}{dx} = -\frac{F_x}{F_y} = -\frac{2x + e^y}{4y^3 + x e^y}$$</div>
+                            <div class="result-badge">Final Answer: $\frac{dy}{dx} = -\frac{2x + e^y}{4y^3 + x e^y}$</div>
+                        </div>
+
+                        <div class="sol-step">
+                            <div class="sol-step-title">Full Solution for (f): $2x^4 + \ln(x + y^3) - 2y = 0$</div>
+                            <div class="math-row">$$F_x = 8x^3 + \frac{1}{x+y^3}, \quad F_y = \frac{3y^2}{x+y^3} - 2$$</div>
+                            <div class="math-row">$$\frac{dy}{dx} = -\frac{F_x}{F_y} = -\frac{\frac{8x^3(x+y^3) + 1}{x+y^3}}{\frac{3y^2 - 2(x+y^3)}{x+y^3}} = \frac{8x^4 + 8x^3 y^3 + 1}{2x + 2y^3 - 3y^2}$$</div>
+                            <div class="result-badge">Final Answer: $\frac{dy}{dx} = \frac{8x^4 + 8x^3 y^3 + 1}{2x + 2y^3 - 3y^2}$</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- ========================================================= -->
+        <!-- Question 5: Implicit dz/dx and dz/dy -->
+        <!-- ========================================================= -->
+        <div id="sec-5" class="question-section active">
+
+            <!-- Q5 (a) & (b) -->
+            <div class="prob-card">
+                <div class="prob-header">
+                    <span class="prob-title">📌 Q5: (a) & (b) Implicit Partial $\frac{\partial z}{\partial x} = -\frac{F_x}{F_z}, \,\, \frac{\partial z}{\partial y} = -\frac{F_y}{F_z}$</span>
+                    <button class="sol-btn" onclick="toggleSolution(this)">إظهار الحل</button>
+                </div>
+                <div class="prob-body">
+                    <div class="prompt-box">
+                        (a) $x^3 + e^{yz} + y \sin(xz) = 3$ <br>
+                        (b) $3^x \sin y + x y^4 + z \ln z = 0$
+                    </div>
+                    <div class="solution-wrapper">
+                        <div class="sol-step">
+                            <div class="sol-step-title">Full Solution for (a): $F(x,y,z) = x^3 + e^{yz} + y \sin(xz) - 3 = 0$</div>
+                            <div class="math-row">$$F_x = 3x^2 + yz \cos(xz)$$</div>
+                            <div class="math-row">$$F_y = z e^{yz} + \sin(xz)$$</div>
+                            <div class="math-row">$$F_z = y e^{yz} + xy \cos(xz)$$</div>
+                            <div class="math-row">$$\frac{\partial z}{\partial x} = -\frac{F_x}{F_z} = -\frac{3x^2 + yz \cos(xz)}{y e^{yz} + xy \cos(xz)}, \quad \frac{\partial z}{\partial y} = -\frac{F_y}{F_z} = -\frac{z e^{yz} + \sin(xz)}{y e^{yz} + xy \cos(xz)}$$</div>
+                            <div class="result-badge">Answer obtained via Theorem 3</div>
+                        </div>
+
+                        <div class="sol-step">
+                            <div class="sol-step-title">Full Solution for (b): $F(x,y,z) = 3^x \sin y + x y^4 + z \ln z = 0$</div>
+                            <div class="math-row">$$F_x = 3^x \ln 3 \sin y + y^4$$</div>
+                            <div class="math-row">$$F_y = 3^x \cos y + 4xy^3$$</div>
+                            <div class="math-row">$$F_z = \ln z + z\left(\frac{1}{z}\right) = \ln z + 1$$</div>
+                            <div class="math-row">$$\frac{\partial z}{\partial x} = -\frac{3^x \ln 3 \sin y + y^4}{\ln z + 1}, \quad \frac{\partial z}{\partial y} = -\frac{3^x \cos y + 4xy^3}{\ln z + 1}$$</div>
+                            <div class="result-badge">Answer Complete</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Q5 (c) & (d) -->
+            <div class="prob-card">
+                <div class="prob-header">
+                    <span class="prob-title">📌 Q5: (c) & (d) Implicit Partial $\frac{\partial z}{\partial x}, \,\, \frac{\partial z}{\partial y}$</span>
+                    <button class="sol-btn" onclick="toggleSolution(this)">إظهار الحل</button>
+                </div>
+                <div class="prob-body">
+                    <div class="prompt-box">
+                        (c) $y \cosh x + x \sin y = z \sinh z$ <br>
+                        (d) $x \tan y + y \cos x + z e^z = 0$
+                    </div>
+                    <div class="solution-wrapper">
+                        <div class="sol-step">
+                            <div class="sol-step-title">Full Solution for (c): $F(x,y,z) = y \cosh x + x \sin y - z \sinh z = 0$</div>
+                            <div class="math-row">$$F_x = y \sinh x + \sin y, \quad F_y = \cosh x + x \cos y, \quad F_z = -(\sinh z + z \cosh z)$$</div>
+                            <div class="math-row">$$\frac{\partial z}{\partial x} = \frac{y \sinh x + \sin y}{\sinh z + z \cosh z}, \quad \frac{\partial z}{\partial y} = \frac{\cosh x + x \cos y}{\sinh z + z \cosh z}$$</div>
+                            <div class="result-badge">Answer Complete</div>
+                        </div>
+
+                        <div class="sol-step">
+                            <div class="sol-step-title">Full Solution for (d): $F(x,y,z) = x \tan y + y \cos x + z e^z = 0$</div>
+                            <div class="math-row">$$F_x = \tan y - y \sin x, \quad F_y = x \sec^2 y + \cos x, \quad F_z = (1+z)e^z$$</div>
+                            <div class="math-row">$$\frac{\partial z}{\partial x} = \frac{y \sin x - \tan y}{(1+z)e^z}, \quad \frac{\partial z}{\partial y} = -\frac{x \sec^2 y + \cos x}{(1+z)e^z}$$</div>
+                            <div class="result-badge">Answer Complete</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Q5 (e) & (f) -->
+            <div class="prob-card">
+                <div class="prob-header">
+                    <span class="prob-title">📌 Q5: (e) & (f) Implicit Partial $\frac{\partial z}{\partial x}, \,\, \frac{\partial z}{\partial y}$</span>
+                    <button class="sol-btn" onclick="toggleSolution(this)">إظهار الحل</button>
+                </div>
+                <div class="prob-body">
+                    <div class="prompt-box">
+                        (e) $x^2 + y^4 + z \sin(xyz) = 0$ <br>
+                        (f) $2x^4 + y + 2z + \ln(xyz) = 0$
+                    </div>
+                    <div class="solution-wrapper">
+                        <div class="sol-step">
+                            <div class="sol-step-title">Full Solution for (e): $F(x,y,z) = x^2 + y^4 + z \sin(xyz) = 0$</div>
+                            <div class="math-row">$$F_x = 2x + yz^2 \cos(xyz)$$</div>
+                            <div class="math-row">$$F_y = 4y^3 + xz^2 \cos(xyz)$$</div>
+                            <div class="math-row">$$F_z = \sin(xyz) + xyz \cos(xyz)$$</div>
+                            <div class="math-row">$$\frac{\partial z}{\partial x} = -\frac{2x + yz^2 \cos(xyz)}{\sin(xyz) + xyz \cos(xyz)}, \quad \frac{\partial z}{\partial y} = -\frac{4y^3 + xz^2 \cos(xyz)}{\sin(xyz) + xyz \cos(xyz)}$$</div>
+                            <div class="result-badge">Answer Complete</div>
+                        </div>
+
+                        <div class="sol-step">
+                            <div class="sol-step-title">Full Solution for (f): $F(x,y,z) = 2x^4 + y + 2z + \ln x + \ln y + \ln z = 0$</div>
+                            <div class="math-row">$$F_x = 8x^3 + \frac{1}{x} = \frac{8x^4 + 1}{x}, \quad F_y = 1 + \frac{1}{y} = \frac{y + 1}{y}, \quad F_z = 2 + \frac{1}{z} = \frac{2z + 1}{z}$$</div>
+                            <div class="math-row">$$\frac{\partial z}{\partial x} = -\frac{z(8x^4+1)}{x(2z+1)}, \quad \frac{\partial z}{\partial y} = -\frac{z(y+1)}{y(2z+1)}$$</div>
+                            <div class="result-badge">Answer Complete</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- ========================================================= -->
+        <!-- Question 6: Verify Euler's Theorem -->
+        <!-- ========================================================= -->
+        <div id="sec-6" class="question-section active">
+
+            <!-- Q6 (a) & (b) -->
+            <div class="prob-card">
+                <div class="prob-header">
+                    <span class="prob-title">📌 Q6: (a) & (b) Verify Euler's Theorem</span>
+                    <button class="sol-btn" onclick="toggleSolution(this)">إظهار الحل</button>
+                </div>
+                <div class="prob-body">
+                    <div class="prompt-box">
+                        Verify Euler's theorem ($x f_x + y f_y = k f$) for: <br>
+                        (a) $f(x,y) = x^3 + y^3 + x y^2$ <br>
+                        (b) $f(x,y) = 3x^4 + x y^3 - 2y^4$
+                    </div>
+                    <div class="solution-wrapper">
+                        <div class="sol-step">
+                            <div class="sol-step-title">Verification for (a): $f(x,y) = x^3 + y^3 + x y^2$</div>
+                            <div class="math-row">$$f(tx, ty) = (tx)^3 + (ty)^3 + (tx)(ty)^2 = t^3(x^3 + y^3 + xy^2) = t^3 f(x,y) \implies k = 3$$</div>
+                            <div class="math-row">$$f_x = 3x^2 + y^2, \quad f_y = 3y^2 + 2xy$$</div>
+                            <div class="math-row">$$x f_x + y f_y = x(3x^2 + y^2) + y(3y^2 + 2xy) = 3x^3 + 3xy^2 + 3y^3 = 3(x^3 + y^3 + xy^2) = 3f$$</div>
+                            <div class="result-badge">Euler's Theorem Verified: $k = 3$</div>
+                        </div>
+
+                        <div class="sol-step">
+                            <div class="sol-step-title">Verification for (b): $f(x,y) = 3x^4 + x y^3 - 2y^4$</div>
+                            <div class="math-row">$$f(tx, ty) = t^4(3x^4 + xy^3 - 2y^4) = t^4 f(x,y) \implies k = 4$$</div>
+                            <div class="math-row">$$f_x = 12x^3 + y^3, \quad f_y = 3xy^2 - 8y^3$$</div>
+                            <div class="math-row">$$x f_x + y f_y = x(12x^3 + y^3) + y(3xy^2 - 8y^3) = 12x^4 + 4xy^3 - 8y^4 = 4(3x^4 + xy^3 - 2y^4) = 4f$$</div>
+                            <div class="result-badge">Euler's Theorem Verified: $k = 4$</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Q6 (c) & (d) -->
+            <div class="prob-card">
+                <div class="prob-header">
+                    <span class="prob-title">📌 Q6: (c) & (d) Verify Euler's Theorem</span>
+                    <button class="sol-btn" onclick="toggleSolution(this)">إظهار الحل</button>
+                </div>
+                <div class="prob-body">
+                    <div class="prompt-box">
+                        (c) $f(x,y) = \ln x - \ln y = \ln\left(\frac{x}{y}\right)$ <br>
+                        (d) $f(x,y) = 5x + \sqrt{x^2+y^2}$
+                    </div>
+                    <div class="solution-wrapper">
+                        <div class="sol-step">
+                            <div class="sol-step-title">Verification for (c): $f(x,y) = \ln(x/y)$</div>
+                            <div class="math-row">$$f(tx, ty) = \ln\left(\frac{tx}{ty}\right) = \ln\left(\frac{x}{y}\right) = t^0 f(x,y) \implies k = 0$$</div>
+                            <div class="math-row">$$f_x = \frac{1}{x}, \quad f_y = -\frac{1}{y} \implies x f_x + y f_y = x\left(\frac{1}{x}\right) + y\left(-\frac{1}{y}\right) = 1 - 1 = 0 = 0 \cdot f$$</div>
+                            <div class="result-badge">Verified: $x f_x + y f_y = 0$</div>
+                        </div>
+
+                        <div class="sol-step">
+                            <div class="sol-step-title">Verification for (d): $f(x,y) = 5x + \sqrt{x^2+y^2}$</div>
+                            <div class="math-row">$$f(tx, ty) = 5tx + \sqrt{t^2(x^2+y^2)} = t(5x + \sqrt{x^2+y^2}) = t^1 f(x,y) \implies k = 1$$</div>
+                            <div class="math-row">$$f_x = 5 + \frac{x}{\sqrt{x^2+y^2}}, \quad f_y = \frac{y}{\sqrt{x^2+y^2}}$$</div>
+                            <div class="math-row">$$x f_x + y f_y = 5x + \frac{x^2+y^2}{\sqrt{x^2+y^2}} = 5x + \sqrt{x^2+y^2} = 1 \cdot f$$</div>
+                            <div class="result-badge">Verified: $x f_x + y f_y = f$</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Q6 (e) & (f) -->
+            <div class="prob-card">
+                <div class="prob-header">
+                    <span class="prob-title">📌 Q6: (e) & (f) Verify Euler's Theorem (3 Variables)</span>
+                    <button class="sol-btn" onclick="toggleSolution(this)">إظهار الحل</button>
+                </div>
+                <div class="prob-body">
+                    <div class="prompt-box">
+                        Verify $x f_x + y f_y + z f_z = k f$ for: <br>
+                        (e) $f(x,y,z) = x^4 + y^4 + z y^3$ <br>
+                        (f) $f(x,y,z) = 2x^2 + yz + 3z^2$
+                    </div>
+                    <div class="solution-wrapper">
+                        <div class="sol-step">
+                            <div class="sol-step-title">Verification for (e): $f(x,y,z) = x^4 + y^4 + z y^3$</div>
+                            <div class="math-row">$$f(tx, ty, tz) = t^4(x^4 + y^4 + zy^3) = t^4 f \implies k = 4$$</div>
+                            <div class="math-row">$$f_x = 4x^3, \quad f_y = 4y^3 + 3zy^2, \quad f_z = y^3$$</div>
+                            <div class="math-row">$$x f_x + y f_y + z f_z = 4x^4 + 4y^4 + 3zy^3 + zy^3 = 4(x^4 + y^4 + zy^3) = 4f$$</div>
+                            <div class="result-badge">Verified: $x f_x + y f_y + z f_z = 4f$</div>
+                        </div>
+
+                        <div class="sol-step">
+                            <div class="sol-step-title">Verification for (f): $f(x,y,z) = 2x^2 + yz + 3z^2$</div>
+                            <div class="math-row">$$f(tx, ty, tz) = t^2(2x^2 + yz + 3z^2) = t^2 f \implies k = 2$$</div>
+                            <div class="math-row">$$f_x = 4x, \quad f_y = z, \quad f_z = y + 6z$$</div>
+                            <div class="math-row">$$x f_x + y f_y + z f_z = 4x^2 + yz + yz + 6z^2 = 2(2x^2 + yz + 3z^2) = 2f$$</div>
+                            <div class="result-badge">Verified: $x f_x + y f_y + z f_z = 2f$</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- ========================================================= -->
+        <!-- Questions 7, 8, 9: Euler Proofs -->
+        <!-- ========================================================= -->
+        <div id="sec-7" class="question-section active">
+
+            <div class="prob-card">
+                <div class="prob-header">
+                    <span class="prob-title">📌 Questions 7, 8 & 9: Proof Problems</span>
+                    <button class="sol-btn" onclick="toggleSolution(this)">إظهار الحل</button>
+                </div>
+                <div class="prob-body">
+                    <div class="prompt-box">
+                        (7) If $f(x,y) = x^3 + 2xy^2 - 4y^3$, show that $x f_x + y f_y = 3f$. <br>
+                        (8) If $f(x,y) = \sin\left(\frac{x}{y}\right) - \cos\left(\frac{y}{x}\right)$, show that $x f_x + y f_y = 0$. <br>
+                        (9) If $f(x,y,z) = x \sinh\left(\frac{x}{y+z}\right) - y \tanh\left(\frac{z}{x+y}\right)$, show that $x f_x + y f_y + z f_z = f$.
+                    </div>
+                    <div class="solution-wrapper">
+                        <div class="sol-step">
+                            <div class="sol-step-title">Solution for Question 7</div>
+                            <div class="math-row">$$f(tx, ty) = t^3(x^3 + 2xy^2 - 4y^3) = t^3 f(x,y) \implies k = 3$$</div>
+                            <div class="math-row">$$f_x = 3x^2 + 2y^2, \quad f_y = 4xy - 12y^2$$</div>
+                            <div class="math-row">$$x f_x + y f_y = x(3x^2 + 2y^2) + y(4xy - 12y^2) = 3x^3 + 6xy^2 - 12y^3 = 3(x^3 + 2xy^2 - 4y^3) = 3f$$</div>
+                            <div class="result-badge">Q.E.D. Proved: Result equals $3f$</div>
+                        </div>
+
+                        <div class="sol-step">
+                            <div class="sol-step-title">Solution for Question 8</div>
+                            <div class="math-row">$$f(tx, ty) = \sin\left(\frac{tx}{ty}\right) - \cos\left(\frac{ty}{tx}\right) = \sin\left(\frac{x}{y}\right) - \cos\left(\frac{y}{x}\right) = t^0 f(x,y) \implies k = 0$$</div>
+                            <div>By Euler's Theorem:</div>
+                            <div class="math-row">$$x f_x + y f_y = 0 \cdot f = 0$$</div>
+                            <div class="result-badge">Q.E.D. Proved: Result equals 0</div>
+                        </div>
+
+                        <div class="sol-step">
+                            <div class="sol-step-title">Solution for Question 9</div>
+                            <div class="math-row">$$f(tx, ty, tz) = tx \sinh\left(\frac{tx}{ty+tz}\right) - ty \tanh\left(\frac{tz}{tx+ty}\right) = t \left[x \sinh\left(\frac{x}{y+z}\right) - y \tanh\left(\frac{z}{x+y}\right)\right] = t^1 f$$</div>
+                            <div>Degree $k = 1$, hence by Euler's Theorem in 3 variables:</div>
+                            <div class="math-row">$$x f_x + y f_y + z f_z = 1 \cdot f = f$$</div>
+                            <div class="result-badge">Q.E.D. Proved: Result equals $f$</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- ========================================================= -->
+        <!-- Questions 10, 11, 12: Euler II -->
+        <!-- ========================================================= -->
+        <div id="sec-10" class="question-section active">
+            <div class="prob-card">
+                <div class="prob-header">
+                    <span class="prob-title">📌 Questions 10, 11 & 12: Advanced Euler Proofs</span>
+                    <button class="sol-btn" onclick="toggleSolution(this)">إظهار الحل</button>
+                </div>
+                <div class="prob-body">
+                    <div class="prompt-box">
+                        (10) If $u = \tan^{-1}\left(\frac{x^3+y^3}{2x+3y}\right)$, show that $x u_x + y u_y = \sin 2u$ <br>
+                        (11) If $u = \ln\left(\frac{x^3+y^3}{2x^2+3y^2}\right)$, show that $x u_x + y u_y = 1$ <br>
+                        (12) If $u = \ln\left(\frac{x^2-y^2}{2x^2+3y^2}\right) + \tan^{-1}\left(\frac{y}{z}\right) - \sinh^{-1}\left(\frac{z}{x}\right)$, show that $x u_x + y u_y + z u_z = 0$
+                    </div>
+                    <div class="solution-wrapper">
+                        <!-- Q10 -->
+                        <div class="sol-step">
+                            <div class="sol-step-title">Detailed Solution for Question 10</div>
+                            <div class="step-desc">Step 1: Transform to an explicit homogeneous function:</div>
+                            <div class="math-row">$$\tan u = \frac{x^3+y^3}{2x+3y} \implies \text{Let } S(x,y) = \tan u = \frac{x^3+y^3}{2x+3y}$$</div>
+                            <div class="step-desc">Step 2: Check homogeneity of $S(x,y)$:</div>
+                            <div class="math-row">$$S(tx, ty) = \frac{(tx)^3+(ty)^3}{2(tx)+3(ty)} = \frac{t^3(x^3+y^3)}{t(2x+3y)} = t^2 S(x,y) \implies k = 2$$</div>
+                            <div class="step-desc">Step 3: Apply Euler's Theorem to $S(x,y)$:</div>
+                            <div class="math-row">$$x S_x + y S_y = 2 S$$</div>
+                            <div>Since $S = \tan u \implies S_x = \sec^2 u \cdot u_x, \quad S_y = \sec^2 u \cdot u_y$:</div>
+                            <div class="math-row">$$x(\sec^2 u \cdot u_x) + y(\sec^2 u \cdot u_y) = 2\tan u \implies \sec^2 u (x u_x + y u_y) = 2\tan u$$</div>
+                            <div class="step-desc">Step 4: Simplify trigonometric relations:</div>
+                            <div class="math-row">$$x u_x + y u_y = \frac{2\tan u}{\sec^2 u} = 2\left(\frac{\sin u}{\cos u}\right)\cos^2 u = 2\sin u \cos u = \sin 2u$$</div>
+                            <div class="result-badge">Q.E.D. Formula Verified: $x u_x + y u_y = \sin 2u$</div>
+                        </div>
+
+                        <!-- Q11 -->
+                        <div class="sol-step">
+                            <div class="sol-step-title">Detailed Solution for Question 11</div>
+                            <div class="step-desc">Step 1: Transform logarithmic function:</div>
+                            <div class="math-row">$$e^u = \frac{x^3+y^3}{2x^2+3y^2} \implies \text{Let } S(x,y) = e^u = \frac{x^3+y^3}{2x^2+3y^2}$$</div>
+                            <div class="step-desc">Step 2: Check degree of homogeneity of $S$:</div>
+                            <div class="math-row">$$S(tx, ty) = \frac{t^3(x^3+y^3)}{t^2(2x^2+3y^2)} = t^1 S(x,y) \implies k = 1$$</div>
+                            <div class="step-desc">Step 3: Apply Euler's Theorem to $S$:</div>
+                            <div class="math-row">$$x S_x + y S_y = 1 \cdot S \implies x(e^u u_x) + y(e^u u_y) = e^u \implies e^u (x u_x + y u_y) = e^u$$</div>
+                            <div class="step-desc">Step 4: Divide both sides by $e^u$:</div>
+                            <div class="math-row">$$x u_x + y u_y = 1$$</div>
+                            <div class="result-badge">Q.E.D. Formula Verified: $x u_x + y u_y = 1$</div>
+                        </div>
+
+                        <!-- Q12 -->
+                        <div class="sol-step">
+                            <div class="sol-step-title">Detailed Solution for Question 12</div>
+                            <div class="step-desc">Evaluate homogeneity directly for each term in $u(x,y,z)$:</div>
+                            <div class="math-row">
+                                $$u(tx, ty, tz) = \ln\left(\frac{t^2(x^2-y^2)}{t^2(2x^2+3y^2)}\right) + \tan^{-1}\left(\frac{ty}{tz}\right) - \sinh^{-1}\left(\frac{tz}{tx}\right)$$
+                                $$= \ln\left(\frac{x^2-y^2}{2x^2+3y^2}\right) + \tan^{-1}\left(\frac{y}{z}\right) - \sinh^{-1}\left(\frac{z}{x}\right) = t^0 u(x,y,z)$$
+                            </div>
+                            <div>The function $u(x,y,z)$ is homogeneous of degree $k = 0$. By Euler's Theorem in 3 variables:</div>
+                            <div class="math-row">$$x u_x + y u_y + z u_z = 0 \cdot u = 0$$</div>
+                            <div class="result-badge">Q.E.D. Formula Verified: Sum equals 0</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========================================================= -->
+        <!-- Question 13: Envelope -->
+        <!-- ========================================================= -->
+        <div id="sec-13" class="question-section active">
+            <div class="prob-card">
+                <div class="prob-header">
+                    <span class="prob-title">📌 Question 13: Envelope of Curves (Cases a to f)</span>
+                    <button class="sol-btn" onclick="toggleSolution(this)">إظهار الحل</button>
+                </div>
+                <div class="prob-body">
+                    <div class="prompt-box">
+                        Find the envelope for: <br>
+                        (a) $x^2 + (y-a)^2 = 2a$ <br>
+                        (b) $(x-b)^2 + y^2 = 4b$ <br>
+                        (c) $(x-c)^2 + (y-2c)^2 = 8$ <br>
+                        (d) $(x-\cos\alpha)^2 + (y-\sin\alpha)^2 = 1$ <br>
+                        (e) $x\cos\theta + y\sin\theta = 2$ <br>
+                        (f) $x\sin\beta + y\cos\beta = 4$
+                    </div>
+                    <div class="solution-wrapper">
+                        <!-- 13a -->
+                        <div class="sol-step">
+                            <div class="sol-step-title">(a) $F(x,y,a) = x^2 + (y-a)^2 - 2a = 0$</div>
+                            <div class="step-desc">Differentiate w.r.t parameter $a$:</div>
+                            <div class="math-row">$$\frac{\partial F}{\partial a} = 2(y-a)(-1) - 2 = -2(y-a) - 2 = 0 \implies y - a = -1 \implies a = y + 1$$</div>
+                            <div class="step-desc">Substitute $a = y + 1$ into original equation:</div>
+                            <div class="math-row">$$x^2 + [y - (y+1)]^2 = 2(y+1) \implies x^2 + (-1)^2 = 2y + 2 \implies x^2 + 1 = 2y + 2$$</div>
+                            <div class="result-badge">Envelope: $x^2 = 2y + 1$ (Parabola)</div>
+                        </div>
+
+                        <!-- 13b -->
+                        <div class="sol-step">
+                            <div class="sol-step-title">(b) $F(x,y,b) = (x-b)^2 + y^2 - 4b = 0$</div>
+                            <div class="math-row">$$\frac{\partial F}{\partial b} = 2(x-b)(-1) - 4 = 0 \implies x - b = -2 \implies b = x + 2$$</div>
+                            <div class="step-desc">Substitute $b = x + 2$:</div>
+                            <div class="math-row">$$(-2)^2 + y^2 = 4(x+2) \implies 4 + y^2 = 4x + 8$$</div>
+                            <div class="result-badge">Envelope: $y^2 = 4x + 4 = 4(x+1)$ (Parabola)</div>
+                        </div>
+
+                        <!-- 13c -->
+                        <div class="sol-step">
+                            <div class="sol-step-title">(c) $F(x,y,c) = (x-c)^2 + (y-2c)^2 - 8 = 0$</div>
+                            <div class="step-desc">Differentiate w.r.t $c$:</div>
+                            <div class="math-row">$$\frac{\partial F}{\partial c} = -2(x-c) - 4(y-2c) = 0 \implies -(x-c) - 2(y-2c) = 0 \implies -x + c - 2y + 4c = 0 \implies 5c = x + 2y \implies c = \frac{x+2y}{5}$$</div>
+                            <div class="step-desc">Substitute $x-c = \frac{4x-2y}{5} = \frac{2(2x-y)}{5}$ and $y-2c = \frac{y-2x}{5} = -\frac{2x-y}{5}$:</div>
+                            <div class="math-row">$$\left[\frac{2(2x-y)}{5}\right]^2 + \left[-\frac{2x-y}{5}\right]^2 = 8 \implies \frac{4(2x-y)^2 + (2x-y)^2}{25} = 8 \implies \frac{5(2x-y)^2}{25} = 8$$</div>
+                            <div class="math-row">$$(2x-y)^2 = 40 \implies 2x - y = \pm\sqrt{40} = \pm 2\sqrt{10}$$</div>
+                            <div class="result-badge">Envelope: Two parallel lines $2x - y = \pm 2\sqrt{10}$</div>
+                        </div>
+
+                        <!-- 13d -->
+                        <div class="sol-step">
+                            <div class="sol-step-title">(d) $F(x,y,\alpha) = (x-\cos\alpha)^2 + (y-\sin\alpha)^2 - 1 = 0$</div>
+                            <div class="step-desc">Expand: $x^2 - 2x\cos\alpha + \cos^2\alpha + y^2 - 2y\sin\alpha + \sin^2\alpha - 1 = 0 \implies x^2 + y^2 - 2(x\cos\alpha + y\sin\alpha) = 0$</div>
+                            <div class="step-desc">Differentiate w.r.t $\alpha$:</div>
+                            <div class="math-row">$$-2(-x\sin\alpha + y\cos\alpha) = 0 \implies x\sin\alpha = y\cos\alpha \implies \tan\alpha = \frac{y}{x}$$</div>
+                            <div class="step-desc">Hence $\cos\alpha = \frac{x}{\sqrt{x^2+y^2}}$ and $\sin\alpha = \frac{y}{\sqrt{x^2+y^2}}$:</div>
+                            <div class="math-row">$$x\cos\alpha + y\sin\alpha = \frac{x^2+y^2}{\sqrt{x^2+y^2}} = \sqrt{x^2+y^2}$$</div>
+                            <div class="step-desc">Substitute back: $x^2 + y^2 - 2\sqrt{x^2+y^2} = 0 \implies \sqrt{x^2+y^2}(\sqrt{x^2+y^2} - 2) = 0$</div>
+                            <div class="result-badge">Envelope: Circle $x^2 + y^2 = 4$ (and origin point $x=y=0$)</div>
+                        </div>
+
+                        <!-- 13e & 13f -->
+                        <div class="sol-step">
+                            <div class="sol-step-title">(e) $x\cos\theta + y\sin\theta = 2$ & (f) $x\sin\beta + y\cos\beta = 4$</div>
+                            <div class="step-desc">For (e): Differentiate w.r.t $\theta$: $-x\sin\theta + y\cos\theta = 0 \implies \frac{\sin\theta}{y} = \frac{\cos\theta}{x} = \frac{1}{\sqrt{x^2+y^2}}$</div>
+                            <div class="math-row">$$\cos\theta = \frac{x}{\sqrt{x^2+y^2}}, \,\, \sin\theta = \frac{y}{\sqrt{x^2+y^2}} \implies \frac{x^2+y^2}{\sqrt{x^2+y^2}} = 2 \implies \sqrt{x^2+y^2} = 2 \implies x^2+y^2 = 4$$</div>
+                            <div class="step-desc">Similarly for (f):</div>
+                            <div class="math-row">$$\sqrt{x^2+y^2} = 4 \implies x^2 + y^2 = 16$$</div>
+                            <div class="result-badge">Envelopes: (e) Circle $x^2+y^2=4$ | (f) Circle $x^2+y^2=16$</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========================================================= -->
+        <!-- Question 14: Extrema -->
+        <!-- ========================================================= -->
+        <div id="sec-14" class="question-section active">
+            <div class="prob-card">
+                <div class="prob-header">
+                    <span class="prob-title">📌 Question 14: Extrema of Functions (a to h)</span>
+                    <button class="sol-btn" onclick="toggleSolution(this)">إظهار الحل</button>
+                </div>
+                <div class="prob-body">
+                    <div class="prompt-box">
+                        Find local extrema / saddle points: <br>
+                        (a) $f = 2x+3y$ | (b) $f = x^2+y^3-4xy+4y$ | (c) $f = 3+\ln x - \ln y$ <br>
+                        (d) $f = 1-x^2-y^2-4x+2y$ | (e) $f = x^3-y^3+3xy$ | (f) $f = x^2+y^2-4x+6y+2$ <br>
+                        (g) $f = x^2+3y^2+2xy$ | (h) $f = x^4+y^3+32x-9y$
+                    </div>
+                    <div class="solution-wrapper">
+                        <!-- 14a & 14c -->
+                        <div class="sol-step">
+                            <div class="sol-step-title">(a) $f = 2x+3y$ & (c) $f = 3+\ln x - \ln y$</div>
+                            <div class="math-row">$$\text{For (a): } f_x = 2 \neq 0, \quad f_y = 3 \neq 0 \implies \text{No Critical Points, No Extrema.}$$</div>
+                            <div class="math-row">$$\text{For (c): } f_x = \frac{1}{x} \neq 0, \quad f_y = -\frac{1}{y} \neq 0 \implies \text{No Critical Points, No Extrema.}$$</div>
+                            <div class="result-badge">Result: No local extrema exist for (a) and (c)</div>
+                        </div>
+
+                        <!-- 14b -->
+                        <div class="sol-step">
+                            <div class="sol-step-title">(b) $f = x^2+y^3-4xy+4y$</div>
+                            <div class="math-row">$$f_x = 2x - 4y = 0 \implies x = 2y$$</div>
+                            <div class="math-row">$$f_y = 3y^2 - 4x + 4 = 0 \implies 3y^2 - 4(2y) + 4 = 0 \implies 3y^2 - 8y + 4 = 0$$</div>
+                            <div class="math-row">$$(3y-2)(y-2) = 0 \implies y = 2 \text{ or } y = 2/3$$</div>
+                            <div>Critical points: $(4, 2)$ and $(4/3, 2/3)$. Second derivatives: $f_{xx} = 2, f_{yy} = 6y, f_{xy} = -4 \implies \Delta = 12y - 16$</div>
+                            <div class="step-desc">At $(4, 2)$: $\Delta = 24 - 16 = 8 > 0$ and $f_{xx} = 2 > 0 \implies \mathbf{Local\,Minimum}$ at $(4,2)$ with value $f(4,2) = 0$.</div>
+                            <div class="step-desc">At $(4/3, 2/3)$: $\Delta = 12(2/3) - 16 = -8 &lt; 0 \implies \mathbf{Saddle\,Point}$ at $(4/3, 2/3)$.</div>
+                            <div class="result-badge">Min at $(4,2,0)$; Saddle at $(4/3, 2/3)$</div>
+                        </div>
+
+                        <!-- 14d & 14f -->
+                        <div class="sol-step">
+                            <div class="sol-step-title">(d) $f = 1-x^2-y^2-4x+2y$ & (f) $f = x^2+y^2-4x+6y+2$</div>
+                            <div class="step-desc">For (d):</div>
+                            <div class="math-row">$$f_x = -2x-4=0 \implies x=-2; \quad f_y = -2y+2=0 \implies y=1 \implies \text{Point } (-2,1)$$</div>
+                            <div class="math-row">$$f_{xx} = -2, f_{yy} = -2, f_{xy} = 0 \implies \Delta = 4 > 0, \,\, f_{xx} &lt; 0 \implies \mathbf{Local\,Maximum} \text{ at } (-2, 1, 6)$$</div>
+                            <div class="step-desc">For (f):</div>
+                            <div class="math-row">$$f_x = 2x-4=0 \implies x=2; \quad f_y = 2y+6=0 \implies y=-3 \implies \text{Point } (2,-3)$$</div>
+                            <div class="math-row">$$f_{xx} = 2, f_{yy} = 2, f_{xy} = 0 \implies \Delta = 4 > 0, \,\, f_{xx} > 0 \implies \mathbf{Local\,Minimum} \text{ at } (2, -3, -11)$$</div>
+                            <div class="result-badge">(d) Max: $f(-2,1)=6$ | (f) Min: $f(2,-3)=-11$</div>
+                        </div>
+
+                        <!-- 14e -->
+                        <div class="sol-step">
+                            <div class="sol-step-title">(e) $f = x^3-y^3+3xy$</div>
+                            <div class="math-row">$$f_x = 3x^2 + 3y = 0 \implies y = -x^2$$</div>
+                            <div class="math-row">$$f_y = -3y^2 + 3x = 0 \implies x = y^2 \implies x = (-x^2)^2 = x^4 \implies x(x^3-1)=0 \implies x=0 \text{ or } x=1$$</div>
+                            <div>Critical points: $(0,0)$ and $(1,-1)$. Second derivatives: $f_{xx}=6x, f_{yy}=-6y, f_{xy}=3 \implies \Delta = -36xy - 9$</div>
+                            <div class="step-desc">At $(0,0)$: $\Delta = -9 &lt; 0 \implies \mathbf{Saddle\,Point}$ at $(0,0,0)$.</div>
+                            <div class="step-desc">At $(1,-1)$: $\Delta = -36(1)(-1) - 9 = 27 > 0$ and $f_{xx} = 6 > 0 \implies \mathbf{Local\,Minimum}$ at $(1,-1,-1)$.</div>
+                            <div class="result-badge">Min at $(1,-1,-1)$; Saddle at $(0,0,0)$</div>
+                        </div>
+
+                        <!-- 14g & 14h -->
+                        <div class="sol-step">
+                            <div class="sol-step-title">(g) $f = x^2+3y^2+2xy$ & (h) $f = x^4+y^3+32x-9y$</div>
+                            <div class="step-desc">For (g):</div>
+                            <div class="math-row">$$f_x = 2x+2y = 0 \implies x = -y; \quad f_y = 6y+2x = 0 \implies 6y-2y=4y=0 \implies (0,0)$$</div>
+                            <div class="math-row">$$f_{xx} = 2, f_{yy} = 6, f_{xy} = 2 \implies \Delta = (2)(6) - 2^2 = 8 > 0, \,\, f_{xx} > 0 \implies \mathbf{Local\,Minimum} \text{ at } (0,0,0)$$</div>
+                            <div class="step-desc">For (h):</div>
+                            <div class="math-row">$$f_x = 4x^3+32=0 \implies x^3 = -8 \implies x = -2$$</div>
+                            <div class="math-row">$$f_y = 3y^2-9=0 \implies y^2 = 3 \implies y = \pm\sqrt{3}$$</div>
+                            <div>Points: $(-2, \sqrt{3})$ and $(-2, -\sqrt{3})$. $f_{xx} = 12x^2, f_{yy} = 6y, f_{xy} = 0 \implies \Delta = 72x^2 y$</div>
+                            <div class="step-desc">At $(-2, \sqrt{3})$: $\Delta = 72(4)(\sqrt{3}) > 0, f_{xx} = 48 > 0 \implies \mathbf{Local\,Minimum}$.</div>
+                            <div class="step-desc">At $(-2, -\sqrt{3})$: $\Delta = 72(4)(-\sqrt{3}) &lt; 0 \implies \mathbf{Saddle\,Point}$.</div>
+                            <div class="result-badge">(g) Min at $(0,0,0)$ | (h) Min at $(-2,\sqrt{3})$ and Saddle at $(-2,-\sqrt{3})$</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========================================================= -->
+        <!-- Question 15: Lagrange Multipliers -->
+        <!-- ========================================================= -->
+        <div id="sec-15" class="question-section active">
+            <div class="prob-card">
+                <div class="prob-header">
+                    <span class="prob-title">📌 Question 15: Constrained Extrema via Lagrange (a to f)</span>
+                    <button class="sol-btn" onclick="toggleSolution(this)">إظهار الحل</button>
+                </div>
+                <div class="prob-body">
+                    <div class="prompt-box">
+                        (a) $f=xy$; $4x^2+y^2=8$ <br>
+                        (b) $f=x^3+y^2$; $3x+2y=9$ <br>
+                        (c) $f=x^2+y^2$; $x+y=2$ <br>
+                        (d) $f=x+y+z$; $x^2+y^2+z^2=27$ <br>
+                        (e) $f=x^2+y^2+z^2$; $x+y+z=12$ <br>
+                        (f) $f=x^2+y^2+z^2$; $x-y+z=6$
+                    </div>
+                    <div class="solution-wrapper">
+                        <!-- 15a -->
+                        <div class="sol-step">
+                            <div class="sol-step-title">(a) $f = xy$ subject to $g = 4x^2+y^2-8 = 0$</div>
+                            <div class="math-row">$$\nabla f = \lambda \nabla g \implies (y, x) = \lambda (8x, 2y) \implies \begin{cases} y = 8\lambda x \\ x = 2\lambda y \end{cases}$$</div>
+                            <div class="math-row">$$y = 8\lambda(2\lambda y) = 16\lambda^2 y \implies \lambda = \pm 1/4 \implies y = \pm 2x$$</div>
+                            <div class="math-row">$$4x^2 + (\pm 2x)^2 = 8 \implies 8x^2 = 8 \implies x = \pm 1 \implies y = \pm 2$$</div>
+                            <div class="step-desc">Evaluating $f(x,y)$:</div>
+                            <div class="math-row">$$f(1,2) = f(-1,-2) = 2 \,\, (\mathbf{Maximum}), \quad f(1,-2) = f(-1,2) = -2 \,\, (\mathbf{Minimum})$$</div>
+                            <div class="result-badge">Max = 2 at $(1,2), (-1,-2)$; Min = -2 at $(1,-2), (-1,2)$</div>
+                        </div>
+
+                        <!-- 15b -->
+                        <div class="sol-step">
+                            <div class="sol-step-title">(b) $f = x^3+y^2$ subject to $g = 3x+2y-9 = 0$</div>
+                            <div class="math-row">$$f_x = \lambda g_x \implies 3x^2 = 3\lambda \implies \lambda = x^2$$</div>
+                            <div class="math-row">$$f_y = \lambda g_y \implies 2y = 2\lambda \implies y = \lambda = x^2$$</div>
+                            <div class="math-row">$$3x + 2(x^2) = 9 \implies 2x^2 + 3x - 9 = 0 \implies (2x-3)(x+3) = 0$$</div>
+                            <div class="math-row">$$\text{Points: } (3/2, 9/4) \text{ and } (-3, 9)$$</div>
+                            <div class="result-badge">Extrema: $f(3/2, 9/4) = 549/64 \approx 8.578$; $f(-3, 9) = 54$</div>
+                        </div>
+
+                        <!-- 15c -->
+                        <div class="sol-step">
+                            <div class="sol-step-title">(c) $f = x^2+y^2$ subject to $g = x+y-2 = 0$</div>
+                            <div class="math-row">$$2x = \lambda, \quad 2y = \lambda \implies x = y \implies x + x = 2 \implies x = 1, y = 1$$</div>
+                            <div class="math-row">$$f(1,1) = 1^2 + 1^2 = 2 \quad (\mathbf{Minimum})$$</div>
+                            <div class="result-badge">Minimum value = 2 at $(1,1)$</div>
+                        </div>
+
+                        <!-- 15d -->
+                        <div class="sol-step">
+                            <div class="sol-step-title">(d) $f = x+y+z$ subject to $g = x^2+y^2+z^2-27 = 0$</div>
+                            <div class="math-row">$$1 = 2\lambda x, \,\, 1 = 2\lambda y, \,\, 1 = 2\lambda z \implies x = y = z = \frac{1}{2\lambda}$$</div>
+                            <div class="math-row">$$3x^2 = 27 \implies x^2 = 9 \implies x = \pm 3 \implies y = \pm 3, z = \pm 3$$</div>
+                            <div class="result-badge">Max = 9 at $(3,3,3)$; Min = -9 at $(-3,-3,-3)$</div>
+                        </div>
+
+                        <!-- 15e & 15f -->
+                        <div class="sol-step">
+                            <div class="sol-step-title">(e) & (f) Distance squares with Linear constraints</div>
+                            <div class="step-desc">For (e): $f=x^2+y^2+z^2$, $x+y+z=12$:</div>
+                            <div class="math-row">$$2x = \lambda, 2y = \lambda, 2z = \lambda \implies x=y=z \implies 3x=12 \implies x=y=z=4 \implies f(4,4,4) = 48 \,\, (\mathbf{Min})$$</div>
+                            <div class="step-desc">For (f): $f=x^2+y^2+z^2$, $x-y+z=6$:</div>
+                            <div class="math-row">$$2x = \lambda, 2y = -\lambda, 2z = \lambda \implies x = z = -y \implies x - (-x) + x = 6 \implies 3x = 6 \implies x=2, y=-2, z=2$$</div>
+                            <div class="math-row">$$f(2,-2,2) = 4+4+4 = 12 \,\, (\mathbf{Min})$$</div>
+                            <div class="result-badge">(e) Min = 48 at $(4,4,4)$ | (f) Min = 12 at $(2,-2,2)$</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========================================================= -->
+        <!-- Questions 16 & 17: Applications -->
+        <!-- ========================================================= -->
+        <div id="sec-16" class="question-section active">
+            <div class="prob-card">
+                <div class="prob-header">
+                    <span class="prob-title">📌 Questions 16 & 17: Applied Optimization Problems</span>
+                    <button class="sol-btn" onclick="toggleSolution(this)">إظهار الحل</button>
+                </div>
+                <div class="prob-body">
+                    <div class="prompt-box">
+                        (16) Find the point on the plane $x+2y-z=10$ nearest to the point $(1, 2, 3)$. <br>
+                        (17) Find the volume of the largest rectangular box that can be inscribed in the ellipsoid $16x^2+4y^2+9z^2=144$.
+                    </div>
+                    <div class="solution-wrapper">
+                        <!-- Q16 -->
+                        <div class="sol-step">
+                            <div class="sol-step-title">Solution for Question 16</div>
+                            <div class="step-desc">Step 1: Distance squared function from $(1,2,3)$</div>
+                            <div class="math-row">$$f(x,y,z) = (x-1)^2 + (y-2)^2 + (z-3)^2 \quad \text{subject to } g(x,y,z) = x+2y-z-10 = 0$$</div>
+                            <div class="step-desc">Step 2: Lagrange Multipliers</div>
+                            <div class="math-row">$$2(x-1) = \lambda(1) \implies x = 1 + \frac{\lambda}{2}$$</div>
+                            <div class="math-row">$$2(y-2) = \lambda(2) \implies y = 2 + \lambda$$</div>
+                            <div class="math-row">$$2(z-3) = \lambda(-1) \implies z = 3 - \frac{\lambda}{2}$$</div>
+                            <div class="step-desc">Step 3: Substitute into plane equation</div>
+                            <div class="math-row">$$\left(1+\frac{\lambda}{2}\right) + 2(2+\lambda) - \left(3-\frac{\lambda}{2}\right) = 10 \implies 1 + \frac{\lambda}{2} + 4 + 2\lambda - 3 + \frac{\lambda}{2} = 10 \implies 2 + 3\lambda = 10 \implies \lambda = \frac{8}{3}$$</div>
+                            <div class="step-desc">Step 4: Find the coordinates</div>
+                            <div class="math-row">$$x = 1 + \frac{4}{3} = \frac{7}{3}, \quad y = 2 + \frac{8}{3} = \frac{14}{3}, \quad z = 3 - \frac{4}{3} = \frac{5}{3}$$</div>
+                            <div class="result-badge">Nearest Point: $\left(\frac{7}{3}, \frac{14}{3}, \frac{5}{3}\right)$</div>
+                        </div>
+
+                        <!-- Q17 -->
+                        <div class="sol-step">
+                            <div class="sol-step-title">Solution for Question 17</div>
+                            <div class="step-desc">Step 1: Formulate Volume and Ellipsoid equation</div>
+                            <div>A box with vertices $(\pm x, \pm y, \pm z)$ has volume: $V = (2x)(2y)(2z) = 8xyz$</div>
+                            <div class="math-row">$$\text{Maximize } f(x,y,z) = xyz \quad \text{subject to } \frac{x^2}{9} + \frac{y^2}{36} + \frac{z^2}{16} = 1$$</div>
+                            <div class="step-desc">Step 2: Lagrange equations</div>
+                            <div class="math-row">$$yz = \lambda \frac{2x}{9}, \quad xz = \lambda \frac{2y}{36}, \quad xy = \lambda \frac{2z}{16}$$</div>
+                            <div>Multiplying by $x, y, z$ respectively:</div>
+                            <div class="math-row">$$xyz = \frac{2\lambda x^2}{9} = \frac{2\lambda y^2}{36} = \frac{2\lambda z^2}{16} \implies \frac{x^2}{9} = \frac{y^2}{36} = \frac{z^2}{16}$$</div>
+                            <div class="step-desc">Step 3: Since their sum equals 1:</div>
+                            <div class="math-row">$$3\left(\frac{x^2}{9}\right) = 1 \implies x^2 = 3 \implies x = \sqrt{3}$$</div>
+                            <div class="math-row">$$y^2 = 12 \implies y = \sqrt{12} = 2\sqrt{3}, \quad z^2 = \frac{16}{3} \implies z = \frac{4}{\sqrt{3}}$$</div>
+                            <div class="step-desc">Step 4: Total Volume</div>
+                            <div class="math-row">$$V = 8xyz = 8(\sqrt{3})(2\sqrt{3})\left(\frac{4}{\sqrt{3}}\right) = 8 \cdot 6 \cdot \frac{4}{\sqrt{3}} = \frac{192}{\sqrt{3}} = 64\sqrt{3}$$</div>
+                            <div class="result-badge">Maximum Volume: $V = 64\sqrt{3} \approx 110.85$</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========================================================= -->
+        <!-- Questions 18 & 19: Jacobians & Hessian Matrices -->
+        <!-- ========================================================= -->
+        <div id="sec-18" class="question-section active">
+            <div class="prob-card">
+                <div class="prob-header">
+                    <span class="prob-title">📌 Questions 18 & 19: Jacobians and Hessian Matrices</span>
+                    <button class="sol-btn" onclick="toggleSolution(this)">إظهار الحل</button>
+                </div>
+                <div class="prob-body">
+                    <div class="prompt-box">
+                        (18) Find Jacobians: <br>
+                        (a) $f = x^2-y^2, \,\, g = 2xy$ <br>
+                        (b) $f = x^2+y^2+z^2, \,\, g = xy, \,\, h = x+y+z$ <br>
+                        (19) Find Hessian matrices: <br>
+                        (a) $f = x^3+\sin 2x$ | (b) $f = e^x\sin y - y^2\cos x$ <br>
+                        (c) $f = x^3\sin y + \ln z - y^2\cos x$ | (d) $f = \sinh y e^{xz} - y^2\tan(x+2z)$
+                    </div>
+                    <div class="solution-wrapper">
+                        <!-- Q18 -->
+                        <div class="sol-step">
+                            <div class="sol-step-title">Question 18: Jacobians</div>
+                            <div class="step-desc">Part (a): $J\left(\frac{f,g}{x,y}\right)$</div>
+                            <div class="math-row">
+                                $$J = \begin{vmatrix} f_x & f_y \\ g_x & g_y \end{vmatrix} = \begin{vmatrix} 2x & -2y \\ 2y & 2x \end{vmatrix} = (2x)(2x) - (-2y)(2y) = 4x^2 + 4y^2$$
+                            </div>
+                            <div class="step-desc">Part (b): $J\left(\frac{f,g,h}{x,y,z}\right)$</div>
+                            <div class="math-row">
+                                $$J = \begin{vmatrix} 2x & 2y & 2z \\ y & x & 0 \\ 1 & 1 & 1 \end{vmatrix} = 2x(x - 0) - 2y(y - 0) + 2z(y - x) = 2x^2 - 2y^2 + 2yz - 2xz = 2(x^2-y^2+yz-xz)$$
+                            </div>
+                            <div class="result-badge">(a) $J = 4(x^2+y^2)$ | (b) $J = 2(x^2-y^2+yz-xz)$</div>
+                        </div>
+
+                        <!-- Q19 -->
+                        <div class="sol-step">
+                            <div class="sol-step-title">Question 19: Hessian Matrices $H = [\nabla^2 f]$</div>
+                            <div class="step-desc">(a) Single variable $f(x) = x^3 + \sin 2x$:</div>
+                            <div class="math-row">$$f' = 3x^2 + 2\cos 2x \implies H = [f''] = [6x - 4\sin 2x]$$</div>
+
+                            <div class="step-desc">(b) Two variables $f(x,y) = e^x\sin y - y^2\cos x$:</div>
+                            <div class="math-row">$$f_x = e^x\sin y + y^2\sin x, \quad f_y = e^x\cos y - 2y\cos x$$</div>
+                            <div class="math-row">$$f_{xx} = e^x\sin y + y^2\cos x, \quad f_{yy} = -e^x\sin y - 2\cos x, \quad f_{xy} = f_{yx} = e^x\cos y + 2y\sin x$$</div>
+                            <div class="math-row">
+                                $$H = \begin{bmatrix} e^x\sin y + y^2\cos x & e^x\cos y + 2y\sin x \\ e^x\cos y + 2y\sin x & -e^x\sin y - 2\cos x \end{bmatrix}$$
+                            </div>
+
+                            <div class="step-desc">(c) Three variables $f(x,y,z) = x^3\sin y + \ln z - y^2\cos x$:</div>
+                            <div class="math-row">
+                                $$f_x = 3x^2\sin y + y^2\sin x, \quad f_y = x^3\cos y - 2y\cos x, \quad f_z = \frac{1}{z}$$
+                            </div>
+                            <div class="math-row">
+                                $$H = \begin{bmatrix} 6x\sin y + y^2\cos x & 3x^2\cos y + 2y\sin x & 0 \\ 3x^2\cos y + 2y\sin x & -x^3\sin y - 2\cos x & 0 \\ 0 & 0 & -\frac{1}{z^2} \end{bmatrix}$$
+                            </div>
+
+                            <div class="step-desc">(d) Three variables $f(x,y,z) = \sinh y e^{xz} - y^2\tan(x+2z)$:</div>
+                            <div class="math-row">
+                                $$f_x = z\sinh y e^{xz} - y^2\sec^2(x+2z)$$
+                                $$f_y = \cosh y e^{xz} - 2y\tan(x+2z)$$
+                                $$f_z = x\sinh y e^{xz} - 2y^2\sec^2(x+2z)$$
+                            </div>
+                            <div>Second derivatives form the symmetric matrix $H = \begin{bmatrix} f_{xx} & f_{xy} & f_{xz} \\ f_{yx} & f_{yy} & f_{yz} \\ f_{zx} & f_{zy} & f_{zz} \end{bmatrix}$ where:</div>
+                            <div class="math-row">
+                                $$f_{xx} = z^2\sinh y e^{xz} - 2y^2\sec^2(x+2z)\tan(x+2z)$$
+                                $$f_{yy} = \sinh y e^{xz} - 2\tan(x+2z)$$
+                                $$f_{zz} = x^2\sinh y e^{xz} - 8y^2\sec^2(x+2z)\tan(x+2z)$$
+                                $$f_{xy} = z\cosh y e^{xz} - 2y\sec^2(x+2z)$$
+                                $$f_{xz} = (1+xz)\sinh y e^{xz} - 4y^2\sec^2(x+2z)\tan(x+2z)$$
+                                $$f_{yz} = x\cosh y e^{xz} - 4y\sec^2(x+2z)$$
+                            </div>
+                            <div class="result-badge">Hessian Matrices Computed Successfully</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- كود الجافاسكريبت للتحكم التفاعلي -->
+    <script>
+        function switchQuestion(qNum, btn) {
+            const tabs = document.querySelectorAll('.tab-btn');
+            const sections = document.querySelectorAll('.question-section');
+            tabs.forEach(t => t.classList.remove('active'));
+            if (btn) btn.classList.add('active');
+
+            if (qNum === 0) {
+                sections.forEach(sec => sec.classList.add('active'));
+            } else {
+                sections.forEach(sec => sec.classList.remove('active'));
+                const target = document.getElementById('sec-' + qNum);
+                if (target) target.classList.add('active');
+            }
+        }
+
+        function toggleSolution(btn) {
+            const card = btn.closest('.prob-card');
+            const sol = card.querySelector('.solution-wrapper');
+            if (sol.classList.contains('show')) {
+                sol.classList.remove('show');
+                btn.classList.remove('active');
+                btn.innerText = 'إظهار الحل';
+            } else {
+                sol.classList.add('show');
+                btn.classList.add('active');
+                btn.innerText = 'إخفاء الحل';
+            }
+        }
+
+        function toggleAllSolutions(show) {
+            const buttons = document.querySelectorAll('.sol-btn');
+            const solutions = document.querySelectorAll('.solution-wrapper');
+
+            solutions.forEach((sol, idx) => {
+                const btn = buttons[idx];
+                if (show) {
+                    sol.classList.add('show');
+                    if (btn) { btn.classList.add('active'); btn.innerText = 'إخفاء الحل'; }
+                } else {
+                    sol.classList.remove('show');
+                    if (btn) { btn.classList.remove('active'); btn.innerText = 'إظهار الحل'; }
+                }
+            });
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            if (typeof renderMathInElement === 'function') {
+                renderMathInElement(document.body, {
+                    delimiters: [
+                        {left: "$$", right: "$$", display: true},
+                        {left: "$", right: "$", display: false}
+                    ],
+                    throwOnError: false
+                });
+            }
+        });
+    </script>
+</body>
+</html>
