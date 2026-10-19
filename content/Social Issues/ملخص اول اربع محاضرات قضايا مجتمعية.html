@@ -1,0 +1,1444 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>بوابة القضايا المجتمعية — الملخص التقني الشامل وبنك الأسئلة — جامعة بنها</title>
+  
+  <!-- استدعاء خطوط Google Fonts: Inter للغات اللاتينية والأرقام + IBM Plex Sans Arabic للواجهات التقنية الحديثة -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-base: #090d13;
+      --bg-card: #111722;
+      --bg-code: #0b1017;
+      --border-card: #1f2937;
+      --cyan: #38bdf8;
+      --emerald: #34d399;
+      --amber: #fbbf24;
+      --purple: #c084fc;
+      --rose: #f43f5e;
+      --text-main: #e2e8f0;
+      --text-muted: #94a3b8;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      width: 100% !important;
+      max-width: 100% !important;
+      overflow-x: hidden !important;
+      position: relative !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      background-color: var(--bg-base);
+      color: var(--text-main);
+      font-family: 'Inter', 'IBM Plex Sans Arabic', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+      line-height: 1.68;
+      -webkit-text-size-adjust: 100%;
+      padding-bottom: 75px;
+    }
+    .container {
+      width: 100% !important;
+      max-width: 980px !important;
+      margin: 0 auto !important;
+      padding: 14px 10px !important;
+      box-sizing: border-box;
+      overflow-x: hidden !important;
+    }
+
+    /* Top Lecture Switcher Bar (Lectures 1, 2, 3, 4) */
+    .lecture-switch-wrapper {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 8px;
+      position: sticky;
+      top: 6px;
+      z-index: 1002;
+      background: rgba(9, 13, 19, 0.95);
+      backdrop-filter: blur(14px);
+      padding: 6px;
+      border-radius: 12px;
+      border: 1px solid var(--border-card);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
+    }
+    .lecture-tab {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 10px 8px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      cursor: pointer;
+      color: var(--text-muted);
+      background: #111722;
+      border: 1px solid #1e293b;
+      transition: all 0.2s ease;
+      user-select: none;
+      text-align: center;
+    }
+    .lecture-tab:hover {
+      color: #fff;
+      border-color: rgba(56, 189, 248, 0.4);
+    }
+    .lecture-tab.active {
+      background: rgba(56, 189, 248, 0.15);
+      border-color: var(--cyan);
+      color: var(--cyan);
+      box-shadow: 0 0 14px rgba(56, 189, 248, 0.25);
+    }
+
+    /* Sub-navigation Bar */
+    .nav-tabs-wrapper {
+      position: sticky;
+      top: 64px;
+      z-index: 1000;
+      background: rgba(9, 13, 19, 0.95);
+      backdrop-filter: blur(12px);
+      padding: 6px 8px;
+      border-radius: 12px;
+      border: 1px solid var(--border-card);
+      margin-bottom: 18px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .nav-tabs-wrapper::-webkit-scrollbar { display: none; }
+    .nav-tabs {
+      display: flex;
+      gap: 6px;
+      width: 100%;
+      min-width: min-content;
+    }
+    .tab-btn {
+      flex: 1;
+      padding: 8px 12px;
+      background: #111722;
+      border: 1px solid #1e293b;
+      color: var(--text-muted);
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.8rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      user-select: none;
+      white-space: nowrap;
+    }
+    .tab-btn:hover {
+      color: #fff;
+      border-color: rgba(56, 189, 248, 0.4);
+    }
+    .tab-btn.active {
+      background: rgba(56, 189, 248, 0.15);
+      border-color: var(--cyan);
+      color: var(--cyan);
+      box-shadow: 0 0 12px rgba(56, 189, 248, 0.2);
+    }
+    .tab-btn.all-parts-btn {
+      background: rgba(52, 211, 153, 0.12);
+      border-color: rgba(52, 211, 153, 0.35);
+      color: var(--emerald);
+    }
+    .tab-btn.all-parts-btn.active {
+      background: rgba(52, 211, 153, 0.22);
+      border-color: var(--emerald);
+      color: #fff;
+      box-shadow: 0 0 14px rgba(52, 211, 153, 0.3);
+    }
+
+    /* Header */
+    .header {
+      padding: 10px 0 16px 0;
+      border-bottom: 1px solid var(--border-card);
+      margin-bottom: 18px;
+    }
+    .header-badge {
+      display: inline-block;
+      background: rgba(56, 189, 248, 0.12);
+      color: var(--cyan);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      padding: 4px 10px;
+      border-radius: 9999px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+      letter-spacing: 0.04em;
+    }
+    .header h1 {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 6px;
+      line-height: 1.35;
+      word-break: break-word;
+    }
+    .header p {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    /* Views */
+    .view-panel {
+      display: none;
+      animation: fadeIn 0.25s ease-in-out;
+    }
+    .view-panel.active-panel {
+      display: block;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Lecture Headings */
+    .lecture-content-wrapper h2 {
+      font-size: 1.22rem;
+      font-weight: 700;
+      color: #fff;
+      padding: 12px 18px;
+      border-radius: 8px;
+      margin-top: 1.2rem;
+      margin-bottom: 1.2rem;
+      box-shadow: 0 4px 18px rgba(0,0,0,0.5);
+      border: 1px solid rgba(255,255,255,0.12);
+    }
+    .lecture-content-wrapper h2.purple  { background: linear-gradient(270deg, #3b0764, #0f172a); border-right: 6px solid var(--purple); }
+    .lecture-content-wrapper h2.emerald { background: linear-gradient(270deg, #064e3b, #0f172a); border-right: 6px solid var(--emerald); }
+    .lecture-content-wrapper h2.blue    { background: linear-gradient(270deg, #0c4a6e, #0f172a); border-right: 6px solid var(--cyan); }
+    .lecture-content-wrapper h2.orange  { background: linear-gradient(270deg, #7c2d12, #0f172a); border-right: 6px solid var(--amber); }
+    .lecture-content-wrapper h2.teal    { background: linear-gradient(270deg, #134e4a, #0f172a); border-right: 6px solid var(--emerald); }
+    .lecture-content-wrapper h2.pink    { background: linear-gradient(270deg, #831843, #0f172a); border-right: 6px solid var(--rose); }
+
+    /* Tables */
+    .table-scroll-container {
+      width: 100% !important;
+      max-width: 100% !important;
+      overflow-x: auto !important;
+      overflow-y: hidden !important;
+      -webkit-overflow-scrolling: touch !important;
+      margin: 1rem 0 1.5rem 0 !important;
+      border: 1px solid #1e293b !important;
+      border-radius: 10px !important;
+      background: var(--bg-card) !important;
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.45) !important;
+      contain: paint !important;
+      box-sizing: border-box !important;
+    }
+    .scroll-hint {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      font-size: 0.76rem;
+      color: var(--cyan);
+      background: rgba(56, 189, 248, 0.08);
+      padding: 7px 12px;
+      text-align: center;
+      border-bottom: 1px solid #1e293b;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      user-select: none;
+    }
+    table {
+      width: 100% !important;
+      min-width: 720px !important;
+      border-collapse: collapse !important;
+      background: var(--bg-card) !important;
+      border: none !important;
+      margin: 0 !important;
+      table-layout: auto !important;
+    }
+    th {
+      background: #1e293b !important;
+      color: var(--cyan) !important;
+      font-weight: 700 !important;
+      font-size: 0.88rem !important;
+      padding: 12px 14px !important;
+      border: 1px solid #334155 !important;
+      text-align: right !important;
+      white-space: nowrap !important;
+    }
+    td {
+      padding: 12px 14px !important;
+      border: 1px solid #1e293b !important;
+      color: #e2e8f0 !important;
+      font-size: 0.87rem !important;
+      vertical-align: top !important;
+      text-align: right !important;
+      line-height: 1.65 !important;
+    }
+    td:nth-child(1) { font-weight: 600 !important; min-width: 160px !important; color: #f1f5f9 !important; }
+    td:nth-child(2) { min-width: 230px !important; color: #38bdf8 !important; }
+    td:nth-child(3) { min-width: 310px !important; color: #cbd5e1 !important; line-height: 1.65 !important; }
+    tr:nth-child(even) td { background: #0b1120 !important; }
+    tr:hover td { background: #162036 !important; }
+
+    /* Callout Boxes */
+    .callout {
+      background: #0d1527;
+      border: 1px solid #334155;
+      border-radius: 8px;
+      padding: 1.1rem 1.4rem;
+      margin: 1.2rem 0 2rem 0;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+      word-break: break-word;
+    }
+    .callout.purple { border-right: 5px solid var(--purple); }
+    .callout.blue   { border-right: 5px solid var(--cyan); }
+    .callout.orange { border-right: 5px solid var(--amber); }
+    .callout.green  { border-right: 5px solid var(--emerald); }
+    .callout.teal   { border-right: 5px solid var(--emerald); }
+    .callout.pink   { border-right: 5px solid var(--rose); }
+    .callout h4 {
+      margin: 0 0 8px 0;
+      font-size: 0.98rem;
+      font-weight: 700;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .callout ul {
+      margin: 0;
+      padding-right: 1.3rem;
+      color: #cbd5e1;
+      font-size: 0.88rem;
+      line-height: 1.65;
+    }
+    .callout li { margin-bottom: 6px; }
+
+    /* Cards & Steps (Used for Solved Questions) */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-card);
+      border-radius: 10px;
+      margin-bottom: 16px;
+      overflow: hidden;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.4);
+      width: 100%;
+      box-sizing: border-box;
+    }
+    .card-header {
+      background: rgba(255, 255, 255, 0.02);
+      border-bottom: 1px solid var(--border-card);
+      padding: 9px 12px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 6px;
+    }
+    .prob-tag {
+      font-weight: 700;
+      font-size: 0.88rem;
+      color: var(--cyan);
+      white-space: nowrap;
+    }
+    .card-body {
+      padding: 12px 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      width: 100%;
+    }
+    .question-prompt {
+      background: rgba(56, 189, 248, 0.05);
+      border-right: 3px solid var(--cyan);
+      padding: 8px 10px;
+      font-size: 0.86rem;
+      color: #f1f5f9;
+      border-radius: 6px 0 0 6px;
+      line-height: 1.55;
+    }
+    .step-block {
+      background: var(--bg-code);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 8px;
+      padding: 9px 11px;
+      font-size: 0.85rem;
+      line-height: 1.68;
+    }
+    .step-label {
+      font-size: 0.74rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+      letter-spacing: 0.03em;
+    }
+    .label-blue { color: var(--cyan); }
+    .label-amber { color: var(--amber); }
+    .label-green { color: var(--emerald); }
+    .label-purple { color: var(--purple); }
+    .result-badge {
+      display: inline-block;
+      background: rgba(52, 211, 153, 0.1);
+      border: 1px solid rgba(52, 211, 153, 0.25);
+      color: var(--emerald);
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-weight: 700;
+      font-size: 0.84rem;
+    }
+
+    /* Toggle Buttons */
+    .sol-toggle-btn {
+      background: rgba(56, 189, 248, 0.12);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      color: var(--cyan);
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .sol-toggle-btn:hover {
+      background: rgba(56, 189, 248, 0.25);
+      color: #fff;
+    }
+    .sol-toggle-btn.active {
+      background: rgba(244, 63, 94, 0.15);
+      border-color: var(--rose);
+      color: var(--rose);
+    }
+    .solution-content {
+      display: none;
+      animation: fadeIn 0.3s ease-in-out;
+    }
+    .solution-content.show {
+      display: block;
+    }
+    .global-toggle-bar {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 14px;
+      background: rgba(255, 255, 255, 0.03);
+      padding: 8px 12px;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+    .global-toggle-bar button {
+      padding: 6px 12px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      border-radius: 6px;
+      cursor: pointer;
+      border: 1px solid #1e293b;
+      background: #111722;
+      color: #cbd5e1;
+      transition: all 0.2s ease;
+    }
+    .global-toggle-bar button:hover {
+      border-color: var(--cyan);
+      color: #fff;
+    }
+
+    @media (max-width: 640px) {
+      .nav-tabs-wrapper { top: 58px; }
+      .lecture-tab { font-size: 0.78rem; padding: 8px 4px; }
+      .tab-btn { font-size: 0.74rem; padding: 7px 10px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <!-- شريط التبديل العلوي بين المحاضرات الأربعة -->
+    <div class="lecture-switch-wrapper">
+      <div id="lec-tab-1" class="lecture-tab active" onclick="switchLectureGroup(1)">المحاضرة 1: المواطنة</div>
+      <div id="lec-tab-2" class="lecture-tab" onclick="switchLectureGroup(2)">المحاضرة 2: العولمة والتعليم</div>
+      <div id="lec-tab-3" class="lecture-tab" onclick="switchLectureGroup(3)">المحاضرة 3: القضية السكانية</div>
+      <div id="lec-tab-4" class="lecture-tab" onclick="switchLectureGroup(4)">المحاضرة 4: العنف ضد المرأة</div>
+    </div>
+
+    <!-- شريط أجزاء المحاضرة 1 -->
+    <div class="nav-tabs-wrapper" id="subnav-wrapper-1">
+      <div class="nav-tabs">
+        <div id="part-btn-1-0" class="tab-btn all-parts-btn" onclick="showLec1Part(0)">جميع الأجزاء (All Parts)</div>
+        <div id="part-btn-1-1" class="tab-btn active" onclick="showLec1Part(1)">الجزء 1: المقدمة والأزمة</div>
+        <div id="part-btn-1-2" class="tab-btn" onclick="showLec1Part(2)">الجزء 2: المفاهيم المتداخلة</div>
+        <div id="part-btn-1-3" class="tab-btn" onclick="showLec1Part(3)">الجزء 3: زوايا المواطنة الثلاث</div>
+        <div id="part-btn-1-4" class="tab-btn" onclick="showLec1Part(4)">الجزء 4: قيم المواطنة</div>
+        <div id="part-btn-1-5" class="tab-btn" onclick="showLec1Part(5)">الجزء 5: أدوار المؤسسات والجامعة</div>
+        <div id="part-btn-1-6" class="tab-btn" onclick="showLec1Part(6)">بنك الأسئلة والاختبار الذاتي</div>
+      </div>
+    </div>
+
+    <!-- شريط أجزاء المحاضرة 2 -->
+    <div class="nav-tabs-wrapper" id="subnav-wrapper-2" style="display: none;">
+      <div class="nav-tabs">
+        <div id="part-btn-2-0" class="tab-btn all-parts-btn" onclick="showLec2Part(0)">جميع الأجزاء (All Parts)</div>
+        <div id="part-btn-2-1" class="tab-btn active" onclick="showLec2Part(1)">الجزء 1: المفهوم vs العالمية</div>
+        <div id="part-btn-2-2" class="tab-btn" onclick="showLec2Part(2)">الجزء 2: المبادئ والعناصر</div>
+        <div id="part-btn-2-3" class="tab-btn" onclick="showLec2Part(3)">الجزء 3: المراحل التاريخية الست</div>
+        <div id="part-btn-2-4" class="tab-btn" onclick="showLec2Part(4)">الجزء 4: أشكال العولمة الخمسة</div>
+        <div id="part-btn-2-5" class="tab-btn" onclick="showLec2Part(5)">الجزء 5: التعليم وأدوار المعلم الجامعي</div>
+        <div id="part-btn-2-6" class="tab-btn" onclick="showLec2Part(6)">الجزء 6: ميزان العولمة والمواجهة</div>
+        <div id="part-btn-2-7" class="tab-btn" onclick="showLec2Part(7)">بنك الأسئلة والاختبار الذاتي</div>
+      </div>
+    </div>
+
+    <!-- شريط أجزاء المحاضرة 3 -->
+    <div class="nav-tabs-wrapper" id="subnav-wrapper-3" style="display: none;">
+      <div class="nav-tabs">
+        <div id="part-btn-3-0" class="tab-btn all-parts-btn" onclick="showLec3Part(0)">جميع الأجزاء (All Parts)</div>
+        <div id="part-btn-3-1" class="tab-btn active" onclick="showLec3Part(1)">الجزء 1: مفهوم المشكلة وتداعياتها الـ17</div>
+        <div id="part-btn-3-2" class="tab-btn" onclick="showLec3Part(2)">الجزء 2: أسباب الزيادة وخارطة 2030</div>
+        <div id="part-btn-3-3" class="tab-btn" onclick="showLec3Part(3)">الجزء 3: مهام الوزارات والمقترحات</div>
+        <div id="part-btn-3-4" class="tab-btn" onclick="showLec3Part(4)">الجزء 4: الصحة الإنجابية وفئاتها</div>
+        <div id="part-btn-3-5" class="tab-btn" onclick="showLec3Part(5)">الجزء 5: الرسائل السبع وزواج الأقارب</div>
+        <div id="part-btn-3-6" class="tab-btn" onclick="showLec3Part(6)">الجزء 6: تنظيم الأسرة والجدوى</div>
+        <div id="part-btn-3-7" class="tab-btn" onclick="showLec3Part(7)">بنك الأسئلة والاختبار الذاتي</div>
+      </div>
+    </div>
+
+    <!-- شريط أجزاء المحاضرة 4 -->
+    <div class="nav-tabs-wrapper" id="subnav-wrapper-4" style="display: none;">
+      <div class="nav-tabs">
+        <div id="part-btn-4-0" class="tab-btn all-parts-btn" onclick="showLec4Part(0)">جميع الأجزاء (All Parts)</div>
+        <div id="part-btn-4-1" class="tab-btn active" onclick="showLec4Part(1)">الجزء 1: مفاهيم العنف والقهر وإحصائياته</div>
+        <div id="part-btn-4-2" class="tab-btn" onclick="showLec4Part(2)">الجزء 2: مكانة المرأة تاريخياً وأسباب العنف</div>
+        <div id="part-btn-4-3" class="tab-btn" onclick="showLec4Part(3)">الجزء 3: أشكال العنف الستة ومسح 2015</div>
+        <div id="part-btn-4-4" class="tab-btn" onclick="showLec4Part(4)">الجزء 4: الجهود الدولية والدستور المصري</div>
+        <div id="part-btn-4-5" class="tab-btn" onclick="showLec4Part(5)">الجزء 5: مفهوم التمكين ومجالاته الخمسة</div>
+        <div id="part-btn-4-6" class="tab-btn" onclick="showLec4Part(6)">الجزء 6: معوقات تمكين المرأة الثمانية</div>
+        <div id="part-btn-4-7" class="tab-btn" onclick="showLec4Part(7)">بنك الأسئلة والاختبار الذاتي</div>
+      </div>
+    </div>
+
+    <!-- Page Header -->
+    <div class="header">
+      <span class="header-badge" id="header-badge">جامعة بنها • مقرر القضايا المجتمعية</span>
+      <h1 id="page-main-title">المحاضرة 1: قضية المواطنة — الملخص التقني الشامل والأسس الدستورية</h1>
+      <p id="page-main-desc">ملخص أكاديمي تقني موثق وفق مقررات جامعة بنها: المفاهيم، الأسس الدستورية، التحديات المعاصرة، وأدوار مؤسسات المجتمع التنشئية.</p>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- المحاضرة 1: قضية المواطنة -->
+    <!-- ============================================================ -->
+    <div id="lec1-container">
+      <div id="part-view-1-1" class="view-panel active-panel">
+        <div class="lecture-content-wrapper">
+          <h2 class="purple">الجزء 1: المقدمة، دوافع الاهتمام، ومظاهر أزمة المواطنة</h2>
+          <div class="table-scroll-container">
+            <div class="scroll-hint">👈 اسحب الجدول أفقياً لتصفح كامل المحاور والتحليلات 👉</div>
+            <table>
+              <thead>
+                <tr><th style="width:25%">المحور الرئيسي</th><th style="width:35%">السياق والتشخيص العلمي</th><th>التفاصيل والمؤشرات الواقعية</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>دوافع الاهتمام بالمواطنة</td><td>متغيرات محلية وتعديلات دستورية</td><td>شهد المجتمع المصري انفتاحاً سياسياً واقتصادياً وتعديلات دستورية بإدراج مبدأ المواطنة صراحة في بنود الدستور لإعادة تنظيم العلاقة بين الفرد والدولة.</td></tr>
+                <tr><td>التحديات العالمية المعاصرة</td><td>الثورة المعرفية والإعلامية الفضائية</td><td>انطلاق مئات الأقمار الصناعية وآلاف القنوات التي تبث برامجها من الدول الغنية للدول النامية حاملة ثقافات تضعف روح الولاء والانتماء والهوية الثقافية.</td></tr>
+                <tr><td>مظاهر أزمة المواطنة في مصر</td><td>سلوكيات وتحديات أمنية وفكرية</td><td>ظواهر العنف، التطرف، الإرهاب، الخروج على القانون، والسلبية واللامبالاة، وضعف المشاركة السياسية والشعور بالاغتراب والرغبة في الهجرة.</td></tr>
+                <tr><td>جذور سلبية المواطنين</td><td>ضغوط معيشية وفجوة ثقة</td><td>انشغال ملايين الفقراء بالبحث عن لقمة العيش، اتساع الفجوة بين الحكام والشعب، غياب الثقة بالقوى السياسية، وضعف المعرفة بالمسؤوليات العامة.</td></tr>
+                <tr><td>تقارير الهيئات الدولية التربوية</td><td>الهيئة الدولية للإنجاز التربوي</td><td>أشارت الدراسات لفقدان أعداد كبيرة من الطلاب لالتزامات المواطنة وقيمها، وشددت على تبني مشروعات تعليمية تنمي الديمقراطية والحرية والتعاون.</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="callout purple">
+            <h4>📌 قواعد محورية في فلسفة المواطنة (الجزء 1)</h4>
+            <ul>
+              <li>استقرار الوطن لا يعتمد فقط على بنية النظام الديمقراطي، بل على نوعية المواطنين، إدراكهم للهوية، وقدرتهم على قبول الآخر والتسامح معه وضبط النفس في حماية الصحة والبيئة.</li>
+              <li>تربية قيم المواطنة ليست عملاً تحتكره المدارس أو الجامعات دون غيرها، فكل مؤسسات المجتمع معنية بدرجة أو بأخرى وتتناوب التأثير والتأثر.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div id="part-view-1-2" class="view-panel">
+        <div class="lecture-content-wrapper">
+          <h2 class="blue">الجزء 2: المفاهيم المتداخلة ذات الصلة بمفهوم المواطنة</h2>
+          <div class="table-scroll-container">
+            <div class="scroll-hint">👈 اسحب الجدول أفقياً لتصفح كامل المحاور والتحليلات 👉</div>
+            <table>
+              <thead>
+                <tr><th style="width:22%">المفهوم</th><th style="width:30%">التعريف والجوهر الاصطلاحي</th><th>العلاقة البينية بمفهوم المواطنة</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>المواطن (Citizen)</td><td>عضو في الدولة له حقوق دستورية وعليه واجبات مفروضة، مستقر في بقعة الأرض ويرتبط بها برابطة استمرار ومصالح مادية ومعنوية.</td><td>يمثل الفاعل المباشر؛ هو جزء من كل وليس كمية مهملة، يرى أفعاله متصلة برفعة المجتمع والنهوض به.</td></tr>
+                <tr><td>الوطنية (Patriotism)</td><td>رابطة شعورية وعاطفية من الولاء والانتماء وحب الوطن، وهي موقف حضاري يتجسد في عطاء المواطن وتضحيته دفاعاً عن وطنه.</td><td>الوطنية هي الوقود العاطفي والمحرك النفسي للمواطنة، بينما المواطنة هي الممارسة المادية والقانونية الفعلية.</td></tr>
+                <tr><td>حقوق الإنسان (Human Rights)</td><td>المكتسبات الطبيعية الأساسية: الكرامة، المساواة، العدل، والأمان والحرية التي يتمتع بها الإنسان بمجرد وجوده.</td><td>المواطنة هي "التتويج القانوني والوعاء المؤسسي" لممارسة حقوق الإنسان؛ يستحيل وجود مواطن يشعر بالانتماء وهو مسلوب الحقوق والحريات.</td></tr>
+                <tr><td>الديمقراطية (Democracy)</td><td>حكم الشعب بالشعب وللشعب عبر إتاحة التعبير والمشاركة، ومنع استبداد طبقة بأخرى وتوزيع السلطة للجميع.</td><td>الديمقراطية هي الأساس والبيئة الحاضنة للمواطنة؛ حيث تقدم مجموعة المبادئ والممارسات المصاغة عبر التاريخ.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div id="part-view-1-3" class="view-panel">
+        <div class="lecture-content-wrapper">
+          <h2 class="orange">الجزء 3: زوايا المواطنة الثلاث (اللغوية والسياسية والاجتماعية)</h2>
+          <div class="table-scroll-container">
+            <div class="scroll-hint">👈 اسحب الجدول أفقياً لتصفح كامل المحاور والتحليلات 👉</div>
+            <table>
+              <thead>
+                <tr><th style="width:24%">الزاوية التحليلية</th><th style="width:36%">المنطلق والتعريف المحدد</th><th>الخصائص والمعايير التطبيقية</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>المفهوم اللغوي</td><td>مشتقة من "الوطن" (المنزل يقام به، ومحل الإنسان كما ورد في لسان العرب لابن منظور).</td><td>لفظ حديث تم تعريبه لمقابلة مصطلح Citizenship الإنجليزي، ومنه التوطين والاستيطان ومشاعر الوطنية.</td></tr>
+                <tr><td>المفهوم السياسي</td><td>علاقة قانونية وسياسية بين الفرد والدولة يحددها الدستور، تتضمن الواجبات والحقوق وحرية التصويت والترشيح.</td><td>تجاوز الولاءات الضيقة (العشائرية، القبلية، الطائفية، والطبقية)؛ فالمواطن يمتلك جزءاً من السيادة السياسية (دائرة المعارف البريطانية).</td></tr>
+                <tr><td>المفهوم الاجتماعي</td><td>العضوية الكاملة والمتساوية في المجتمع؛ صفة مكتسبة للفرد بالتنشئة الاجتماعية تحكمها المساواة التامة.</td><td>كافة أبناء الشعب سواسية كأسنان المشط دون أدنى تمييز بالدين أو الجنس أو اللون أو المستوى؛ يقدم الفرد الولاء وتتولى الدولة الحماية.</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="callout orange">
+            <h4>⚖️ التعريف الجامع والشامل للمواطنة</h4>
+            <p><b>المواطنة:</b> علاقة الفرد بالوطن الذي ينتسب إليه، والتي تفرض حقوقاً دستورية وواجبات منصوص عليها قانونياً من أجل تحقيق مقاصد مشتركة ومتبادلة والحرص على ممارستها مجتمعياً.</p>
+          </div>
+        </div>
+      </div>
+
+      <div id="part-view-1-4" class="view-panel">
+        <div class="lecture-content-wrapper">
+          <h2 class="teal">الجزء 4: منظومة قيم المواطنة (البعد القومي والبعد العالمي)</h2>
+          <div class="table-scroll-container">
+            <div class="scroll-hint">👈 اسحب الجدول أفقياً لتصفح كامل المحاور والتحليلات 👉</div>
+            <table>
+              <thead>
+                <tr><th style="width:25%">البعد القيمي</th><th style="width:35%">القيم الأساسية والمصاحبة</th><th>مقتضياتها الميدانية والواقعية</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>البعد القومي: الولاء والدفاع</td><td>حب الوطن، الفخر بالانتماء، حماية المقدسات، وصيانة الثروات ومقدرات الشعب.</td><td>صد كافة أشكال العدوان الخارجي والداخلي، الحفاظ على المرافق، وتقديم المصالح العليا للوطن على المصالح الشخصية.</td></tr>
+                <tr><td>البعد القومي: الخدمة والالتزام</td><td>الإخلاص في العمل لتحديث الوطن، الالتزام بالقوانين والأعراف، وسيادة القانون.</td><td>المشاركة الإيجابية في كل الأمور العامة، المساواة، والتعامل بحب واحترام بين جميع المواطنين دون تمييز.</td></tr>
+                <tr><td>البعد العالمي: السلام والتسامح</td><td>التفاهم الدولي، التسامح الإنساني، احترام ثقافات الآخرين، والتعايش السلمي.</td><td>التخلي عن مشاعر الاستعلاء أو العنف الحضاري، وحماية حقوق الأقليات والشعوب كافة.</td></tr>
+                <tr><td>البعد العالمي: التعاون والدفاع المشترك</td><td>الشراكة المتنوعة مع الهيئات الدولية في قضايا الغذاء، الأمن، التعليم، والصحة.</td><td>الدفاع المشترك لصد كل اعتداء تتعرض له الدول والأقاليم حتى ينعم الجميع بخيرات الحياة ويسود الاستقرار العالمي.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div id="part-view-1-5" class="view-panel">
+        <div class="lecture-content-wrapper">
+          <h2 class="pink">الجزء 5: أدوار المؤسسات التنشئية في غرس المواطنة والجامعة</h2>
+          <div class="table-scroll-container">
+            <div class="scroll-hint">👈 اسحب الجدول أفقياً لتصفح كامل المحاور والتحليلات 👉</div>
+            <table>
+              <thead>
+                <tr><th style="width:24%">المؤسسة</th><th style="width:36%">الآليات والأدوات التنفيذية المقترحة</th><th>الأثر والهدف المجتمعي المباشر</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>المؤسسة الإعلامية</td><td>برامج تثقيف دستوري ومدني، استضافة المفكرين، وحملات لحث المواطنين على المشاركة.</td><td>تخطي حاجز الأمية الأبجدية، الوصول لعموم الفئات، وشرح مستويات وصلاحيات الحكومة للمواطنين.</td></tr>
+                <tr><td>المؤسسة الدينية</td><td>خطب الجمعة، الدروس الكنسية، والندوات المشتركة لعلماء الأوقاف والأزهر ورجال الدين المسيحي.</td><td>ربط المواطنة بالقيم الروحية، تأصيل العيش المشترك ونبذ التعصب وبناء الثقة والطمأنينة المتبادلة.</td></tr>
+                <tr><td>منظمات المجتمع المدني</td><td>الأحزاب، النقابات المهنية، جمعيات حقوق الإنسان، والجمعيات الأهلية عبر إتاحة منابر لخدمة وتدريب الجماهير.</td><td>تدريب الأفراد على العمل الجماعي، تفعيل الرقابة الشعبية، ونشر ثقافة المبادرة والعمل التطوعي.</td></tr>
+                <tr><td>المدرسة والجامعة</td><td>بيئة غير سلطوية، مسرح مدرسي، رحلات للمتاحف ونصب الشهداء، معسكرات كشافة، ومناقشة القضايا بحيادية.</td><td>تنمية مهارات التفكير الناقد بدلاً من التلقين، تدريب طلاب الجامعات على فهم التعددية وبلورة بدائل للسياسات.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div id="part-view-1-6" class="view-panel">
+        <div class="lecture-content-wrapper">
+          <h2 class="emerald">بنك الأسئلة والاختبار الذاتي التفاعلي — المحاضرة 1</h2>
+          <div class="global-toggle-bar">
+            <button onclick="toggleAllSolutionsInContainer('part-view-1-6', true)">👁️ إظهار جميع الإجابات النموذجية</button>
+            <button onclick="toggleAllSolutionsInContainer('part-view-1-6', false)">🙈 إخفاء جميع الإجابات (اختبر نفسك)</button>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <span class="prob-tag">سؤال تطبيقي 1: العلاقة الجدلية بين الوطنية والمواطنة وحقوق الإنسان</span>
+              <button class="sol-toggle-btn" onclick="toggleCardSolution(this)">👁️ إظهار الحل / Show Solution</button>
+            </div>
+            <div class="card-body">
+              <div class="question-prompt">وضح بدقة كيف تؤثر مشاعر الوطنية والتمتع بحقوق الإنسان على استقرار وتفعيل ممارسة المواطنة في الدولة الدستورية الحديثة؟</div>
+              <div class="solution-content">
+                <div class="step-block">
+                  <div class="step-label label-blue">عناصر الإجابة النموذجية المعتمدة:</div>
+                  <div>1. <b>الوطنية:</b> تمثل الرابطة الشعورية الوجدانية والعاطفة الإيجابية القائمة على الحب والولاء والتضحية بين المواطن ووطنه ومجتمعه.</div>
+                  <div>2. <b>حقوق الإنسان:</b> تمثل الأساس والشرط المسبق للشعور بالانتماء؛ إذ يستحيل خلق مواطن يشعر بالفخر والولاء وهو مسلوب الكرامة والعدالة والأمان والحريات الأساسية.</div>
+                  <div>3. <b>المواطنة:</b> هي التتويج القانوني والممارسة الدستورية الفعلية؛ حيث يمنح الدستور المواطن صفة العضوية الكاملة المتساوية لممارسة الحقوق المدنية والسياسية مقابل التزامه بواجبات النهوض بالدولة.</div>
+                  <div class="result-badge">الخلاصة: الوطنية هي الوجدان، وحقوق الإنسان هي الشرط، والمواطنة هي الإطار القانوني والممارسة الفعلية.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <span class="prob-tag">سؤال تطبيقي 2: أدوار المؤسسات الجامعية والتنشئية في مواجهة السلبية</span>
+              <button class="sol-toggle-btn" onclick="toggleCardSolution(this)">👁️ إظهار الحل / Show Solution</button>
+            </div>
+            <div class="card-body">
+              <div class="question-prompt">علل: "التربية من أجل المواطنة تختلف جوهرياً عن التلقين السياسي"، وما الدور المنوط بالجامعة حيال ذلك؟</div>
+              <div class="solution-content">
+                <div class="step-block">
+                  <div class="step-label label-green">عناصر الإجابة النموذجية:</div>
+                  <div>&bull; التلقين السياسي يقوم على فرض رأي أحادي وإلزام الطلاب بوجهة نظر السلطة دون تمحيص.</div>
+                  <div>&bull; بينما التربية للمواطنة تهدف لبناء المواطن الواعي والمسؤول من خلال:</div>
+                  <div style="margin-right: 15px;">
+                    1. تنمية مهارات التفكير الناقد وتقييم البدائل والحلول للمشكلات المجتمعية.<br>
+                    2. تشجيع الطلاب على متابعة الشؤون العامة والسياسية بحيادية ودون مصادرة لحرياتهم.<br>
+                    3. ممارسة العمل الديمقراطي وقبول التعددية الفكرية والدينية والمذهبية داخل الحرم الجامعي.
+                  </div>
+                  <div class="result-badge">الجامعة بيئة حوار نقدي مفتوح وليست أداة حشد إيديولوجي قسري.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- المحاضرة 2: العولمة وتأثيرها على منظومة التعليم -->
+    <!-- ============================================================ -->
+    <div id="lec2-container" style="display: none;">
+      <div id="part-view-2-1" class="view-panel">
+        <div class="lecture-content-wrapper">
+          <h2 class="purple">الجزء 1: مفهوم العولمة والمقارنة الحاسمة بين العولمة والعالمية</h2>
+          <div class="table-scroll-container">
+            <div class="scroll-hint">👈 اسحب الجدول أفقياً لتصفح كامل المحاور والتحليلات 👉</div>
+            <table>
+              <thead>
+                <tr><th style="width:20%">المصطلح</th><th style="width:40%">المفهوم والهدف الأساسي</th><th>الموقف من سيادة الدولة والهوية الثقافية</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>العولمة (Globalization)</td><td>تصميم وفرض نمط حياة أحادي على البشرية، إلغاء الحواجز لتحويل العالم لقرية إلكترونية صغيرة تخدم مراكز القوى الرأسمالية العظمى.</td><td><b>نفي للآخر:</b> تسعى لإضعاف دور الدولة القومية، تهميش الخصوصيات الثقافية وإحلال التنميط والاختراق الثقافي محل التنوع.</td></tr>
+                <tr><td>العالمية (Universalism)</td><td>الانفتاح والتواصل والتبادل الحضاري الإنساني المتكافئ القائم على الأخذ والعطاء والتفاعل الحر بين الأمم.</td><td><b>احترام للآخر:</b> تحافظ على سيادة وكيان الدولة، وتحرص على صون التركيبة الحضارية والخصوصية الثقافية لكل أمة دون استتباع.</td></tr>
+                <tr><td>العولمة التربوية</td><td>هيمنة الثقافات الأقوى على مناهج ونظم التعليم للشعوب النامية لإزالة الفوارق وصهرها في قالب قيمي موحد.</td><td>تؤدي إلى اهتزاز المنظومة القيمية وتغريب الناشئة عن واقعهم وتراثهم الوطني.</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="callout purple">
+            <h4>💡 قاعدة جوهرية في الامتحان</h4>
+            <p>العالمية نقيض للعولمة وليست امتداداً لها؛ لأن العالمية تقوم على التعددية والتكامل، بينما العولمة تقوم على التنميط والابتلاع والهيمنة.</p>
+          </div>
+        </div>
+      </div>
+
+      <div id="part-view-2-2" class="view-panel">
+        <div class="lecture-content-wrapper">
+          <h2 class="blue">الجزء 2: مبادئ وعناصر العولمة الحاكمة</h2>
+          <div class="table-scroll-container">
+            <div class="scroll-hint">👈 اسحب الجدول أفقياً لتصفح كامل المحاور والتحليلات 👉</div>
+            <table>
+              <thead>
+                <tr><th style="width:25%">المبدأ / العنصر</th><th style="width:35%">التعريف الإجرائي</th><th>التأثير والخطورة المجتمعية</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>اللاقطرية</td><td>انحسار وتلاشي الحدود الجغرافية والسياسية أمام تدفق المعلومات والسلع والأفكار.</td><td>ظهور حقائق تربوية وعلمية وإعلامية عابرة للحدود يصعب على الدول ضبطها أو السيطرة عليها بمفردها.</td></tr>
+                <tr><td>اللامركزية</td><td>تقليص انفراد الدولة الواحدة باتخاذ القرارات المصيرية دون تدخل المجتمع والمنظمات الدولية.</td><td>تداخل العلاقات الدولية وارتهان قرارات التنمية والسياسة بالضغوط والاشتراطات الخارجية.</td></tr>
+                <tr><td>حرية رؤوس الأموال</td><td>التحرك المطلق للأموال والاستثمارات والأرباح عبر الحدود وتحرير الأسواق لتضبط نفسها.</td><td>تغليب آليات السوق الرأسمالية الحرة (الليبرالية الجديدة) وتراجع دور الدولة الاجتماعي في حماية الفقراء.</td></tr>
+                <tr><td>عناصر العولمة الكبرى</td><td>إعادة قولبة العالم وفق مصالح القوى الغربية، انتشار الشركات متعدية الجنسيات، وهيمنة الاقتصاد الحر.</td><td>تحويل المجتمعات المستهلكة الضعيفة إلى أسواق تابعة للمنتجات التكنولوجية للمراكز المهيمنة.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div id="part-view-2-3" class="view-panel">
+        <div class="lecture-content-wrapper">
+          <h2 class="orange">الجزء 3: مراحل تطور العولمة التاريخية الست</h2>
+          <div class="table-scroll-container">
+            <div class="scroll-hint">👈 اسحب الجدول أفقياً لتصفح كامل المحاور والتحليلات 👉</div>
+            <table>
+              <thead>
+                <tr><th style="width:24%">المرحلة الزمنية</th><th style="width:22%">الفترة التاريخية</th><th>أهم السمات والتطورات المحورية</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>1. المرحلة الجنينية</td><td>بداية القرن 15 - منتصف 18</td><td>تبلور المجتمعات القومية في أوروبا، بدايات أفكار الفرد والإنسانية، ونشاط الجغرافيا الكشفية.</td></tr>
+                <tr><td>2. مرحلة النشوء</td><td>منتصف القرن 18 - 1870م</td><td>ظهور مفهوم الاتفاقيات والعلاقات الدولية، وتأطير التواصل بين الدول عبر مؤسسات رسمية.</td></tr>
+                <tr><td>3. مرحلة الانطلاق</td><td>1870م - منتصف 1920م</td><td>بروز فكرة الكونية، تسارع الاتصالات، وتقارب المجتمعات العالمية وظهور الهيئات العابرة للدول.</td></tr>
+                <tr><td>4. مرحلة الصراع للهيمنة</td><td>منتصف 1920م - أواخر 1960م</td><td>الحروب العالمية، الصراع الإيديولوجي بين المعسكرين الشرقي والغربي، والحروب الباردة الفكرية.</td></tr>
+                <tr><td>5. مرحلة عدم اليقين</td><td>أواخر 1960م - نهاية القرن 20</td><td>الهبوط على القمر، سيولة النظام الدولي، تعميق القيم المادية، وبدء ثورة الإعلام والمعلوماتية والإنترنت.</td></tr>
+                <tr><td>6. مرحلة الهيمنة (الأمركة)</td><td>مطلع القرن 21 (بعد 2001)</td><td>استغلال أحداث 11 سبتمبر لفرض السيطرة الأمريكية المنفردة سياسياً واقتصادياً وثقافياً على العالم.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div id="part-view-2-4" class="view-panel">
+        <div class="lecture-content-wrapper">
+          <h2 class="teal">الجزء 4: أشكال العولمة ومظاهر اختراقها</h2>
+          <div class="table-scroll-container">
+            <div class="scroll-hint">👈 اسحب الجدول أفقياً لتصفح كامل المحاور والتحليلات 👉</div>
+            <table>
+              <thead>
+                <tr><th style="width:20%">الشكل</th><th style="width:40%">الآليات والأدوات الفاعلة</th><th>التداعيات والمخاطر المباشرة</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>العولمة الثقافية</td><td>ثقافة بلا حدود تعتمد "لغة الصورة" بعد عصر المكتوب، ترويج النمط الغربي والأمريكي عبر الشاشات ومواقع التواصل.</td><td>استهداف فئة الشباب، انتشار النزعة الاستهلاكية التفاخرية، اغتراب المواطن داخل وطنه، وتهميش الخصوصية التراثية.</td></tr>
+                <tr><td>العولمة السياسية</td><td>إضعاف سيادة الدولة الوطنية لصالح المنظمات الدولية ومراكز القوى العالمية.</td><td>ظهور مبررات التدخل في الشؤون الداخلية بذريعة حقوق الإنسان وإعادة تشكيل الأقاليم الحساسة جغرافياً.</td></tr>
+                <tr><td>العولمة الاقتصادية</td><td>الانتقال من عالمية التبادل إلى عالمية الإنتاج وهيمنة الشركات متعدية الجنسيات والأسواق المفتوحة.</td><td>أذرعها الثلاثة: البنك الدولي، صندوق النقد الدولي، ومنظمة التجارة العالمية؛ وتكريس تبعية الدول النامية مالياً.</td></tr>
+                <tr><td>العولمة الاجتماعية</td><td>توافق قيمي عابر للحدود يفرض معايير اجتماعية موحدة تفكك الروابط الأسرية التقليدية.</td><td>تغيير أنماط المعيشة والخطاب اللغوي اليومي واهتزاز المعايير الأخلاقية المجتمعية الجامعة.</td></tr>
+                <tr><td>عولمة الإنترنت والتعليم</td><td>المنصات الرقمية، الفضائيات، التعليم عن بعد، والبريد الإلكتروني وتخطي عوائق الجغرافيا.</td><td>إتاحة معارف ضخمة وتسهيل البحث، لكنها مصحوبة باحتكار كبريات الشركات العالمية لصناعة وتسويق المعرفة.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div id="part-view-2-5" class="view-panel">
+        <div class="lecture-content-wrapper">
+          <h2 class="pink">الجزء 5: تأثير العولمة على التعليم وأدوار المعلم الجامعي المعاصر</h2>
+          <div class="table-scroll-container">
+            <div class="scroll-hint">👈 اسحب الجدول أفقياً لتصفح كامل المحاور والتحليلات 👉</div>
+            <table>
+              <thead>
+                <tr><th style="width:25%">المحور</th><th style="width:35%">الواقع والتحول المطلوب</th><th>الأدوار والمهام الجديدة للمعلم الجامعي</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>فلسفة التعليم المعاصر</td><td>الانتقال من الاستقبال السلبي للمعلومات إلى توليد المعرفة والتعلم الذاتي المستمر مدى الحياة والارتقاء بالتفكير والتحليل.</td><td>تهيئة مناخ البحث والاستكشاف، الربط بين النظرية والتطبيق، وتنمية مهارات التفكير الناقد والإبداع وحل المشكلات.</td></tr>
+                <tr><td>توظيف التكنولوجيا</td><td>التخلص من أساليب التدريس التقليدية التي تعتمد حصراً على الإلقاء والسبورة والطباشير.</td><td>إتقان التقنيات التعليمية الحديثة، إنتاج المواد الرقمية في التخصص، وتوظيف برامج الحاسوب والمنصات التفاعلية.</td></tr>
+                <tr><td>الارتباط بالبيئة والمجتمع</td><td>مواجهة تحديات الجامعات الأجنبية والاستثمار الخاص العشوائي في التعليم العالي.</td><td>توظيف خامات البيئة المحلية، تنويع أساليب التقويم، استثمار مصادر التعلم المفتوح، ومواكبة تفريد التعليم.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div id="part-view-2-6" class="view-panel">
+        <div class="lecture-content-wrapper">
+          <h2 class="blue">الجزء 6: ميزان العولمة (إيجابيات وسلبيات) واستراتيجية المواجهة</h2>
+          <div class="table-scroll-container">
+            <div class="scroll-hint">👈 اسحب الجدول أفقياً لتصفح كامل المحاور والتحليلات 👉</div>
+            <table>
+              <thead>
+                <tr><th style="width:22%">الجانب</th><th style="width:38%">أبرز النقاط والمظاهر</th><th>الانعكاس الميداني</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>أبرز الإيجابيات (13 ميزة)</td><td>نقل التكنولوجيا السريع، مواكبة أحدث الأبحاث العلمية، إتاحة بنوك المعلومات العالمية، سهولة تنقل العمالة، تنمية الشفافية، توسيع الأسواق، وسد العجز بالاقتراض الدولي.</td><td>دعم النمو السريع للدول ذات الاقتصادات الديناميكية وكسر احتكار مصادر المعلومات القديمة.</td></tr>
+                <tr><td>أبرز السلبيات (15 خطراً)</td><td>تعميم الثقافة الأمريكية، آثار صحية (الخمول، إجهاد العين والمخ)، تهديد الهوية القومية، تراجع الصناعات المحلية والوظائف، التلوث واستنزاف الطاقة، وتركيز الثروة لدى شركات عملاقة.</td><td>تحول الدولة النامية إلى كيان هش عاجز عن المنافسة ومجبر على قبول إملاءات الشركات متعدية الجنسيات.</td></tr>
+                <tr><td>أدوات المواجهة المتكاملة</td><td>1. التمسك بالعقيدة والأخلاق. 2. إصلاح الأوضاع السياسية الداخلية. 3. التكامل الإقليمي وسوق عربية مشتركة. 4. صيانة الثقافة وتطوير التعليم.</td><td>تجنب الرفض المطلق المنعزل والقبول المطلق الذائب؛ تحقيق الاستفادة الذكية مع صون الهوية والخصوصية.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div id="part-view-2-7" class="view-panel">
+        <div class="lecture-content-wrapper">
+          <h2 class="emerald">بنك الأسئلة والاختبار الذاتي التفاعلي — المحاضرة 2</h2>
+          <div class="global-toggle-bar">
+            <button onclick="toggleAllSolutionsInContainer('part-view-2-7', true)">👁️ إظهار جميع الإجابات النموذجية</button>
+            <button onclick="toggleAllSolutionsInContainer('part-view-2-7', false)">🙈 إخفاء جميع الإجابات (اختبر نفسك)</button>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <span class="prob-tag">سؤال تطبيقي 1: التمييز المعياري بين العولمة والعالمية وموقف الهوية</span>
+              <button class="sol-toggle-btn" onclick="toggleCardSolution(this)">👁️ إظهار الحل / Show Solution</button>
+            </div>
+            <div class="card-body">
+              <div class="question-prompt">قارن بين العولمة والعالمية من حيث المفهوم والموقف من الخصوصية الثقافية والدولة الوطنية، مع بيان أدوات الأمة العربية لمواجهة طغيان العولمة؟</div>
+              <div class="solution-content">
+                <div class="step-block">
+                  <div class="step-label label-blue">المقارنة والأدوات:</div>
+                  <div>&bull; <b>العولمة:</b> تسعى لتنميط العالم وفق النموذج الغربي الرأسمالي، وهي نفي للآخر واختراق ثقافي يلغي الحدود ويضعف سيادة الدولة الوطنية.</div>
+                  <div>&bull; <b>العالمية:</b> تعني الانفتاح والتواصل الإنساني مع الاحتفاظ بالتنوع الأيديولوجي والخصوصية الحضارية وصون كيان الدولة.</div>
+                  <div>&bull; <b>أدوات المواجهة الأربعة:</b></div>
+                  <div style="margin-right: 15px;">
+                    1. التمسك بمنظومة العقيدة والقيم الأخلاقية الأصيلة.<br>
+                    2. الإصلاح السياسي والاقتصادي الداخلي وتعزيز الحريات المسؤولة.<br>
+                    3. تفعيل التكامل الإقليمي العربي وبناء سوق عربية مشتركة ككتلة مفاوضة.<br>
+                    4. تحديث مناهج التعليم وصيانة برامج تجديد الثقافة الوطنية.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- المحاضرة 3: القضية السكانية والصحة الإنجابية -->
+    <!-- ============================================================ -->
+    <div id="lec3-container" style="display: none;">
+      <div id="part-view-3-1" class="view-panel">
+        <div class="lecture-content-wrapper">
+          <h2 class="purple">الجزء 1: مفهوم المشكلة السكانية وتداعياتها الـ17 الشاملة</h2>
+          <div class="table-scroll-container">
+            <div class="scroll-hint">👈 اسحب الجدول أفقياً لتصفح كامل المحاور والتحليلات 👉</div>
+            <table>
+              <thead>
+                <tr><th style="width:25%">التصنيف</th><th style="width:35%">التعريف والمفهوم الأساسي</th><th>أبرز التداعيات الـ17 المباشرة</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>مفهوم المشكلة السكانية</td><td>اختلال التوازن بين وتيرة نمو السكان ومعدل نمو الموارد الطبيعية والرأسمالية والقدرات الفنية المتاحة.</td><td>السكان طاقة إنتاجية وأداة استغلال، ولكن تزايدهم بمعدلات تفوق التنمية يحولهم إلى عبء استهلاكي يبتلع مقدرات الدولة.</td></tr>
+                <tr><td>القطاعات الخدمية والمرافق</td><td>عجز في استيعاب الاحتياجات المتصاعدة للمواطنين.</td><td>1. ضغوط قطاع الكهرباء والطاقة. 2. تدهور الصرف الصحي ورغيف الخبز. 3. تكدس وسائل المواصلات والمدارس. 4. تدني الرعاية الصحية.</td></tr>
+                <tr><td>الآثار الاقتصادية والتنموية</td><td>تآكل الدخل القومي والادخار والاستثمار.</td><td>5. ارتفاع معدلات البطالة. 6. انخفاض الأجور وتدني نصيب الفرد من الدخل. 7. انخفاض حصة الفرد من رأس المال. 8. فجوة الغذاء وزيادة الاستيراد من الخارج. 9. استهلاك الدخل في رعاية الأطفال بدلاً من الادخار (يلزم استثمار 2-5% من الدخل القومي لكل 1% نمو سكاني).</td></tr>
+                <tr><td>الآثار البيئية والموارد</td><td>تدمير النظم الإيكولوجية وشح الموارد الحيوية.</td><td>10. تآكل الرقعة الزراعية بالبناء العشوائي. 11. ارتفاع الانبعاثات الكربونية والتلوث. 12. انخفاض نصيب الفرد من المياه العذبة. 13. تفاقم النزاعات والصراعات الدولية على مصادر المياه.</td></tr>
+                <tr><td>الآثار الاجتماعية والأمنية</td><td>اهتزاز النسيج الاجتماعي والأخلاقي.</td><td>14. ارتفاع معدلات الجريمة والعنف بسبب التزاحم. 15. تدني المستوى الاجتماعي والمعيشي للأسرة. 16. ارتفاع نسب الإعالة وزيادة كبار السن. 17. فقدان التوازن بين متطلبات الرفاهية والواقع الفعلي.</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="callout purple">
+            <h4>💡 الكاريكاتير الرمزي الشهير في المحاضرة</h4>
+            <p>تم تمثيل <b>الزيادة السكانية بأسد مفترس</b> يلتهم ثمار <b>التنمية</b>؛ لبيان أنه مهما عظمت جهود الدولة وموازناتها فإنها تتآكل وتتبدد إن لم تنضبط معدلات المواليد.</p>
+          </div>
+        </div>
+      </div>
+
+      <div id="part-view-3-2" class="view-panel">
+        <div class="lecture-content-wrapper">
+          <h2 class="blue">الجزء 2: أسباب الزيادة بمصر وخارطة طريق استراتيجية 2030</h2>
+          <div class="table-scroll-container">
+            <div class="scroll-hint">👈 اسحب الجدول أفقياً لتصفح كامل المحاور والتحليلات 👉</div>
+            <table>
+              <thead>
+                <tr><th style="width:25%">المحور</th><th style="width:35%">الأسباب والعوامل المرصودة</th><th>البنود التنفيذية لخارطة الطريق 2030</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>أسباب الانفجار السكاني بمصر (تخطي 100 مليون نسمة)</td><td>ثبات معدلات المواليد المرتفعة مقابل انخفاض ملحوظ في الوفيات نتيجة تحسن الرعاية الصحية.</td><td>1. ثقافة "العزوة والسند" الموروثة. 2. عادات الزواج المبكر وختان الإناث. 3. تفضيل إنجاب الذكور وإعادة الحمل. 4. قلة الوعي وانتشار الأمية وضعف مشاركة المرأة بسوق العمل.</td></tr>
+                <tr><td>أسباب تعثر البرامج السابقة</td><td>ضعف المتابعة وغياب التكامل بين المؤسسات.</td><td>عدم وجود متابعة دقيقة، بعد الوحدات الصحية، نقص الأطباء، ومقاومة بعض المفاهيم الخاطئة.</td></tr>
+                <tr><td>خارطة الطريق السبعة (استراتيجية السكان 2030)</td><td>رؤية استراتيجية رئاسية ملزمة لكل قطاعات الدولة.</td><td>1. إطلاق حوار مجتمعي لبناء مساندة شعبية. 2. رسم سياسة إعلامية ملزمة. 3. مراجعة الإطار المؤسسي. 4. وضع المشكلة في بؤرة الاهتمام. 5. رصد الموارد في ضوء الوفر المالي. 6. مستهدفات كمية دورية. 7. دمج النمو السكاني في تخطيط المرافق.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div id="part-view-3-3" class="view-panel">
+        <div class="lecture-content-wrapper">
+          <h2 class="orange">الجزء 3: أدوار الوزارات بمشروع الحوافز ومقترحات الحل الميدانية</h2>
+          <div class="table-scroll-container">
+            <div class="scroll-hint">👈 اسحب الجدول أفقياً لتصفح كامل المحاور والتحليلات 👉</div>
+            <table>
+              <thead>
+                <tr><th style="width:24%">الجهة / الوزارة</th><th style="width:36%">المهام المنوطة بموجب المادة 8 من مشروع قانون الحوافز</th><th>المقترحات والحلول الميدانية الشاملة</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>وزارة الصحة والسكان</td><td>تثقيف المرأة بأهمية العمل، دورات للمقبلين على الزواج، وتقديم وسائل منع الحمل مجاناً بالمستشفيات والوحدات مع إحكام الرقابة لمنع تسربها.</td><td>تغطية 3,183 منطقة محرومة و1,250 وحدة صحية تفتقر لطبيب، وتكثيف قوافل الصعيد وتدريب الطبيبات الجدد.</td></tr>
+                <tr><td>وزارتا التربية والتعليم والتعليم العالي</td><td>دمج مفاهيم السكان والصحة الإنجابية في المناهج، وتدريس مقرر خاص لطلبة الجامعات عن تنظيم الأسرة.</td><td>تنمية رأس المال البشري ورفع مهارات الطلاب للتحول إلى قوى منتجة بدلاً من طاقات استهلاكية.</td></tr>
+                <tr><td>الثقافة والشباب والرياضة</td><td>حملات توعية بقصور الثقافة ومراكز الشباب على مستوى الجمهورية بمخاطر الزيادة ومزايا الأسرة الصغيرة.</td><td>فتح باب الريادة للشباب وتوفير فرص استثمارية بالمحافظات للقضاء على أوقات الفراغ والفقر.</td></tr>
+                <tr><td>الإعلام والمجالس القومية</td><td>تهيئة المناخ لمشاركة الفنانين والإعلاميين بإنتاج برامج توعية، واجتماعات دورية لتقييم استراتيجية 2015-2030.</td><td>استغلال الأراضي المستصلحة بالزراعة وتحلية مياه البحر، وتعميق الشراكة التنموية مع القطاع الخاص والمجتمع المدني.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div id="part-view-3-4" class="view-panel">
+        <div class="lecture-content-wrapper">
+          <h2 class="teal">الجزء 4: الصحة الإنجابية: المفهوم، الفئات والخدمات الأساسية</h2>
+          <div class="table-scroll-container">
+            <div class="scroll-hint">👈 اسحب الجدول أفقياً لتصفح كامل المحاور والتحليلات 👉</div>
+            <table>
+              <thead>
+                <tr><th style="width:25%">المحور</th><th style="width:35%">التعريف المعتمد في مؤتمر القاهرة الدولي (ICPD 1994)</th><th>الفئات المستهدفة والخدمات المقدمة</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>مفهوم الصحة الإنجابية</td><td>حالة من الرفاه البدني والنفسي والاجتماعي الكامل في جميع الأمور المتعلقة بالجهاز التناسلي ووظائفه وعملياته، وليست مجرد السلامة من المرض أو الإعاقة.</td><td>نهج حياتي ممتد يؤثر على الذكور والإناث من الطفولة حتى الشيخوخة؛ يتضمن التمتع بحياة آمنة وقرار إنجابي حر ومسؤول.</td></tr>
+                <tr><td>الفئات المستهدفة الأربعة</td><td>1. الرجال والنساء في سن الإنجاب. 2. المراهقون والشباب (تعديل السلوكيات الضارة). 3. النساء بعد سن الإنجاب (الوقاية من الأورام). 4. الأطفال حديثو الولادة.</td><td>توفير الفحص الدوري، فحص المدارس، والفحص الطبي الإلزامي لراغبي الزواج للكشف عن المخاطر مبكراً.</td></tr>
+                <tr><td>حزم الخدمات الأساسية</td><td>خدمات تنظيم الأسرة وعلاج العقم، رعاية الحمل والولادة الآمنة، القضاء على الإجهاض غير الآمن، ومكافحة الأمراض المنقولة جنسياً.</td><td>تقليل وفيات الأمهات والأطفال، تعزيز الصحة الجنسية السليمة، والحد من مضاعفات الحمل المتتابع.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div id="part-view-3-5" class="view-panel">
+        <div class="lecture-content-wrapper">
+          <h2 class="pink">الجزء 5: الرسائل السبع الأساسية وزواج الأقارب ومخاطره الوراثية</h2>
+          <div class="table-scroll-container">
+            <div class="scroll-hint">👈 اسحب الجدول أفقياً لتصفح كامل المحاور والتحليلات 👉</div>
+            <table>
+              <thead>
+                <tr><th style="width:25%">الرسالة التوعوية</th><th style="width:35%">المضمون والأهمية الإجرائية</th><th>الآثار الصحية والمجتمعية</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>1. رعاية ما قبل الزواج</td><td>استشارات طبية واجتماعية وإجراء فحوصات وتحاليل معملية لاكتشاف الأمراض المعدية وتحديد وسائل التأجيل المناسبة.</td><td>الوقاية من نقل العدوى التناسلية وتأهيل الشريكين نفسياً لتحمل أعباء وتحديات الحياة الزوجية.</td></tr>
+                <tr><td>2. تأخير إنجاب الطفل الأول</td><td>تأجيل الحمل الأول يمنح الزوجين فرصة التعارف والتكيف مع الحياة الجديدة دون أعباء تربوية سريعة.</td><td>توطيد العلاقة الزوجية والتأقلم النفسي والمهني، وتقليل الخلافات المبكرة المؤدية للطلاق السريع.</td></tr>
+                <tr><td>3. دور الرجل في تنظيم الأسرة</td><td>المشاركة المسؤولة في قرار الإنجاب، تبني مفهوم الأسرة الصغيرة، دعم الزوجة واستخدام الواقي الذكري.</td><td>كسر الاعتقاد الخاطئ بأن تنظيم الأسرة مسؤولية المرأة وحدها، وتعزيز التكافل الأسري المشترك.</td></tr>
+                <tr><td>4. المباعدة بين الولادات</td><td>الانتظار لمدة لا تقل عن سنتين بين الولادة والحمل التالي، و6 أشهر على الأقل بعد الإجهاض.</td><td>تعافي جسم الأم، خفض وفيات الرضع، القضاء على التقزم والأنيميا والسمنة، ومنح الطفل حقه الكامل في الرضاعة والرعاية.</td></tr>
+                <tr><td>5. منع زواج الأطفال</td><td>حظر الزواج دون سن 18 عاماً باعتباره زواجاً قسرياً يفتقر للرضا والأهلية العقلية والجسدية.</td><td>مضاعفة احتمالات تسمم الحمل، تمزق الرحم، الوفاة أثناء الولادة، واكتئاب ما بعد الولادة، مع تفاقم الفقر والعنف.</td></tr>
+                <tr><td>6. ضرورة تعليم الإناث</td><td>المرأة المتعلمة تمتلك وعياً صحياً ينعكس على تغذية أولادها، وتقلل معدل الإنجاب وتشارك في العمل.</td><td>تحصين الأسرة من الجهل والتطرف؛ إدراك الأم المتعلمة هو المحرك الحقيقي للنهوض الحضاري.</td></tr>
+                <tr><td>7. الحد من زواج الأقارب</td><td>مسؤول عن 15% من وفيات الرضع بمصر (2008)، وتصل الإصابة بالعيوب الوراثية إلى 4-6% بين أقارب الدرجة الأولى.</td><td>إصابة الأطفال بالأمراض العصبية (31.4%)، عيوب الهيموجلوبين والدم (18.5%)، والتشوهات الكروموسومية (11.5%).</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div id="part-view-3-6" class="view-panel">
+        <div class="lecture-content-wrapper">
+          <h2 class="blue">الجزء 6: وسائل تنظيم الأسرة، محددات الخصوبة، والجدوى الاقتصادية</h2>
+          <div class="table-scroll-container">
+            <div class="scroll-hint">👈 اسحب الجدول أفقياً لتصفح كامل المحاور والتحليلات 👉</div>
+            <table>
+              <thead>
+                <tr><th style="width:22%">نوع الوسيلة</th><th style="width:38%">الأمثلة وآلية العمل البيولوجية</th><th>درجة الفاعلية والخصائص</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>عازلة (Barrier)</td><td>الواقي الذكري، الواقي الأنثوي، الحجاب الحاجز، إسفنجة منع الحمل؛ تعمل على منع وصول الحيوانات المنوية للبويضة.</td><td>متوسطة الفاعلية، تتطلب انضباطاً عند كل علاقة، والواقي الذكري يحمي أيضاً من الأمراض المنقولة جنسياً.</td></tr>
+                <tr><td>هرمونية قصيرة المفعول</td><td>حبوب منع الحمل اليومية، الحقن (ديبو بروفيرا كل 3 أشهر)، اللصقة الجلدية، والحلقة المهبلية؛ تمنع التبويض وتزيد سمك مخاط عنق الرحم.</td><td>عالية الفاعلية إذا استخدمت بانتظام، لكن يعيبها احتمالية النسيان وتأثير انقطاع الجرعة.</td></tr>
+                <tr><td>هرمونية/ميكانيكية طويلة</td><td>اللولب النحاسي والهرموني، وكبسولات تحت الجلد؛ تعطل حركة النطاف وتغير بطانة الرحم وتمنع الانغراس.</td><td><b>الأعلى فاعلية وأماناً:</b> تستمر من 3 إلى 10 سنوات ولا تتأثر بسلوك النسيان اليومي.</td></tr>
+                <tr><td>دائمة وطوارئ وطبيعية</td><td>التعقيم الجراحي (ربط البوق للإناث، قطع القناة المنوية للذكور)، حبوب الصباح التالي، وطرق احتساب الخصوبة وحرارة الجسم.</td><td>التعقيم دائم لا رجعة فيه، بينما تنظيم الإيقاع الطبيعي يحقق أدنى معدلات وقاية وأعلى احتمالات حمل.</td></tr>
+                <tr><td>محددات الخصوبة الأربعة المباشرة بمصر (بيانات 2019)</td><td>1. <b>تنظيم الأسرة (64%)</b>. 2. الرضاعة الطبيعية (14%). 3. الإجهاض المتعمد (12%). 4. سن الزواج (10%).</td><td>تنظيم الأسرة هو المحدد الأول؛ يجنب مصر سنوياً <b>4 ملايين حمل غير مخطط</b> و<b>1.6 مليون إجهاض غير آمن</b>.</td></tr>
+                <tr><td>الجدوى الاقتصادية واستثمار الموارد (UNFPA)</td><td>كل دولار واحد يُستثمر في وسائل منع الحمل يوفر <b>1.47 دولار</b> في تكاليف الرعاية الصحية وتكاليف المدارس والمرافق.</td><td>صنف مشروع كوبنهاغن كونسينسس تنظيم الأسرة <b>ثالث أعلى مبادرة سياسية نفعاً</b> في العالم لكل دولار يُنفق.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div id="part-view-3-7" class="view-panel">
+        <div class="lecture-content-wrapper">
+          <h2 class="emerald">بنك الأسئلة والاختبار الذاتي التفاعلي — المحاضرة 3</h2>
+          <div class="global-toggle-bar">
+            <button onclick="toggleAllSolutionsInContainer('part-view-3-7', true)">👁️ إظهار جميع الإجابات النموذجية</button>
+            <button onclick="toggleAllSolutionsInContainer('part-view-3-7', false)">🙈 إخفاء جميع الإجابات (اختبر نفسك)</button>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <span class="prob-tag">مسألة حسابية وتحليلية: العائد الاقتصادي ومحددات الخصوبة في مصر</span>
+              <button class="sol-toggle-btn" onclick="toggleCardSolution(this)">👁️ إظهار الحل / Show Solution</button>
+            </div>
+            <div class="card-body">
+              <div class="question-prompt">علل رقمياً: "تنظيم الأسرة ليس إنفاقاً مستنزفاً للموازنة بل هو استثمار اقتصادي مربح للدولة المصرية"، واذكر نسب المحددات الأربعة للخصوبة؟</div>
+              <div class="solution-content">
+                <div class="step-block">
+                  <div class="step-label label-blue">البيانات الإحصائية والتحليل:</div>
+                  <div>&bull; وفقاً لتقرير صندوق الأمم المتحدة للسكان (UNFPA)، فإن كل <b>1 دولار</b> يتم إنفاقه على وسائل منع الحمل يوفر <b>1.47 دولار</b> من تكاليف الرعاية والخدمات العامة.</div>
+                  <div>&bull; صنف مركز كوبنهاغن كونسينسس العالمي تنظيم الأسرة كثالث أعلى مبادرة سياسية ذات جدوى اقتصادية واجتماعية وبيئية في العالم.</div>
+                  <div>&bull; <b>المحددات الأربعة المباشرة للتغير في معدلات الخصوبة بمصر:</b></div>
+                  <div style="margin-right: 15px;">
+                    1. <b>تنظيم الأسرة:</b> يسهم بنسبة <span class="result-badge">64%</span> (الأهم على الإطلاق، ويمنع 4 مليون حمل غير مخطط سنوياً).<br>
+                    2. <b>الرضاعة الطبيعية:</b> تسهم بنسبة 14%.<br>
+                    3. <b>الإجهاض المتعمد:</b> يسهم بنسبة 12%.<br>
+                    4. <b>سن الزواج:</b> يسهم بنسبة 10%.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- المحاضرة 4: العنف ضد المرأة وكيفية تمكينها -->
+    <!-- ============================================================ -->
+    <div id="lec4-container" style="display: none;">
+      <div id="part-view-4-1" class="view-panel">
+        <div class="lecture-content-wrapper">
+          <h2 class="purple">الجزء 1: مفاهيم العنف والقهر وإحصائيات العنف الأسري</h2>
+          <div class="table-scroll-container">
+            <div class="scroll-hint">👈 اسحب الجدول أفقياً لتصفح كامل المحاور والتحليلات 👉</div>
+            <table>
+              <thead>
+                <tr><th style="width:25%">المفهوم الاصطلاحي</th><th style="width:35%">التعريف المعتمد (إعلان الأمم المتحدة 1993)</th><th>الأبعاد والإحصائيات الحديثة</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>مفهوم العنف (Violence)</td><td>كل سلوك أو فعل موجه للمرأة يقوم على الشدة والقوة والإكراه، ويتسم بدرجات من التمييز والاضطهاد والقهر ناجم عن علاقات قوة غير متكافئة.</td><td>ينتهك الحقوق والحريات الأساسية، ويتخذ صوراً بدنية ونفسية وجنسية واقتصادية وصحية شتى.</td></tr>
+                <tr><td>مفهوم القهر (Coercion)</td><td>القوة التي يمارسها النظام أو المجتمع لإخضاع الأفراد قسراً تحت التهديد بالعقاب أو الحرمان من الموارد والحقوق.</td><td>العنف والقهر وجهان لعملة واحدة تعبر عن الإلزام والإكراه ومصادرة الإرادة الحرة.</td></tr>
+                <tr><td>طفرة العنف أثناء جائحة كورونا</td><td>دراسات أظهرت قفزة عنيفة في العنف الأسري خلال الإغلاقات (زيادة 20% بـ 193 دولة بالأمم المتحدة).</td><td>ارتفاع الحوادث بنسبة 300% في هوبي بالصين، 50% في البرازيل، 33% بسنغافورة، 30% بقبرص، و25% بالأرجنتين.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div id="part-view-4-2" class="view-panel">
+        <div class="lecture-content-wrapper">
+          <h2 class="blue">الجزء 2: مكانة المرأة تاريخياً عبر الحضارات والأديان، وأسباب العنف</h2>
+          <div class="table-scroll-container">
+            <div class="scroll-hint">👈 اسحب الجدول أفقياً لتصفح كامل المحاور والتحليلات 👉</div>
+            <table>
+              <thead>
+                <tr><th style="width:25%">الحضارة / الشريعة</th><th style="width:40%">الواقع التاريخي والتشريعي للمرأة</th><th>المقارنة والتقييم الحقوقي</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>اليونانية والصينية والهندية</td><td>حُرمت من التعليم والإرث، واعتُبرت خادمة ورفيقاً بلا عقل يعتد به (مقولة أرسطو: "لم تُزود المرأة بأي استعداد عقلي يعتد به").</td><td>اضطهاد وسلب كامل للأهلية؛ عند الهنود كانت تُحرق مع زوجها المتوفى (الساتي).</td></tr>
+                <tr><td>مصر القديمة وبلاد النوبة</td><td>عاشت في أزهى عصور الحرية؛ شاركت في الحكم، وقادت معارك (الملكة حتشبسوت)، وكانت إيزيس رمز الجمال وماعت إلهة العدل.</td><td><b>المكانة الأعلى عالمياً:</b> مساواة واحترام لم تنله في أي حضارة قديمة سابقة.</td></tr>
+                <tr><td>عصر الجاهلية واليهودية</td><td>في الجاهلية ظهر وأد البنات وتعدد الزوجات للتفاخر، وفي اليهودية حُرمت من الميراث إلا لغياب الذكور واعتُبرت مسؤولة عن الشرور.</td><td>في التوراة المحرفة نُعتت المرأة بأنها "أمرّ من الموت"، وحق للأب بيع ابنته القاصرة.</td></tr>
+                <tr><td>المسيحية والإسلام</td><td>المسيحية أوصت بالإحسان وإلغاء الاضطهاد، وجاء الإسلام بتكريم شامل: أعطاها حق الإرث، الملكية المستقلة، التعليم، واختيار الزوج.</td><td>تكامل الأدوار والمودة والرحمة: "ولهن مثل الذي عليهن بالمعروف".</td></tr>
+                <tr><td>أسباب العنف الأربعة المعاصرة</td><td>1. أسباب تعليمية (تدني مستويات التعليم). 2. أسباب اجتماعية (الأعراف الذكورية والصمت العائلي). 3. أسباب اقتصادية (البطالة والفقر). 4. أسباب إعلامية (تسليع المرأة والترويج للعنف).</td><td>تراكم الموروثات السلبية يغذي دوائر الاضطهاد داخل الأسرة والمجتمع.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div id="part-view-4-3" class="view-panel">
+        <div class="lecture-content-wrapper">
+          <h2 class="orange">الجزء 3: أشكال العنف الستة وتكلفة دراسة مسح 2015 و2021 بمصر</h2>
+          <div class="table-scroll-container">
+            <div class="scroll-hint">👈 اسحب الجدول أفقياً لتصفح كامل المحاور والتحليلات 👉</div>
+            <table>
+              <thead>
+                <tr><th style="width:22%">شكل العنف</th><th style="width:38%">المظاهر والممارسات التفصيلية</th><th>الآثار المباشرة على الضحية</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>1. جسدي (Physical)</td><td>ضرب، صفع، ركل، حرق، خنق، رمي، شد شعر، وإيذاء بأدوات بدنية.</td><td>انتهاك للمادة 5 من إعلان حقوق الإنسان (1948) وعاهات مستديمة.</td></tr>
+                <tr><td>2. نفسي (Psychological)</td><td>تحقير، إهمال متعمد، تجريح، فظاظة، تهديد بالطلاق، والخيانة العلنية.</td><td>فقدان الثقة، الاكتئاب، تدمير المعنويات والانعزال عن المجتمع.</td></tr>
+                <tr><td>3. جنسي (Sexual)</td><td>المعاشرة القسرية دون رضا، إجبار على أوضاع غير لائقة، ومحاولات إذلال وتحقير.</td><td>اغتصاب زوجي معترف به دولياً وصدمات نفسية عميقة.</td></tr>
+                <tr><td>4. لفظي (Verbal)</td><td>السب، القذف، الشتم، رفع الصوت، والإهانة أمام الأبناء أو الغرباء.</td><td>تحطيم الكرامة الشخصية وبناء بيئة أسرية عدائية للأطفال.</td></tr>
+                <tr><td>5. صحي (Health)</td><td>إجهاض قسري، فرض أحمال متتالية، حرمان من الطبيب والدواء، وسوء التغذية.</td><td>اعتلال بدني جسيم، فقر دم، ومضاعفات خطيرة خلال الحمل.</td></tr>
+                <tr><td>6. اقتصادي (Economic)</td><td>حجب النفقة، الاستيلاء على الراتب، منع العمل، والتحكم بالموارد المالية.</td><td>فرض التبعية القسرية وسلب الاستقلال المالي والكرامة الإنسانية.</td></tr>
+                <tr>
+                  <td>نتائج دراسة تكلفة العنف بمصر (UNFPA والجهاز المركزي 2015)</td>
+                  <td>&bull; <b>مليون امرأة</b> يتركن بيوتهن سنوياً بسبب العنف.<br>&bull; <b>585 مليون جنيه</b> تكلفة السكن البديل والإيواء سنوياً.<br>&bull; <b>200 ألف سيدة</b> يتعرضن لمضاعفات حمل سنوياً بسبب عنف الزوج.<br>&bull; <b>113 ألف أسرة</b> يتغيب أطفالها عن المدارس (خسارة 90 ألف يوم دراسي).<br>&bull; <b>300 ألف أسرة</b> يعاني أطفالها كوابيس وخوفاً مستمراً.</td>
+                  <td><b>مؤشر الفجوة بين الجنسين 2021:</b> تقدمت مصر 5 مراكز لتصل للمركز 129 من 156 دولة (مقابل 134 عام 2020)، مع بقاء أمية النساء ضعف الرجال.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div id="part-view-4-4" class="view-panel">
+        <div class="lecture-content-wrapper">
+          <h2 class="teal">الجزء 4: الجهود الدولية والدستور المصري والمجلس القومي للمرأة</h2>
+          <div class="table-scroll-container">
+            <div class="scroll-hint">👈 اسحب الجدول أفقياً لتصفح كامل المحاور والتحليلات 👉</div>
+            <table>
+              <thead>
+                <tr><th style="width:25%">المستوى</th><th style="width:35%">المبادرات والاتفاقيات المعتمدة</th><th>الإجراءات والنصوص الدستورية الملزمة</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>الجهود الدولية</td><td>حملة منظمة العفو 2004 "أوقفوا العنف ضد المرأة"، قرار جمعية الصحة العالمية 2016، استراتيجيات INSPIRE السبع لإنهاء العنف، والهدف 16 للتنمية المستدامة 2030.</td><td>انضمام مصر لاتفاقية CEDAW ومواثيق حقوق الإنسان والعهدين الدوليين، وتعتبر نافذة كقانون وطني بمجرد التصديق.</td></tr>
+                <tr><td>دور المجلس القومي للمرأة</td><td>وضع الاستراتيجية الوطنية لمكافحة العنف ضد المرأة (2015-2020) بالتعاون مع صندوق الأمم المتحدة، ووحدات تكافؤ الفرص بـ13 محافظة.</td><td>إنشاء مكاتب شكاوى، وحدات تنسيق لمناهضة العنف القائم على النوع، تدريب القضاة وأطباء قصر العيني والمنصورة والطب الشرعي.</td></tr>
+                <tr><td>التشريعات الوطنية</td><td>تغليظ عقوبات التحرش والاغتصاب والختان، إنشاء محاكم الأسرة (قانون 10 لسنة 2004)، صندوق تأمين الأسرة (قانون 1 لسنة 2000)، وقانون الخلع.</td><td>توفير بيوت الإيواء، الحماية الجنائية للشاهدات والضحايا، المساعدة القانونية والنفسية وإعادة التأهيل.</td></tr>
+                <tr><td>دستور مصر 2014 ومواده الحامية</td><td><b>المادة 11:</b> تحقيق المساواة بين الجنسين في سائر الحقوق، تمثيل مناسب بالبرلمان، تولي الوظائف العليا والقضاء دون تمييز، وحماية المرأة من كافة أشكال العنف.</td><td><b>المادة 9:</b> تكافؤ الفرص.<br><b>المادة 10:</b> حماية الأسرة والأمومة والطفولة.<br><b>المادة 53:</b> حظر التمييز التام بسبب الجنس أو الدين.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div id="part-view-4-5" class="view-panel">
+        <div class="lecture-content-wrapper">
+          <h2 class="pink">الجزء 5: مفهوم التمكين (Empowerment) وأهدافه ومجالاته الخمسة</h2>
+          <div class="table-scroll-container">
+            <div class="scroll-hint">👈 اسحب الجدول أفقياً لتصفح كامل المحاور والتحليلات 👉</div>
+            <table>
+              <thead>
+                <tr><th style="width:25%">المحور</th><th style="width:35%">التعريف المرجعي (UNIFEM والبنك الدولي)</th><th>الأهداف والمجالات التطبيقية الخمسة</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>مفهوم تمكين المرأة</td><td>وفق <b>UNIFEM:</b> عمل جماعي للفئات المضطهدة للتغلب على العقبات وأوجه التمايز التي تسلب حقوقها.<br>وفق <b>البنك الدولي:</b> توسيع قدرات الأفراد بالمشاركة والتأثير والتحكم بالمؤسسات ومحاسبتها.</td><td>استقلال المرأة في صنع قراراتها، امتلاك المبادرات الذاتية، تغيير أفكار المجتمع ديمقراطياً، وكسر القوالب النمطية.</td></tr>
+                <tr><td>1. التمكين الاقتصادي</td><td>حق العمل، تقلد الأنشطة التجارية، وتساوي الأجور وظروف العمل.</td><td>الاستقلال المالي التام ومنع استخدام الحاجة المادية كأداة للضغط والابتزاز.</td></tr>
+                <tr><td>2. التمكين السياسي</td><td>ممارسة حقوق الترشح والانتخاب، تولي الوزارات، والمشاركة بالأحزاب.</td><td>دخول دوائر صنع القرار وتعديل السياسات العامة المنحازة لصالح قضايا الأسرة.</td></tr>
+                <tr><td>3. التمكين التعليمي والثقافي</td><td>تكافؤ الفرص في نيل المعرفة وتداول المعلومات ومحو أمية الإناث.</td><td>تغيير الوعي الجمعي وإعداد المرأة كعنصر فاعل في التنمية المجتمعية.</td></tr>
+                <tr><td>4. التمكين الصحي</td><td>تأمين خدمات الصحة الإنجابية والدعم النفسي وأوقات الترفيه المثمرة.</td><td>حماية المرأة من الإنهاك الجسدي وتأمين صحة الأجيال الصاعدة.</td></tr>
+                <tr><td>5. التمكين الاجتماعي</td><td>توفير المكانة اللائقة وتقدير دورها في رعاية وتوجيه الأسرة.</td><td>تحقيق الاستقرار الأسري وضمان عيش كريم لكافة فئات المجتمع.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div id="part-view-4-6" class="view-panel">
+        <div class="lecture-content-wrapper">
+          <h2 class="blue">الجزء 6: معوقات تمكين المرأة الثمانية الشاملة</h2>
+          <div class="table-scroll-container">
+            <div class="scroll-hint">👈 اسحب الجدول أفقياً لتصفح كامل المحاور والتحليلات 👉</div>
+            <table>
+              <thead>
+                <tr><th style="width:24%">نوع المعوق</th><th style="width:36%">المظاهر والأسباب الهيكلية</th><th>التأثير والنتيجة الواقعية</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>1. معوقات سياسية</td><td>افتقار دعم الأحزاب، محاربة عمل المرأة السياسي، وهيمنة المعايير الذكورية على القوائم.</td><td>ضعف التمثيل النيابي والمشاركة في السلطة التشريعية.</td></tr>
+                <tr><td>2. معوقات قيادية</td><td>المركزية الشديدة، تخوف القيادات الذكورية من فقدان النفوذ، والسرية في تداول البيانات.</td><td>حرمان الكفاءات النسائية من ترؤس الهيئات والمؤسسات الكبرى.</td></tr>
+                <tr><td>3. معوقات شخصية/ذاتية</td><td>تراكم الأعباء المنزلية، ضعف التدريب، عدم الثقة بالذات، وصعوبة التوفيق بين العمل والبيت.</td><td>الانسحاب الطوعي من المنافسة على المناصب الرفيعة.</td></tr>
+                <tr><td>4. معوقات وظيفية</td><td>تفضيل العنصر الذكوري في التعيينات والمكافآت لافتراض تفرغه التام.</td><td>اتساع الفجوة الوظيفية وحرمان المرأة من مسارات الترقية السريعة.</td></tr>
+                <tr><td>5. معوقات ثقافية واجتماعية</td><td>عادات وتقاليد بالية، الخوف من النقد المجتمعي، والنظرة الدونية لعمل المرأة.</td><td>تكبيل طموح المرأة وخضوعها لسطوة المفاهيم السلفية الخاطئة.</td></tr>
+                <tr><td>6. معوقات اقتصادية</td><td>انخفاض متوسط أجور النساء مقارنة بالرجال، وقلة الحوافز والموارد التمويلية.</td><td>تعثر ريادة الأعمال النسائية واستمرار التبعية المعيشية.</td></tr>
+                <tr><td>7. معوقات تنظيمية وإدارية</td><td>البيروقراطية المعقدة، غياب وحدات رعاية الأطفال بمواقع العمل، ونقص المرونة.</td><td>إجبار الأمهات العاملات على الاستقالة أو أخذ إجازات طويلة.</td></tr>
+                <tr><td>8. الثقافة الذكورية</td><td>ربط الفعل الحضاري بالرجل حصراً واحتكار المعرفة والفرص على حساب الإناث.</td><td>استنقاص شأن مساهمة المرأة التنموية وتكريس الهيمنة الذكورية.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div id="part-view-4-7" class="view-panel">
+        <div class="lecture-content-wrapper">
+          <h2 class="emerald">بنك الأسئلة والاختبار الذاتي التفاعلي — المحاضرة 4</h2>
+          <div class="global-toggle-bar">
+            <button onclick="toggleAllSolutionsInContainer('part-view-4-7', true)">👁️ إظهار جميع الإجابات النموذجية</button>
+            <button onclick="toggleAllSolutionsInContainer('part-view-4-7', false)">🙈 إخفاء جميع الإجابات (اختبر نفسك)</button>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <span class="prob-tag">سؤال تطبيقي 1: الحماية الدستورية والتشريعية للمرأة المصرية</span>
+              <button class="sol-toggle-btn" onclick="toggleCardSolution(this)">👁️ إظهار الحل / Show Solution</button>
+            </div>
+            <div class="card-body">
+              <div class="question-prompt">استعرض بدقة ما قررته المادة 11 من دستور مصر 2014 لصالح المرأة، وما أبرز القوانين الداعمة لحقوقها الأسرية؟</div>
+              <div class="solution-content">
+                <div class="step-block">
+                  <div class="step-label label-blue">النصوص والضمانات الدستورية المعتمدة:</div>
+                  <div>&bull; <b>المادة 11 من دستور 2014 نصت صراحة على:</b></div>
+                  <div style="margin-right: 15px;">
+                    1. كفالة الدولة للمساواة التامة بين المرأة والرجل في جميع الحقوق المدنية والسياسية والاقتصادية والاجتماعية والثقافية.<br>
+                    2. اتخاذ التدابير لضمان تمثيل المرأة تمثيلاً مناسباً في المجالس النيابية (الكوتا).<br>
+                    3. كفالة حقها في تولي الوظائف العامة ووظائف الإدارة العليا والهيئات القضائية دون أي تمييز.<br>
+                    4. التزام الدولة بحماية المرأة من كافة أشكال العنف وتوفيق واجباتها الأسرية مع متطلبات العمل.<br>
+                    5. توفير الرعاية الخاصة للمرأة المعيلة والمسنة والأشد احتياجاً.
+                  </div>
+                  <div style="margin-top: 6px;">&bull; <b>القوانين الداعمة:</b> قانون الخلع، قانون إنشاء محاكم الأسرة (10 لسنة 2004)، وقانون صندوق تأمين الأسرة (1 لسنة 2000).</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <span class="prob-tag">سؤال تطبيقي 2: معوقات التمكين ومجالاته الخمسة</span>
+              <button class="sol-toggle-btn" onclick="toggleCardSolution(this)">👁️ إظهار الحل / Show Solution</button>
+            </div>
+            <div class="card-body">
+              <div class="question-prompt">اذكر مجالات تمكين المرأة الخمسة، وناقش كيف تشكل "الثقافة الذكورية والمعوقات القيادية" عقبة كبرى أمام وصول المرأة للمناصب العليا؟</div>
+              <div class="solution-content">
+                <div class="step-block">
+                  <div class="step-label label-green">عناصر الإجابة:</div>
+                  <div>&bull; <b>مجالات التمكين الخمسة:</b> 1. اقتصادي. 2. سياسي. 3. تعليمي وثقافي. 4. صحي. 5. اجتماعي.</div>
+                  <div>&bull; <b>تأثير الثقافة الذكورية والمعوقات القيادية:</b></div>
+                  <div style="margin-right: 15px;">
+                    - رسوخ فكرة ربط الإدارة الحازمة بالرجل وافتراض عاطفية المرأة وعدم قدرتها على اتخاذ القرارات المصيرية.<br>
+                    - تخوف الإدارات العليا من فقدان النفوذ المركزي، وحجب المعلومات الهامة، وتفضيل الذكور في الترقيات للمناصب القيادية.<br>
+                    - النظرة النمطية التي تحصر نجاح المرأة داخل إطار المنزل فقط وتعتبر توليها القيادة خروجاً عن المألوف.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    let currentLec = 1;
+    let currentLec1Part = 1;
+    let currentLec2Part = 1;
+    let currentLec3Part = 1;
+    let currentLec4Part = 1;
+
+    const lec1Titles = [
+      "المحاضرة 1: عرض كامل لكافة أجزاء قضية المواطنة",
+      "الجزء 1: مقدمة المواطنة ومظاهر الأزمة والمفاهيم الأساسية",
+      "الجزء 2: المفاهيم المتداخلة ذات الصلة بمفهوم المواطنة",
+      "الجزء 3: زوايا المواطنة الثلاث (اللغوية والسياسية والاجتماعية)",
+      "الجزء 4: منظومة قيم المواطنة بأبعادها القومية والعالمية",
+      "الجزء 5: أدوار المؤسسات التنشئية في تفعيل المواطنة والجامعة",
+      "المحاضرة 1: بنك الأسئلة الشامل والاختبارات الذاتية التفاعلية"
+    ];
+
+    const lec2Titles = [
+      "المحاضرة 2: عرض كامل لأجزاء العولمة وتأثيرها على التعليم",
+      "الجزء 1: مفهوم العولمة والمقارنة الحاسمة بين العولمة والعالمية",
+      "الجزء 2: مبادئ العولمة (اللاقطرية، اللامركزية، ورؤوس الأموال)",
+      "الجزء 3: مراحل العولمة التاريخية الست من الجنينية حتى الهيمنة",
+      "الجزء 4: أشكال العولمة الخمسة (الثقافية، السياسية، الاقتصادية...)",
+      "الجزء 5: العملية التعليمية في عصر العولمة وأدوار المعلم الجامعي",
+      "الجزء 6: ميزان العولمة الشامل (13 إيجابية و15 سلبية) وأدوات المواجهة",
+      "المحاضرة 2: بنك الأسئلة الشامل والاختبارات الذاتية التفاعلية"
+    ];
+
+    const lec3Titles = [
+      "المحاضرة 3: عرض كامل لأجزاء القضية السكانية والصحة الإنجابية",
+      "الجزء 1: مفهوم المشكلة السكانية وتداعياتها الـ17 الشاملة",
+      "الجزء 2: أسباب الزيادة بمصر وخارطة طريق استراتيجية السكان 2030",
+      "الجزء 3: أدوار الوزارات بمشروع قانون الحوافز ومقترحات الحل الميدانية",
+      "الجزء 4: مفهوم الصحة الإنجابية وفئاتها وخدماتها الأساسية",
+      "الجزء 5: الرسائل التوعوية السبع الأساسية ومخاطر زواج الأقارب",
+      "الجزء 6: وسائل تنظيم الأسرة، محددات الخصوبة، والجدوى الاقتصادية",
+      "المحاضرة 3: بنك الأسئلة الشامل والاختبارات الذاتية التفاعلية"
+    ];
+
+    const lec4Titles = [
+      "المحاضرة 4: عرض كامل لأجزاء العنف ضد المرأة وكيفية تمكينها",
+      "الجزء 1: مفهوم العنف والقهر الأسري وإحصائيات كورونا العالمية",
+      "الجزء 2: مكانة المرأة تاريخياً عبر الحضارات والأديان وأسباب العنف",
+      "الجزء 3: أشكال العنف الستة وتكلفة دراسة مسح 2015 و2021 بمصر",
+      "الجزء 4: الجهود الدولية والدستور المصري والمجلس القومي للمرأة",
+      "الجزء 5: مفهوم التمكين (Empowerment) وأهدافه ومجالاته الخمسة",
+      "الجزء 6: معوقات تمكين المرأة الثمانية الشاملة (السياسية والقيادية...)",
+      "المحاضرة 4: بنك الأسئلة الشامل والاختبارات الذاتية التفاعلية"
+    ];
+
+    function showLec1Part(num) {
+      currentLec1Part = num;
+      document.getElementById('header-badge').innerText = (num === 6) ? "جامعة بنها • بنك الأسئلة والاختبار الذاتي للمحاضرة 1" : "جامعة بنها • المحاضرة 1: قضية المواطنة";
+      document.getElementById('page-main-title').innerText = lec1Titles[num];
+
+      for (let i = 0; i <= 6; i++) {
+        const b = document.getElementById('part-btn-1-' + i);
+        if (b) b.classList.remove('active');
+      }
+      const activeBtn = document.getElementById('part-btn-1-' + num);
+      if (activeBtn) activeBtn.classList.add('active');
+
+      for (let i = 1; i <= 6; i++) {
+        const p = document.getElementById('part-view-1-' + i);
+        if (p) {
+          if (num === 0) p.classList.add('active-panel');
+          else p.classList.remove('active-panel');
+        }
+      }
+
+      if (num !== 0) {
+        const activePart = document.getElementById('part-view-1-' + num);
+        if (activePart) activePart.classList.add('active-panel');
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function showLec2Part(num) {
+      currentLec2Part = num;
+      document.getElementById('header-badge').innerText = (num === 7) ? "جامعة بنها • بنك الأسئلة والاختبار الذاتي للمحاضرة 2" : "جامعة بنها • المحاضرة 2: العولمة والتعليم";
+      document.getElementById('page-main-title').innerText = lec2Titles[num];
+
+      for (let i = 0; i <= 7; i++) {
+        const b = document.getElementById('part-btn-2-' + i);
+        if (b) b.classList.remove('active');
+      }
+      const activeBtn = document.getElementById('part-btn-2-' + num);
+      if (activeBtn) activeBtn.classList.add('active');
+
+      for (let i = 1; i <= 7; i++) {
+        const p = document.getElementById('part-view-2-' + i);
+        if (p) {
+          if (num === 0) p.classList.add('active-panel');
+          else p.classList.remove('active-panel');
+        }
+      }
+
+      if (num !== 0) {
+        const activePart = document.getElementById('part-view-2-' + num);
+        if (activePart) activePart.classList.add('active-panel');
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function showLec3Part(num) {
+      currentLec3Part = num;
+      document.getElementById('header-badge').innerText = (num === 7) ? "جامعة بنها • بنك الأسئلة والاختبار الذاتي للمحاضرة 3" : "جامعة بنها • المحاضرة 3: القضية السكانية وتنظيم الأسرة";
+      document.getElementById('page-main-title').innerText = lec3Titles[num];
+
+      for (let i = 0; i <= 7; i++) {
+        const b = document.getElementById('part-btn-3-' + i);
+        if (b) b.classList.remove('active');
+      }
+      const activeBtn = document.getElementById('part-btn-3-' + num);
+      if (activeBtn) activeBtn.classList.add('active');
+
+      for (let i = 1; i <= 7; i++) {
+        const p = document.getElementById('part-view-3-' + i);
+        if (p) {
+          if (num === 0) p.classList.add('active-panel');
+          else p.classList.remove('active-panel');
+        }
+      }
+
+      if (num !== 0) {
+        const activePart = document.getElementById('part-view-3-' + num);
+        if (activePart) activePart.classList.add('active-panel');
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function showLec4Part(num) {
+      currentLec4Part = num;
+      document.getElementById('header-badge').innerText = (num === 7) ? "جامعة بنها • بنك الأسئلة والاختبار الذاتي للمحاضرة 4" : "جامعة بنها • المحاضرة 4: العنف ضد المرأة وتمكينها";
+      document.getElementById('page-main-title').innerText = lec4Titles[num];
+
+      for (let i = 0; i <= 7; i++) {
+        const b = document.getElementById('part-btn-4-' + i);
+        if (b) b.classList.remove('active');
+      }
+      const activeBtn = document.getElementById('part-btn-4-' + num);
+      if (activeBtn) activeBtn.classList.add('active');
+
+      for (let i = 1; i <= 7; i++) {
+        const p = document.getElementById('part-view-4-' + i);
+        if (p) {
+          if (num === 0) p.classList.add('active-panel');
+          else p.classList.remove('active-panel');
+        }
+      }
+
+      if (num !== 0) {
+        const activePart = document.getElementById('part-view-4-' + num);
+        if (activePart) activePart.classList.add('active-panel');
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function switchLectureGroup(lecNum) {
+      currentLec = lecNum;
+      for (let l = 1; l <= 4; l++) {
+        const tab = document.getElementById('lec-tab-' + l);
+        const sub = document.getElementById('subnav-wrapper-' + l);
+        const cont = document.getElementById('lec' + l + '-container');
+        if (tab) tab.classList.remove('active');
+        if (sub) sub.style.display = 'none';
+        if (cont) cont.style.display = 'none';
+      }
+
+      const activeTab = document.getElementById('lec-tab-' + lecNum);
+      const activeSub = document.getElementById('subnav-wrapper-' + lecNum);
+      const activeCont = document.getElementById('lec' + lecNum + '-container');
+
+      if (activeTab) activeTab.classList.add('active');
+      if (activeSub) activeSub.style.display = 'block';
+      if (activeCont) activeCont.style.display = 'block';
+
+      if (lecNum === 1) showLec1Part(currentLec1Part);
+      else if (lecNum === 2) showLec2Part(currentLec2Part);
+      else if (lecNum === 3) showLec3Part(currentLec3Part);
+      else if (lecNum === 4) showLec4Part(currentLec4Part);
+    }
+
+    /* Solution Toggle Functions */
+    function toggleCardSolution(btn) {
+      const card = btn.closest('.card');
+      const sol = card.querySelector('.solution-content');
+      if (sol.classList.contains('show')) {
+        sol.classList.remove('show');
+        btn.classList.remove('active');
+        btn.innerHTML = '👁️ إظهار الحل / Show Solution';
+      } else {
+        sol.classList.add('show');
+        btn.classList.add('active');
+        btn.innerHTML = '🙈 إخفاء الحل / Hide Solution';
+      }
+    }
+
+    function toggleAllSolutionsInContainer(containerId, show) {
+      const container = document.getElementById(containerId);
+      if (!container) return;
+      const buttons = container.querySelectorAll('.sol-toggle-btn');
+      const solutions = container.querySelectorAll('.solution-content');
+
+      solutions.forEach((sol, idx) => {
+        const btn = buttons[idx];
+        if (show) {
+          sol.classList.add('show');
+          if (btn) {
+            btn.classList.add('active');
+            btn.innerHTML = '🙈 إخفاء الحل / Hide Solution';
+          }
+        } else {
+          sol.classList.remove('show');
+          if (btn) {
+            btn.classList.remove('active');
+            btn.innerHTML = '👁️ إظهار الحل / Show Solution';
+          }
+        }
+      });
+    }
+  </script>
+</body>
+</html>

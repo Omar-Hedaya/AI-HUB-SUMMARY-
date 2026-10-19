@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>مقرر القضايا المجتمعية — ملخص كبسولة ليلة الامتحان وأهم النقاط المركزة — جامعة بنها</title>
+  
+  <!-- خطوط Google الرسمية: IBM Plex Sans Arabic و Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-base: #090d13;
+      --bg-card: #111722;
+      --bg-code: #0b1017;
+      --border-card: #1f2937;
+      --border-focus: #38bdf8;
+      --cyan: #38bdf8;
+      --emerald: #34d399;
+      --amber: #fbbf24;
+      --purple: #c084fc;
+      --rose: #f43f5e;
+      --text-main: #e2e8f0;
+      --text-muted: #94a3b8;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    html, body {
+      width: 100% !important;
+      max-width: 100% !important;
+      overflow-x: hidden !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      background-color: var(--bg-base);
+      color: var(--text-main);
+      font-family: 'IBM Plex Sans Arabic', 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+      line-height: 1.68;
+      -webkit-text-size-adjust: 100%;
+      padding-bottom: 70px;
+    }
+
+    .container {
+      width: 100% !important;
+      max-width: 980px !important;
+      margin: 0 auto !important;
+      padding: 14px 10px !important;
+      box-sizing: border-box;
+    }
+
+    /* Top Sticky Controls */
+    .top-bar-sticky {
+      position: sticky;
+      top: 6px;
+      z-index: 1002;
+      background: rgba(9, 13, 19, 0.95);
+      backdrop-filter: blur(14px);
+      padding: 8px;
+      border-radius: 12px;
+      border: 1px solid var(--border-card);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.65);
+      margin-bottom: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    /* Lecture Switcher Bar */
+    .lecture-switch-wrapper {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .lecture-switch-wrapper::-webkit-scrollbar { display: none; }
+
+    .lecture-tab {
+      flex: 1;
+      min-width: max-content;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      cursor: pointer;
+      color: var(--text-muted);
+      background: #111722;
+      border: 1px solid #1e293b;
+      transition: all 0.2s ease;
+      user-select: none;
+      text-align: center;
+      white-space: nowrap;
+    }
+    .lecture-tab:hover {
+      color: #fff;
+      border-color: rgba(56, 189, 248, 0.4);
+    }
+    .lecture-tab.active {
+      background: rgba(56, 189, 248, 0.15);
+      border-color: var(--cyan);
+      color: var(--cyan);
+      box-shadow: 0 0 12px rgba(56, 189, 248, 0.25);
+    }
+    .lecture-tab.all-tab {
+      background: rgba(52, 211, 153, 0.12);
+      border-color: rgba(52, 211, 153, 0.35);
+      color: var(--emerald);
+    }
+    .lecture-tab.all-tab.active {
+      background: rgba(52, 211, 153, 0.24);
+      border-color: var(--emerald);
+      color: #fff;
+      box-shadow: 0 0 14px rgba(52, 211, 153, 0.3);
+    }
+
+    /* Search & Action Row */
+    .search-action-row {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+    .search-input-box {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      background: #0b1017;
+      border: 1px solid #1e293b;
+      border-radius: 8px;
+      padding: 0 10px;
+    }
+    .search-input-box input {
+      width: 100%;
+      background: transparent;
+      border: none;
+      outline: none;
+      color: #fff;
+      font-size: 0.82rem;
+      padding: 7px 4px;
+      font-family: inherit;
+    }
+    .search-input-box input::placeholder {
+      color: #64748b;
+    }
+    .action-btn {
+      background: #111722;
+      border: 1px solid #1e293b;
+      color: var(--text-muted);
+      padding: 7px 12px;
+      border-radius: 8px;
+      font-size: 0.76rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+    .action-btn:hover {
+      border-color: var(--cyan);
+      color: #fff;
+    }
+
+    /* Header */
+    .header {
+      padding: 8px 0 14px 0;
+      border-bottom: 1px solid var(--border-card);
+      margin-bottom: 16px;
+    }
+    .header-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(251, 191, 36, 0.12);
+      color: var(--amber);
+      border: 1px solid rgba(251, 191, 36, 0.3);
+      padding: 3px 10px;
+      border-radius: 9999px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+      letter-spacing: 0.03em;
+    }
+    .header h1 {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 4px;
+      line-height: 1.4;
+    }
+    .header p {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    /* Key Numbers Grid (Flash Capsule) */
+    .key-numbers-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 8px;
+      margin-bottom: 18px;
+    }
+    .stat-capsule {
+      background: var(--bg-card);
+      border: 1px solid var(--border-card);
+      border-radius: 10px;
+      padding: 10px 12px;
+      text-align: center;
+      transition: all 0.2s;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+    .stat-capsule:hover {
+      border-color: var(--cyan);
+      transform: translateY(-2px);
+    }
+    .stat-num {
+      font-family: 'Inter', 'JetBrains Mono', sans-serif;
+      font-size: 1.25rem;
+      font-weight: 800;
+      line-height: 1.2;
+      margin-bottom: 2px;
+    }
+    .num-cyan { color: var(--cyan); }
+    .num-emerald { color: var(--emerald); }
+    .num-amber { color: var(--amber); }
+    .num-purple { color: var(--purple); }
+    .num-rose { color: var(--rose); }
+
+    .stat-label {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      font-weight: 600;
+      line-height: 1.3;
+    }
+
+    /* Lecture Section Wrapper */
+    .lecture-section {
+      margin-bottom: 26px;
+      animation: fadeIn 0.25s ease-in-out;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Headings (h2) */
+    .lecture-section h2 {
+      font-size: 1.02rem;
+      font-weight: 700;
+      color: #fff;
+      padding: 9px 14px;
+      border-radius: 8px;
+      margin-top: 1rem;
+      margin-bottom: 1rem;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.4);
+      border: 1px solid rgba(255,255,255,0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .lecture-section h2.purple  { background: linear-gradient(270deg, #3b0764, #0f172a); border-right: 5px solid var(--purple); }
+    .lecture-section h2.emerald { background: linear-gradient(270deg, #064e3b, #0f172a); border-right: 5px solid var(--emerald); }
+    .lecture-section h2.blue    { background: linear-gradient(270deg, #0c4a6e, #0f172a); border-right: 5px solid var(--cyan); }
+    .lecture-section h2.orange  { background: linear-gradient(270deg, #7c2d12, #0f172a); border-right: 5px solid var(--amber); }
+
+    /* Condensed Table Containers */
+    .table-scroll-container {
+      width: 100% !important;
+      overflow-x: auto !important;
+      margin: 0.8rem 0 1.2rem 0 !important;
+      border: 1px solid #1e293b !important;
+      border-radius: 10px !important;
+      background: var(--bg-card) !important;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4) !important;
+    }
+    table {
+      width: 100% !important;
+      min-width: 680px !important;
+      border-collapse: collapse !important;
+      background: var(--bg-card) !important;
+    }
+    th {
+      background: #1e293b !important;
+      color: var(--cyan) !important;
+      font-weight: 700 !important;
+      font-size: 0.82rem !important;
+      padding: 9px 12px !important;
+      border: 1px solid #334155 !important;
+      text-align: right !important;
+      white-space: nowrap !important;
+    }
+    td {
+      padding: 9px 12px !important;
+      border: 1px solid #1e293b !important;
+      color: #e2e8f0 !important;
+      font-size: 0.82rem !important;
+      vertical-align: top !important;
+      text-align: right !important;
+      line-height: 1.6 !important;
+    }
+    td:nth-child(1) { font-weight: 700 !important; min-width: 150px !important; color: #f1f5f9 !important; }
+    td:nth-child(2) { min-width: 220px !important; color: #38bdf8 !important; }
+    td:nth-child(3) { min-width: 280px !important; color: #cbd5e1 !important; }
+    tr:nth-child(even) td { background: #0b1120 !important; }
+    tr:hover td { background: #162036 !important; }
+
+    /* Callout */
+    .callout {
+      background: #0d1527;
+      border: 1px solid #334155;
+      border-radius: 8px;
+      padding: 0.9rem 1.1rem;
+      margin: 1rem 0;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+    }
+    .callout.purple { border-right: 4px solid var(--purple); }
+    .callout.blue   { border-right: 4px solid var(--cyan); }
+    .callout.orange { border-right: 4px solid var(--amber); }
+    .callout.emerald{ border-right: 4px solid var(--emerald); }
+    
+    .callout h4 {
+      margin: 0 0 6px 0;
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .callout ul {
+      margin: 0;
+      padding-right: 1.2rem;
+      color: #cbd5e1;
+      font-size: 0.82rem;
+      line-height: 1.6;
+    }
+    .callout li { margin-bottom: 4px; }
+
+    /* Exam Cards (Trikats & Flashcards) */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-card);
+      border-radius: 10px;
+      margin-bottom: 12px;
+      overflow: hidden;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.35);
+    }
+    .card-header {
+      background: rgba(255, 255, 255, 0.02);
+      border-bottom: 1px solid var(--border-card);
+      padding: 8px 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 6px;
+    }
+    .prob-tag {
+      font-weight: 700;
+      font-size: 0.82rem;
+      color: var(--cyan);
+    }
+    .card-body {
+      padding: 10px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .question-prompt {
+      background: rgba(56, 189, 248, 0.05);
+      border-right: 3px solid var(--cyan);
+      padding: 7px 10px;
+      font-size: 0.82rem;
+      color: #f1f5f9;
+      border-radius: 6px 0 0 6px;
+      line-height: 1.5;
+    }
+    .step-block {
+      background: var(--bg-code);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 8px;
+      padding: 8px 10px;
+      font-size: 0.81rem;
+      line-height: 1.6;
+    }
+    .step-label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      margin-bottom: 3px;
+    }
+    .label-blue { color: var(--cyan); }
+    .label-green { color: var(--emerald); }
+    .label-amber { color: var(--amber); }
+
+    .result-badge {
+      display: inline-block;
+      background: rgba(52, 211, 153, 0.1);
+      border: 1px solid rgba(52, 211, 153, 0.25);
+      color: var(--emerald);
+      padding: 2px 7px;
+      border-radius: 4px;
+      font-weight: 700;
+      font-size: 0.78rem;
+    }
+
+    /* Sol Toggle Button */
+    .sol-toggle-btn {
+      background: rgba(56, 189, 248, 0.12);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      color: var(--cyan);
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+    .sol-toggle-btn:hover {
+      background: rgba(56, 189, 248, 0.25);
+      color: #fff;
+    }
+    .sol-toggle-btn.active {
+      background: rgba(244, 63, 94, 0.15);
+      border-color: var(--rose);
+      color: var(--rose);
+    }
+    .solution-content {
+      display: none;
+      animation: fadeIn 0.25s ease-in-out;
+    }
+    .solution-content.show {
+      display: block;
+    }
+
+    /* Print View */
+    @media print {
+      body { background: #fff !important; color: #000 !important; }
+      .top-bar-sticky, .sol-toggle-btn, .action-btn { display: none !important; }
+      .card, .table-scroll-container, .callout { border: 1px solid #ccc !important; box-shadow: none !important; }
+      .solution-content { display: block !important; }
+      .lecture-section { display: block !important; }
+      th { background: #eee !important; color: #000 !important; }
+      td { color: #000 !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+
+    <!-- Top Sticky Bar -->
+    <div class="top-bar-sticky">
+      <!-- Lecture Switcher -->
+      <div class="lecture-switch-wrapper">
+        <div id="tab-btn-all" class="lecture-tab all-tab active" onclick="switchFilter('all')">📚 كبسولة كل المحاضرات</div>
+        <div id="tab-btn-1" class="lecture-tab" onclick="switchFilter('lec1')">1. المواطنة</div>
+        <div id="tab-btn-2" class="lecture-tab" onclick="switchFilter('lec2')">2. العولمة والتعليم</div>
+        <div id="tab-btn-3" class="lecture-tab" onclick="switchFilter('lec3')">3. القضية السكانية</div>
+        <div id="tab-btn-4" class="lecture-tab" onclick="switchFilter('lec4')">4. العنف ضد المرأة</div>
+      </div>
+
+      <!-- Live Search & Global Actions -->
+      <div class="search-action-row">
+        <div class="search-input-box">
+          <span>🔍</span>
+          <input type="text" id="live-search-input" placeholder="بحث فوري في كل النقاط (مثال: المادة 11، 64%، ICPD، العولمة والعالمية)..." oninput="liveFilterContent()">
+        </div>
+        <button class="action-btn" onclick="toggleAllGlobalAnswers()">👁️ إظهار/إخفاء الحلول</button>
+        <button class="action-btn" onclick="window.print()">🖨️ طباعة</button>
+      </div>
+    </div>
+
+    <!-- Header Section -->
+    <div class="header">
+      <div class="header-badge">
+        <span>⚡</span> كبسولة المراجعة النهائية المركزة • جامعة بنها
+      </div>
+      <h1>مقرر القضايا المجتمعية — أهم النقاط والمقارنات وتريكات الامتحان</h1>
+      <p>ملخص فائق التركيز يجمع جوهر المحاضرات الأربع، الأرقام والإحصائيات الرسمية المعتمدة، مقارنات الصواب والخطأ، ونصوص المواد الدستورية الحاسمة.</p>
+    </div>
+
+    <!-- Key Numbers Dashboard (Flash Stats) -->
+    <div class="key-numbers-grid">
+      <div class="stat-capsule">
+        <div class="stat-num num-cyan">+100M</div>
+        <div class="stat-label">سكان مصر (أول دولة عربية في الانفجار)</div>
+      </div>
+      <div class="stat-capsule">
+        <div class="stat-num num-emerald">64%</div>
+        <div class="stat-label">دور تنظيم الأسرة في خفض الخصوبة بمصر</div>
+      </div>
+      <div class="stat-capsule">
+        <div class="stat-num num-amber">1$ = 1.47$</div>
+        <div class="stat-label">الوفر الاقتصادي لكل دولار يُستثمر بتنظيم الأسرة</div>
+      </div>
+      <div class="stat-capsule">
+        <div class="stat-num num-purple">المادة 11</div>
+        <div class="stat-label">المساواة وحماية المرأة وتمثيلها النيابي (2014)</div>
+      </div>
+      <div class="stat-capsule">
+        <div class="stat-num num-rose">6 مراحل</div>
+        <div class="stat-label">تطور العولمة تاريخياً (من الجنينية للهيمنة)</div>
+      </div>
+      <div class="stat-capsule">
+        <div class="stat-num num-emerald">5 مجالات</div>
+        <div class="stat-label">تمكين المرأة (اقتصادي، سياسي، تعليمي، صحي، اجتماعي)</div>
+      </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- المحاضرة 1: قضية المواطنة -->
+    <!-- ============================================================ -->
+    <div id="section-lec1" class="lecture-section">
+      <h2 class="purple">
+        <span>المحاضرة 1: قضية المواطنة (Citizenship) والأسس الدستورية</span>
+        <span style="font-size:0.75rem; font-weight:400; opacity:0.8;">التركيز: 100%</span>
+      </h2>
+
+      <div class="table-scroll-container">
+        <table>
+          <thead>
+            <tr><th style="width:24%">المفهوم / المحور</th><th style="width:36%">الجوهر الاصطلاحي المركز</th><th>نقطة الامتحان والتريك المصاحب</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>المواطنة vs الوطنية</td>
+              <td><b>الوطنية:</b> عاطفة وشعور بالولاء والانتماء وحب الوطن والتضحية.<br><b>المواطنة:</b> صفة قانونية وممارسة دستورية فعلية للحقوق والواجبات.</td>
+              <td>الوطنية هي الوقود العاطفي، والمواطنة هي الإطار القانوني والممارسة المؤسسية (ليسا مترادفين!).</td>
+            </tr>
+            <tr>
+              <td>المواطنة وحقوق الإنسان</td>
+              <td>المواطنة هي التتويج والمظلة القانونية لممارسة حقوق الإنسان (كرامة، عدل، أمان، حرية).</td>
+              <td>يستحيل وجود مواطن يشعر بالانتماء وهو مسلوب الحقوق والحريات الأساسية.</td>
+            </tr>
+            <tr>
+              <td>المواطنة والديمقراطية</td>
+              <td>الديمقراطية هي "حكم الشعب بالشعب" وتكافؤ الفرص والتعبير الحر.</td>
+              <td>الديمقراطية هي الأساس والبيئة الحاضنة لقيم المواطنة وتمنع تحكم طبقة بأخرى.</td>
+            </tr>
+            <tr>
+              <td>زوايا المواطنة الثلاث</td>
+              <td>1. <b>لغوية:</b> من "الوطن" (لسان العرب: المنزل يقام به).<br>2. <b>سياسية:</b> علاقة قانونية بالدولة تتجاوز القبيلة والطائفة (دائرة المعارف البريطانية).<br>3. <b>اجتماعية:</b> العضوية الكاملة المتساوية في المجتمع بدون أدنى تمييز.</td>
+              <td>المفهوم الاجتماعي هو الأوسع والأشمل؛ لأن حصر المواطنة في الإطار السياسي يعد مفهوماً ضيقاً.</td>
+            </tr>
+            <tr>
+              <td>أبعاد قيم المواطنة</td>
+              <td><b>البعد القومي:</b> الولاء، الدفاع وصيانة الثروات، خدمة الوطن، والالتزام بالقوانين.<br><b>البعد العالمي:</b> السلام والتفاهم الإنساني، التعاون، والدفاع المشترك لحماية الأقليات ومقدرات الشعوب.</td>
+              <td>المواطنة تجمع بين الانتماء القومي والوعي الإنساني العالمي ولا تنفصل عنهما.</td>
+            </tr>
+            <tr>
+              <td>أدوار المؤسسات</td>
+              <td><b>الإعلامية:</b> تخطي حاجز الأمية والتثقيف الدستوري.<br><b>الدينية:</b> خطب الجمعة والدروس المشتركة لتأصيل التسامح والعيش المشترك.<br><b>المجتمع المدني:</b> تدريب المواطنين ونشر الثقافة السياسية.<br><b>الجامعة:</b> بيئة حوار نقدي مفتوح وليست أداة تلقين إيديولوجي قسري.</td>
+              <td>تربية المواطنة مسؤولية تكاملية لجميع المؤسسات ولا تحتكرها المدارس والجامعات.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Quick Exam Traps -->
+      <div class="card">
+        <div class="card-header">
+          <span class="prob-tag">⚠️ تريكة امتحان (صح أم خطأ مع التعليل): التربية للمواطنة والتلقين السياسي</span>
+          <button class="sol-toggle-btn" onclick="toggleCardSolution(this)">👁️ إظهار الحل</button>
+        </div>
+        <div class="card-body">
+          <div class="question-prompt">"التربية من أجل المواطنة في الجامعة هي مرادف للتلقين السياسي للطلاب وحشدهم خلف التوجهات الرسمية"؟</div>
+          <div class="solution-content">
+            <div class="step-block">
+              <div class="step-label label-blue">الإجابة الدقيقة:</div>
+              <div><b>العبارة خاطئة تماماً (❌).</b></div>
+              <div>التربية من أجل المواطنة تختلف جوهرياً عن التلقين السياسي؛ فمهمتها إعداد المواطن الواعي والمسؤول، وبناء مهارات <b>التفكير الناقد</b>، وتقييم السياسات العامة بحيادية، والانفتاح على الآراء والبدائل دون فرض قسري لأي توجه.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- المحاضرة 2: العولمة وتأثيرها على منظومة التعليم -->
+    <!-- ============================================================ -->
+    <div id="section-lec2" class="lecture-section">
+      <h2 class="blue">
+        <span>المحاضرة 2: العولمة وتأثيرها على التعليم والمواجهة</span>
+        <span style="font-size:0.75rem; font-weight:400; opacity:0.8;">التركيز: 100%</span>
+      </h2>
+
+      <div class="table-scroll-container">
+        <table>
+          <thead>
+            <tr><th style="width:24%">المحور</th><th style="width:36%">الجوهر الاصطلاحي والتاريخي</th><th>نقطة الامتحان والتريك المصاحب</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>العولمة vs العالمية (مقارنة حاسمة)</td>
+              <td><b>العولمة (Globalization):</b> فرض نمط حياة واحد، نفي للآخر، إلغاء الحواجز، وإحلال الاختراق محل التنوع الثقافي.<br><b>العالمية (Universalism):</b> انفتاح وتواصل وتبادل حر مع الاحتفاظ بالاختلاف الأيديولوجي وصون سيادة الدولة.</td>
+              <td><b>سؤال متكرر:</b> هل العولمة امتداد للعالمية؟ الإجابة: لا، العالمية مناقضة ومنافية للعولمة في الفلسفة والهدف.</td>
+            </tr>
+            <tr>
+              <td>مبادئ العولمة الثلاثة</td>
+              <td>1. <b>اللاقطرية:</b> تلاشي الحدود الجغرافية والسياسية أمام تدفق المعرفة.<br>2. <b>اللامركزية:</b> عدم انفراد الدولة باتخاذ القرار دون تدخل المنظمات الدولية.<br>3. <b>حرية رؤوس الأموال:</b> حركة الأموال والسلع وتحرير السوق ليحكم نفسه.</td>
+              <td>مبدأ اللاقطرية تظهر خطورته الشديدة في الجانب التربوي والتعليمي لعدم إمكانية السيطرة عليه.</td>
+            </tr>
+            <tr>
+              <td>المراحل التاريخية الست للعولمة</td>
+              <td>1. الجنينية (ق 15 - منتصف 18).<br>2. النشوء (منتصف 18 - 1870).<br>3. الانطلاق (1870 - منتصف 1920).<br>4. الصراع من أجل الهيمنة (منتصف 1920 - أواخر 1960).<br>5. عدم اليقين (أواخر 1960 - نهاية ق 20: القمر والإعلام).<br>6. الهيمنة / الأمركة (مطلع ق 21 بعد أحداث 11 سبتمبر 2001).</td>
+              <td>العولمة ليست ظاهرة فجائية حديثة، بل ظاهرة قديمة تطورت تاريخياً عبر 6 مراحل متتابعة.</td>
+            </tr>
+            <tr>
+              <td>أدوار المعلم الجامعي في عصر العولمة</td>
+              <td>الانتقال من التلقين السلبي إلى توليد المعرفة، إتقان التقنيات الرقمية والمنصات، توظيف خامات البيئة المحلية، ومواكبة تفريد التعليم والتعليم الذاتي.</td>
+              <td>لم يعد دور المعلم الجامعي نقل المعلومات (المتوفرة بالإنترنت)، بل تدريب الطلاب على التحليل والنقد والابتكار.</td>
+            </tr>
+            <tr>
+              <td>أدوات مواجهة العولمة الأربعة</td>
+              <td>1. التمسك بالعقيدة والأخلاق.<br>2. إصلاح الأوضاع السياسية الداخلية.<br>3. التكامل الإقليمي وإنشاء سوق عربية مشتركة.<br>4. صيانة الهوية الثقافية وتحديث التعليم.</td>
+              <td>الموقف السليم هو تجنب الرفض المطلق المنعزل والقبول المطلق الذائب؛ بل الأخذ الذكي الواعي.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Quick Exam Traps -->
+      <div class="card">
+        <div class="card-header">
+          <span class="prob-tag">⚠️ تريكة امتحان: أذرع العولمة الاقتصادية</span>
+          <button class="sol-toggle-btn" onclick="toggleCardSolution(this)">👁️ إظهار الحل</button>
+        </div>
+        <div class="card-body">
+          <div class="question-prompt">ما هي الآليات والمؤسسات الدولية الثلاث الحاكمة للعولمة الاقتصادية عالمياً؟</div>
+          <div class="solution-content">
+            <div class="step-block">
+              <div class="step-label label-green">المؤسسات الثلاث المعتمدة:</div>
+              <div>1. <b>البنك الدولي (World Bank).</b></div>
+              <div>2. <b>صندوق النقد الدولي (IMF).</b></div>
+              <div>3. <b>منظمة التجارة العالمية (WTO).</b></div>
+              <div class="result-badge">تتحكم هذه المؤسسات في التبادل الحر وعولمة الإنتاج وإقراض الدول النامية.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- المحاضرة 3: القضية السكانية والصحة الإنجابية -->
+    <!-- ============================================================ -->
+    <div id="section-lec3" class="lecture-section">
+      <h2 class="emerald">
+        <span>المحاضرة 3: القضية السكانية والصحة الإنجابية وتنظيم الأسرة</span>
+        <span style="font-size:0.75rem; font-weight:400; opacity:0.8;">التركيز: 100%</span>
+      </h2>
+
+      <div class="table-scroll-container">
+        <table>
+          <thead>
+            <tr><th style="width:25%">المحور</th><th style="width:35%">النسبة / الإحصائية الدقيقة</th><th>المدلول والتحليل العلمي والامتحاني</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>مفهوم القضية السكانية</td>
+              <td>علاقة تناسب بين السكان والموارد</td>
+              <td>ليست مجرد زيادة عدد السكان، بل <b>اختلال التوازن</b> بين وتيرة نمو السكان ومعدل نمو الموارد والخدمات.</td>
+            </tr>
+            <tr>
+              <td>محددات الخصوبة الأربعة بمصر (2019)</td>
+              <td>1. تنظيم الأسرة: <b>64%</b><br>2. الرضاعة الطبيعية: <b>14%</b><br>3. الإجهاض المتعمد: <b>12%</b><br>4. سن الزواج: <b>10%</b></td>
+              <td><b>تنظيم الأسرة هو المحدد الأهم على الإطلاق</b>؛ يجنب مصر سنوياً 4 ملايين حمل غير مخطط و1.6 مليون إجهاض غير آمن.</td>
+            </tr>
+            <tr>
+              <td>العائد الاستثماري لتنظيم الأسرة (UNFPA)</td>
+              <td>كل <b>1 دولار</b> يوفر <b>1.47 دولار</b></td>
+              <td>تنظيم الأسرة استثمار اقتصادي ذو عائد إيجابي يقلل تكاليف رعاية الأطفال والخدمات، وصُنّف ثالث أعلى مبادرة عالمياً (كوبنهاغن).</td>
+            </tr>
+            <tr>
+              <td>معدل الاستثمار للتنمية السكانية</td>
+              <td>استثمار <b>2 - 5%</b> من الدخل القومي</td>
+              <td>يلزم استثمار 2 إلى 5% من الدخل القومي لمواكبة كل <b>1% نمو سكاني سنوي</b> لمجرد الحفاظ على مستوى المعيشة الحالي.</td>
+            </tr>
+            <tr>
+              <td>مخاطر زواج الأقارب بمصر</td>
+              <td><b>15%</b> من وفيات الرضع (2008)<br><b>4 - 6%</b> عيوب وراثية بأقارب الدرجة 1</td>
+              <td>يسبب أمراضاً عصبية (31.4%)، تشوهات بالدم والهيموجلوبين (18.5%)، وعيوباً صبغية وكروموسومية (11.5%).</td>
+            </tr>
+            <tr>
+              <td>وسائل تنظيم الأسرة الأكثر فاعلية</td>
+              <td>اللولب، الكبسولات تحت الجلد، والتعقيم</td>
+              <td>وسائل طويلة المفعول تمتد من 3 إلى 10 سنوات، ولا تعتمد على سلوك التذكر اليومي (عكس الحبوب).</td>
+            </tr>
+            <tr>
+              <td>المباعدة بين الولادات</td>
+              <td><b>سنتان على الأقل</b> بعد الولادة<br><b>6 أشهر</b> بعد الإجهاض</td>
+              <td>تحمي الأم من فقر الدم وتسمم الحمل، وتخفض معدلات التقزم والسمنة والأنيميا لدى الأطفال.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Quick Exam Traps -->
+      <div class="card">
+        <div class="card-header">
+          <span class="prob-tag">⚠️ تريكة امتحان: تعريف الصحة الإنجابية (مؤتمر ICPD 1994)</span>
+          <button class="sol-toggle-btn" onclick="toggleCardSolution(this)">👁️ إظهار الحل</button>
+        </div>
+        <div class="card-body">
+          <div class="question-prompt">هل تقتصر الصحة الإنجابية على النساء المتزوجات في سن الحمل والولادة؟</div>
+          <div class="solution-content">
+            <div class="step-block">
+              <div class="step-label label-amber">التصحيح المعتمد:</div>
+              <div><b>لا (❌).</b> الصحة الإنجابية <b>نهج حياتي شامل</b> يخص الذكور والإناث في كافة المراحل العمرية (الأطفال، المراهقين والشباب، سن الإنجاب، وما بعد سن الإنجاب)، وتعرف بأنها "حالة من الرفاه البدني والنفسي والاجتماعي الكامل في كل ما يتعلق بالجهاز التناسلي، وليست مجرد السلامة من المرض أو العجز".</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- المحاضرة 4: العنف ضد المرأة وكيفية تمكينها -->
+    <!-- ============================================================ -->
+    <div id="section-lec4" class="lecture-section">
+      <h2 class="orange">
+        <span>المحاضرة 4: العنف ضد المرأة وحمايتها الدستورية والتمكين</span>
+        <span style="font-size:0.75rem; font-weight:400; opacity:0.8;">التركيز: 100%</span>
+      </h2>
+
+      <div class="table-scroll-container">
+        <table>
+          <thead>
+            <tr><th style="width:24%">المحور</th><th style="width:36%">الجوهر والنص الدستوري والإحصائي</th><th>نقطة الامتحان والتريك المصاحب</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>المادة 11 من دستور مصر 2014 (الأهم إطلاقاً)</td>
+              <td>تنص على: 1. المساواة التامة بين الرجل والمرأة.<br>2. التمثيل المناسب في المجالس النيابية.<br>3. حق تولي الوظائف العليا والقضاء دون تمييز.<br>4. حماية المرأة من كافة أشكال العنف.<br>5. رعاية المعيلة والمسنة والأشد احتياجاً.</td>
+              <td><b>سؤال امتحان مباشر:</b> ما هي المادة الدستورية التي ألزمت الدولة بحماية المرأة من العنف وكفلت تعيينها بالقضاء؟ (المادة 11).</td>
+            </tr>
+            <tr>
+              <td>أشكال العنف الستة ضد المرأة</td>
+              <td>1. جسدي (ضرب، حرق، خنق).<br>2. نفسي (تحقير، فظاظة، تهديد بالطلاق).<br>3. جنسي (معاشرة قسرية واغتصاب زوجي).<br>4. لفظي (سب، قذف، شتم).<br>5. صحي (إجهاض قسري، حرمان من العلاج).<br>6. اقتصادي (حجب النفقة، الاستيلاء على الراتب).</td>
+              <td>العنف والقهر وجهان لعملة واحدة تعبر عن استخدام القوة والإكراه لإخضاع المرأة.</td>
+            </tr>
+            <tr>
+              <td>تكلفة دراسة العنف الأسري بمصر (2015)</td>
+              <td>&bull; <b>مليون امرأة</b> يتركن بيوتهن سنوياً.<br>&bull; <b>585 مليون جنيه</b> تكلفة السكن البديل والإيواء سنوياً.<br>&bull; <b>200 ألف سيدة</b> يتعرضن لمضاعفات حمل سنوياً بسبب عنف الزوج.<br>&bull; <b>113 ألف أسرة</b> يتغيب أطفالها عن المدارس (خسارة 90 ألف يوم دراسي).</td>
+              <td>العنف الأسري ليس شأناً عائلياً خاصاً بل كارثة تستنزف الموازنة العامة للدولة وتهدد صحة الأجيال.</td>
+            </tr>
+            <tr>
+              <td>مفهوم التمكين (Empowerment)</td>
+              <td>وفق <b>UNIFEM:</b> عمل جماعي لمواجهة الاضطهاد والتغلب على عقبات التمييز.<br>وفق <b>البنك الدولي:</b> توسيع قدرات الأفراد بالمشاركة والتأثير والتحكم بالمؤسسات ومحاسبتها.</td>
+              <td>التمكين يهدف إلى استقلال المرأة في صنع قراراتها الذاتية وبناء مجتمع إنساني متوازن.</td>
+            </tr>
+            <tr>
+              <td>مجالات التمكين الخمسة</td>
+              <td>1. اقتصادي (العمل، تساوي الأجور).<br>2. سياسي (الترشح والمجالس النيابية).<br>3. تعليمي وثقافي (محو الأمية والمعرفة).<br>4. صحي (الصحة الإنجابية والترويح).<br>5. اجتماعي (التقدير والمكانة اللائقة).</td>
+              <td>التمكين عملية كلية مترابطة لا تقتصر على الجانب الاقتصادي فحسب.</td>
+            </tr>
+            <tr>
+              <td>مكانة المرأة تاريخياً عبر العصور</td>
+              <td><b>اليونان والهند:</b> حُرمت من التعليم والإرث وخادمة بلا عقل (أرسطو).<br><b>الفراعنة:</b> أعلى مكانة وحرية عالمياً (حتشبسوت، إيزيس، وماعت).<br><b>الإسلام:</b> كرمها واستقلت ذمتها المالية وحصلت على الميراث والتعليم.</td>
+              <td>عاشت المرأة المصرية في عهد الفراعنة في حرية ومساواة لم تحصل عليها في أي حضارة قديمة سابقة.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Quick Exam Traps -->
+      <div class="card">
+        <div class="card-header">
+          <span class="prob-tag">⚠️ تريكة امتحان: معوقات تمكين المرأة الثمانية</span>
+          <button class="sol-toggle-btn" onclick="toggleCardSolution(this)">👁️ إظهار الحل</button>
+        </div>
+        <div class="card-body">
+          <div class="question-prompt">صنف المعوقات الثمانية التي تعرقل تمكين المرأة في المجتمع النامي؟</div>
+          <div class="solution-content">
+            <div class="step-block">
+              <div class="step-label label-blue">المعوقات الثمانية الشاملة:</div>
+              <div>1. <b>معوقات سياسية:</b> ضعف دعم الأحزاب ومحاربة ترشح المرأة.</div>
+              <div>2. <b>معوقات قيادية:</b> المركزية الشديدة وخوف القيادات من فقدان السلطة.</div>
+              <div>3. <b>معوقات شخصية/ذاتية:</b> تعدد الأعباء الأسرية وضعف الثقة بالذات.</div>
+              <div>4. <b>معوقات وظيفية:</b> تفضيل الذكور في الترقيات والمناصب التنفيذية.</div>
+              <div>5. <b>معوقات ثقافية واجتماعية:</b> العادات البالية والخوف من النقد المجتمعي.</div>
+              <div>6. <b>معوقات اقتصادية:</b> فجوة الأجور وضعف التمويل المتاح للمشروعات النسائية.</div>
+              <div>7. <b>معوقات تنظيمية وإدارية:</b> الروتين والبيروقراطية وغياب دور الحضانة بالعمل.</div>
+              <div>8. <b>الثقافة الذكورية:</b> ربط الفعل الحضاري بالرجل واحتكار الفرص.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- بنك التريكات وأهم أسئلة الامتحانات المباشرة -->
+    <!-- ============================================================ -->
+    <div id="section-quiz" class="lecture-section">
+      <h2 class="emerald">
+        <span>بنك أسئلة الامتحانات المتكررة وتريكات الصواب والخطأ</span>
+        <span style="font-size:0.75rem; font-weight:400; opacity:0.8;">Quiz & Traps</span>
+      </h2>
+
+      <!-- Q1 -->
+      <div class="card">
+        <div class="card-header">
+          <span class="prob-tag">سؤال 1 (صواب أو خطأ مع التعليل):</span>
+          <button class="sol-toggle-btn" onclick="toggleCardSolution(this)">👁️ إظهار الحل</button>
+        </div>
+        <div class="card-body">
+          <div class="question-prompt">"تعد العالمية امتداداً طبيعياً ومرحلة متطورة من مراحل العولمة المعاصرة"؟</div>
+          <div class="solution-content">
+            <div class="step-block">
+              <div class="step-label label-blue">الحل النموذجي:</div>
+              <div><b>العبارة خاطئة (❌).</b></div>
+              <div>العالمية شيء مختلف ومنافٍ تماماً للعولمة؛ فالعالمية تعني الانفتاح والتواصل والتبادل الحضاري مع الحفاظ على سيادة الدولة وتنوع الثقافات والخصوصيات، بينما العولمة نفي للآخر وإلغاء لسيادة الدولة وفرض نمط استهلاكي أحادي يخدم القوى الرأسمالية.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Q2 -->
+      <div class="card">
+        <div class="card-header">
+          <span class="prob-tag">سؤال 2 (اختر الإجابة الصحيحة):</span>
+          <button class="sol-toggle-btn" onclick="toggleCardSolution(this)">👁️ إظهار الحل</button>
+        </div>
+        <div class="card-body">
+          <div class="question-prompt">المحدد المباشر الأهم على الإطلاق في خفض معدلات الخصوبة بجمهورية مصر العربية بنسبة 64% هو: (الرضاعة الطبيعية — سن الزواج — تنظيم الأسرة — الإجهاض المتعمد)؟</div>
+          <div class="solution-content">
+            <div class="step-block">
+              <div class="step-label label-green">الحل النموذجي:</div>
+              <div><b>تنظيم الأسرة</b> هو المحدد الأول بنسبة <span class="result-badge">64%</span>، تليه الرضاعة (14%)، ثم الإجهاض (12%)، وأخيراً سن الزواج (10%).</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Q3 -->
+      <div class="card">
+        <div class="card-header">
+          <span class="prob-tag">سؤال 3 (دستوري وقانوني):</span>
+          <button class="sol-toggle-btn" onclick="toggleCardSolution(this)">👁️ إظهار الحل</button>
+        </div>
+        <div class="card-body">
+          <div class="question-prompt">ما هو القانون الذي نظم إنشاء محاكم الأسرة في مصر، وما هي المادة الدستورية التي ألزمت الدولة بحماية المرأة من العنف؟</div>
+          <div class="solution-content">
+            <div class="step-block">
+              <div class="step-label label-blue">الحل النموذجي:</div>
+              <div>&bull; قانون إنشاء محاكم الأسرة: <span class="result-badge">قانون رقم 10 لسنة 2004</span>.</div>
+              <div>&bull; المادة الدستورية الملزمة بحماية المرأة من كافة أشكال العنف وكفالة المساواة والتعيين بالجهات القضائية: <span class="result-badge">المادة 11 من دستور 2014</span>.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <script>
+    // Lecture Filter Switcher
+    function switchFilter(type) {
+      const tabs = document.querySelectorAll('.lecture-tab');
+      tabs.forEach(t => t.classList.remove('active'));
+
+      const sec1 = document.getElementById('section-lec1');
+      const sec2 = document.getElementById('section-lec2');
+      const sec3 = document.getElementById('section-lec3');
+      const sec4 = document.getElementById('section-lec4');
+      const secQuiz = document.getElementById('section-quiz');
+
+      if (type === 'all') {
+        document.getElementById('tab-btn-all').classList.add('active');
+        sec1.style.display = 'block';
+        sec2.style.display = 'block';
+        sec3.style.display = 'block';
+        sec4.style.display = 'block';
+        secQuiz.style.display = 'block';
+      } else if (type === 'lec1') {
+        document.getElementById('tab-btn-1').classList.add('active');
+        sec1.style.display = 'block';
+        sec2.style.display = 'none';
+        sec3.style.display = 'none';
+        sec4.style.display = 'none';
+        secQuiz.style.display = 'none';
+      } else if (type === 'lec2') {
+        document.getElementById('tab-btn-2').classList.add('active');
+        sec1.style.display = 'none';
+        sec2.style.display = 'block';
+        sec3.style.display = 'none';
+        sec4.style.display = 'none';
+        secQuiz.style.display = 'none';
+      } else if (type === 'lec3') {
+        document.getElementById('tab-btn-3').classList.add('active');
+        sec1.style.display = 'none';
+        sec2.style.display = 'none';
+        sec3.style.display = 'block';
+        sec4.style.display = 'none';
+        secQuiz.style.display = 'none';
+      } else if (type === 'lec4') {
+        document.getElementById('tab-btn-4').classList.add('active');
+        sec1.style.display = 'none';
+        sec2.style.display = 'none';
+        sec3.style.display = 'none';
+        sec4.style.display = 'block';
+        secQuiz.style.display = 'none';
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Live Text Search Filter
+    function liveFilterContent() {
+      const query = document.getElementById('live-search-input').value.trim().toLowerCase();
+      const sections = document.querySelectorAll('.lecture-section');
+      
+      sections.forEach(sec => {
+        const text = sec.innerText.toLowerCase();
+        if (query === '' || text.includes(query)) {
+          sec.style.display = 'block';
+        } else {
+          sec.style.display = 'none';
+        }
+      });
+    }
+
+    // Card Solution Toggle
+    function toggleCardSolution(btn) {
+      const card = btn.closest('.card');
+      const sol = card.querySelector('.solution-content');
+      if (sol.classList.contains('show')) {
+        sol.classList.remove('show');
+        btn.classList.remove('active');
+        btn.innerHTML = '👁️ إظهار الحل';
+      } else {
+        sol.classList.add('show');
+        btn.classList.add('active');
+        btn.innerHTML = '🙈 إخفاء الحل';
+      }
+    }
+
+    // Global Solution Toggle
+    let allExpanded = false;
+    function toggleAllGlobalAnswers() {
+      allExpanded = !allExpanded;
+      const buttons = document.querySelectorAll('.sol-toggle-btn');
+      const solutions = document.querySelectorAll('.solution-content');
+
+      solutions.forEach((sol, idx) => {
+        const btn = buttons[idx];
+        if (allExpanded) {
+          sol.classList.add('show');
+          if (btn) {
+            btn.classList.add('active');
+            btn.innerHTML = '🙈 إخفاء الحل';
+          }
+        } else {
+          sol.classList.remove('show');
+          if (btn) {
+            btn.classList.remove('active');
+            btn.innerHTML = '👁️ إظهار الحل';
+          }
+        }
+      });
+    }
+  </script>
+</body>
+</html>
