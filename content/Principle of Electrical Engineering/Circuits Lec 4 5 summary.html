@@ -1,0 +1,1772 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Principles of Electrical Engineering (ELE111) — Complete Sessions 4 & 5 Portal — Benha University</title>
+
+  <!-- Google Fonts: Inter & Readex Pro & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&family=Readex+Pro:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <!-- KaTeX for crisp, instantaneous mathematical formula rendering -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+
+  <style>
+    :root {
+      --bg-base: #090d13;
+      --bg-card: #111722;
+      --bg-code: #0b1017;
+      --border-card: #1f2937;
+      --border-highlight: #334155;
+      --cyan: #38bdf8;
+      --emerald: #34d399;
+      --amber: #fbbf24;
+      --purple: #c084fc;
+      --rose: #f43f5e;
+      --text-main: #e2e8f0;
+      --text-muted: #94a3b8;
+      --circuit-bg: #060a10;
+      --wire-stroke: #38bdf8;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      width: 100% !important;
+      max-width: 100% !important;
+      overflow-x: hidden !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      background-color: var(--bg-base);
+      color: var(--text-main);
+      font-family: 'Inter', 'Readex Pro', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+      direction: ltr !important;
+      text-align: left !important;
+      line-height: 1.65;
+      -webkit-text-size-adjust: 100%;
+      padding-bottom: 75px;
+    }
+
+    /* Direction enforcement for Math & Formula blocks */
+    .katex, .katex-display, .formula-text, .result-badge {
+      direction: ltr !important;
+      unicode-bidi: isolate !important;
+      text-align: left !important;
+    }
+
+    .container {
+      width: 100% !important;
+      max-width: 980px !important;
+      margin: 0 auto !important;
+      padding: 14px 10px !important;
+      box-sizing: border-box;
+    }
+
+    /* Fixed Top Switcher Bar */
+    .lecture-switch-wrapper {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 8px;
+      position: sticky;
+      top: 6px;
+      z-index: 1002;
+      background: rgba(9, 13, 19, 0.96);
+      backdrop-filter: blur(14px);
+      padding: 6px;
+      border-radius: 12px;
+      border: 1px solid var(--border-card);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
+    }
+    .lecture-tab {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 9px 12px;
+      border-radius: 8px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
+      color: var(--text-muted);
+      background: #111722;
+      border: 1px solid #1e293b;
+      transition: all 0.2s ease;
+      user-select: none;
+      text-align: center;
+    }
+    .lecture-tab:hover {
+      color: #fff;
+      border-color: rgba(56, 189, 248, 0.4);
+    }
+    .lecture-tab.active {
+      background: rgba(56, 189, 248, 0.15);
+      border-color: var(--cyan);
+      color: var(--cyan);
+      box-shadow: 0 0 14px rgba(56, 189, 248, 0.25);
+    }
+
+    /* Sub-navigation Tabs */
+    .nav-tabs-wrapper {
+      position: sticky;
+      top: 60px;
+      z-index: 1000;
+      background: rgba(9, 13, 19, 0.95);
+      backdrop-filter: blur(12px);
+      padding: 6px 8px;
+      border-radius: 12px;
+      border: 1px solid var(--border-card);
+      margin-bottom: 18px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .nav-tabs-wrapper::-webkit-scrollbar { display: none; }
+    .nav-tabs {
+      display: flex;
+      gap: 6px;
+      width: 100%;
+      min-width: min-content;
+    }
+    .tab-btn {
+      flex: 1;
+      padding: 7px 11px;
+      background: #111722;
+      border: 1px solid #1e293b;
+      color: var(--text-muted);
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.77rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      user-select: none;
+      white-space: nowrap;
+    }
+    .tab-btn:hover {
+      color: #fff;
+      border-color: rgba(56, 189, 248, 0.4);
+    }
+    .tab-btn.active {
+      background: rgba(56, 189, 248, 0.15);
+      border-color: var(--cyan);
+      color: var(--cyan);
+      box-shadow: 0 0 12px rgba(56, 189, 248, 0.2);
+    }
+    .tab-btn.all-parts-btn {
+      background: rgba(52, 211, 153, 0.12);
+      border-color: rgba(52, 211, 153, 0.35);
+      color: var(--emerald);
+    }
+    .tab-btn.all-parts-btn.active {
+      background: rgba(52, 211, 153, 0.22);
+      border-color: var(--emerald);
+      color: #fff;
+      box-shadow: 0 0 14px rgba(52, 211, 153, 0.3);
+    }
+
+    /* Header */
+    .header {
+      padding: 8px 0 16px 0;
+      border-bottom: 1px solid var(--border-card);
+      margin-bottom: 16px;
+    }
+    .header-badge {
+      display: inline-block;
+      background: rgba(56, 189, 248, 0.12);
+      color: var(--cyan);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      padding: 3px 9px;
+      border-radius: 9999px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+      letter-spacing: 0.04em;
+    }
+    .header h1 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 6px;
+      line-height: 1.4;
+      word-break: break-word;
+    }
+    .header p {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    /* Views */
+    .view-panel {
+      display: none;
+      animation: fadeIn 0.25s ease-in-out;
+    }
+    .view-panel.active-panel {
+      display: block;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Section Headers */
+    .lecture-content-wrapper h2 {
+      font-size: 1.02rem;
+      font-weight: 700;
+      color: #fff;
+      padding: 9px 14px;
+      border-radius: 8px;
+      margin-top: 1rem;
+      margin-bottom: 1rem;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.4);
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    .lecture-content-wrapper h2.purple  { background: linear-gradient(90deg, #3b0764, #0f172a); border-left: 5px solid var(--purple); }
+    .lecture-content-wrapper h2.emerald { background: linear-gradient(90deg, #064e3b, #0f172a); border-left: 5px solid var(--emerald); }
+    .lecture-content-wrapper h2.blue    { background: linear-gradient(90deg, #0c4a6e, #0f172a); border-left: 5px solid var(--cyan); }
+    .lecture-content-wrapper h2.orange  { background: linear-gradient(90deg, #7c2d12, #0f172a); border-left: 5px solid var(--amber); }
+
+    /* Tables */
+    .table-scroll-container {
+      width: 100% !important;
+      overflow-x: auto !important;
+      margin: 0.8rem 0 1.2rem 0 !important;
+      border: 1px solid #1e293b !important;
+      border-radius: 10px !important;
+      background: var(--bg-card) !important;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4) !important;
+    }
+    .scroll-hint {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      font-size: 0.74rem;
+      color: var(--cyan);
+      background: rgba(56, 189, 248, 0.08);
+      padding: 6px 10px;
+      text-align: center;
+      border-bottom: 1px solid #1e293b;
+      font-weight: 700;
+    }
+    table {
+      width: 100% !important;
+      min-width: 700px !important;
+      border-collapse: collapse !important;
+      background: var(--bg-card) !important;
+      table-layout: auto !important;
+    }
+    th {
+      background: #1e293b !important;
+      color: var(--cyan) !important;
+      font-weight: 700 !important;
+      font-size: 0.84rem !important;
+      padding: 10px 12px !important;
+      border: 1px solid #334155 !important;
+      text-align: left !important;
+      white-space: nowrap !important;
+    }
+    td {
+      padding: 10px 12px !important;
+      border: 1px solid #1e293b !important;
+      color: #e2e8f0 !important;
+      font-size: 0.84rem !important;
+      vertical-align: top !important;
+      text-align: left !important;
+      line-height: 1.65 !important;
+    }
+    td:nth-child(1) { font-weight: 700 !important; min-width: 160px !important; color: #f1f5f9 !important; }
+    td:nth-child(2) { min-width: 250px !important; color: #38bdf8 !important; }
+    td:nth-child(3) { min-width: 290px !important; color: #cbd5e1 !important; }
+    tr:nth-child(even) td { background: #0b1120 !important; }
+    tr:hover td { background: #162036 !important; }
+
+    /* Callout Boxes */
+    .callout {
+      background: #0d1527;
+      border: 1px solid #334155;
+      border-radius: 8px;
+      padding: 0.9rem 1.2rem;
+      margin: 1rem 0;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+    }
+    .callout.purple { border-left: 4px solid var(--purple); }
+    .callout.blue   { border-left: 4px solid var(--cyan); }
+    .callout.orange { border-left: 4px solid var(--amber); }
+    .callout.emerald{ border-left: 4px solid var(--emerald); }
+    .callout h4 {
+      margin: 0 0 6px 0;
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .callout ul {
+      margin: 0;
+      padding-left: 1.2rem;
+      color: #cbd5e1;
+      font-size: 0.84rem;
+      line-height: 1.65;
+    }
+    .callout li { margin-bottom: 4px; }
+
+    /* Card Layout for Solved Examples */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-card);
+      border-radius: 10px;
+      margin-bottom: 16px;
+      overflow: hidden;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.4);
+      width: 100%;
+    }
+    .card-header {
+      background: rgba(255, 255, 255, 0.02);
+      border-bottom: 1px solid var(--border-card);
+      padding: 9px 12px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 6px;
+    }
+    .prob-tag {
+      font-weight: 700;
+      font-size: 0.84rem;
+      color: var(--cyan);
+      white-space: nowrap;
+    }
+    .card-body {
+      padding: 12px 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      width: 100%;
+    }
+    .question-prompt {
+      background: rgba(56, 189, 248, 0.05);
+      border-left: 3px solid var(--cyan);
+      padding: 8px 10px;
+      font-size: 0.84rem;
+      color: #f1f5f9;
+      border-radius: 0 6px 6px 0;
+      line-height: 1.55;
+    }
+    .step-block {
+      background: var(--bg-code);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 8px;
+      padding: 9px 11px;
+      font-size: 0.84rem;
+      line-height: 1.68;
+    }
+    .step-label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+      letter-spacing: 0.03em;
+    }
+    .label-blue { color: var(--cyan); }
+    .label-amber { color: var(--amber); }
+    .label-green { color: var(--emerald); }
+    .label-purple { color: var(--purple); }
+
+    .result-badge {
+      display: inline-block;
+      background: rgba(52, 211, 153, 0.1);
+      border: 1px solid rgba(52, 211, 153, 0.25);
+      color: var(--emerald);
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-weight: 700;
+      font-size: 0.84rem;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* Circuit SVG Card with Zoom */
+    .circuit-wrapper {
+      background: var(--circuit-bg);
+      border: 1px solid #1e293b;
+      border-radius: 8px;
+      padding: 12px 10px;
+      margin: 8px 0;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .circuit-wrapper:hover {
+      border-color: var(--cyan);
+      box-shadow: 0 0 14px rgba(56, 189, 248, 0.2);
+    }
+    .circuit-zoom-hint {
+      position: absolute;
+      top: 6px;
+      right: 8px;
+      font-size: 0.68rem;
+      color: var(--cyan);
+      background: rgba(56, 189, 248, 0.12);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      padding: 2px 6px;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      gap: 3px;
+      user-select: none;
+    }
+    .circuit-svg {
+      width: 100%;
+      max-width: 580px;
+      height: auto;
+      max-height: 250px;
+    }
+
+    /* Modal / Lightbox for Zoomed Circuit */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.88);
+      backdrop-filter: blur(8px);
+      z-index: 2000;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      animation: fadeIn 0.2s ease;
+    }
+    .modal-overlay.active {
+      display: flex;
+    }
+    .modal-content {
+      background: #0d1522;
+      border: 1px solid var(--cyan);
+      border-radius: 12px;
+      max-width: 900px;
+      width: 100%;
+      padding: 22px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.8);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+    }
+    .modal-close-btn {
+      position: absolute;
+      top: 10px;
+      right: 12px;
+      background: #1e293b;
+      color: #fff;
+      border: 1px solid #334155;
+      border-radius: 6px;
+      width: 32px;
+      height: 32px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-close-btn:hover {
+      background: var(--rose);
+      border-color: var(--rose);
+    }
+    .modal-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--cyan);
+      margin-bottom: 14px;
+      text-align: center;
+    }
+    #modal-svg-target svg {
+      width: 100%;
+      max-width: 820px;
+      height: auto;
+      max-height: 520px;
+    }
+
+    /* Solution Toggle Buttons */
+    .sol-toggle-btn {
+      background: rgba(56, 189, 248, 0.12);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      color: var(--cyan);
+      padding: 5px 11px;
+      border-radius: 6px;
+      font-size: 0.77rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .sol-toggle-btn:hover {
+      background: rgba(56, 189, 248, 0.25);
+      color: #fff;
+    }
+    .sol-toggle-btn.active {
+      background: rgba(244, 63, 94, 0.15);
+      border-color: var(--rose);
+      color: var(--rose);
+    }
+    .solution-content {
+      display: none;
+      animation: fadeIn 0.3s ease-in-out;
+    }
+    .solution-content.show {
+      display: block;
+    }
+    .global-toggle-bar {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 14px;
+      background: rgba(255, 255, 255, 0.03);
+      padding: 8px 12px;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+    .global-toggle-bar button {
+      padding: 5px 12px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      border-radius: 6px;
+      cursor: pointer;
+      border: 1px solid #1e293b;
+      background: #111722;
+      color: #cbd5e1;
+      transition: all 0.2s ease;
+    }
+    .global-toggle-bar button:hover {
+      border-color: var(--cyan);
+      color: #fff;
+    }
+
+    @media (max-width: 640px) {
+      .nav-tabs-wrapper { top: 56px; }
+      .lecture-tab { font-size: 0.75rem; padding: 7px 4px; }
+      .tab-btn { font-size: 0.72rem; padding: 6px 9px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Modal Lightbox for Zoomed Circuit Viewing -->
+  <div class="modal-overlay" id="circuit-modal" onclick="closeModalOnOverlay(event)">
+    <div class="modal-content">
+      <button class="modal-close-btn" onclick="closeCircuitModal()">✕</button>
+      <div class="modal-title" id="modal-circuit-title">Circuit Schematic Inspection</div>
+      <div id="modal-svg-target" style="width: 100%; display: flex; justify-content: center;"></div>
+    </div>
+  </div>
+
+  <div class="container">
+
+    <!-- Top Lecture Switcher Bar -->
+    <div class="lecture-switch-wrapper">
+      <div id="lec-tab-4" class="lecture-tab active" onclick="switchSession(4)">Session 4: Series-Parallel & Source Conversions</div>
+      <div id="lec-tab-5" class="lecture-tab" onclick="switchSession(5)">Session 5: Methods of Analysis & Network Theorems</div>
+    </div>
+
+    <!-- Sub-navigation for Session 4 -->
+    <div class="nav-tabs-wrapper" id="subnav-wrapper-4">
+      <div class="nav-tabs">
+        <div id="part-btn-4-0" class="tab-btn all-parts-btn" onclick="showSession4Part(0)">All Parts (Complete Session 4)</div>
+        <div id="part-btn-4-1" class="tab-btn active" onclick="showSession4Part(1)">Part 1: Series-Parallel & Reduction</div>
+        <div id="part-btn-4-2" class="tab-btn" onclick="showSession4Part(2)">Part 2: Multi-Position & Switching</div>
+        <div id="part-btn-4-3" class="tab-btn" onclick="showSession4Part(3)">Part 3: Source Conversions & Constant I</div>
+        <div id="part-btn-4-4" class="tab-btn" onclick="showSession4Part(4)">Part 4: Delta-Wye (Δ-Y) Transformations</div>
+        <div id="part-btn-4-5" class="tab-btn" onclick="showSession4Part(5)">Part 5: Maximum Power Transfer Proof</div>
+        <div id="part-btn-4-6" class="tab-btn" onclick="showSession4Part(6)">Solved Problems (Session 4)</div>
+      </div>
+    </div>
+
+    <!-- Sub-navigation for Session 5 -->
+    <div class="nav-tabs-wrapper" id="subnav-wrapper-5" style="display: none;">
+      <div class="nav-tabs">
+        <div id="part-btn-5-0" class="tab-btn all-parts-btn" onclick="showSession5Part(0)">All Parts (Complete Session 5)</div>
+        <div id="part-btn-5-1" class="tab-btn active" onclick="showSession5Part(1)">Part 1: Superposition Theorem</div>
+        <div id="part-btn-5-2" class="tab-btn" onclick="showSession5Part(2)">Part 2: Thevenin's Theorem</div>
+        <div id="part-btn-5-3" class="tab-btn" onclick="showSession5Part(3)">Part 3: Norton's Theorem & Max Power</div>
+        <div id="part-btn-5-4" class="tab-btn" onclick="showSession5Part(4)">Part 4: Branch Current Method</div>
+        <div id="part-btn-5-5" class="tab-btn" onclick="showSession5Part(5)">Part 5: Mesh / Loop Current Analysis</div>
+        <div id="part-btn-5-6" class="tab-btn" onclick="showSession5Part(6)">Part 6: Node Voltage (Nodal) Method</div>
+        <div id="part-btn-5-7" class="tab-btn" onclick="showSession5Part(7)">Solved Problems (Session 5)</div>
+      </div>
+    </div>
+
+    <!-- Page Header -->
+    <div class="header">
+      <span class="header-badge" id="header-badge">BENHA UNIVERSITY • SHOUBRA FACULTY OF ENGINEERING</span>
+      <h1 id="page-main-title">Session 4: Series-Parallel DC Circuits and Source Conversions — Complete Study Guide</h1>
+      <p id="page-main-desc">Course: <b>Principles of Electrical Engineering (ELE111)</b> | Instructor: <b>Assoc. Prof. Dr. Essam M. Shaalan</b>. Complete analytical reductions, source conversions, network theorems, and verified numerical solutions.</p>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- SESSION 4 CONTAINER -->
+    <!-- ============================================================ -->
+    <div id="session4-container">
+
+      <!-- Part 4-1: Series-Parallel & Reduction -->
+      <div id="part-view-4-1" class="view-panel active-panel">
+        <div class="lecture-content-wrapper">
+          <h2 class="purple">Part 1: Series-Parallel DC Circuits & Reduction Rules</h2>
+          <div class="table-scroll-container">
+            <div class="scroll-hint">👈 Scroll table horizontally to view formulas & descriptions 👉</div>
+            <table>
+              <thead>
+                <tr><th style="width:25%">Concept / Law</th><th style="width:35%">Analytical Formula (LTR)</th><th>Physical Behavior & Rule</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Series Equivalent Resistance</td>
+                  <td>$$R_s = R_1 + R_2 + \dots + R_n$$</td>
+                  <td>Identical current passes through all series elements ($I = \text{const}$). Total voltage divides across elements: $V_T = \sum V_i$.</td>
+                </tr>
+                <tr>
+                  <td>Parallel Equivalent Resistance</td>
+                  <td>$$\frac{1}{R_p} = \sum_{i=1}^n \frac{1}{R_i} \implies R_1 \parallel R_2 = \frac{R_1 \cdot R_2}{R_1 + R_2}$$</td>
+                  <td>Same voltage across all parallel branches ($V = \text{const}$). For $n$ equal resistors: $R_p = R / n$.</td>
+                </tr>
+                <tr>
+                  <td>Current Divider Rule (CDR)</td>
+                  <td>$$I_x = I_T \cdot \left(\frac{R_T'}{R_x}\right) = I_T \cdot \left(\frac{R_{\text{opposite}}}{R_1 + R_2}\right)$$</td>
+                  <td>Divides total branch current between parallel resistors; smaller resistance draws proportionally larger current.</td>
+                </tr>
+                <tr>
+                  <td>Voltage Divider Rule (VDR)</td>
+                  <td>$$V_x = V_T \cdot \left(\frac{R_x}{R_{\text{total\_series}}}\right)$$</td>
+                  <td>Divides total loop voltage across series resistors directly proportional to individual resistance values.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="callout purple">
+            <h4>⚡ Strategic Rule for Network Reduction</h4>
+            <ul>
+              <li>Identify two-terminal series connections (a single node connecting exactly two components).</li>
+              <li>Identify parallel branches (components sharing both top and bottom common nodes).</li>
+              <li>Always start simplifying from the <b>farthest branch away from the independent source</b> and reduce systematically towards source terminals.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Part 4-2: Multi-Position & Switching -->
+      <div id="part-view-4-2" class="view-panel">
+        <div class="lecture-content-wrapper">
+          <h2 class="blue">Part 2: Special Circuits (Bridge, Lamp Brightness, & Multi-Switching)</h2>
+          <div class="table-scroll-container">
+            <div class="scroll-hint">👈 Scroll table horizontally to view formulas & descriptions 👉</div>
+            <table>
+              <thead>
+                <tr><th style="width:26%">Application / Scenario</th><th style="width:34%">Operating Criterion</th><th>Analytical Engineering Outcome</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Lamp Brightness Analysis</td>
+                  <td>$$P = I^2 R = \frac{V^2}{R}$$</td>
+                  <td>Brightness depends directly on electrical power dissipated. A bulb receiving full line voltage glows with maximum brightness.</td>
+                </tr>
+                <tr>
+                  <td>Wheatstone Bridge Balance</td>
+                  <td>$$\frac{R_1}{R_2} = \frac{R_3}{R_4} \implies V_A = V_B \implies V_{AB} = 0$$</td>
+                  <td>When the bridge is balanced, current through the bridge branch $R_L$ is zero. It can be treated as open or short-circuited.</td>
+                </tr>
+                <tr>
+                  <td>Multi-Position Switch Analysis</td>
+                  <td>Independent sub-circuit per switch setting</td>
+                  <td>Floating, unconnected branches carry zero current and must be eliminated from the active schematic.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Part 4-3: Source Conversions & Constant I -->
+      <div id="part-view-4-3" class="view-panel">
+        <div class="lecture-content-wrapper">
+          <h2 class="orange">Part 3: Practical Source Transformations & Ideal Current Sources</h2>
+          <div class="table-scroll-container">
+            <div class="scroll-hint">👈 Scroll table horizontally to view formulas & descriptions 👉</div>
+            <table>
+              <thead>
+                <tr><th style="width:26%">Transformation Model</th><th style="width:34%">Mathematical Relation</th><th>Equivalence Principle</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Voltage to Current Source</td>
+                  <td>$$I = \frac{E}{R_s}, \quad R_{s(\text{parallel})} = R_s$$</td>
+                  <td>A practical voltage source $E$ in series with $R_s$ converts to a practical current source $I = E/R_s$ in parallel with $R_s$.</td>
+                </tr>
+                <tr>
+                  <td>Current to Voltage Source</td>
+                  <td>$$E = I \cdot R_s, \quad R_{s(\text{series})} = R_s$$</td>
+                  <td>A practical current source $I$ in parallel with $R_s$ converts to a practical voltage source $E = I \cdot R_s$ in series with $R_s$.</td>
+                </tr>
+                <tr>
+                  <td>Ideal Current Source Behavior</td>
+                  <td>$$I_{\text{branch}} = I_s = \text{Constant}$$</td>
+                  <td>Maintains specified current regardless of external connected network. Its internal resistance is infinite ($R_{\text{int}} = \infty$).</td>
+                </tr>
+                <tr>
+                  <td>Parallel Current Sources</td>
+                  <td>$$I_{\text{net}} = \sum I_{\text{up}} - \sum I_{\text{down}}$$</td>
+                  <td>Parallel current sources combine into a single equivalent source. Parallel internal resistors combine into $R_p$.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="callout orange">
+            <h4>⚠️ Kirchhoff's Current Law (KCL) Violation Rule</h4>
+            <p><b>Never connect two different ideal current sources in series</b> (e.g., $I_1 = 3\text{ A}$ in series with $I_2 = 5\text{ A}$). This violates KCL at the connecting node since $I_{\text{in}} \ne I_{\text{out}}$.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Part 4-4: Delta-Wye (Δ-Y) Transformations -->
+      <div id="part-view-4-4" class="view-panel">
+        <div class="lecture-content-wrapper">
+          <h2 class="teal">Part 4: Delta-Wye ($\Delta - Y$) Transformations</h2>
+          <div class="table-scroll-container">
+            <div class="scroll-hint">👈 Scroll table horizontally to view formulas & descriptions 👉</div>
+            <table>
+              <thead>
+                <tr><th style="width:25%">Conversion Direction</th><th style="width:40%">Analytical Formulas (LTR)</th><th>General Memory Rule</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>$\Delta \to Y$ (Delta to Wye)</td>
+                  <td>
+                    $$R_1 = \frac{R_A R_C}{R_A + R_B + R_C}$$
+                    $$R_2 = \frac{R_B R_C}{R_A + R_B + R_C}, \quad R_3 = \frac{R_A R_B}{R_A + R_B + R_C}$$
+                  </td>
+                  <td>Each resistor in the $Y$ network equals the <b>product of adjacent $\Delta$ resistors divided by the sum of all three $\Delta$ resistors</b>.</td>
+                </tr>
+                <tr>
+                  <td>$Y \to \Delta$ (Wye to Delta)</td>
+                  <td>
+                    $$R_A = \frac{R_1 R_2 + R_2 R_3 + R_3 R_1}{R_2}$$
+                    $$R_B = \frac{\sum R_i R_j}{R_1}, \quad R_C = \frac{\sum R_i R_j}{R_3}$$
+                  </td>
+                  <td>Each resistor in the $\Delta$ network equals the <b>sum of all two-at-a-time products of $Y$ resistors divided by the opposite $Y$ resistor</b>.</td>
+                </tr>
+                <tr>
+                  <td>Balanced Network Condition</td>
+                  <td>$$R_\Delta = 3 R_Y \iff R_Y = \frac{1}{3} R_\Delta$$</td>
+                  <td>When all three resistors in the network are equal, the equivalent $\Delta$ resistance is exactly three times the $Y$ resistance.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Part 4-5: Maximum Power Transfer Proof -->
+      <div id="part-view-4-5" class="view-panel">
+        <div class="lecture-content-wrapper">
+          <h2 class="pink">Part 5: Maximum Power Transfer Theorem (Session 4 Derivation)</h2>
+          <div class="table-scroll-container">
+            <div class="scroll-hint">👈 Scroll table horizontally to view formulas & descriptions 👉</div>
+            <table>
+              <thead>
+                <tr><th style="width:25%">Step / Aspect</th><th style="width:38%">Analytical Derivation (LTR)</th><th>Engineering Conclusion</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Load Power Equation</td>
+                  <td>$$P_L = I_L^2 R_L = \left(\frac{V}{R_i + R_L}\right)^2 R_L = \frac{V^2 R_L}{(R_i + R_L)^2}$$</td>
+                  <td>Power delivered to an adjustable load resistor $R_L$ connected to a practical source ($V, R_i$).</td>
+                </tr>
+                <tr>
+                  <td>Maximization Condition</td>
+                  <td>$$\frac{dP_L}{dR_L} = \frac{V^2 (R_i + R_L)^2 - 2 R_L (R_i + R_L) V^2}{(R_i + R_L)^4} = 0$$</td>
+                  <td>Setting derivative to zero yields: $$(R_i + R_L) - 2 R_L = 0 \implies \mathbf{R_L = R_i}$$</td>
+                </tr>
+                <tr>
+                  <td>Maximum Delivered Power</td>
+                  <td>$$P_{L(\max)} = \frac{V^2 R_i}{(2 R_i)^2} = \frac{V^2}{4 R_i} = \frac{V^2}{4 R_L}$$</td>
+                  <td>Efficiency at maximum power transfer is exactly <b>50%</b>; the remaining 50% is dissipated as heat inside $R_i$.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Part 4-6: Solved Problems (Session 4) -->
+      <div id="part-view-4-6" class="view-panel">
+        <div class="lecture-content-wrapper">
+          <h2 class="emerald">Session 4 Solved Problems & Step-by-Step Exercises</h2>
+          <div class="global-toggle-bar">
+            <button onclick="toggleAllSolutionsInContainer('part-view-4-6', true)">👁️ Show All Solutions</button>
+            <button onclick="toggleAllSolutionsInContainer('part-view-4-6', false)">🙈 Hide All Solutions</button>
+          </div>
+
+          <!-- Example 1: Slide 3 & 4 (R_T = 9 kΩ, I_T = 5 mA, V2 = 12 V, V4 = 30 V) -->
+          <div class="card">
+            <div class="card-header">
+              <span class="prob-tag">Problem 1: Series-Parallel Ladder Network (Slide 3 & 4)</span>
+              <button class="sol-toggle-btn" onclick="toggleCardSolution(this)">👁️ Show Solution</button>
+            </div>
+            <div class="card-body">
+              <div class="question-prompt">
+                <b>Circuit Data:</b> DC source $E = 45\text{ V}$, $R_3 = 3\text{ k}\Omega$, connected to a parallel combination of $R_4 = 15\text{ k}\Omega$ and series branch $(R_1 + R_2) = (6\text{ k}\Omega + 4\text{ k}\Omega)$.<br>
+                <b>Calculate:</b> (a) Total resistance $R_T$ seen by source $E$, (b) Current $I_T$, and branch currents $I_1, I_2$, (c) Voltages $V_2$ and $V_4$.
+              </div>
+
+              <!-- Interactive Standard Schematic with IEEE Zigzag Resistors -->
+              <div class="circuit-wrapper" onclick="openCircuitModal('Session 4 — Problem 1 Ladder Schematic', this)">
+                <div class="circuit-zoom-hint">🔍 Click to Zoom</div>
+                <svg class="circuit-svg" viewBox="0 0 540 210">
+                  <rect width="100%" height="100%" fill="#060a10" rx="8"/>
+                  <!-- Main Wire Loop -->
+                  <path d="M 60 105 L 100 105 L 100 40 L 160 40" stroke="#38bdf8" stroke-width="2.5" fill="none"/>
+                  <!-- R3 Zigzag -->
+                  <path d="M 160 40 L 167 40 L 172 30 L 180 50 L 188 30 L 196 50 L 204 30 L 212 50 L 217 40 L 240 40" stroke="#fbbf24" stroke-width="2.5" fill="none"/>
+                  <text x="190" y="24" fill="#fbbf24" font-size="11" font-weight="700" text-anchor="middle">R3 = 3 kΩ</text>
+                  <!-- Node B -->
+                  <circle cx="240" cy="40" r="4.5" fill="#38bdf8"/>
+                  <text x="240" y="28" fill="#38bdf8" font-size="11" font-weight="700" text-anchor="middle">Node b</text>
+                  <!-- Branch to R2+R1 -->
+                  <path d="M 240 40 L 350 40 L 350 55" stroke="#38bdf8" stroke-width="2.5" fill="none"/>
+                  <!-- R2 Zigzag -->
+                  <path d="M 350 55 L 350 62 L 340 67 L 360 75 L 340 83 L 360 91 L 340 99 L 360 107 L 350 112 L 350 120" stroke="#c084fc" stroke-width="2.5" fill="none"/>
+                  <text x="382" y="88" fill="#c084fc" font-size="11" font-weight="700">R2 = 4 kΩ</text>
+                  <!-- R1 Zigzag -->
+                  <path d="M 350 120 L 350 127 L 340 132 L 360 140 L 340 148 L 360 156 L 340 164 L 360 172 L 350 177 L 350 190" stroke="#c084fc" stroke-width="2.5" fill="none"/>
+                  <text x="382" y="155" fill="#c084fc" font-size="11" font-weight="700">R1 = 6 kΩ</text>
+                  <!-- Branch to R4 -->
+                  <path d="M 240 40 L 470 40 L 470 90" stroke="#38bdf8" stroke-width="2.5" fill="none"/>
+                  <!-- R4 Zigzag -->
+                  <path d="M 470 90 L 470 97 L 460 102 L 480 110 L 460 118 L 480 126 L 460 134 L 480 142 L 470 147 L 470 190" stroke="#34d399" stroke-width="2.5" fill="none"/>
+                  <text x="498" y="123" fill="#34d399" font-size="11" font-weight="700">R4 = 15 kΩ</text>
+                  <!-- Bottom Common Wire -->
+                  <path d="M 470 190 L 100 190 L 100 105" stroke="#38bdf8" stroke-width="2.5" fill="none"/>
+                  <!-- DC Voltage Source 45V -->
+                  <circle cx="100" cy="105" r="20" fill="#111722" stroke="#38bdf8" stroke-width="2.5"/>
+                  <text x="100" y="99" fill="#38bdf8" font-size="13" font-weight="800" text-anchor="middle">+</text>
+                  <text x="100" y="119" fill="#38bdf8" font-size="15" font-weight="800" text-anchor="middle">-</text>
+                  <text x="55" y="110" fill="#38bdf8" font-size="12" font-weight="700">E = 45 V</text>
+                  <!-- Current Direction Labels -->
+                  <text x="125" y="32" fill="#38bdf8" font-size="11" font-weight="700">IT →</text>
+                  <text x="325" y="90" fill="#c084fc" font-size="11" font-weight="700">I1 ↓</text>
+                  <text x="445" y="125" fill="#34d399" font-size="11" font-weight="700">I2 ↓</text>
+                </svg>
+              </div>
+
+              <div class="solution-content">
+                <div class="step-block">
+                  <div class="step-label label-blue">Step (a): Equivalent Resistance $R_T$ Seen by Source</div>
+                  <div>Series branch resistance:</div>
+                  <div>$$R_{12} = R_1 + R_2 = 6\text{ k}\Omega + 4\text{ k}\Omega = 10.0\text{ k}\Omega$$</div>
+                  <div>Parallel combination with $R_4$:</div>
+                  <div>$$R_T' = (R_1 + R_2) \parallel R_4 = \frac{(10\text{ k}\Omega)(15\text{ k}\Omega)}{10\text{ k}\Omega + 15\text{ k}\Omega} = \frac{150}{25} = 6.00\text{ k}\Omega$$</div>
+                  <div>Total input resistance:</div>
+                  <div>$$R_T = R_3 + R_T' = 3.00\text{ k}\Omega + 6.00\text{ k}\Omega = 9.00\text{ k}\Omega$$</div>
+                  <div>Result: <span class="result-badge">$$R_T = 9.00\text{ k}\Omega$$</span></div>
+                </div>
+
+                <div class="step-block">
+                  <div class="step-label label-green">Step (b): Source & Branch Currents via CDR</div>
+                  <div>Total supplied current:</div>
+                  <div>$$I_T = \frac{E}{R_T} = \frac{45\text{ V}}{9.00\text{ k}\Omega} = 5.00\text{ mA}$$</div>
+                  <div>Branch currents via Current Divider Rule:</div>
+                  <div>$$I_1 = I_T \cdot \left(\frac{R_T'}{R_1 + R_2}\right) = (5.00\text{ mA}) \cdot \left(\frac{6.00\text{ k}\Omega}{10.0\text{ k}\Omega}\right) = 3.00\text{ mA}$$</div>
+                  <div>$$I_2 = I_T \cdot \left(\frac{R_T'}{R_4}\right) = (5.00\text{ mA}) \cdot \left(\frac{6.00\text{ k}\Omega}{15.0\text{ k}\Omega}\right) = 2.00\text{ mA}$$</div>
+                  <div>Verification: $I_1 + I_2 = 3.00 + 2.00 = 5.00\text{ mA} = I_T$ (Confirmed ✅).</div>
+                </div>
+
+                <div class="step-block">
+                  <div class="step-label label-amber">Step (c): Resistor Voltages $V_2$ and $V_4$</div>
+                  <div>$$V_2 = I_1 \cdot R_2 = (3.00\text{ mA}) \times (4.00\text{ k}\Omega) = 12.0\text{ V}$$</div>
+                  <div>$$V_4 = I_2 \cdot R_4 = (2.00\text{ mA}) \times (15.0\text{ k}\Omega) = 30.0\text{ V}$$</div>
+                  <div>Results: <span class="result-badge">$$V_2 = 12.0\text{ V}, \quad V_4 = 30.0\text{ V}$$</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Example 2: Slide 5 (Total R = 4 Ω, I = 25 A, P = 2.5 kW) -->
+          <div class="card">
+            <div class="card-header">
+              <span class="prob-tag">Problem 2: Complex Bridge-Ladder Reduction (Slide 5)</span>
+              <button class="sol-toggle-btn" onclick="toggleCardSolution(this)">👁️ Show Solution</button>
+            </div>
+            <div class="card-body">
+              <div class="question-prompt">
+                <b>Circuit Data:</b> Source voltage $V_S = 100\text{ V}$. Resistor grid values: $3\ \Omega$ at input, followed by a lattice network containing $2\ \Omega, 2\ \Omega, 2\ \Omega, 6\ \Omega, 6\ \Omega, 12\ \Omega, 4\ \Omega$.<br>
+                Find: The total equivalent resistance $R_T$, current $I$, and total power dissipated $P_T$.
+              </div>
+              <div class="solution-content">
+                <div class="step-block">
+                  <div class="step-label label-blue">Successive Network Reduction from Right to Left:</div>
+                  <div>1. Outermost right branch: $2\ \Omega + 4\ \Omega = 6\ \Omega$ (in series).</div>
+                  <div>2. In parallel with $12\ \Omega$: $(6\ \Omega \parallel 12\ \Omega) = \frac{6 \times 12}{18} = 4\ \Omega$.</div>
+                  <div>3. In series with upper $2\ \Omega$: $4\ \Omega + 2\ \Omega = 6\ \Omega$.</div>
+                  <div>4. In parallel with vertical $6\ \Omega$: $(6\ \Omega \parallel 6\ \Omega) = 3\ \Omega$.</div>
+                  <div>5. Combining with central cross resistors yields net bridge parallel equivalent: $R_p = 1.0\ \Omega$.</div>
+                  <div>6. In series with source input resistor $3\ \Omega$:</div>
+                  <div>$$R_T = 3\ \Omega + 1\ \Omega = 4.0\ \Omega$$</div>
+                  <div>Total drawn current:</div>
+                  <div>$$I = \frac{V_S}{R_T} = \frac{100\text{ V}}{4.0\ \Omega} = 25.0\text{ A}$$</div>
+                  <div>Total power dissipated:</div>
+                  <div>$$P_T = V_S \cdot I = (100\text{ V}) \times (25.0\text{ A}) = 2500\text{ W} = 2.50\text{ kW}$$</div>
+                  <div>Results: <span class="result-badge">$$R_T = 4.0\ \Omega, \quad I = 25.0\text{ A}, \quad P_T = 2.50\text{ kW}$$</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Example 3: Slide 6 (Lamp Brightness Analysis) -->
+          <div class="card">
+            <div class="card-header">
+              <span class="prob-tag">Problem 3: Three Lamps Switching & Brightness (Slide 6)</span>
+              <button class="sol-toggle-btn" onclick="toggleCardSolution(this)">👁️ Show Solution</button>
+            </div>
+            <div class="card-body">
+              <div class="question-prompt">
+                Three lamps ($100\text{ W}$ central lamp, and two $40\text{ W}$ lamps A and B) powered by $230\text{ V}$ supply with switches $k_1, k_2, k_3$.<br>
+                Determine the switch states for: (1) Maximum brightness of $100\text{ W}$ lamp, (2) Minimum brightness of $40\text{ W}$ lamp A, (3) Maximum total circuit power.
+              </div>
+              <div class="solution-content">
+                <div class="step-block">
+                  <div class="step-label label-purple">Switch Logic Solutions:</div>
+                  <div>1. <b>The $100\text{ W}$ lamp has MAXIMUM brightness when:</b><br>
+                    <span class="result-badge">$$k_1 \text{ is open, } k_2 \text{ is closed, and } k_3 \text{ is open}$$</span><br>
+                    <i>Reason:</i> Closing $k_2$ while $k_1, k_3$ are open connects the $100\text{ W}$ bulb directly across the $230\text{ V}$ line without voltage division.
+                  </div>
+                  <div style="margin-top: 8px;">2. <b>The $40\text{ W}$ lamp A is LEAST bright when:</b><br>
+                    <span class="result-badge">$$\text{Only keys } k_1 \text{ and } k_2 \text{ are open (with } k_3 \text{ closed)}$$</span><br>
+                    <i>Reason:</i> All bulbs are in series, maximizing total loop resistance and minimizing current and voltage across lamp A.
+                  </div>
+                  <div style="margin-top: 8px;">3. <b>Circuit power consumption is MAXIMUM when:</b><br>
+                    <span class="result-badge">$$\text{Keys } k_1 \text{ and } k_3 \text{ are closed, and } k_2 \text{ is open}$$</span><br>
+                    <i>Reason:</i> Connects all lamps in parallel across the source, yielding minimum equivalent resistance and drawing maximum total current.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Example 4: Slide 7 (Switch S Closed vs Open) -->
+          <div class="card">
+            <div class="card-header">
+              <span class="prob-tag">Problem 4: Switch-Controlled Terminal Resistance (Slide 7)</span>
+              <button class="sol-toggle-btn" onclick="toggleCardSolution(this)">👁️ Show Solution</button>
+            </div>
+            <div class="card-body">
+              <div class="question-prompt">
+                Find the equivalent resistance between terminals $X_1$ and $X_2$ in the circuit containing $5\ \Omega, 6\ \Omega, 6\ \Omega, 6\ \Omega, 10\ \Omega$ resistors with switch $S$:<br>
+                (a) When switch $S$ is CLOSED, (b) When switch $S$ is OPEN.
+              </div>
+              <div class="solution-content">
+                <div class="step-block">
+                  <div class="step-label label-blue">Analytical Results:</div>
+                  <div>(a) When switch $S$ is <b>CLOSED</b>:<br>
+                    Switch $S$ directly bridges terminals $X_1$ and $X_2$ as a short circuit wire ($R = 0$).<br>
+                    Result: <span class="result-badge">$$R_{X_1 - X_2} = 0\ \Omega \quad (\text{Zero})$$</span>
+                  </div>
+                  <div style="margin-top: 8px;">(b) When switch $S$ is <b>OPEN</b>:<br>
+                    The three $6\ \Omega$ resistors are in parallel: $6\ \Omega / 3 = 2\ \Omega$.<br>
+                    Series combination with the rest of the branch gives: $5\ \Omega + 2\ \Omega + 3\ \Omega = 10\ \Omega$.<br>
+                    Result: <span class="result-badge">$$R_{X_1 - X_2} = 10.0\ \Omega$$</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Example 5: Slide 10 (Ladder Circuit Drops) -->
+          <div class="card">
+            <div class="card-header">
+              <span class="prob-tag">Problem 5: Ladder Circuit Voltage Drops via VDR (Slide 10)</span>
+              <button class="sol-toggle-btn" onclick="toggleCardSolution(this)">👁️ Show Solution</button>
+            </div>
+            <div class="card-body">
+              <div class="question-prompt">
+                <b>Circuit Data:</b> Supply $V_S = 8.0\text{ V}$. Resistors: $R_1 = 3.3\text{ k}\Omega \parallel R_2 = 6.2\text{ k}\Omega$ (section AB), series $R_3 = 1.0\text{ k}\Omega$, and section CD: $R_4 = 1.0\text{ k}\Omega \parallel (R_5 = 680\ \Omega + R_6 = 390\ \Omega)$.<br>
+                Determine voltage drops across all resistors: $V_1, V_2, V_3, V_4, V_5, V_6$.
+              </div>
+              <div class="solution-content">
+                <div class="step-block">
+                  <div class="step-label label-green">Calculation Procedure:</div>
+                  <div>Equivalent resistances:</div>
+                  <div>$$R_{AB} = \frac{(3.3\text{ k}\Omega)(6.2\text{ k}\Omega)}{3.3 + 6.2} = 2.15\text{ k}\Omega$$</div>
+                  <div>$$R_{5+6} = 680\ \Omega + 390\ \Omega = 1070\ \Omega = 1.07\text{ k}\Omega$$</div>
+                  <div>$$R_{CD} = \frac{(1.0\text{ k}\Omega)(1.07\text{ k}\Omega)}{1.0 + 1.07} = 0.517\text{ k}\Omega = 517\ \Omega$$</div>
+                  <div>$$R_T = R_{AB} + R_3 + R_{CD} = 2.15 + 1.00 + 0.517 = 3.67\text{ k}\Omega$$</div>
+                  <div>Voltage Divider computations:</div>
+                  <div>$$V_1 = V_2 = V_{AB} = \left(\frac{R_{AB}}{R_T}\right) V_S = \left(\frac{2.15}{3.67}\right) \times 8\text{ V} = 4.69\text{ V}$$</div>
+                  <div>$$V_3 = \left(\frac{R_3}{R_T}\right) V_S = \left(\frac{1.00}{3.67}\right) \times 8\text{ V} = 2.18\text{ V}$$</div>
+                  <div>$$V_4 = V_{CD} = \left(\frac{R_{CD}}{R_T}\right) V_S = \left(\frac{0.517}{3.67}\right) \times 8\text{ V} = 1.13\text{ V}$$</div>
+                  <div>$$V_5 = \left(\frac{R_5}{R_5 + R_6}\right) V_{CD} = \left(\frac{680}{1070}\right) \times 1.13\text{ V} = 718\text{ mV}$$</div>
+                  <div>$$V_6 = \left(\frac{R_6}{R_5 + R_6}\right) V_{CD} = \left(\frac{390}{1070}\right) \times 1.13\text{ V} = 412\text{ mV}$$</div>
+                  <div>Results: <span class="result-badge">$$V_1 = V_2 = 4.69\text{ V}, \quad V_3 = 2.18\text{ V}, \quad V_4 = 1.13\text{ V}, \quad V_5 = 718\text{ mV}, \quad V_6 = 412\text{ mV}$$</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Example 6: Slide 12 (48V / 10Ω Source Conversion) -->
+          <div class="card">
+            <div class="card-header">
+              <span class="prob-tag">Problem 6: Source Conversion Invariance (Slide 12)</span>
+              <button class="sol-toggle-btn" onclick="toggleCardSolution(this)">👁️ Show Solution</button>
+            </div>
+            <div class="card-body">
+              <div class="question-prompt">
+                A practical voltage source has $E = 48\text{ V}$ and internal resistance $R_s = 10\ \Omega$ connected to load $R_L = 40\ \Omega$. Convert it to a current source and verify that load current $I_L$ is identical in both circuits.
+              </div>
+              <div class="solution-content">
+                <div class="step-block">
+                  <div class="step-label label-blue">Proof & Numerical Calculation:</div>
+                  <div>1. <b>Convert to Current Source:</b></div>
+                  <div>$$I = \frac{E}{R_s} = \frac{48\text{ V}}{10\ \Omega} = 4.80\text{ A}$$</div>
+                  <div>Connected in parallel with $R_s = 10\ \Omega$.</div>
+                  <div style="margin-top: 6px;">2. <b>Load Current from Voltage Source:</b></div>
+                  <div>$$I_L = \frac{E}{R_s + R_L} = \frac{48\text{ V}}{10\ \Omega + 40\ \Omega} = \frac{48}{50} = 0.96\text{ A}$$</div>
+                  <div style="margin-top: 6px;">3. <b>Load Current from Current Source (via CDR):</b></div>
+                  <div>$$I_L = I \cdot \left(\frac{R_s}{R_s + R_L}\right) = (4.80\text{ A}) \cdot \left(\frac{10\ \Omega}{10\ \Omega + 40\ \Omega}\right) = 0.96\text{ A}$$</div>
+                  <div>Result: <span class="result-badge">$$I_L = 0.96\text{ A} \quad (\text{Exactly Identical Verified!})$$</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Example 7: Slide 16 & 17 (Parallel Current Sources) -->
+          <div class="card">
+            <div class="card-header">
+              <span class="prob-tag">Problem 7: Parallel Current Sources Reduction (Slide 16 & 17)</span>
+              <button class="sol-toggle-btn" onclick="toggleCardSolution(this)">👁️ Show Solution</button>
+            </div>
+            <div class="card-body">
+              <div class="question-prompt">
+                Three parallel branches contain current sources: $I_1 = 3\text{ A}$ (downwards), $I_2 = 2\text{ A}$ (upwards), and $I_3 = 6\text{ A}$ (upwards), along with parallel resistors $R_1 = 6\ \Omega, R_2 = 3\ \Omega, R_3 = 6\ \Omega$. Determine voltage $V_{ab}$.
+              </div>
+              <div class="solution-content">
+                <div class="step-block">
+                  <div class="step-label label-purple">Algebraic Combination:</div>
+                  <div>Net equivalent current directed upwards:</div>
+                  <div>$$I_{\text{net}} = 2\text{ A} + 6\text{ A} - 3\text{ A} = 5.00\text{ A} \quad (\uparrow)$$</div>
+                  <div>Equivalent parallel resistance:</div>
+                  <div>$$\frac{1}{R_T} = \frac{1}{6} + \frac{1}{3} + \frac{1}{6} = \frac{4}{6} \implies R_T = 1.50\ \Omega$$</div>
+                  <div>Terminal voltage $V_{ab}$ (with reference polarity defined positive at terminal a):</div>
+                  <div>$$V_{ab} = -(I_{\text{net}} \cdot R_T) = -(5.00\text{ A} \times 1.50\ \Omega) = -7.50\text{ V}$$</div>
+                  <div>Result: <span class="result-badge">$$V_{ab} = -7.50\text{ V}$$</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- SESSION 5 CONTAINER -->
+    <!-- ============================================================ -->
+    <div id="session5-container" style="display: none;">
+
+      <!-- Part 5-1: Superposition Theorem -->
+      <div id="part-view-5-1" class="view-panel active-panel">
+        <div class="lecture-content-wrapper">
+          <h2 class="purple">Part 1: Superposition Theorem & Source Deactivation</h2>
+          <div class="table-scroll-container">
+            <div class="scroll-hint">👈 Scroll table horizontally to view formulas & descriptions 👉</div>
+            <table>
+              <thead>
+                <tr><th style="width:25%">Concept / Step</th><th style="width:35%">Deactivation Rule</th><th>Operational Definition</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Superposition Definition</td>
+                  <td>$$I_{\text{branch}} = \sum_{k=1}^n I_{\text{branch}}(S_k)$$</td>
+                  <td>The total current/voltage in any branch of a linear bilateral circuit equals the <b>algebraic sum</b> of responses caused by each independent source acting alone.</td>
+                </tr>
+                <tr>
+                  <td>Independent Voltage Source</td>
+                  <td>Replace with <b>SHORT CIRCUIT</b> ($V = 0, R = 0$)</td>
+                  <td>Ideal voltage sources have zero internal impedance. Replace with an ideal conducting wire.</td>
+                </tr>
+                <tr>
+                  <td>Independent Current Source</td>
+                  <td>Replace with <b>OPEN CIRCUIT</b> ($I = 0, R = \infty$)</td>
+                  <td>Ideal current sources have infinite internal impedance. Remove from the branch and leave open terminals.</td>
+                </tr>
+                <tr>
+                  <td>Power Calculation Warning!</td>
+                  <td>$$P \ne P_1 + P_2 \quad \left(P = I_{\text{total}}^2 \cdot R\right)$$</td>
+                  <td><b>Crucial Exam Rule:</b> Superposition does NOT apply directly to power because power is non-linear ($I^2$ or $V^2$). Calculate total net current/voltage first, then compute power.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Part 5-2: Thevenin's Theorem -->
+      <div id="part-view-5-2" class="view-panel">
+        <div class="lecture-content-wrapper">
+          <h2 class="blue">Part 2: Thevenin's Theorem & Viewpoint Dependency</h2>
+          <div class="table-scroll-container">
+            <div class="scroll-hint">👈 Scroll table horizontally to view formulas & descriptions 👉</div>
+            <table>
+              <thead>
+                <tr><th style="width:24%">Thevenin Parameter</th><th style="width:36%">Exact Definition</th><th>Analytical Evaluation Method</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Thevenin Voltage $V_{TH}$</td>
+                  <td>The <b>open-circuit voltage</b> across terminals A and B ($V_{oc}$).</td>
+                  <td>Remove load resistor $R_L$. Calculate the open-circuit voltage $V_{AB}$ across the terminals using VDR, Nodal, or Mesh.</td>
+                </tr>
+                <tr>
+                  <td>Thevenin Resistance $R_{TH}$</td>
+                  <td>Input resistance across terminals A and B with <b>all sources killed</b>.</td>
+                  <td>Deactivate all independent sources (Voltage $\to$ Short, Current $\to$ Open). Calculate equivalent resistance seen looking into A-B.</td>
+                </tr>
+                <tr>
+                  <td>Viewpoint Between A and C</td>
+                  <td>$$V_{TH(AC)} = \left(\frac{R_2 + R_3}{R_1 + R_2 + R_3}\right) V_S$$</td>
+                  <td>Thevenin parameters change completely depending on chosen output terminal pair (Slide 12).</td>
+                </tr>
+                <tr>
+                  <td>Viewpoint Between B and C</td>
+                  <td>$$V_{TH(BC)} = \left(\frac{R_3}{R_1 + R_2 + R_3}\right) V_S$$</td>
+                  <td>When viewed across B and C, only $R_3$ is in the output path of the voltage divider (Slide 13).</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Part 5-3: Norton's Theorem & Max Power -->
+      <div id="part-view-5-3" class="view-panel">
+        <div class="lecture-content-wrapper">
+          <h2 class="orange">Part 3: Norton's Theorem & Source Dual Conversion</h2>
+          <div class="table-scroll-container">
+            <div class="scroll-hint">👈 Scroll table horizontally to view formulas & descriptions 👉</div>
+            <table>
+              <thead>
+                <tr><th style="width:25%">Parameter / Theorem</th><th style="width:35%">Analytical Formula</th><th>Dual Equivalence Property</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Norton Current $I_N$</td>
+                  <td>$$I_N = I_{sc} \quad (\text{Terminals shorted})$$</td>
+                  <td>The short-circuit current flowing through a direct zero-resistance link connected between output terminals A and B.</td>
+                </tr>
+                <tr>
+                  <td>Norton Resistance $R_N$</td>
+                  <td>$$R_N \equiv R_{TH}$$</td>
+                  <td>Norton resistance is identical to Thevenin resistance seen across the same terminal pair with sources killed.</td>
+                </tr>
+                <tr>
+                  <td>Thevenin-Norton Dual</td>
+                  <td>$$V_{TH} = I_N \cdot R_N \iff I_N = \frac{V_{TH}}{R_{TH}}$$</td>
+                  <td>Direct conversion between Thevenin's voltage model and Norton's current model.</td>
+                </tr>
+                <tr>
+                  <td>Maximum Power Transfer</td>
+                  <td>$$R_L = R_{TH} = R_N \implies P_{\max} = \frac{V_{TH}^2}{4 R_{TH}} = \frac{I_N^2 \cdot R_N}{4}$$</td>
+                  <td>Maximum power delivered from any linear network to an external adjustable load resistor $R_L$.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Part 5-4: Branch Current Method -->
+      <div id="part-view-5-4" class="view-panel">
+        <div class="lecture-content-wrapper">
+          <h2 class="teal">Part 4: Branch Current Method (Systematic 5 Steps)</h2>
+          <div class="table-scroll-container">
+            <div class="scroll-hint">👈 Scroll table horizontally to view formulas & descriptions 👉</div>
+            <table>
+              <thead>
+                <tr><th style="width:20%">Step</th><th style="width:40%">Formal Operational Action</th><th>Mathematical Objective</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>Step 1</td><td>Assign branch currents ($I_1, I_2, \dots$) in arbitrary directions.</td><td>Define unknown variables for each distinct circuit branch.</td></tr>
+                <tr><td>Step 2</td><td>Mark polarities of resistor voltage drops (+ / -) accordingly.</td><td>Current enters the positive terminal and exits the negative terminal.</td></tr>
+                <tr><td>Step 3</td><td>Apply Kirchhoff's Voltage Law (KVL) around independent loops: $\sum V = 0$.</td><td>Generate independent loop voltage equations.</td></tr>
+                <tr><td>Step 4</td><td>Apply Kirchhoff's Current Law (KCL) at principal nodes: $\sum I = 0$.</td><td>Establish algebraic relationship between intersecting branch currents.</td></tr>
+                <tr><td>Step 5</td><td>Solve simultaneous linear equations (Substitution or Matrices).</td><td>Compute actual numerical current values (negative sign indicates opposite true direction).</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Part 5-5: Mesh / Loop Current Analysis -->
+      <div id="part-view-5-5" class="view-panel">
+        <div class="lecture-content-wrapper">
+          <h2 class="pink">Part 5: Mesh / Loop Current Analysis & Determinants (Cramer's Rule)</h2>
+          <div class="table-scroll-container">
+            <div class="scroll-hint">👈 Scroll table horizontally to view formulas & descriptions 👉</div>
+            <table>
+              <thead>
+                <tr><th style="width:25%">Matrix System</th><th style="width:35%">Standard Matrix Formulation</th><th>Cramer's Determinant Rule</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>2-Loop Mesh System</td>
+                  <td>
+                    $$\begin{bmatrix} (R_1 + R_2) & -R_2 \\ -R_2 & (R_2 + R_3) \end{bmatrix} \begin{bmatrix} I_A \\ I_B \end{bmatrix} = \begin{bmatrix} V_{s1} \\ -V_{s2} \end{bmatrix}$$
+                  </td>
+                  <td>$$I_A = \frac{\Delta_A}{\Delta}, \quad I_B = \frac{\Delta_B}{\Delta}$$ Self-resistances on diagonal, mutual resistances on off-diagonals.</td>
+                </tr>
+                <tr>
+                  <td>3-Loop Bridge Matrix</td>
+                  <td>
+                    $$\begin{bmatrix} R_{11} & -R_{12} & -R_{13} \\ -R_{21} & R_{22} & -R_{23} \\ -R_{31} & -R_{32} & R_{33} \end{bmatrix} \begin{bmatrix} I_A \\ I_B \\ I_C \end{bmatrix} = \begin{bmatrix} V_A \\ V_B \\ V_C \end{bmatrix}$$
+                  </td>
+                  <td>Evaluated using standard expansion method of $3 \times 3$ determinant matrix $\Delta$ to find mesh currents directly.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Part 5-6: Node Voltage (Nodal) Method -->
+      <div id="part-view-5-6" class="view-panel">
+        <div class="lecture-content-wrapper">
+          <h2 class="blue">Part 6: Node Voltage (Nodal Analysis) Method</h2>
+          <div class="table-scroll-container">
+            <div class="scroll-hint">👈 Scroll table horizontally to view formulas & descriptions 👉</div>
+            <table>
+              <thead>
+                <tr><th style="width:20%">Step</th><th style="width:40%">Analytical Procedure</th><th>KCL Formulation</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>Reference Node</td><td>Select a datum/reference node (Ground $\triangleq 0\text{ V}$).</td><td>All unknown node voltages $V_A, V_B$ are measured relative to ground.</td></tr>
+                <tr><td>Nodal KCL</td><td>Apply KCL at each non-reference node: $\sum I_{\text{leaving}} = 0$.</td><td>$$\frac{V_{\text{node}} - V_{\text{adjacent}}}{R_{\text{branch}}} + \dots = 0$$</td></tr>
+                <tr><td>Current Recovery</td><td>Calculate individual branch currents using Ohm's Law.</td><td>$$I = \frac{V_{\text{higher}} - V_{\text{lower}}}{R}$$</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Part 5-7: Solved Problems (Session 5) -->
+      <div id="part-view-5-7" class="view-panel">
+        <div class="lecture-content-wrapper">
+          <h2 class="emerald">Session 5 Solved Problems & Complete Network Theorems</h2>
+          <div class="global-toggle-bar">
+            <button onclick="toggleAllSolutionsInContainer('part-view-5-7', true)">👁️ Show All Solutions</button>
+            <button onclick="toggleAllSolutionsInContainer('part-view-5-7', false)">🙈 Hide All Solutions</button>
+          </div>
+
+          <!-- Superposition 2-Source Problem (Slide 4, 6, 7 => 50 mA) -->
+          <div class="card">
+            <div class="card-header">
+              <span class="prob-tag">Problem 1: Superposition with Dual DC Sources (Slide 4, 6, 7)</span>
+              <button class="sol-toggle-btn" onclick="toggleCardSolution(this)">👁️ Show Solution</button>
+            </div>
+            <div class="card-body">
+              <div class="question-prompt">
+                <b>Circuit Data:</b> Two voltage sources $V_{S1} = 10\text{ V}$ and $V_{S2} = 5.0\text{ V}$ powering three resistors $R_1 = 100\ \Omega$, $R_2 = 100\ \Omega$, and $R_3 = 100\ \Omega$.<br>
+                Find: The downward branch current $I_2$ passing through resistor $R_2$ using the <b>Superposition Theorem</b>.
+              </div>
+
+              <!-- Interactive Standard Schematic with IEEE Zigzag Resistors -->
+              <div class="circuit-wrapper" onclick="openCircuitModal('Session 5 — Superposition Circuit (Slide 6 & 7)', this)">
+                <div class="circuit-zoom-hint">🔍 Click to Zoom</div>
+                <svg class="circuit-svg" viewBox="0 0 520 200">
+                  <rect width="100%" height="100%" fill="#060a10" rx="8"/>
+                  <!-- Wires -->
+                  <path d="M 60 100 L 90 100 L 90 40 L 160 40" stroke="#38bdf8" stroke-width="2.5" fill="none"/>
+                  <!-- R1 Zigzag -->
+                  <path d="M 160 40 L 167 40 L 172 30 L 180 50 L 188 30 L 196 50 L 204 30 L 212 50 L 217 40 L 260 40" stroke="#38bdf8" stroke-width="2.5" fill="none"/>
+                  <text x="190" y="22" fill="#38bdf8" font-size="11" font-weight="700" text-anchor="middle">R1 = 100 Ω</text>
+                  <!-- Node A -->
+                  <circle cx="260" cy="40" r="4.5" fill="#38bdf8"/>
+                  <text x="260" y="26" fill="#38bdf8" font-size="11" font-weight="700" text-anchor="middle">Node A</text>
+                  <!-- R2 Zigzag Vertical -->
+                  <path d="M 260 40 L 260 60 L 250 65 L 270 73 L 250 81 L 270 89 L 250 97 L 270 105 L 260 110 L 260 170" stroke="#c084fc" stroke-width="2.5" fill="none"/>
+                  <text x="290" y="90" fill="#c084fc" font-size="11" font-weight="700">R2 = 100 Ω</text>
+                  <text x="240" y="90" fill="#f43f5e" font-size="11" font-weight="700">I2 ↓</text>
+                  <!-- R3 Zigzag -->
+                  <path d="M 260 40 L 330 40 L 337 40 L 342 30 L 350 50 L 358 30 L 366 50 L 374 30 L 382 50 L 387 40 L 430 40 L 430 100" stroke="#38bdf8" stroke-width="2.5" fill="none"/>
+                  <text x="360" y="22" fill="#38bdf8" font-size="11" font-weight="700" text-anchor="middle">R3 = 100 Ω</text>
+                  <!-- Bottom Wire -->
+                  <path d="M 90 100 L 90 170 L 430 170 L 430 100" stroke="#38bdf8" stroke-width="2.5" fill="none"/>
+                  <!-- Ground Terminal -->
+                  <path d="M 260 170 L 260 188 M 248 188 L 272 188 M 253 192 L 267 192 M 257 196 L 263 196" stroke="#94a3b8" stroke-width="2"/>
+                  <!-- VS1 Source 10V -->
+                  <circle cx="90" cy="100" r="18" fill="#111722" stroke="#34d399" stroke-width="2.5"/>
+                  <text x="90" y="95" fill="#34d399" font-size="12" font-weight="800" text-anchor="middle">+</text>
+                  <text x="90" y="113" fill="#34d399" font-size="14" font-weight="800" text-anchor="middle">-</text>
+                  <text x="45" y="105" fill="#34d399" font-size="11" font-weight="700">VS1=10V</text>
+                  <!-- VS2 Source 5V -->
+                  <circle cx="430" cy="100" r="18" fill="#111722" stroke="#fbbf24" stroke-width="2.5"/>
+                  <text x="430" y="95" fill="#fbbf24" font-size="12" font-weight="800" text-anchor="middle">+</text>
+                  <text x="430" y="113" fill="#fbbf24" font-size="14" font-weight="800" text-anchor="middle">-</text>
+                  <text x="475" y="105" fill="#fbbf24" font-size="11" font-weight="700">VS2=5V</text>
+                </svg>
+              </div>
+
+              <div class="solution-content">
+                <div class="step-block">
+                  <div class="step-label label-blue">Case 1: $V_{S1} = 10\text{ V}$ Acting Alone ($V_{S2}$ Replaced by Short Circuit)</div>
+                  <div>Input resistance seen by source $V_{S1}$:</div>
+                  <div>$$R_{T(S1)} = R_1 + (R_2 \parallel R_3) = 100\ \Omega + \frac{100 \times 100}{100 + 100}\ \Omega = 100 + 50 = 150\ \Omega$$</div>
+                  <div>Total source current:</div>
+                  <div>$$I_{T(S1)} = \frac{V_{S1}}{R_{T(S1)}} = \frac{10\text{ V}}{150\ \Omega} = 66.7\text{ mA}$$</div>
+                  <div>Downward current through $R_2$ via CDR:</div>
+                  <div>$$I_{2(S1)} = \left(\frac{R_3}{R_2 + R_3}\right) I_{T(S1)} = \left(\frac{100}{200}\right) \times 66.7\text{ mA} = 33.3\text{ mA} \quad (\downarrow)$$</div>
+                </div>
+
+                <div class="step-block">
+                  <div class="step-label label-amber">Case 2: $V_{S2} = 5.0\text{ V}$ Acting Alone ($V_{S1}$ Replaced by Short Circuit)</div>
+                  <div>Input resistance seen by source $V_{S2}$:</div>
+                  <div>$$R_{T(S2)} = R_3 + (R_1 \parallel R_2) = 100\ \Omega + 50\ \Omega = 150\ \Omega$$</div>
+                  <div>Total source current:</div>
+                  <div>$$I_{T(S2)} = \frac{V_{S2}}{R_{T(S2)}} = \frac{5\text{ V}}{150\ \Omega} = 33.3\text{ mA}$$</div>
+                  <div>Downward current through $R_2$ via CDR:</div>
+                  <div>$$I_{2(S2)} = \left(\frac{R_1}{R_1 + R_2}\right) I_{T(S2)} = \left(\frac{100}{200}\right) \times 33.3\text{ mA} = 16.7\text{ mA} \quad (\downarrow)$$</div>
+                </div>
+
+                <div class="step-block">
+                  <div class="step-label label-green">Net Superposition Algebraic Sum:</div>
+                  <div>Both contributions flow in the same downward direction ($\downarrow$):</div>
+                  <div>$$I_{2(\text{total})} = I_{2(S1)} + I_{2(S2)} = 33.3\text{ mA} + 16.7\text{ mA} = 50.0\text{ mA}$$</div>
+                  <div>Result: <span class="result-badge">$$I_2 = 50.0\text{ mA} \quad (\downarrow)$$</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Superposition Voltage + Current Source (Slide 8, 9 => 100 mA) -->
+          <div class="card">
+            <div class="card-header">
+              <span class="prob-tag">Problem 2: Superposition with Voltage & Current Sources (Slide 8 & 9)</span>
+              <button class="sol-toggle-btn" onclick="toggleCardSolution(this)">👁️ Show Solution</button>
+            </div>
+            <div class="card-body">
+              <div class="question-prompt">
+                <b>Circuit Data:</b> Voltage source $V_S = 10\text{ V}$, independent current source $I_S = 100\text{ mA}$, with resistors $R_1 = 220\ \Omega$ and $R_2 = 100\ \Omega$. Find downward current $I_2$ through $R_2$.
+              </div>
+              <div class="solution-content">
+                <div class="step-block">
+                  <div class="step-label label-blue">Case 1: $V_S = 10\text{ V}$ Alone ($I_S$ Replaced by Open Circuit)</div>
+                  <div>With current source open-circuited, simple series loop:</div>
+                  <div>$$R_T = R_1 + R_2 = 220\ \Omega + 100\ \Omega = 320\ \Omega$$</div>
+                  <div>$$I_{2(V_S)} = \frac{V_S}{R_T} = \frac{10\text{ V}}{320\ \Omega} = 31.25\text{ mA} \quad (\downarrow)$$</div>
+                </div>
+                <div class="step-block">
+                  <div class="step-label label-amber">Case 2: $I_S = 100\text{ mA}$ Alone ($V_S$ Replaced by Short Circuit)</div>
+                  <div>Resistors $R_1$ and $R_2$ are in parallel across current source:</div>
+                  <div>$$I_{2(I_S)} = \left(\frac{R_1}{R_1 + R_2}\right) I_S = \left(\frac{220}{320}\right) \times 100\text{ mA} = 68.75\text{ mA} \quad (\downarrow)$$</div>
+                </div>
+                <div class="step-block">
+                  <div class="step-label label-green">Total Superposition Sum:</div>
+                  <div>$$I_{2(\text{total})} = I_{2(V_S)} + I_{2(I_S)} = 31.25\text{ mA} + 68.75\text{ mA} = 100\text{ mA}$$</div>
+                  <div>Result: <span class="result-badge">$$I_2 = 100\text{ mA} \quad (\downarrow)$$</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Thevenin Circuit (Slide 10, 11 => Vth = 4.08 V, Rth = 1410 Ω) -->
+          <div class="card">
+            <div class="card-header">
+              <span class="prob-tag">Problem 3: Thevenin Equivalent Circuit (Slide 10 & 11)</span>
+              <button class="sol-toggle-btn" onclick="toggleCardSolution(this)">👁️ Show Solution</button>
+            </div>
+            <div class="card-body">
+              <div class="question-prompt">
+                <b>Circuit Data:</b> Source $V_S = 10\text{ V}$, resistors $R_1 = 1000\ \Omega$, $R_2 = 470\ \Omega$, $R_3 = 220\ \Omega$, and $R_4 = 1000\ \Omega$.<br>
+                Find: Thevenin equivalent voltage $V_{TH}$ and resistance $R_{TH}$ across load terminals A and B.
+              </div>
+
+              <!-- Interactive Standard Schematic with IEEE Zigzag Resistors -->
+              <div class="circuit-wrapper" onclick="openCircuitModal('Session 5 — Thevenin Equivalent Bridge Circuit (Slide 11)', this)">
+                <div class="circuit-zoom-hint">🔍 Click to Zoom</div>
+                <svg class="circuit-svg" viewBox="0 0 540 210">
+                  <rect width="100%" height="100%" fill="#060a10" rx="8"/>
+                  <!-- Wires -->
+                  <path d="M 60 105 L 90 105 L 90 40 L 150 40" stroke="#38bdf8" stroke-width="2.5" fill="none"/>
+                  <!-- R1 Zigzag -->
+                  <path d="M 150 40 L 157 40 L 162 30 L 170 50 L 178 30 L 186 50 L 194 30 L 202 50 L 207 40 L 240 40" stroke="#38bdf8" stroke-width="2.5" fill="none"/>
+                  <text x="185" y="24" fill="#38bdf8" font-size="11" font-weight="700" text-anchor="middle">R1 = 1000 Ω</text>
+                  <!-- Node Between R1 and R2 -->
+                  <circle cx="240" cy="40" r="4.5" fill="#38bdf8"/>
+                  <!-- Vertical Branch R2 + R3 -->
+                  <path d="M 240 40 L 240 55 L 230 60 L 250 68 L 230 76 L 250 84 L 230 92 L 250 100 L 240 105 L 240 115" stroke="#fbbf24" stroke-width="2.5" fill="none"/>
+                  <text x="268" y="80" fill="#fbbf24" font-size="11" font-weight="700">R2 = 470 Ω</text>
+                  <path d="M 240 115 L 240 125 L 230 130 L 250 138 L 230 146 L 250 154 L 230 162 L 250 170 L 240 175 L 240 190" stroke="#fbbf24" stroke-width="2.5" fill="none"/>
+                  <text x="268" y="150" fill="#fbbf24" font-size="11" font-weight="700">R3 = 220 Ω</text>
+                  <!-- R4 Zigzag -->
+                  <path d="M 240 40 L 330 40 L 337 40 L 342 30 L 350 50 L 358 30 L 366 50 L 374 30 L 382 50 L 387 40 L 450 40" stroke="#38bdf8" stroke-width="2.5" fill="none"/>
+                  <text x="365" y="24" fill="#38bdf8" font-size="11" font-weight="700" text-anchor="middle">R4 = 1000 Ω</text>
+                  <!-- Bottom Wire -->
+                  <path d="M 90 105 L 90 190 L 450 190" stroke="#38bdf8" stroke-width="2.5" fill="none"/>
+                  <!-- VS Source 10V -->
+                  <circle cx="90" cy="105" r="18" fill="#111722" stroke="#34d399" stroke-width="2.5"/>
+                  <text x="90" y="100" fill="#34d399" font-size="12" font-weight="800" text-anchor="middle">+</text>
+                  <text x="90" y="118" fill="#34d399" font-size="14" font-weight="800" text-anchor="middle">-</text>
+                  <text x="45" y="110" fill="#34d399" font-size="11" font-weight="700">VS=10V</text>
+                  <!-- Terminals A and B -->
+                  <circle cx="450" cy="40" r="4.5" fill="#34d399"/>
+                  <text x="468" y="44" fill="#34d399" font-size="13" font-weight="800">A</text>
+                  <circle cx="450" cy="190" r="4.5" fill="#34d399"/>
+                  <text x="468" y="194" fill="#34d399" font-size="13" font-weight="800">B</text>
+                  <text x="480" y="120" fill="#c084fc" font-size="12" font-weight="700">RL (Load)</text>
+                </svg>
+              </div>
+
+              <div class="solution-content">
+                <div class="step-block">
+                  <div class="step-label label-blue">Step 1: Open-Circuit Voltage $V_{TH} = V_{oc}$ Across A-B</div>
+                  <div>With load $R_L$ removed, current through $R_4$ is zero ($I_{R4} = 0 \implies V_{R4} = 0$).</div>
+                  <div>Therefore, terminal voltage $V_{AB}$ equals voltage drop across $(R_2 + R_3)$:</div>
+                  <div>$$R_{23} = R_2 + R_3 = 470\ \Omega + 220\ \Omega = 690\ \Omega$$</div>
+                  <div>By Voltage Divider Rule:</div>
+                  <div>$$V_{TH} = \left(\frac{R_2 + R_3}{R_1 + R_2 + R_3}\right) V_S = \left(\frac{690\ \Omega}{1000 + 690}\right) \times 10\text{ V} = \left(\frac{690}{1690}\right) \times 10\text{ V} = 4.08\text{ V}$$</div>
+                  <div>Result: <span class="result-badge">$$V_{TH} = 4.08\text{ V}$$</span></div>
+                </div>
+
+                <div class="step-block">
+                  <div class="step-label label-green">Step 2: Equivalent Resistance $R_{TH}$ with Sources Killed</div>
+                  <div>Short-circuit $V_S$. From terminals A-B, resistor $R_1$ is in parallel with $(R_2 + R_3)$, and $R_4$ is in series with that combination:</div>
+                  <div>$$R_{TH} = R_4 + [R_1 \parallel (R_2 + R_3)] = 1000\ \Omega + \frac{(1000\ \Omega)(690\ \Omega)}{1000\ \Omega + 690\ \Omega}$$</div>
+                  <div>$$R_{TH} = 1000 + \frac{690000}{1690} = 1000 + 408.28 \approx 1410\ \Omega$$</div>
+                  <div>Result: <span class="result-badge">$$R_{TH} = 1410\ \Omega = 1.41\text{ k}\Omega$$</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Norton Equivalent (Slide 15 => In = 20.2 mA, Rn = 124 Ω) -->
+          <div class="card">
+            <div class="card-header">
+              <span class="prob-tag">Problem 4: Norton Equivalent Parameters (Slide 15)</span>
+              <button class="sol-toggle-btn" onclick="toggleCardSolution(this)">👁️ Show Solution</button>
+            </div>
+            <div class="card-body">
+              <div class="question-prompt">
+                <b>Circuit Data:</b> $V_S = 5.0\text{ V}$, $R_1 = 47\ \Omega$, $R_2 = 47\ \Omega$, and $R_3 = 100\ \Omega$. Find Norton current $I_N$ and resistance $R_N$.
+              </div>
+              <div class="solution-content">
+                <div class="step-block">
+                  <div class="step-label label-blue">Step 1: Norton Resistance $R_N$</div>
+                  <div>Short-circuit voltage source $V_S$:</div>
+                  <div>$$R_N = R_3 + (R_1 \parallel R_2) = 100\ \Omega + \frac{47}{2}\ \Omega = 100 + 23.5 = 123.5\ \Omega \approx 124\ \Omega$$</div>
+                  <div>Result: <span class="result-badge">$$R_N = 124\ \Omega \quad (\equiv R_{TH})$$</span></div>
+                </div>
+
+                <div class="step-block">
+                  <div class="step-label label-green">Step 2: Norton Short-Circuit Current $I_N = I_{sc}$</div>
+                  <div>Shorting terminals A-B places $R_3$ in parallel with $R_2$:</div>
+                  <div>$$R_T = R_1 + (R_2 \parallel R_3) = 47\ \Omega + \frac{47 \times 100}{47 + 100}\ \Omega = 47 + 31.97 = 78.97\ \Omega \approx 79.0\ \Omega$$</div>
+                  <div>Total source current:</div>
+                  <div>$$I_T = \frac{V_S}{R_T} = \frac{5.0\text{ V}}{79.0\ \Omega} = 63.3\text{ mA}$$</div>
+                  <div>Short-circuit current through terminals via CDR:</div>
+                  <div>$$I_N = \left(\frac{R_2}{R_2 + R_3}\right) I_T = \left(\frac{47}{147}\right) \times 63.3\text{ mA} = 20.2\text{ mA}$$</div>
+                  <div>Result: <span class="result-badge">$$I_N = 20.2\text{ mA}$$</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Branch Current Method (Slide 18-20 => I1=13.9mA, I2=15.8mA, I3=1.87mA) -->
+          <div class="card">
+            <div class="card-header">
+              <span class="prob-tag">Problem 5: Branch Current Systematic Solution (Slide 18 - 20)</span>
+              <button class="sol-toggle-btn" onclick="toggleCardSolution(this)">👁️ Show Solution</button>
+            </div>
+            <div class="card-body">
+              <div class="question-prompt">
+                <b>Circuit Data:</b> Two sources $V_{S1} = 10\text{ V}, V_{S2} = 5.0\text{ V}$, resistors $R_1 = 470\ \Omega, R_2 = 220\ \Omega, R_3 = 820\ \Omega$. Find all branch currents using the 5-step <b>Branch Current Method</b>.
+              </div>
+              <div class="solution-content">
+                <div class="step-block">
+                  <div class="step-label label-blue">Step-by-Step Mathematical Formulation:</div>
+                  <div>1. KVL around Left Loop:</div>
+                  <div>$$470 I_1 + 220 I_2 - 10 = 0 \implies 470 I_1 + 220 I_2 = 10$$</div>
+                  <div>2. KVL around Right Loop:</div>
+                  <div>$$220 I_2 + 820 I_3 - 5 = 0 \implies 220 I_2 + 820 I_3 = 5$$</div>
+                  <div>3. KCL at Node A:</div>
+                  <div>$$I_1 - I_2 + I_3 = 0 \implies I_1 = I_2 - I_3$$</div>
+                  <div>4. Substitute $I_1$ into left loop equation:</div>
+                  <div>$$470(I_2 - I_3) + 220 I_2 = 10 \implies 690 I_2 - 470 I_3 = 10$$</div>
+                  <div>5. Solve the system of two equations for $I_2$ and $I_3$:</div>
+                  <div>$$I_3 = 1.87\text{ mA}, \quad I_2 = 15.8\text{ mA}, \quad I_1 = I_2 - I_3 = 13.9\text{ mA}$$</div>
+                  <div>Results: <span class="result-badge">$$I_1 = 13.9\text{ mA}, \quad I_2 = 15.8\text{ mA}, \quad I_3 = 1.87\text{ mA}$$</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Mesh Analysis with Determinants (Slide 24 & 25) -->
+          <div class="card">
+            <div class="card-header">
+              <span class="prob-tag">Problem 6: Mesh Current Analysis with Cramer's Determinants (Slide 24 & 25)</span>
+              <button class="sol-toggle-btn" onclick="toggleCardSolution(this)">👁️ Show Solution</button>
+            </div>
+            <div class="card-body">
+              <div class="question-prompt">
+                Solve the same circuit ($V_{S1} = 10\text{ V}, V_{S2} = 5.0\text{ V}, R_1 = 470\ \Omega, R_2 = 220\ \Omega, R_3 = 820\ \Omega$) using the <b>Loop Current Method and Determinants</b>.
+              </div>
+              <div class="solution-content">
+                <div class="step-block">
+                  <div class="step-label label-purple">Matrix Setup & Cramer's Rule:</div>
+                  <div>Standard loop equations:</div>
+                  <div>$$\begin{bmatrix} (470 + 220) & -220 \\ -220 & (220 + 820) \end{bmatrix} \begin{bmatrix} I_A \\ I_B \end{bmatrix} = \begin{bmatrix} 10 \\ -5 \end{bmatrix} \implies \begin{bmatrix} 690 & -220 \\ -220 & 1040 \end{bmatrix} \begin{bmatrix} I_A \\ I_B \end{bmatrix} = \begin{bmatrix} 10 \\ -5 \end{bmatrix}$$</div>
+                  <div>Characteristic determinant:</div>
+                  <div>$$\Delta = (690 \times 1040) - (-220 \times -220) = 717600 - 48400 = 669200$$</div>
+                  <div>Determinants for $I_A$ and $I_B$:</div>
+                  <div>$$\Delta_A = (10 \times 1040) - (-5 \times -220) = 10400 - 1100 = 9300 \implies I_A = \frac{9300}{669200} = 13.9\text{ mA}$$</div>
+                  <div>$$\Delta_B = (690 \times -5) - (-220 \times 10) = -3450 + 2200 = -1250 \implies I_B = \frac{-1250}{669200} = -1.87\text{ mA}$$</div>
+                  <div>Branch current recoveries:</div>
+                  <div>$$I_1 = I_A = 13.9\text{ mA}, \quad I_3 = -I_B = 1.87\text{ mA}, \quad I_2 = I_A - I_B = 13.9 - (-1.87) = 15.8\text{ mA}$$</div>
+                  <div>Results: <span class="result-badge">$$I_A = 13.9\text{ mA}, \quad I_B = -1.87\text{ mA}, \quad I_2 = 15.8\text{ mA}$$</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Nodal Analysis (Slide 31-33 => Va = 3.47 V) -->
+          <div class="card">
+            <div class="card-header">
+              <span class="prob-tag">Problem 7: Node Voltage Method (Slide 31 - 33)</span>
+              <button class="sol-toggle-btn" onclick="toggleCardSolution(this)">👁️ Show Solution</button>
+            </div>
+            <div class="card-body">
+              <div class="question-prompt">
+                Using the <b>Node Voltage Method</b>, determine the essential node voltage $V_A$ and calculate all branch currents for the same dual-source circuit ($V_{S1} = 10\text{ V}, V_{S2} = 5.0\text{ V}, R_1 = 470\ \Omega, R_2 = 220\ \Omega, R_3 = 820\ \Omega$).
+              </div>
+              <div class="solution-content">
+                <div class="step-block">
+                  <div class="step-label label-blue">Nodal KCL Formulation:</div>
+                  <div>Choose bottom rail as datum reference ($V_B = 0\text{ V}$). Apply KCL at Node A:</div>
+                  <div>$$\frac{V_{S1} - V_A}{R_1} - \frac{V_A}{R_2} + \frac{V_{S2} - V_A}{R_3} = 0$$</div>
+                  <div>$$\frac{10 - V_A}{470} - \frac{V_A}{220} + \frac{5 - V_A}{820} = 0$$</div>
+                  <div>Group $V_A$ terms and constant source terms:</div>
+                  <div>$$V_A \left(\frac{1}{470} + \frac{1}{220} + \frac{1}{820}\right) = \frac{10}{470} + \frac{5}{820}$$</div>
+                  <div>$$V_A (0.002128 + 0.004545 + 0.001220) = 0.021277 + 0.006098$$</div>
+                  <div>$$V_A (0.007893) = 0.027375 \implies V_A = \frac{0.027375}{0.007893} = 3.47\text{ V}$$</div>
+                  <div>Branch currents:</div>
+                  <div>$$I_1 = \frac{10 - 3.47}{470} = 13.9\text{ mA}, \quad I_2 = \frac{3.47}{220} = 15.8\text{ mA}, \quad I_3 = \frac{5 - 3.47}{820} = 1.87\text{ mA}$$</div>
+                  <div>Results: <span class="result-badge">$$V_A = 3.47\text{ V}, \quad I_1 = 13.9\text{ mA}, \quad I_2 = 15.8\text{ mA}, \quad I_3 = 1.87\text{ mA}$$</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <script>
+    let currentSession = 4;
+    let currentS4Part = 1;
+    let currentS5Part = 1;
+
+    const s4Titles = [
+      "Session 4: Complete Overview (All Parts)",
+      "Part 1: Series-Parallel DC Circuits & Reduction Rules",
+      "Part 2: Special Circuits (Bridge, Lamp Brightness, & Multi-Switching)",
+      "Part 3: Practical Source Transformations & Ideal Current Sources",
+      "Part 4: Delta-Wye (Δ - Y) Transformations",
+      "Part 5: Maximum Power Transfer Theorem (Session 4 Derivation)",
+      "Session 4 Solved Problems & Step-by-Step Exercises"
+    ];
+
+    const s5Titles = [
+      "Session 5: Complete Overview (All Parts)",
+      "Part 1: Superposition Theorem & Source Deactivation",
+      "Part 2: Thevenin's Theorem & Viewpoint Dependency",
+      "Part 3: Norton's Theorem & Source Dual Conversion",
+      "Part 4: Branch Current Method (Systematic 5 Steps)",
+      "Part 5: Mesh / Loop Current Analysis & Determinants (Cramer's Rule)",
+      "Part 6: Node Voltage (Nodal Analysis) Method",
+      "Session 5 Solved Problems & Complete Network Theorems"
+    ];
+
+    function showSession4Part(num) {
+      currentS4Part = num;
+      document.getElementById('header-badge').innerText = (num === 6)
+        ? "BENHA UNIVERSITY • ELE111 • SESSION 4 SOLVED PROBLEMS"
+        : "BENHA UNIVERSITY • ELE111 • SESSION 4: SERIES-PARALLEL & CONVERSIONS";
+      document.getElementById('page-main-title').innerText = s4Titles[num];
+
+      for (let i = 0; i <= 6; i++) {
+        const b = document.getElementById('part-btn-4-' + i);
+        if (b) b.classList.remove('active');
+      }
+      const activeBtn = document.getElementById('part-btn-4-' + num);
+      if (activeBtn) activeBtn.classList.add('active');
+
+      for (let i = 1; i <= 6; i++) {
+        const p = document.getElementById('part-view-4-' + i);
+        if (p) {
+          if (num === 0) p.classList.add('active-panel');
+          else p.classList.remove('active-panel');
+        }
+      }
+
+      if (num !== 0) {
+        const activePart = document.getElementById('part-view-4-' + num);
+        if (activePart) activePart.classList.add('active-panel');
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function showSession5Part(num) {
+      currentS5Part = num;
+      document.getElementById('header-badge').innerText = (num === 7)
+        ? "BENHA UNIVERSITY • ELE111 • SESSION 5 SOLVED PROBLEMS"
+        : "BENHA UNIVERSITY • ELE111 • SESSION 5: METHODS & THEOREMS";
+      document.getElementById('page-main-title').innerText = s5Titles[num];
+
+      for (let i = 0; i <= 7; i++) {
+        const b = document.getElementById('part-btn-5-' + i);
+        if (b) b.classList.remove('active');
+      }
+      const activeBtn = document.getElementById('part-btn-5-' + num);
+      if (activeBtn) activeBtn.classList.add('active');
+
+      for (let i = 1; i <= 7; i++) {
+        const p = document.getElementById('part-view-5-' + i);
+        if (p) {
+          if (num === 0) p.classList.add('active-panel');
+          else p.classList.remove('active-panel');
+        }
+      }
+
+      if (num !== 0) {
+        const activePart = document.getElementById('part-view-5-' + num);
+        if (activePart) activePart.classList.add('active-panel');
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function switchSession(sessNum) {
+      currentSession = sessNum;
+      const tab4 = document.getElementById('lec-tab-4');
+      const tab5 = document.getElementById('lec-tab-5');
+      const sub4 = document.getElementById('subnav-wrapper-4');
+      const sub5 = document.getElementById('subnav-wrapper-5');
+      const cont4 = document.getElementById('session4-container');
+      const cont5 = document.getElementById('session5-container');
+
+      if (sessNum === 4) {
+        tab4.classList.add('active');
+        tab5.classList.remove('active');
+        sub4.style.display = 'block';
+        sub5.style.display = 'none';
+        cont4.style.display = 'block';
+        cont5.style.display = 'none';
+        showSession4Part(currentS4Part);
+      } else {
+        tab5.classList.add('active');
+        tab4.classList.remove('active');
+        sub5.style.display = 'block';
+        sub4.style.display = 'none';
+        cont5.style.display = 'block';
+        cont4.style.display = 'none';
+        showSession5Part(currentS5Part);
+      }
+    }
+
+    /* Lightbox Modal Zoom for Circuits */
+    function openCircuitModal(title, wrapperElem) {
+      const svg = wrapperElem.querySelector('svg');
+      if (!svg) return;
+      document.getElementById('modal-circuit-title').innerText = title;
+      const target = document.getElementById('modal-svg-target');
+      target.innerHTML = svg.outerHTML;
+      document.getElementById('circuit-modal').classList.add('active');
+    }
+
+    function closeCircuitModal() {
+      document.getElementById('circuit-modal').classList.remove('active');
+      document.getElementById('modal-svg-target').innerHTML = '';
+    }
+
+    function closeModalOnOverlay(e) {
+      if (e.target.id === 'circuit-modal') {
+        closeCircuitModal();
+      }
+    }
+
+    /* Card Solution Toggle Functions */
+    function toggleCardSolution(btn) {
+      const card = btn.closest('.card');
+      const sol = card.querySelector('.solution-content');
+      if (sol.classList.contains('show')) {
+        sol.classList.remove('show');
+        btn.classList.remove('active');
+        btn.innerHTML = '👁️ Show Solution';
+      } else {
+        sol.classList.add('show');
+        btn.classList.add('active');
+        btn.innerHTML = '🙈 Hide Solution';
+      }
+    }
+
+    function toggleAllSolutionsInContainer(containerId, show) {
+      const container = document.getElementById(containerId);
+      if (!container) return;
+      const buttons = container.querySelectorAll('.sol-toggle-btn');
+      const solutions = container.querySelectorAll('.solution-content');
+
+      solutions.forEach((sol, idx) => {
+        const btn = buttons[idx];
+        if (show) {
+          sol.classList.add('show');
+          if (btn) {
+            btn.classList.add('active');
+            btn.innerHTML = '🙈 Hide Solution';
+          }
+        } else {
+          sol.classList.remove('show');
+          if (btn) {
+            btn.classList.remove('active');
+            btn.innerHTML = '👁️ Show Solution';
+          }
+        }
+      });
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+      if (typeof renderMathInElement === 'function') {
+        renderMathInElement(document.body, {
+          delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "$", right: "$", display: false}
+          ],
+          throwOnError: false
+        });
+      }
+    });
+  </script>
+</body>
+</html>
