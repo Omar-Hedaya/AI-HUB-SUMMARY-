@@ -1,0 +1,2255 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <title>Logic Design — Sheet 2: Logic Gates & Always-Glowing Signal Tracing</title>
+  <!-- KaTeX CSS & JS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;700;800;900&family=JetBrains+Mono:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-base: #05080f;
+      --bg-card: #0b111c;
+      --bg-code: #070d17;
+      --border-card: #1e293b;
+      --cyan: #38bdf8;
+      --emerald: #34d399;
+      --amber: #f59e0b;
+      --amber-light: #fbbf24;
+      --purple: #c084fc;
+      --rose: #f43f5e;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box !important;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      width: 100% !important;
+      max-width: 100% !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      overflow-x: hidden !important;
+      background-color: var(--bg-base);
+      color: var(--text-main);
+      font-family: 'Cairo', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      line-height: 1.55;
+      padding-bottom: 70px !important;
+    }
+
+    /* Enforce strict LTR on technical blocks */
+    .ltr-block,
+    .math-block,
+    .katex,
+    .katex-display,
+    .mono,
+    .table-fit-container,
+    table,
+    .timing-container,
+    .circuit-container,
+    .rule-card,
+    .sim-container,
+    .quiz-bar,
+    .inspector-panel,
+    .trace-status-bar {
+      direction: ltr !important;
+      text-align: left !important;
+      unicode-bidi: isolate !important;
+    }
+
+    .mono {
+      font-family: 'JetBrains Mono', monospace !important;
+      font-weight: 700;
+    }
+
+    .container {
+      width: 100% !important;
+      max-width: 980px !important;
+      margin: 0 auto !important;
+      padding: 10px 10px !important;
+    }
+
+    /* Sticky Navigation */
+    .subnav-wrapper {
+      position: sticky;
+      top: 6px;
+      z-index: 1000;
+      background: rgba(5, 8, 15, 0.95);
+      backdrop-filter: blur(14px);
+      padding: 6px 8px;
+      border-radius: 10px;
+      border: 1px solid var(--border-card);
+      margin-bottom: 12px;
+      overflow-x: auto !important;
+      scrollbar-width: none;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.7);
+    }
+    .subnav-wrapper::-webkit-scrollbar { display: none; }
+    .subnav-tabs {
+      display: flex;
+      gap: 6px;
+      width: 100%;
+      min-width: min-content;
+    }
+    .tab-btn {
+      flex: 1;
+      padding: 6px 10px;
+      background: #111827;
+      border: 1px solid #1f2937;
+      color: var(--text-muted);
+      border-radius: 7px;
+      font-weight: 800;
+      font-size: 0.74rem;
+      text-align: center;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+    }
+    .tab-btn:hover { color: #fff; border-color: rgba(56, 189, 248, 0.4); }
+    .tab-btn.active {
+      background: rgba(56, 189, 248, 0.16);
+      border-color: var(--cyan);
+      color: var(--cyan);
+      box-shadow: 0 0 10px rgba(56, 189, 248, 0.25);
+    }
+    .tab-btn.all-btn {
+      background: rgba(52, 211, 153, 0.12);
+      border-color: rgba(52, 211, 153, 0.35);
+      color: var(--emerald);
+    }
+    .tab-btn.all-btn.active {
+      background: rgba(52, 211, 153, 0.22);
+      border-color: var(--emerald);
+      color: #fff;
+    }
+
+    /* Header */
+    .header {
+      padding: 8px 4px 12px 4px;
+      border-bottom: 1px solid var(--border-card);
+      margin-bottom: 12px;
+    }
+    .header-badge {
+      display: inline-block;
+      background: rgba(56, 189, 248, 0.12);
+      color: var(--cyan);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      padding: 3px 10px;
+      border-radius: 9999px;
+      font-size: 0.7rem;
+      font-weight: 800;
+      margin-bottom: 6px;
+      direction: ltr !important;
+    }
+    .header h1 {
+      font-size: 1.25rem;
+      font-weight: 900;
+      color: #fff;
+      margin-bottom: 4px;
+      line-height: 1.4;
+    }
+    .header p {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+    }
+
+    /* Cheat Sheet */
+    .cheat-sheet-card {
+      background: linear-gradient(145deg, #0c1320, #080d16);
+      border: 1px solid rgba(56, 189, 248, 0.25);
+      border-radius: 10px;
+      margin-bottom: 12px;
+      padding: 10px 12px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.5);
+    }
+    .cheat-sheet-header {
+      font-size: 0.86rem;
+      font-weight: 900;
+      color: var(--cyan);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .rules-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 8px;
+    }
+    .rule-card {
+      background: #060a11;
+      border: 1px solid #1a2538;
+      border-radius: 7px;
+      padding: 8px 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .rule-tag {
+      font-size: 0.74rem;
+      font-weight: 800;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .rule-tag.cyan { color: var(--cyan); }
+    .rule-tag.amber { color: var(--amber-light); }
+    .rule-tag.emerald { color: var(--emerald); }
+    .rule-tag.purple { color: var(--purple); }
+    .rule-body {
+      font-size: 0.76rem;
+      color: #cbd5e1;
+      line-height: 1.45;
+    }
+    .rule-math {
+      background: #0d1524;
+      border: 1px solid #1e293b;
+      border-radius: 5px;
+      padding: 3px 6px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.74rem;
+      color: #38bdf8;
+      margin-top: 2px;
+      display: inline-block;
+    }
+
+    /* Global Toggle Bar */
+    .global-toggle-bar {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 12px;
+      background: rgba(255, 255, 255, 0.02);
+      padding: 6px;
+      border-radius: 8px;
+      border: 1px solid var(--border-card);
+    }
+    .global-toggle-bar button {
+      flex: 1;
+      padding: 7px 10px;
+      font-size: 0.75rem;
+      font-weight: 800;
+      border-radius: 6px;
+      cursor: pointer;
+      border: 1px solid #1e293b;
+      background: #111827;
+      color: #e2e8f0;
+      font-family: inherit;
+      transition: all 0.2s ease;
+    }
+    .global-toggle-bar button:hover { border-color: var(--cyan); color: #fff; }
+
+    /* Cards */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-card);
+      border-radius: 10px;
+      margin-bottom: 14px;
+      overflow: hidden !important;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.45);
+    }
+    .card-header {
+      background: rgba(255, 255, 255, 0.025);
+      border-bottom: 1px solid var(--border-card);
+      padding: 8px 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .prob-tag {
+      font-weight: 800;
+      font-size: 0.82rem;
+      color: var(--cyan);
+      flex: 1;
+      min-width: 220px;
+      direction: ltr !important;
+      text-align: left !important;
+    }
+    .card-header-actions {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .sol-toggle-btn, .quiz-mode-btn, .compare-mode-btn, .reset-trace-btn {
+      padding: 4px 9px;
+      border-radius: 6px;
+      font-size: 0.72rem;
+      font-weight: 800;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+    .sol-toggle-btn {
+      background: rgba(244, 63, 94, 0.14);
+      border: 1px solid var(--rose);
+      color: var(--rose);
+    }
+    .sol-toggle-btn.collapsed {
+      background: rgba(56, 189, 248, 0.12);
+      border-color: rgba(56, 189, 248, 0.4);
+      color: var(--cyan);
+    }
+    .quiz-mode-btn {
+      background: rgba(245, 158, 11, 0.15);
+      border: 1px solid var(--amber);
+      color: var(--amber-light);
+    }
+    .quiz-mode-btn.active {
+      background: rgba(52, 211, 153, 0.2);
+      border-color: var(--emerald);
+      color: var(--emerald);
+    }
+    .compare-mode-btn {
+      background: rgba(192, 132, 252, 0.15);
+      border: 1px solid var(--purple);
+      color: var(--purple);
+    }
+    .compare-mode-btn.active {
+      background: rgba(192, 132, 252, 0.35);
+      color: #fff;
+      box-shadow: 0 0 10px rgba(192, 132, 252, 0.3);
+    }
+    .reset-trace-btn {
+      background: rgba(56, 189, 248, 0.14);
+      border: 1px solid var(--cyan);
+      color: var(--cyan);
+    }
+
+    .card-body {
+      padding: 10px 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .question-prompt {
+      background: rgba(56, 189, 248, 0.05);
+      border-left: 3px solid var(--cyan);
+      padding: 7px 10px;
+      font-size: 0.8rem;
+      color: #f1f5f9;
+      border-radius: 0 6px 6px 0;
+      line-height: 1.45;
+      direction: ltr !important;
+      text-align: left !important;
+    }
+    .solution-content { display: none; flex-direction: column; gap: 10px; }
+    .solution-content.show { display: flex; }
+
+    .step-block {
+      background: var(--bg-code);
+      border: 1px solid #1a2538;
+      border-radius: 8px;
+      padding: 9px 9px;
+      font-size: 0.8rem;
+      line-height: 1.5;
+    }
+    .step-label {
+      font-size: 0.75rem;
+      font-weight: 800;
+      margin-bottom: 6px;
+      letter-spacing: 0.02em;
+    }
+    .label-blue { color: var(--cyan); }
+    .label-amber { color: var(--amber-light); }
+    .label-green { color: var(--emerald); }
+    .label-purple { color: var(--purple); }
+    .label-rose { color: var(--rose); }
+
+    .result-badge {
+      display: block;
+      background: rgba(52, 211, 153, 0.1);
+      border: 1px solid rgba(52, 211, 153, 0.35);
+      color: var(--emerald);
+      padding: 6px 10px;
+      border-radius: 6px;
+      font-weight: 700;
+      font-size: 0.78rem;
+      direction: ltr !important;
+      text-align: left !important;
+    }
+
+    /* Containers */
+    .circuit-container, .timing-container {
+      position: relative;
+      background: #04070d;
+      border: 1px solid #1e293b;
+      border-radius: 8px;
+      padding: 8px 6px;
+      width: 100% !important;
+      max-width: 100% !important;
+      overflow: hidden !important;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      box-shadow: inset 0 2px 12px rgba(0,0,0,0.7);
+    }
+    .diagram-title {
+      font-size: 0.72rem;
+      font-weight: 800;
+      color: var(--cyan);
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      margin-bottom: 6px;
+      width: 100%;
+      text-align: left;
+      padding-left: 4px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 4px;
+    }
+    .circuit-svg {
+      width: 100% !important;
+      max-width: 560px !important;
+      height: auto !important;
+      display: block !important;
+    }
+    .timing-svg {
+      width: 100% !important;
+      max-width: 100% !important;
+      height: auto !important;
+      display: block !important;
+      cursor: crosshair;
+    }
+
+    /* Trace Status Bar */
+    .trace-status-bar {
+      width: 100%;
+      background: #080e18;
+      border: 1px solid #1b283d;
+      border-radius: 6px;
+      padding: 5px 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+    .glow-state-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 800;
+    }
+    .pulse-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--emerald);
+      box-shadow: 0 0 8px var(--emerald);
+      animation: pulseAnim 1.4s infinite;
+    }
+    @keyframes pulseAnim {
+      0% { opacity: 0.4; transform: scale(0.9); }
+      50% { opacity: 1; transform: scale(1.15); box-shadow: 0 0 12px var(--cyan); }
+      100% { opacity: 0.4; transform: scale(0.9); }
+    }
+
+    /* Inspector Info Panel */
+    .inspector-panel {
+      width: 100%;
+      background: rgba(14, 23, 38, 0.95);
+      border: 1px solid #22354f;
+      border-radius: 6px;
+      padding: 5px 8px;
+      margin-top: 5px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.74rem;
+      color: #94a3b8;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 4px;
+    }
+    .inspector-panel .active-val {
+      font-weight: 800;
+      color: #fff;
+    }
+
+    /* Compact Tables */
+    .table-fit-container {
+      width: 100% !important;
+      max-width: 100% !important;
+      overflow-x: auto !important;
+      border: 1px solid #1e293b !important;
+      border-radius: 7px !important;
+      background: #070b12 !important;
+    }
+    table {
+      width: 100% !important;
+      border-collapse: collapse !important;
+      table-layout: fixed !important;
+    }
+    table.truth-table {
+      table-layout: auto !important;
+    }
+    th {
+      background: #111a29 !important;
+      color: var(--cyan) !important;
+      font-weight: 800 !important;
+      font-size: 0.68rem !important;
+      padding: 5px 1px !important;
+      border: 1px solid #1e293b !important;
+      text-align: center !important;
+      overflow: hidden;
+    }
+    td {
+      padding: 5px 1px !important;
+      border: 1px solid #162030 !important;
+      color: #e2e8f0 !important;
+      font-size: 0.72rem !important;
+      font-family: 'JetBrains Mono', monospace;
+      text-align: center !important;
+    }
+    th.sig-col, td.sig-col {
+      width: 72px !important;
+      font-size: 0.68rem !important;
+      padding-left: 3px !important;
+      padding-right: 3px !important;
+      white-space: nowrap;
+    }
+    @media (min-width: 640px) {
+      th, td { font-size: 0.8rem !important; padding: 6px 4px !important; }
+      th.sig-col, td.sig-col { width: 120px !important; font-size: 0.78rem !important; }
+    }
+    tr:nth-child(even) td { background: #0a101a !important; }
+    
+    /* Interactive Row Isolation */
+    tr.trace-row {
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    tr.trace-row:hover td {
+      background: rgba(56, 189, 248, 0.1) !important;
+    }
+    tr.trace-row.tr-isolated td {
+      background: rgba(56, 189, 248, 0.24) !important;
+      border-color: rgba(56, 189, 248, 0.5) !important;
+      color: #fff !important;
+      font-weight: bold;
+    }
+
+    /* Self-Quiz Cell Buttons */
+    .quiz-cell-btn {
+      width: 24px;
+      height: 24px;
+      border-radius: 4px;
+      border: 1px solid #334155;
+      background: #111827;
+      color: #94a3b8;
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 800;
+      font-size: 0.74rem;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto;
+    }
+    .quiz-cell-btn.correct {
+      background: rgba(52, 211, 153, 0.25) !important;
+      border-color: var(--emerald) !important;
+      color: var(--emerald) !important;
+    }
+    .quiz-cell-btn.wrong {
+      background: rgba(244, 63, 94, 0.25) !important;
+      border-color: var(--rose) !important;
+      color: var(--rose) !important;
+    }
+    .quiz-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #090e17;
+      border: 1px solid #1b263b;
+      padding: 6px 10px;
+      border-radius: 6px;
+      margin-top: 4px;
+      font-size: 0.75rem;
+    }
+    .quiz-score-badge {
+      font-weight: 800;
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--amber-light);
+    }
+    .quiz-action-btn {
+      background: #1e293b;
+      border: 1px solid #334155;
+      color: #cbd5e1;
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-size: 0.7rem;
+      font-family: inherit;
+      cursor: pointer;
+      font-weight: 700;
+    }
+    .quiz-action-btn:hover { background: #2d3b52; color: #fff; }
+
+    /* Custom Waveform Generator Simulator */
+    .sim-container {
+      background: #0b111c;
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      border-radius: 9px;
+      padding: 12px;
+      margin-top: 14px;
+    }
+    .sim-title {
+      color: var(--cyan);
+      font-weight: 800;
+      font-size: 0.9rem;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
+    .sim-controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .sim-select {
+      background: #060a10;
+      border: 1px solid #1e293b;
+      color: #fff;
+      padding: 6px 10px;
+      border-radius: 6px;
+      font-family: inherit;
+      font-size: 0.78rem;
+      cursor: pointer;
+    }
+    .sim-grid-hint {
+      font-size: 0.74rem;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container" id="app-container">
+
+    <!-- Top Sticky Subnav -->
+    <div class="subnav-wrapper">
+      <div class="subnav-tabs">
+        <div id="filter-btn-0" class="tab-btn all-btn active" onclick="filterGroup(0)">All (Q1–Q10)</div>
+        <div id="filter-btn-1" class="tab-btn" onclick="filterGroup(1)">Q1 (Gate Symbols)</div>
+        <div id="filter-btn-2" class="tab-btn" onclick="filterGroup(2)">Q2–Q4 (Circuits & Flow Isolation)</div>
+        <div id="filter-btn-3" class="tab-btn" onclick="filterGroup(3)">Q5–Q7 (AND, OR, NAND Waveforms)</div>
+        <div id="filter-btn-4" class="tab-btn" onclick="filterGroup(4)">Q8–Q10 (NOR, XOR, XNOR Waveforms)</div>
+      </div>
+    </div>
+
+    <!-- Header -->
+    <div class="header">
+      <span class="header-badge">BENHA UNIVERSITY • FACULTY OF ENGINEERING AT SHOUBRA • EEC213 / ELE113</span>
+      <h1>Logic Design — Sheet 2: Logic Gates & Always-Glowing Signal Tracing</h1>
+      <p>تطبيق تفاعلي ذكي: مسارات تدفق الإشارات مضيئة بتوهج نيون مستمر افتراضياً ⚡، وعند النقر على أي صف في جدول الحقيقة يتم <b>تحديد وعزل مسار الإشارة الخاص به فقط</b>، وتعود جميع المسارات للإضاءة التامة عند النقر في أي مكان خارج الجدول.</p>
+    </div>
+
+    <!-- Summary Cheat Sheet -->
+    <div class="cheat-sheet-card">
+      <div class="cheat-sheet-header">
+        <span>⚡ ملخص قواعد البوابات المنطقية (Quick Reference Guide)</span>
+      </div>
+      <div class="rules-grid">
+        <div class="rule-card">
+          <div class="rule-tag cyan"><span>🔘 NOT & AND Gates</span></div>
+          <div class="rule-body">
+            &bull; <b>NOT:</b> Inverts input ($0 \leftrightarrow 1$).<br>
+            &bull; <b>AND:</b> Output is <b>1</b> <u>only when BOTH inputs are 1</u> ($1 \cdot 1 = 1$).
+          </div>
+          <div class="rule-math">NOT: X = A' &nbsp;|&nbsp; AND: X = A · B</div>
+        </div>
+        <div class="rule-card">
+          <div class="rule-tag amber"><span>➕ OR & NAND Gates</span></div>
+          <div class="rule-body">
+            &bull; <b>OR:</b> Output is <b>1</b> if <u>ANY input is 1</u> ($0+0=0$).<br>
+            &bull; <b>NAND:</b> Output is <b>0</b> <u>only when BOTH inputs are 1</u>.
+          </div>
+          <div class="rule-math">OR: X = A + B &nbsp;|&nbsp; NAND: X = (A · B)'</div>
+        </div>
+        <div class="rule-card">
+          <div class="rule-tag emerald"><span>⭕ NOR & XOR Gates</span></div>
+          <div class="rule-body">
+            &bull; <b>NOR:</b> Output is <b>1</b> <u>only when BOTH inputs are 0</u>.<br>
+            &bull; <b>XOR:</b> Output is <b>1</b> when inputs are <u>DIFFERENT</u> ($A \neq B$).
+          </div>
+          <div class="rule-math">NOR: X = (A + B)' &nbsp;|&nbsp; XOR: X = A ⊕ B</div>
+        </div>
+        <div class="rule-card">
+          <div class="rule-tag purple"><span>⚖️ XNOR Gate (Equivalence)</span></div>
+          <div class="rule-body">
+            &bull; <b>XNOR:</b> Inverted XOR. Output is <b>1</b> when inputs are <u>IDENTICAL</u> ($A = B$).
+          </div>
+          <div class="rule-math">XNOR: X = (A ⊕ B)' = A ⊙ B</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Global Toggle Bar -->
+    <div class="global-toggle-bar">
+      <button onclick="toggleAllSolutions(true)">👁️ إظهار جميع الحلول والرسومات (Show All)</button>
+      <button onclick="toggleAllSolutions(false)">🙈 إخفاء الخطوات للحل الذاتي (Hide All)</button>
+    </div>
+
+    <!-- ==========================================
+         QUESTION 1: STANDARD GATE SYMBOLS
+    ========================================== -->
+    <div class="card" data-group="1">
+      <div class="card-header">
+        <span class="prob-tag">Q1. Standard Logic Symbols & Truth Tables (NOT, AND, OR, NAND, NOR)</span>
+        <div class="card-header-actions">
+          <button class="sol-toggle-btn" onclick="toggleCardSolution(this)">🙈 Hide Steps</button>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="question-prompt">
+          <b>Q1.</b> Draw the correct symbol and truth table for each of the following logic gates:<br>
+          <b>a) NOT &nbsp;&nbsp;&nbsp; b) AND &nbsp;&nbsp;&nbsp; c) OR &nbsp;&nbsp;&nbsp; d) NAND &nbsp;&nbsp;&nbsp; e) NOR</b>
+        </div>
+        <div class="solution-content show">
+
+          <!-- a) NOT -->
+          <div class="step-block ltr-block">
+            <div class="step-label label-blue">a) NOT Gate (Inverter) — IEEE Symbol & Truth Table</div>
+            <div class="circuit-container">
+              <svg class="circuit-svg" viewBox="0 0 420 90" preserveAspectRatio="xMidYMid meet">
+                <line x1="45" y1="45" x2="155" y2="45" stroke="#38bdf8" stroke-width="3.2" stroke-linecap="round" style="filter: drop-shadow(0 0 4px rgba(56, 189, 248, 0.7));"/>
+                <circle cx="45" cy="45" r="4.5" fill="#38bdf8"/>
+                <text x="18" y="50" fill="#38bdf8" font-size="16" font-weight="bold" font-family="JetBrains Mono">A</text>
+                <polygon points="155,15 155,75 225,45" fill="#0d1524" stroke="#38bdf8" stroke-width="3" stroke-linejoin="round" style="filter: drop-shadow(0 0 5px rgba(56, 189, 248, 0.5));"/>
+                <circle cx="233" cy="45" r="7" fill="#0d1524" stroke="#38bdf8" stroke-width="3"/>
+                <line x1="241" y1="45" x2="315" y2="45" stroke="#34d399" stroke-width="3.2" stroke-linecap="round" style="filter: drop-shadow(0 0 4px rgba(52, 211, 153, 0.7));"/>
+                <circle cx="315" cy="45" r="4.5" fill="#34d399"/>
+                <text x="328" y="50" fill="#34d399" font-size="16" font-weight="bold" font-family="JetBrains Mono">X = A'</text>
+              </svg>
+            </div>
+            <div class="table-fit-container">
+              <table class="truth-table">
+                <thead><tr><th>Input (A)</th><th>Output ($X = \overline{A}$)</th></tr></thead>
+                <tbody>
+                  <tr><td>0</td><td style="color:var(--emerald); font-weight:bold;">1</td></tr>
+                  <tr><td>1</td><td style="color:var(--rose); font-weight:bold;">0</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- b) AND -->
+          <div class="step-block ltr-block">
+            <div class="step-label label-amber">b) 2-Input AND Gate — IEEE Symbol & Truth Table</div>
+            <div class="circuit-container">
+              <svg class="circuit-svg" viewBox="0 0 420 100" preserveAspectRatio="xMidYMid meet">
+                <line x1="45" y1="32" x2="145" y2="32" stroke="#38bdf8" stroke-width="3.2" stroke-linecap="round" style="filter: drop-shadow(0 0 4px rgba(56, 189, 248, 0.7));"/>
+                <circle cx="45" cy="32" r="4.5" fill="#38bdf8"/>
+                <text x="18" y="37" fill="#38bdf8" font-size="16" font-weight="bold" font-family="JetBrains Mono">A</text>
+                <line x1="45" y1="68" x2="145" y2="68" stroke="#fbbf24" stroke-width="3.2" stroke-linecap="round" style="filter: drop-shadow(0 0 4px rgba(251, 191, 36, 0.7));"/>
+                <circle cx="45" cy="68" r="4.5" fill="#fbbf24"/>
+                <text x="18" y="73" fill="#fbbf24" font-size="16" font-weight="bold" font-family="JetBrains Mono">B</text>
+                <path d="M 145 16 L 195 16 A 34 34 0 0 1 195 84 L 145 84 Z" fill="#0d1524" stroke="#fbbf24" stroke-width="3" stroke-linejoin="round" style="filter: drop-shadow(0 0 5px rgba(251, 191, 36, 0.5));"/>
+                <line x1="229" y1="50" x2="305" y2="50" stroke="#34d399" stroke-width="3.2" stroke-linecap="round" style="filter: drop-shadow(0 0 4px rgba(52, 211, 153, 0.7));"/>
+                <circle cx="305" cy="50" r="4.5" fill="#34d399"/>
+                <text x="318" y="55" fill="#34d399" font-size="16" font-weight="bold" font-family="JetBrains Mono">X = A · B</text>
+              </svg>
+            </div>
+            <div class="table-fit-container">
+              <table class="truth-table">
+                <thead><tr><th>Input A</th><th>Input B</th><th>Output ($X = A \cdot B$)</th></tr></thead>
+                <tbody>
+                  <tr><td>0</td><td>0</td><td>0</td></tr>
+                  <tr><td>0</td><td>1</td><td>0</td></tr>
+                  <tr><td>1</td><td>0</td><td>0</td></tr>
+                  <tr><td>1</td><td>1</td><td style="color:var(--emerald); font-weight:bold;">1</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- c) OR -->
+          <div class="step-block ltr-block">
+            <div class="step-label label-green">c) 2-Input OR Gate — IEEE Symbol & Truth Table</div>
+            <div class="circuit-container">
+              <svg class="circuit-svg" viewBox="0 0 420 100" preserveAspectRatio="xMidYMid meet">
+                <line x1="45" y1="32" x2="152" y2="32" stroke="#38bdf8" stroke-width="3.2" stroke-linecap="round" style="filter: drop-shadow(0 0 4px rgba(56, 189, 248, 0.7));"/>
+                <circle cx="45" cy="32" r="4.5" fill="#38bdf8"/>
+                <text x="18" y="37" fill="#38bdf8" font-size="16" font-weight="bold" font-family="JetBrains Mono">A</text>
+                <line x1="45" y1="68" x2="152" y2="68" stroke="#fbbf24" stroke-width="3.2" stroke-linecap="round" style="filter: drop-shadow(0 0 4px rgba(251, 191, 36, 0.7));"/>
+                <circle cx="45" cy="68" r="4.5" fill="#fbbf24"/>
+                <text x="18" y="73" fill="#fbbf24" font-size="16" font-weight="bold" font-family="JetBrains Mono">B</text>
+                <path d="M 140 16 Q 168 50 140 84 Q 195 84 235 50 Q 195 16 140 16 Z" fill="#0d1524" stroke="#34d399" stroke-width="3" stroke-linejoin="round" style="filter: drop-shadow(0 0 5px rgba(52, 211, 153, 0.5));"/>
+                <line x1="235" y1="50" x2="305" y2="50" stroke="#34d399" stroke-width="3.2" stroke-linecap="round" style="filter: drop-shadow(0 0 4px rgba(52, 211, 153, 0.7));"/>
+                <circle cx="305" cy="50" r="4.5" fill="#34d399"/>
+                <text x="318" y="55" fill="#34d399" font-size="16" font-weight="bold" font-family="JetBrains Mono">X = A + B</text>
+              </svg>
+            </div>
+            <div class="table-fit-container">
+              <table class="truth-table">
+                <thead><tr><th>Input A</th><th>Input B</th><th>Output ($X = A + B$)</th></tr></thead>
+                <tbody>
+                  <tr><td>0</td><td>0</td><td>0</td></tr>
+                  <tr><td>0</td><td>1</td><td style="color:var(--emerald); font-weight:bold;">1</td></tr>
+                  <tr><td>1</td><td>0</td><td style="color:var(--emerald); font-weight:bold;">1</td></tr>
+                  <tr><td>1</td><td>1</td><td style="color:var(--emerald); font-weight:bold;">1</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- d) NAND -->
+          <div class="step-block ltr-block">
+            <div class="step-label label-purple">d) 2-Input NAND Gate — IEEE Symbol & Truth Table</div>
+            <div class="circuit-container">
+              <svg class="circuit-svg" viewBox="0 0 420 100" preserveAspectRatio="xMidYMid meet">
+                <line x1="45" y1="32" x2="140" y2="32" stroke="#38bdf8" stroke-width="3.2" stroke-linecap="round" style="filter: drop-shadow(0 0 4px rgba(56, 189, 248, 0.7));"/>
+                <circle cx="45" cy="32" r="4.5" fill="#38bdf8"/>
+                <text x="18" y="37" fill="#38bdf8" font-size="16" font-weight="bold" font-family="JetBrains Mono">A</text>
+                <line x1="45" y1="68" x2="140" y2="68" stroke="#fbbf24" stroke-width="3.2" stroke-linecap="round" style="filter: drop-shadow(0 0 4px rgba(251, 191, 36, 0.7));"/>
+                <circle cx="45" cy="68" r="4.5" fill="#fbbf24"/>
+                <text x="18" y="73" fill="#fbbf24" font-size="16" font-weight="bold" font-family="JetBrains Mono">B</text>
+                <path d="M 140 16 L 190 16 A 34 34 0 0 1 190 84 L 140 84 Z" fill="#0d1524" stroke="#c084fc" stroke-width="3" stroke-linejoin="round" style="filter: drop-shadow(0 0 5px rgba(192, 132, 252, 0.5));"/>
+                <circle cx="231" cy="50" r="7" fill="#0d1524" stroke="#c084fc" stroke-width="3"/>
+                <line x1="239" y1="50" x2="295" y2="50" stroke="#34d399" stroke-width="3.2" stroke-linecap="round" style="filter: drop-shadow(0 0 4px rgba(52, 211, 153, 0.7));"/>
+                <circle cx="295" cy="50" r="4.5" fill="#34d399"/>
+                <text x="306" y="55" fill="#34d399" font-size="16" font-weight="bold" font-family="JetBrains Mono">X = (A·B)'</text>
+              </svg>
+            </div>
+            <div class="table-fit-container">
+              <table class="truth-table">
+                <thead><tr><th>Input A</th><th>Input B</th><th>Output ($X = \overline{A \cdot B}$)</th></tr></thead>
+                <tbody>
+                  <tr><td>0</td><td>0</td><td style="color:var(--emerald); font-weight:bold;">1</td></tr>
+                  <tr><td>0</td><td>1</td><td style="color:var(--emerald); font-weight:bold;">1</td></tr>
+                  <tr><td>1</td><td>0</td><td style="color:var(--emerald); font-weight:bold;">1</td></tr>
+                  <tr><td>1</td><td>1</td><td style="color:var(--rose); font-weight:bold;">0</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- e) NOR -->
+          <div class="step-block ltr-block">
+            <div class="step-label label-rose">e) 2-Input NOR Gate — IEEE Symbol & Truth Table</div>
+            <div class="circuit-container">
+              <svg class="circuit-svg" viewBox="0 0 420 100" preserveAspectRatio="xMidYMid meet">
+                <line x1="45" y1="32" x2="147" y2="32" stroke="#38bdf8" stroke-width="3.2" stroke-linecap="round" style="filter: drop-shadow(0 0 4px rgba(56, 189, 248, 0.7));"/>
+                <circle cx="45" cy="32" r="4.5" fill="#38bdf8"/>
+                <text x="18" y="37" fill="#38bdf8" font-size="16" font-weight="bold" font-family="JetBrains Mono">A</text>
+                <line x1="45" y1="68" x2="147" y2="68" stroke="#fbbf24" stroke-width="3.2" stroke-linecap="round" style="filter: drop-shadow(0 0 4px rgba(251, 191, 36, 0.7));"/>
+                <circle cx="45" cy="68" r="4.5" fill="#fbbf24"/>
+                <text x="18" y="73" fill="#fbbf24" font-size="16" font-weight="bold" font-family="JetBrains Mono">B</text>
+                <path d="M 135 16 Q 163 50 135 84 Q 190 84 228 50 Q 190 16 135 16 Z" fill="#0d1524" stroke="#f43f5e" stroke-width="3" stroke-linejoin="round" style="filter: drop-shadow(0 0 5px rgba(244, 63, 94, 0.5));"/>
+                <circle cx="236" cy="50" r="7" fill="#0d1524" stroke="#f43f5e" stroke-width="3"/>
+                <line x1="244" y1="50" x2="295" y2="50" stroke="#34d399" stroke-width="3.2" stroke-linecap="round" style="filter: drop-shadow(0 0 4px rgba(52, 211, 153, 0.7));"/>
+                <circle cx="295" cy="50" r="4.5" fill="#34d399"/>
+                <text x="306" y="55" fill="#34d399" font-size="16" font-weight="bold" font-family="JetBrains Mono">X = (A+B)'</text>
+              </svg>
+            </div>
+            <div class="table-fit-container">
+              <table class="truth-table">
+                <thead><tr><th>Input A</th><th>Input B</th><th>Output ($X = \overline{A + B}$)</th></tr></thead>
+                <tbody>
+                  <tr><td>0</td><td>0</td><td style="color:var(--emerald); font-weight:bold;">1</td></tr>
+                  <tr><td>0</td><td>1</td><td style="color:var(--rose); font-weight:bold;">0</td></tr>
+                  <tr><td>1</td><td>0</td><td style="color:var(--rose); font-weight:bold;">0</td></tr>
+                  <tr><td>1</td><td>1</td><td style="color:var(--rose); font-weight:bold;">0</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- ==========================================
+         QUESTION 2: CIRCUIT ANALYSIS & FLOW ISOLATION
+    ========================================== -->
+    <div class="card" data-group="2" id="card-q2">
+      <div class="card-header">
+        <span class="prob-tag">Q2. Logic Circuit Analysis: Inverter + AND Gate</span>
+        <div class="card-header-actions">
+          <button class="reset-trace-btn" onclick="resetCircuitSelection('q2')">✨ إضاءة شاملة للمسارات</button>
+          <button class="quiz-mode-btn" onclick="toggleQuizMode('q2')">✍️ اختبر نفسك (Quiz)</button>
+          <button class="sol-toggle-btn" onclick="toggleCardSolution(this)">🙈 Hide Steps</button>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="question-prompt">
+          <b>Q2.</b> The figure below shows a logic circuit and its incomplete truth table. Complete the below truth table.<br>
+          <i>Input A and inverted Input B (Node C) feed an AND gate to produce output Q.</i>
+        </div>
+        <div class="solution-content show">
+
+          <div class="trace-status-bar" id="trace-bar-q2">
+            <span class="glow-state-badge">
+              <span class="pulse-dot"></span>
+              <span id="trace-text-q2" style="color:var(--cyan);">المسارات مضيئة دائماً (اضغط على أي صف لتحديد مساره الخاص)</span>
+            </span>
+            <span style="font-size:0.7rem; color:var(--text-muted);">انقر خارج الجدول للعودة للإضاءة الشاملة</span>
+          </div>
+          
+          <div class="circuit-container ltr-block" id="schematic-container-q2">
+            <!-- Dynamic SVG injected by JS -->
+          </div>
+
+          <div class="step-block ltr-block">
+            <div class="step-label label-blue">Boolean Equations:</div>
+            <div>&bull; Node $C$ (Inverter): &nbsp;$\mathbf{C = \overline{B}}$</div>
+            <div>&bull; Output $Q$ (AND Gate): &nbsp;$\mathbf{Q = A \cdot C = A \cdot \overline{B}}$</div>
+          </div>
+
+          <div class="table-fit-container" id="circuit-table-q2"></div>
+
+          <div class="result-badge">Q2 Final Truth Table Column: $C = [1, 0, 1, 0]^T$, &nbsp; $Q = [0, 0, 1, 0]^T$</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==========================================
+         QUESTION 3: CIRCUIT ANALYSIS & FLOW ISOLATION
+    ========================================== -->
+    <div class="card" data-group="2" id="card-q3">
+      <div class="card-header">
+        <span class="prob-tag">Q3. Logic Circuit Analysis: NOR + NOT &rarr; NAND Gate</span>
+        <div class="card-header-actions">
+          <button class="reset-trace-btn" onclick="resetCircuitSelection('q3')">✨ إضاءة شاملة للمسارات</button>
+          <button class="quiz-mode-btn" onclick="toggleQuizMode('q3')">✍️ اختبر نفسك (Quiz)</button>
+          <button class="sol-toggle-btn" onclick="toggleCardSolution(this)">🙈 Hide Steps</button>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="question-prompt">
+          <b>Q3.</b> The figure below shows a logic circuit and its incomplete truth table. Complete its truth table.<br>
+          <i>Inputs A and B feed a <b>NOR gate</b> (Node C). Input B also feeds a <b>NOT gate</b> (Node D). Nodes C and D feed a <b>NAND gate</b> to produce Q.</i>
+        </div>
+        <div class="solution-content show">
+
+          <div class="trace-status-bar" id="trace-bar-q3">
+            <span class="glow-state-badge">
+              <span class="pulse-dot"></span>
+              <span id="trace-text-q3" style="color:var(--cyan);">المسارات مضيئة دائماً (اضغط على أي صف لتحديد مساره الخاص)</span>
+            </span>
+            <span style="font-size:0.7rem; color:var(--text-muted);">انقر خارج الجدول للعودة للإضاءة الشاملة</span>
+          </div>
+          
+          <div class="circuit-container ltr-block" id="schematic-container-q3">
+            <!-- Dynamic SVG injected by JS -->
+          </div>
+
+          <div class="step-block ltr-block">
+            <div class="step-label label-blue">Boolean Equations & Simplification:</div>
+            <div>&bull; $C = \overline{A + B}$ &nbsp;&nbsp;and&nbsp;&nbsp; $D = \overline{B}$</div>
+            <div>&bull; $Q = \overline{C \cdot D} = \overline{\overline{A + B} \cdot \overline{B}} = (A + B) + B = \mathbf{A + B}$</div>
+          </div>
+
+          <div class="table-fit-container" id="circuit-table-q3"></div>
+
+          <div class="result-badge">Q3 Final Truth Table Columns: $C=[1,0,0,0]^T$, $D=[1,0,1,0]^T$, $Q=[0,1,1,1]^T$</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==========================================
+         QUESTION 4: CIRCUIT ANALYSIS & FLOW ISOLATION
+    ========================================== -->
+    <div class="card" data-group="2" id="card-q4">
+      <div class="card-header">
+        <span class="prob-tag">Q4. Logic Circuit Analysis: OR + NOT &rarr; XOR Gate</span>
+        <div class="card-header-actions">
+          <button class="reset-trace-btn" onclick="resetCircuitSelection('q4')">✨ إضاءة شاملة للمسارات</button>
+          <button class="quiz-mode-btn" onclick="toggleQuizMode('q4')">✍️ اختبر نفسك (Quiz)</button>
+          <button class="sol-toggle-btn" onclick="toggleCardSolution(this)">🙈 Hide Steps</button>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="question-prompt">
+          <b>Q4.</b> The figure below shows a logic circuit and its incomplete truth table. Complete the below truth table.<br>
+          <i>Inputs A and B feed an <b>OR gate</b> (Node C). Input B also feeds a <b>NOT gate</b> (Node D). Nodes C and D feed an <b>XOR gate</b> to produce Q.</i>
+        </div>
+        <div class="solution-content show">
+
+          <div class="trace-status-bar" id="trace-bar-q4">
+            <span class="glow-state-badge">
+              <span class="pulse-dot"></span>
+              <span id="trace-text-q4" style="color:var(--cyan);">المسارات مضيئة دائماً (اضغط على أي صف لتحديد مساره الخاص)</span>
+            </span>
+            <span style="font-size:0.7rem; color:var(--text-muted);">انقر خارج الجدول للعودة للإضاءة الشاملة</span>
+          </div>
+          
+          <div class="circuit-container ltr-block" id="schematic-container-q4">
+            <!-- Dynamic SVG injected by JS -->
+          </div>
+
+          <div class="step-block ltr-block">
+            <div class="step-label label-blue">Boolean Equations:</div>
+            <div>&bull; $C = A + B$ &nbsp;&nbsp;and&nbsp;&nbsp; $D = \overline{B}$</div>
+            <div>&bull; $Q = C \oplus D$ (Output is <b>1</b> when $C \neq D$, and <b>0</b> when $C = D$)</div>
+          </div>
+
+          <div class="table-fit-container" id="circuit-table-q4"></div>
+
+          <div class="result-badge">Q4 Final Truth Table Columns: $C=[0,1,1,1]^T$, $D=[1,0,1,0]^T$, $Q=[1,1,0,1]^T$</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==========================================
+         QUESTION 5: 12-INTERVAL AND GATE WAVEFORM
+    ========================================== -->
+    <div class="card" data-group="3" id="card-q5">
+      <div class="card-header">
+        <span class="prob-tag">Q5. 2-Input AND Gate: Full 12-Interval Timing Diagram</span>
+        <div class="card-header-actions">
+          <button class="compare-mode-btn" onclick="toggleMultiCompare('q5')">📊 مقارنة كل البوابات</button>
+          <button class="quiz-mode-btn" onclick="toggleQuizMode('q5')">✍️ اختبر نفسك (Quiz)</button>
+          <button class="sol-toggle-btn" onclick="toggleCardSolution(this)">🙈 Hide Steps</button>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="question-prompt">
+          <b>Q5.</b> Determine the output X for the 2-input AND gate for the given input waveforms. Draw the output timing diagram. (Full 12 Intervals $t_1 \to t_{12}$)
+        </div>
+        <div class="solution-content show">
+          <div class="timing-container ltr-block" id="timing-q5"></div>
+          <div class="table-fit-container" id="table-q5"></div>
+          <div class="result-badge">Q5 Output (AND): $X = 1$ only during $t_3, t_4, t_8$ where BOTH $A=1$ and $B=1$.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==========================================
+         QUESTION 6: 12-INTERVAL OR GATE WAVEFORM
+    ========================================== -->
+    <div class="card" data-group="3" id="card-q6">
+      <div class="card-header">
+        <span class="prob-tag">Q6. 2-Input OR Gate: Full 12-Interval Timing Diagram</span>
+        <div class="card-header-actions">
+          <button class="compare-mode-btn" onclick="toggleMultiCompare('q6')">📊 مقارنة كل البوابات</button>
+          <button class="quiz-mode-btn" onclick="toggleQuizMode('q6')">✍️ اختبر نفسك (Quiz)</button>
+          <button class="sol-toggle-btn" onclick="toggleCardSolution(this)">🙈 Hide Steps</button>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="question-prompt">
+          <b>Q6.</b> Determine the output X for the 2-input OR gate for the given input waveforms. Draw the output timing diagram. (Full 12 Intervals $t_1 \to t_{12}$)
+        </div>
+        <div class="solution-content show">
+          <div class="timing-container ltr-block" id="timing-q6"></div>
+          <div class="table-fit-container" id="table-q6"></div>
+          <div class="result-badge">Q6 Output (OR): $X = 1$ whenever $A=1$ OR $B=1$ (LOW only during $t_3, t_9, t_{12}$).</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==========================================
+         QUESTION 7: 12-INTERVAL NAND GATE WAVEFORM
+    ========================================== -->
+    <div class="card" data-group="3" id="card-q7">
+      <div class="card-header">
+        <span class="prob-tag">Q7. 2-Input NAND Gate: Full 12-Interval Timing Diagram</span>
+        <div class="card-header-actions">
+          <button class="compare-mode-btn" onclick="toggleMultiCompare('q7')">📊 مقارنة كل البوابات</button>
+          <button class="quiz-mode-btn" onclick="toggleQuizMode('q7')">✍️ اختبر نفسك (Quiz)</button>
+          <button class="sol-toggle-btn" onclick="toggleCardSolution(this)">🙈 Hide Steps</button>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="question-prompt">
+          <b>Q7.</b> Determine the output X for the 2-input NAND gate for the given input waveforms. Draw the output timing diagram. (Full 12 Intervals $t_1 \to t_{12}$)
+        </div>
+        <div class="solution-content show">
+          <div class="timing-container ltr-block" id="timing-q7"></div>
+          <div class="table-fit-container" id="table-q7"></div>
+          <div class="result-badge">Q7 Output (NAND): $X = 0$ ONLY during $t_2$ (where $A=1$ and $B=1$), and $X = 1$ everywhere else!</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==========================================
+         QUESTION 8: 12-INTERVAL NOR GATE WAVEFORM
+    ========================================== -->
+    <div class="card" data-group="4" id="card-q8">
+      <div class="card-header">
+        <span class="prob-tag">Q8. 2-Input NOR Gate: Full 12-Interval Timing Diagram</span>
+        <div class="card-header-actions">
+          <button class="compare-mode-btn" onclick="toggleMultiCompare('q8')">📊 مقارنة كل البوابات</button>
+          <button class="quiz-mode-btn" onclick="toggleQuizMode('q8')">✍️ اختبر نفسك (Quiz)</button>
+          <button class="sol-toggle-btn" onclick="toggleCardSolution(this)">🙈 Hide Steps</button>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="question-prompt">
+          <b>Q8.</b> Determine the output X for the 2-input NOR gate for the given input waveforms. Draw the output timing diagram. (Full 12 Intervals $t_1 \to t_{12}$)
+        </div>
+        <div class="solution-content show">
+          <div class="timing-container ltr-block" id="timing-q8"></div>
+          <div class="table-fit-container" id="table-q8"></div>
+          <div class="result-badge">Q8 Output (NOR): $X = 1$ when BOTH $A=0$ and $B=0$ (LOW during $t_3, t_5, t_8, t_{10}$).</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==========================================
+         QUESTION 9: 12-INTERVAL XOR GATE WAVEFORM
+    ========================================== -->
+    <div class="card" data-group="4" id="card-q9">
+      <div class="card-header">
+        <span class="prob-tag">Q9. 2-Input XOR Gate: Full 12-Interval Timing Diagram</span>
+        <div class="card-header-actions">
+          <button class="compare-mode-btn" onclick="toggleMultiCompare('q9')">📊 مقارنة كل البوابات</button>
+          <button class="quiz-mode-btn" onclick="toggleQuizMode('q9')">✍️ اختبر نفسك (Quiz)</button>
+          <button class="sol-toggle-btn" onclick="toggleCardSolution(this)">🙈 Hide Steps</button>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="question-prompt">
+          <b>Q9.</b> Determine the output X for the 2-input XOR gate for the given input waveforms. Draw the output timing diagram. (Full 12 Intervals $t_1 \to t_{12}$)
+        </div>
+        <div class="solution-content show">
+          <div class="timing-container ltr-block" id="timing-q9"></div>
+          <div class="table-fit-container" id="table-q9"></div>
+          <div class="result-badge">Q9 Output (XOR): $X = 1$ when $A \neq B$ (HIGH during $t_1, t_2$, $t_5, t_6$, and $t_9, t_{10}$).</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==========================================
+         QUESTION 10: 12-INTERVAL XNOR GATE WAVEFORM
+    ========================================== -->
+    <div class="card" data-group="4" id="card-q10">
+      <div class="card-header">
+        <span class="prob-tag">Q10. 2-Input XNOR Gate: Full 12-Interval Timing Diagram</span>
+        <div class="card-header-actions">
+          <button class="compare-mode-btn" onclick="toggleMultiCompare('q10')">📊 مقارنة كل البوابات</button>
+          <button class="quiz-mode-btn" onclick="toggleQuizMode('q10')">✍️ اختبر نفسك (Quiz)</button>
+          <button class="sol-toggle-btn" onclick="toggleCardSolution(this)">🙈 Hide Steps</button>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="question-prompt">
+          <b>Q10.</b> Determine the output X for the 2-input XNOR gate for the given input waveforms. Draw the output timing diagram. (Full 12 Intervals $t_1 \to t_{12}$)
+        </div>
+        <div class="solution-content show">
+          <div class="timing-container ltr-block" id="timing-q10"></div>
+          <div class="table-fit-container" id="table-q10"></div>
+          <div class="result-badge">Q10 Output (XNOR): $X = 1$ when $A = B$ (Alternating HIGH at odd intervals $t_1, t_3, t_5, t_7, t_9, t_{11}$).</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==========================================
+         FEATURE 3: INTERACTIVE CUSTOM WAVEFORM GENERATOR SIMULATOR
+    ========================================== -->
+    <div class="sim-container">
+      <div class="sim-title">
+        <span>⚡ محاكي ومولّد النبضات الزمني التفاعلي المباشر (Custom Live Waveform Designer)</span>
+        <span style="font-size:0.75rem; color:var(--emerald); font-weight:700;">8 Intervals ($t_1 \to t_8$)</span>
+      </div>
+      <div class="sim-grid-hint">
+        💡 <b>كيفية الاستخدام:</b> اضغط على أي نبضة من إشارة <b>Input A</b> أو <b>Input B</b> لتبديل قيمتها فوراً بين <b>0</b> و <b>1</b>، وسيتم رسم موجة الخرج <b>Output X</b> لحظياً وفقاً للبوابة المختارة!
+      </div>
+      <div class="sim-controls">
+        <label style="font-size:0.78rem; color:var(--text-muted); font-weight:bold;">Logic Gate:</label>
+        <select id="sim-custom-gate" class="sim-select" onchange="updateCustomSim()">
+          <option value="AND">AND Gate (A · B)</option>
+          <option value="OR">OR Gate (A + B)</option>
+          <option value="NAND">NAND Gate (A · B)'</option>
+          <option value="NOR">NOR Gate (A + B)'</option>
+          <option value="XOR">XOR Gate (A ⊕ B)</option>
+          <option value="XNOR">XNOR Gate (A ⊙ B)</option>
+        </select>
+        <button class="quiz-action-btn" onclick="randomizeCustomSim()">🎲 توليد نبضات عشوائية</button>
+        <button class="quiz-action-btn" onclick="resetCustomSim()">🔄 تصفير النبضات (Reset)</button>
+      </div>
+
+      <div class="timing-container ltr-block" id="sim-custom-container"></div>
+      <div class="table-fit-container" id="sim-custom-table" style="margin-top:6px;"></div>
+    </div>
+
+  </div>
+
+  <script>
+    /* =========================================================================
+       DATA & DEFINITIONS FOR QUESTIONS
+    ========================================================================= */
+    const waveformProblems = [
+      {
+        id: 'q5',
+        title: 'Q5 Timing Diagram — 2-Input AND Gate (X = A · B)',
+        gateName: 'AND',
+        gateLabel: 'X (AND)',
+        ruleExplain: 'AND = 1 only when BOTH inputs are 1',
+        A: [0, 0, 1, 1, 1, 0, 0, 1, 1, 0, 0, 0],
+        B: [0, 1, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0],
+        X: [0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0]
+      },
+      {
+        id: 'q6',
+        title: 'Q6 Timing Diagram — 2-Input OR Gate (X = A + B)',
+        gateName: 'OR',
+        gateLabel: 'X (OR)',
+        ruleExplain: 'OR = 1 when ANY input is 1',
+        A: [1, 1, 0, 0, 0, 1, 1, 0, 0, 1, 0, 0],
+        B: [0, 0, 0, 1, 1, 0, 0, 1, 0, 0, 1, 0],
+        X: [1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 0]
+      },
+      {
+        id: 'q7',
+        title: 'Q7 Timing Diagram — 2-Input NAND Gate (X = (A · B)\')',
+        gateName: 'NAND',
+        gateLabel: 'X (NAND)',
+        ruleExplain: 'NAND = 0 only when BOTH inputs are 1',
+        A: [0, 1, 1, 0, 1, 0, 0, 1, 0, 0, 1, 0],
+        B: [0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0],
+        X: [1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+      },
+      {
+        id: 'q8',
+        title: 'Q8 Timing Diagram — 2-Input NOR Gate (X = (A + B)\')',
+        gateName: 'NOR',
+        gateLabel: 'X (NOR)',
+        ruleExplain: 'NOR = 1 only when BOTH inputs are 0',
+        A: [0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0],
+        B: [0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0],
+        X: [1, 1, 0, 1, 0, 1, 1, 0, 1, 0, 1, 1]
+      },
+      {
+        id: 'q9',
+        title: 'Q9 Timing Diagram — 2-Input XOR Gate (X = A ⊕ B)',
+        gateName: 'XOR',
+        gateLabel: 'X (XOR)',
+        ruleExplain: 'XOR = 1 when inputs are DIFFERENT (A ≠ B)',
+        A: [0, 1, 1, 0, 0, 1, 1, 0, 1, 0, 0, 0],
+        B: [1, 0, 1, 0, 1, 0, 1, 0, 0, 1, 0, 0],
+        X: [1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0]
+      },
+      {
+        id: 'q10',
+        title: 'Q10 Timing Diagram — 2-Input XNOR Gate (X = (A ⊕ B)\')',
+        gateName: 'XNOR',
+        gateLabel: 'X (XNOR)',
+        ruleExplain: 'XNOR = 1 when inputs are IDENTICAL (A = B)',
+        A: [0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1],
+        B: [0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0],
+        X: [1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+      }
+    ];
+
+    const circuitProblems = {
+      q2: {
+        A: [0, 0, 1, 1],
+        B: [0, 1, 0, 1],
+        C: [1, 0, 1, 0],
+        Q: [0, 0, 1, 0]
+      },
+      q3: {
+        A: [0, 0, 1, 1],
+        B: [0, 1, 0, 1],
+        C: [1, 0, 0, 0],
+        D: [1, 0, 1, 0],
+        Q: [0, 1, 1, 1]
+      },
+      q4: {
+        A: [0, 0, 1, 1],
+        B: [0, 1, 0, 1],
+        C: [0, 1, 1, 1],
+        D: [1, 0, 1, 0],
+        Q: [1, 1, 0, 1]
+      }
+    };
+
+    /* State for Circuit Row Isolation (null = ALL GLOWING ACTIVE) */
+    const isolatedRowState = {
+      q2: null,
+      q3: null,
+      q4: null
+    };
+
+    // State for Self-Quiz Modes
+    const quizState = {
+      q2: { active: false, userVals: ['?', '?', '?', '?'] },
+      q3: { active: false, userVals: ['?', '?', '?', '?'] },
+      q4: { active: false, userVals: ['?', '?', '?', '?'] },
+      q5: { active: false, userVals: Array(12).fill('?') },
+      q6: { active: false, userVals: Array(12).fill('?') },
+      q7: { active: false, userVals: Array(12).fill('?') },
+      q8: { active: false, userVals: Array(12).fill('?') },
+      q9: { active: false, userVals: Array(12).fill('?') },
+      q10: { active: false, userVals: Array(12).fill('?') }
+    };
+
+    // State for Multi-Gate Comparison Mode
+    const compareState = {
+      q5: false,
+      q6: false,
+      q7: false,
+      q8: false,
+      q9: false,
+      q10: false
+    };
+
+    function calculateGateOutput(a, b, gate) {
+      if (gate === 'AND') return a & b;
+      if (gate === 'OR') return a | b;
+      if (gate === 'NAND') return (a & b) ? 0 : 1;
+      if (gate === 'NOR') return (a | b) ? 0 : 1;
+      if (gate === 'XOR') return a ^ b;
+      if (gate === 'XNOR') return (a === b) ? 1 : 0;
+      return 0;
+    }
+
+    function buildWavePath(bits, xStart, stepW, yHigh, yLow) {
+      let d = '';
+      for (let i = 0; i < bits.length; i++) {
+        const x1 = xStart + i * stepW;
+        const x2 = x1 + stepW;
+        const y = bits[i] === 1 ? yHigh : yLow;
+        if (i === 0) {
+          d += `M ${x1} ${y} L ${x2} ${y}`;
+        } else {
+          const prevY = bits[i - 1] === 1 ? yHigh : yLow;
+          if (prevY !== y) d += ` L ${x1} ${y}`;
+          d += ` L ${x2} ${y}`;
+        }
+      }
+      return d;
+    }
+
+    /* =========================================================================
+       DYNAMIC ALWAYS-GLOWING / ROW-ISOLATED SIGNAL TRACING SCHEMATICS
+    ========================================================================= */
+    const GLOW_ALL_A = 'stroke: #38bdf8; stroke-width: 3.6; filter: drop-shadow(0 0 5px rgba(56, 189, 248, 0.8));';
+    const GLOW_ALL_B = 'stroke: #fbbf24; stroke-width: 3.6; filter: drop-shadow(0 0 5px rgba(251, 191, 36, 0.8));';
+    const GLOW_ALL_C = 'stroke: #c084fc; stroke-width: 3.6; filter: drop-shadow(0 0 5px rgba(192, 132, 252, 0.8));';
+    const GLOW_ALL_D = 'stroke: #f43f5e; stroke-width: 3.6; filter: drop-shadow(0 0 5px rgba(244, 63, 94, 0.8));';
+    const GLOW_ALL_Q = 'stroke: #34d399; stroke-width: 4.0; filter: drop-shadow(0 0 6px rgba(52, 211, 153, 0.9));';
+
+    function getIsolatedStyle(level) {
+      if (level === 1) {
+        return 'stroke: #38bdf8; stroke-width: 4.2; filter: drop-shadow(0 0 6px rgba(56, 189, 248, 0.95));';
+      } else {
+        return 'stroke: #475569; stroke-width: 2.2; filter: none; opacity: 0.65;';
+      }
+    }
+
+    function isolateRow(circuitId, rowIndex) {
+      isolatedRowState[circuitId] = rowIndex;
+      updateCircuitDisplay(circuitId);
+    }
+
+    function resetCircuitSelection(circuitId) {
+      isolatedRowState[circuitId] = null;
+      updateCircuitDisplay(circuitId);
+    }
+
+    function updateCircuitDisplay(circuitId) {
+      const rowIndex = isolatedRowState[circuitId];
+      const barText = document.getElementById(`trace-text-${circuitId}`);
+
+      if (rowIndex === null) {
+        if (barText) barText.innerHTML = '✨ <b>جميع المسارات مضيئة بالتوهج الكامل</b> (اضغط على أي صف لتحديد مساره الخاص)';
+      } else {
+        const d = circuitProblems[circuitId];
+        const a = d.A[rowIndex];
+        const b = d.B[rowIndex];
+        const q = d.Q[rowIndex];
+        if (barText) {
+          barText.innerHTML = `🎯 <b>تم تحديد الصف [A=${a}, B=${b} &rarr; Q=${q}]</b> (انقر خارج الجدول للعودة للإضاءة الشاملة)`;
+        }
+      }
+
+      if (circuitId === 'q2') renderSchematicQ2(rowIndex);
+      if (circuitId === 'q3') renderSchematicQ3(rowIndex);
+      if (circuitId === 'q4') renderSchematicQ4(rowIndex);
+
+      renderCircuitTable(circuitId);
+    }
+
+    // Schematic Q2: A and C=B' feed AND gate -> Q = A · B'
+    function renderSchematicQ2(rowIndex) {
+      const container = document.getElementById('schematic-container-q2');
+      if (!container) return;
+
+      const isIsolated = (rowIndex !== null);
+      let aVal, bVal, cVal, qVal;
+      let styleA, styleB, styleC, styleQ;
+      let dotA, dotB, dotC, dotQ;
+
+      if (!isIsolated) {
+        styleA = GLOW_ALL_A; dotA = '#38bdf8';
+        styleB = GLOW_ALL_B; dotB = '#fbbf24';
+        styleC = GLOW_ALL_C; dotC = '#c084fc';
+        styleQ = GLOW_ALL_Q; dotQ = '#34d399';
+        aVal = 'A'; bVal = 'B'; cVal = 'C = B\''; qVal = 'Q = A·B\'';
+      } else {
+        const d = circuitProblems.q2;
+        aVal = d.A[rowIndex];
+        bVal = d.B[rowIndex];
+        cVal = d.C[rowIndex];
+        qVal = d.Q[rowIndex];
+
+        styleA = getIsolatedStyle(aVal); dotA = aVal ? '#38bdf8' : '#475569';
+        styleB = getIsolatedStyle(bVal); dotB = bVal ? '#38bdf8' : '#475569';
+        styleC = getIsolatedStyle(cVal); dotC = cVal ? '#38bdf8' : '#475569';
+        styleQ = qVal ? 'stroke: #34d399; stroke-width: 4.5; filter: drop-shadow(0 0 8px rgba(52, 211, 153, 1));' : 'stroke: #475569; stroke-width: 2.2; opacity: 0.65;';
+        dotQ = qVal ? '#34d399' : '#475569';
+      }
+
+      container.innerHTML = `
+        <div class="diagram-title">
+          <span>Q2 Schematic — ${isIsolated ? `المسار المحدد للصف [A=${aVal}, B=${bVal}]` : 'المسارات مضيئة دائماً (Always Glowing Flow)'}</span>
+          <span style="color:${isIsolated ? (qVal ? 'var(--emerald)' : 'var(--rose)') : 'var(--cyan)'}; font-weight:800;">
+            ${isIsolated ? `Q = ${qVal} (${qVal ? 'HIGH' : 'LOW'})` : 'Active Glowing State'}
+          </span>
+        </div>
+        <svg class="circuit-svg" viewBox="0 0 540 155" preserveAspectRatio="xMidYMid meet">
+          <!-- Input A Wire -->
+          <circle cx="40" cy="42" r="5" fill="${dotA}"/>
+          <text x="14" y="47" fill="${dotA}" font-size="16" font-weight="bold" font-family="JetBrains Mono">${isIsolated ? `A=${aVal}` : 'A'}</text>
+          <line x1="40" y1="42" x2="250" y2="42" style="${styleA}" stroke-linecap="round"/>
+
+          <!-- Input B Wire -->
+          <circle cx="40" cy="110" r="5" fill="${dotB}"/>
+          <text x="14" y="115" fill="${dotB}" font-size="16" font-weight="bold" font-family="JetBrains Mono">${isIsolated ? `B=${bVal}` : 'B'}</text>
+          <line x1="40" y1="110" x2="95" y2="110" style="${styleB}" stroke-linecap="round"/>
+
+          <!-- NOT Gate -->
+          <polygon points="95,82 95,138 150,110" fill="#0d1524" stroke="${dotB}" stroke-width="3" stroke-linejoin="round" style="filter: drop-shadow(0 0 4px ${dotB});"/>
+          <circle cx="158" cy="110" r="7" fill="#0d1524" stroke="${dotC}" stroke-width="3"/>
+
+          <!-- Wire C -->
+          <line x1="166" y1="110" x2="215" y2="110" style="${styleC}" stroke-linecap="round"/>
+          <line x1="215" y1="110" x2="215" y2="82" style="${styleC}" stroke-linecap="round"/>
+          <line x1="215" y1="82" x2="250" y2="82" style="${styleC}" stroke-linecap="round"/>
+          <text x="175" y="98" fill="${dotC}" font-size="13" font-weight="bold" font-family="JetBrains Mono">${isIsolated ? `C=${cVal}` : 'C=B\''}</text>
+
+          <!-- AND Gate -->
+          <path d="M 250 24 L 305 24 A 38 38 0 0 1 305 100 L 250 100 Z" fill="#0d1524" stroke="#fbbf24" stroke-width="3" stroke-linejoin="round" style="filter: drop-shadow(0 0 5px rgba(251, 191, 36, 0.6));"/>
+
+          <!-- Output Q Wire -->
+          <line x1="343" y1="62" x2="415" y2="62" style="${styleQ}" stroke-linecap="round"/>
+          <circle cx="415" cy="62" r="5" fill="${dotQ}"/>
+          <text x="428" y="67" fill="${dotQ}" font-size="16" font-weight="bold" font-family="JetBrains Mono">${isIsolated ? `Q=${qVal}` : 'Q=A·B\''}</text>
+        </svg>
+      `;
+    }
+
+    // Schematic Q3: NOR(A, B) -> C, NOT(B) -> D, NAND(C, D) -> Q
+    function renderSchematicQ3(rowIndex) {
+      const container = document.getElementById('schematic-container-q3');
+      if (!container) return;
+
+      const isIsolated = (rowIndex !== null);
+      let aVal, bVal, cVal, dVal, qVal;
+      let styleA, styleB, styleC, styleD, styleQ;
+      let dotA, dotB, dotC, dotD, dotQ;
+
+      if (!isIsolated) {
+        styleA = GLOW_ALL_A; dotA = '#38bdf8';
+        styleB = GLOW_ALL_B; dotB = '#fbbf24';
+        styleC = GLOW_ALL_C; dotC = '#c084fc';
+        styleD = GLOW_ALL_D; dotD = '#f43f5e';
+        styleQ = GLOW_ALL_Q; dotQ = '#34d399';
+        aVal = 'A'; bVal = 'B'; cVal = 'C'; dVal = 'D'; qVal = 'Q';
+      } else {
+        const d = circuitProblems.q3;
+        aVal = d.A[rowIndex];
+        bVal = d.B[rowIndex];
+        cVal = d.C[rowIndex];
+        dVal = d.D[rowIndex];
+        qVal = d.Q[rowIndex];
+
+        styleA = getIsolatedStyle(aVal); dotA = aVal ? '#38bdf8' : '#475569';
+        styleB = getIsolatedStyle(bVal); dotB = bVal ? '#38bdf8' : '#475569';
+        styleC = getIsolatedStyle(cVal); dotC = cVal ? '#38bdf8' : '#475569';
+        styleD = getIsolatedStyle(dVal); dotD = dVal ? '#38bdf8' : '#475569';
+        styleQ = qVal ? 'stroke: #34d399; stroke-width: 4.5; filter: drop-shadow(0 0 8px rgba(52, 211, 153, 1));' : 'stroke: #475569; stroke-width: 2.2; opacity: 0.65;';
+        dotQ = qVal ? '#34d399' : '#475569';
+      }
+
+      container.innerHTML = `
+        <div class="diagram-title">
+          <span>Q3 Schematic — ${isIsolated ? `المسار المحدد للصف [A=${aVal}, B=${bVal}]` : 'المسارات مضيئة دائماً (Always Glowing Flow)'}</span>
+          <span style="color:${isIsolated ? (qVal ? 'var(--emerald)' : 'var(--rose)') : 'var(--cyan)'}; font-weight:800;">
+            ${isIsolated ? `Q = ${qVal} (${qVal ? 'HIGH' : 'LOW'})` : 'Active Glowing State'}
+          </span>
+        </div>
+        <svg class="circuit-svg" viewBox="0 0 560 185" preserveAspectRatio="xMidYMid meet">
+          <!-- A Wire -->
+          <circle cx="38" cy="36" r="5" fill="${dotA}"/>
+          <text x="12" y="41" fill="${dotA}" font-size="15" font-weight="bold" font-family="JetBrains Mono">${isIsolated ? `A=${aVal}` : 'A'}</text>
+          <line x1="38" y1="36" x2="112" y2="36" style="${styleA}" stroke-linecap="round"/>
+
+          <!-- B Wire -->
+          <circle cx="38" cy="76" r="5" fill="${dotB}"/>
+          <text x="12" y="81" fill="${dotB}" font-size="15" font-weight="bold" font-family="JetBrains Mono">${isIsolated ? `B=${bVal}` : 'B'}</text>
+          <line x1="38" y1="76" x2="112" y2="76" style="${styleB}" stroke-linecap="round"/>
+
+          <!-- Branch B to Inverter -->
+          <circle cx="68" cy="76" r="5" fill="${dotB}"/>
+          <line x1="68" y1="76" x2="68" y2="142" style="${styleB}" stroke-linecap="round"/>
+          <line x1="68" y1="142" x2="105" y2="142" style="${styleB}" stroke-linecap="round"/>
+
+          <!-- NOR Gate -->
+          <path d="M 100 20 Q 128 56 100 92 Q 155 92 192 56 Q 155 20 100 20 Z" fill="#0d1524" stroke="#38bdf8" stroke-width="3" stroke-linejoin="round" style="filter: drop-shadow(0 0 4px rgba(56, 189, 248, 0.6));"/>
+          <circle cx="200" cy="56" r="7" fill="#0d1524" stroke="${dotC}" stroke-width="3"/>
+          <line x1="208" y1="56" x2="310" y2="56" style="${styleC}" stroke-linecap="round"/>
+          <text x="216" y="45" fill="${dotC}" font-size="13" font-weight="bold" font-family="JetBrains Mono">${isIsolated ? `C=${cVal}` : 'C=(A+B)\''}</text>
+
+          <!-- Inverter for B -->
+          <polygon points="105,114 105,170 160,142" fill="#0d1524" stroke="${dotB}" stroke-width="3" stroke-linejoin="round" style="filter: drop-shadow(0 0 4px ${dotB});"/>
+          <circle cx="168" cy="142" r="7" fill="#0d1524" stroke="${dotD}" stroke-width="3"/>
+          <line x1="176" y1="142" x2="265" y2="142" style="${styleD}" stroke-linecap="round"/>
+          <line x1="265" y1="142" x2="265" y2="96" style="${styleD}" stroke-linecap="round"/>
+          <line x1="265" y1="96" x2="310" y2="96" style="${styleD}" stroke-linecap="round"/>
+          <text x="188" y="132" fill="${dotD}" font-size="13" font-weight="bold" font-family="JetBrains Mono">${isIsolated ? `D=${dVal}` : 'D=B\''}</text>
+
+          <!-- NAND Gate -->
+          <path d="M 310 38 L 365 38 A 38 38 0 0 1 365 114 L 310 114 Z" fill="#0d1524" stroke="#34d399" stroke-width="3" stroke-linejoin="round" style="filter: drop-shadow(0 0 5px rgba(52, 211, 153, 0.6));"/>
+          <circle cx="411" cy="76" r="7" fill="#0d1524" stroke="${dotQ}" stroke-width="3"/>
+          <line x1="419" y1="76" x2="480" y2="76" style="${styleQ}" stroke-linecap="round"/>
+          <circle cx="480" cy="76" r="5" fill="${dotQ}"/>
+          <text x="492" y="81" fill="${dotQ}" font-size="16" font-weight="bold" font-family="JetBrains Mono">${isIsolated ? `Q=${qVal}` : 'Q=(C·D)\''}</text>
+        </svg>
+      `;
+    }
+
+    // Schematic Q4: OR(A, B) -> C, NOT(B) -> D, XOR(C, D) -> Q
+    function renderSchematicQ4(rowIndex) {
+      const container = document.getElementById('schematic-container-q4');
+      if (!container) return;
+
+      const isIsolated = (rowIndex !== null);
+      let aVal, bVal, cVal, dVal, qVal;
+      let styleA, styleB, styleC, styleD, styleQ;
+      let dotA, dotB, dotC, dotD, dotQ;
+
+      if (!isIsolated) {
+        styleA = GLOW_ALL_A; dotA = '#38bdf8';
+        styleB = GLOW_ALL_B; dotB = '#fbbf24';
+        styleC = GLOW_ALL_C; dotC = '#c084fc';
+        styleD = GLOW_ALL_D; dotD = '#f43f5e';
+        styleQ = GLOW_ALL_Q; dotQ = '#34d399';
+        aVal = 'A'; bVal = 'B'; cVal = 'C'; dVal = 'D'; qVal = 'Q';
+      } else {
+        const d = circuitProblems.q4;
+        aVal = d.A[rowIndex];
+        bVal = d.B[rowIndex];
+        cVal = d.C[rowIndex];
+        dVal = d.D[rowIndex];
+        qVal = d.Q[rowIndex];
+
+        styleA = getIsolatedStyle(aVal); dotA = aVal ? '#38bdf8' : '#475569';
+        styleB = getIsolatedStyle(bVal); dotB = bVal ? '#38bdf8' : '#475569';
+        styleC = getIsolatedStyle(cVal); dotC = cVal ? '#38bdf8' : '#475569';
+        styleD = getIsolatedStyle(dVal); dotD = dVal ? '#38bdf8' : '#475569';
+        styleQ = qVal ? 'stroke: #34d399; stroke-width: 4.5; filter: drop-shadow(0 0 8px rgba(52, 211, 153, 1));' : 'stroke: #475569; stroke-width: 2.2; opacity: 0.65;';
+        dotQ = qVal ? '#34d399' : '#475569';
+      }
+
+      container.innerHTML = `
+        <div class="diagram-title">
+          <span>Q4 Schematic — ${isIsolated ? `المسار المحدد للصف [A=${aVal}, B=${bVal}]` : 'المسارات مضيئة دائماً (Always Glowing Flow)'}</span>
+          <span style="color:${isIsolated ? (qVal ? 'var(--emerald)' : 'var(--rose)') : 'var(--cyan)'}; font-weight:800;">
+            ${isIsolated ? `Q = ${qVal} (${qVal ? 'HIGH' : 'LOW'})` : 'Active Glowing State'}
+          </span>
+        </div>
+        <svg class="circuit-svg" viewBox="0 0 560 185" preserveAspectRatio="xMidYMid meet">
+          <!-- A Wire -->
+          <circle cx="38" cy="36" r="5" fill="${dotA}"/>
+          <text x="12" y="41" fill="${dotA}" font-size="15" font-weight="bold" font-family="JetBrains Mono">${isIsolated ? `A=${aVal}` : 'A'}</text>
+          <line x1="38" y1="36" x2="112" y2="36" style="${styleA}" stroke-linecap="round"/>
+
+          <!-- B Wire -->
+          <circle cx="38" cy="76" r="5" fill="${dotB}"/>
+          <text x="12" y="81" fill="${dotB}" font-size="15" font-weight="bold" font-family="JetBrains Mono">${isIsolated ? `B=${bVal}` : 'B'}</text>
+          <line x1="38" y1="76" x2="112" y2="76" style="${styleB}" stroke-linecap="round"/>
+
+          <!-- Branch B to Inverter -->
+          <circle cx="68" cy="76" r="5" fill="${dotB}"/>
+          <line x1="68" y1="76" x2="68" y2="142" style="${styleB}" stroke-linecap="round"/>
+          <line x1="68" y1="142" x2="105" y2="142" style="${styleB}" stroke-linecap="round"/>
+
+          <!-- OR Gate -->
+          <path d="M 100 20 Q 128 56 100 92 Q 155 92 195 56 Q 155 20 100 20 Z" fill="#0d1524" stroke="#38bdf8" stroke-width="3" stroke-linejoin="round" style="filter: drop-shadow(0 0 4px rgba(56, 189, 248, 0.6));"/>
+          <line x1="195" y1="56" x2="312" y2="56" style="${styleC}" stroke-linecap="round"/>
+          <text x="216" y="45" fill="${dotC}" font-size="13" font-weight="bold" font-family="JetBrains Mono">${isIsolated ? `C=${cVal}` : 'C=A+B'}</text>
+
+          <!-- Inverter for B -->
+          <polygon points="105,114 105,170 160,142" fill="#0d1524" stroke="${dotB}" stroke-width="3" stroke-linejoin="round" style="filter: drop-shadow(0 0 4px ${dotB});"/>
+          <circle cx="168" cy="142" r="7" fill="#0d1524" stroke="${dotD}" stroke-width="3"/>
+          <line x1="176" y1="142" x2="265" y2="142" style="${styleD}" stroke-linecap="round"/>
+          <line x1="265" y1="142" x2="265" y2="96" style="${styleD}" stroke-linecap="round"/>
+          <line x1="265" y1="96" x2="312" y2="96" style="${styleD}" stroke-linecap="round"/>
+          <text x="188" y="132" fill="${dotD}" font-size="13" font-weight="bold" font-family="JetBrains Mono">${isIsolated ? `D=${dVal}` : 'D=B\''}</text>
+
+          <!-- XOR Gate -->
+          <path d="M 296 38 Q 324 76 296 114" fill="none" stroke="${dotC}" stroke-width="3" stroke-linecap="round"/>
+          <path d="M 308 38 Q 336 76 308 114 Q 365 114 405 76 Q 365 38 308 38 Z" fill="#0d1524" stroke="#34d399" stroke-width="3" stroke-linejoin="round" style="filter: drop-shadow(0 0 5px rgba(52, 211, 153, 0.6));"/>
+          <line x1="405" y1="76" x2="480" y2="76" style="${styleQ}" stroke-linecap="round"/>
+          <circle cx="480" cy="76" r="5" fill="${dotQ}"/>
+          <text x="492" y="81" fill="${dotQ}" font-size="16" font-weight="bold" font-family="JetBrains Mono">${isIsolated ? `Q=${qVal}` : 'Q=C⊕D'}</text>
+        </svg>
+      `;
+    }
+
+    /* Truth Table with Row Click-to-Isolate and Quiz Mode */
+    function renderCircuitTable(probId) {
+      const data = circuitProblems[probId];
+      const tableContainer = document.getElementById(`circuit-table-${probId}`);
+      if (!data || !tableContainer) return;
+
+      const isQuiz = quizState[probId].active;
+      const isolatedIdx = isolatedRowState[probId];
+      let score = 0;
+
+      let html = '<table class="truth-table"><thead><tr>';
+      html += '<th>Input A</th><th>Input B</th>';
+      if (probId === 'q2') html += '<th>Node C = B\'</th>';
+      if (probId === 'q3') html += '<th>C = (A+B)\'</th><th>D = B\'</th>';
+      if (probId === 'q4') html += '<th>C = A + B</th><th>D = B\'</th>';
+      html += `<th>Output Q (${isQuiz ? 'Quiz' : 'Complete'})</th><th>حالة المسار</th></tr></thead><tbody>`;
+
+      for (let i = 0; i < 4; i++) {
+        const rowA = data.A[i];
+        const rowB = data.B[i];
+        const isCurrentIsolated = (isolatedIdx === i);
+        const trClass = `trace-row ${isCurrentIsolated ? 'tr-isolated' : ''}`;
+
+        html += `<tr class="${trClass}" onclick="event.stopPropagation(); isolateRow('${probId}', ${i})">`;
+        html += `<td>${rowA}</td><td>${rowB}</td>`;
+        if (probId === 'q2') html += `<td style="color:var(--purple);">${data.C[i]}</td>`;
+        if (probId === 'q3') html += `<td style="color:var(--cyan);">${data.C[i]}</td><td style="color:var(--purple);">${data.D[i]}</td>`;
+        if (probId === 'q4') html += `<td style="color:var(--cyan);">${data.C[i]}</td><td style="color:var(--purple);">${data.D[i]}</td>`;
+
+        if (!isQuiz) {
+          const qVal = data.Q[i];
+          const qColor = qVal === 1 ? 'color:var(--emerald); font-weight:bold;' : 'color:var(--rose); font-weight:bold;';
+          html += `<td style="${qColor}">${qVal}</td>`;
+        } else {
+          const userVal = quizState[probId].userVals[i];
+          let btnClass = 'quiz-cell-btn';
+          if (userVal !== '?') {
+            if (userVal === data.Q[i]) {
+              btnClass += ' correct';
+              score++;
+            } else {
+              btnClass += ' wrong';
+            }
+          }
+          html += `<td><button class="${btnClass}" onclick="event.stopPropagation(); toggleQuizCell('${probId}', ${i})">${userVal}</button></td>`;
+        }
+
+        html += `<td><span style="font-size:0.7rem; color:${isCurrentIsolated ? 'var(--cyan)' : 'var(--text-muted)'};">${isCurrentIsolated ? '🎯 مسار معزول' : 'انقر لتحديد'}</span></td>`;
+        html += '</tr>';
+      }
+      html += '</tbody></table>';
+
+      if (isQuiz) {
+        html += `
+          <div class="quiz-bar">
+            <div>درجتك الحالية: <span class="quiz-score-badge">${score} / 4</span> ${score === 4 ? '🎉 إجابة صحيحة بالكامل!' : ''}</div>
+            <div style="display:flex; gap:6px;">
+              <button class="quiz-action-btn" onclick="checkAllQuiz('${probId}')">✔️ كشف كل الإجابات</button>
+              <button class="quiz-action-btn" onclick="resetQuiz('${probId}')">🔄 إعادة الاختبار</button>
+            </div>
+          </div>
+        `;
+      }
+
+      tableContainer.innerHTML = html;
+    }
+
+    /* Global listener: Click anywhere outside tables to reset glow to ALL ACTIVE */
+    document.addEventListener('click', function(e) {
+      if (!e.target.closest('table.truth-table') && !e.target.closest('.reset-trace-btn')) {
+        ['q2', 'q3', 'q4'].forEach(id => {
+          if (isolatedRowState[id] !== null) {
+            isolatedRowState[id] = null;
+            updateCircuitDisplay(id);
+          }
+        });
+      }
+    });
+
+    /* =========================================================================
+       TIMING DIAGRAMS & WAVEFORMS LOGIC (Q5–Q10)
+    ========================================================================= */
+    const xStart = 54;
+    const stepW = 52;
+    const svgW = 692;
+
+    const allGatesList = [
+      { key: 'AND',  name: 'X(AND) = AB',      color: '#34d399' },
+      { key: 'OR',   name: 'X(OR) = A+B',      color: '#38bdf8' },
+      { key: 'NAND', name: 'X(NAND) = (AB)\'', color: '#c084fc' },
+      { key: 'NOR',  name: 'X(NOR) = (A+B)\'', color: '#f43f5e' },
+      { key: 'XOR',  name: 'X(XOR) = A⊕B',     color: '#fbbf24' },
+      { key: 'XNOR', name: 'X(XNOR) = A⊙B',    color: '#a78bfa' }
+    ];
+
+    function toggleMultiCompare(probId) {
+      compareState[probId] = !compareState[probId];
+      const card = document.getElementById(`card-${probId}`);
+      if (card) {
+        const btn = card.querySelector('.compare-mode-btn');
+        if (btn) {
+          if (compareState[probId]) {
+            btn.classList.add('active');
+            btn.innerHTML = '🔙 إغلاق المقارنة (Normal)';
+          } else {
+            btn.classList.remove('active');
+            btn.innerHTML = '📊 مقارنة كل البوابات';
+          }
+        }
+      }
+      renderSingleTimingDiagram(probId);
+    }
+
+    function renderSingleTimingDiagram(probId) {
+      const prob = waveformProblems.find(p => p.id === probId);
+      const container = document.getElementById(`timing-${prob.id}`);
+      if (!prob || !container) return;
+
+      const isCompare = compareState[prob.id];
+
+      const yA1 = 34,  yA0 = 64;
+      const yB1 = 92,  yB0 = 122;
+      let svgH = 210;
+
+      let gateOutputs = [];
+      if (!isCompare) {
+        gateOutputs.push({
+          label: prob.gateLabel,
+          key: prob.gateName,
+          color: '#34d399',
+          bits: prob.X,
+          y1: 152,
+          y0: 182
+        });
+        svgH = 205;
+      } else {
+        svgH = 500;
+        let startY = 152;
+        allGatesList.forEach((g, idx) => {
+          const bits = [];
+          for (let i = 0; i < 12; i++) {
+            bits.push(calculateGateOutput(prob.A[i], prob.B[i], g.key));
+          }
+          gateOutputs.push({
+            label: g.name,
+            key: g.key,
+            color: g.color,
+            bits: bits,
+            y1: startY + idx * 56,
+            y0: startY + idx * 56 + 30
+          });
+        });
+      }
+
+      let gridLines = '';
+      let intervalLabels = '';
+      let bitLabels = '';
+      let hoverRects = '';
+
+      for (let i = 0; i < 12; i++) {
+        const x = xStart + i * stepW;
+        const cx = x + stepW / 2;
+
+        gridLines += `<line x1="${x}" y1="18" x2="${x}" y2="${svgH - 12}" stroke="#f59e0b" stroke-opacity="0.35" stroke-width="1.3" stroke-dasharray="4,4"/>`;
+        intervalLabels += `<text x="${cx}" y="14" fill="#94a3b8" font-size="11" font-weight="800" font-family="JetBrains Mono" text-anchor="middle">t${i + 1}</text>`;
+
+        const aBit = prob.A[i];
+        const bBit = prob.B[i];
+
+        bitLabels += `<text x="${cx}" y="52" fill="${aBit ? '#fbbf24' : '#475569'}" font-size="10.5" font-weight="800" font-family="JetBrains Mono" text-anchor="middle">${aBit}</text>`;
+        bitLabels += `<text x="${cx}" y="110" fill="${bBit ? '#fbbf24' : '#475569'}" font-size="10.5" font-weight="800" font-family="JetBrains Mono" text-anchor="middle">${bBit}</text>`;
+
+        gateOutputs.forEach(go => {
+          const outBit = go.bits[i];
+          bitLabels += `<text x="${cx}" y="${go.y0 - 10}" fill="${outBit ? go.color : '#475569'}" font-size="10.5" font-weight="800" font-family="JetBrains Mono" text-anchor="middle">${outBit}</text>`;
+        });
+
+        hoverRects += `<rect x="${x}" y="16" width="${stepW}" height="${svgH - 28}" fill="transparent" cursor="pointer" onmouseenter="inspectInterval('${prob.id}', ${i})" onmousemove="inspectInterval('${prob.id}', ${i})" ontouchstart="inspectInterval('${prob.id}', ${i})"/>`;
+      }
+      gridLines += `<line x1="${xStart + 12 * stepW}" y1="18" x2="${xStart + 12 * stepW}" y2="${svgH - 12}" stroke="#f59e0b" stroke-opacity="0.35" stroke-width="1.3" stroke-dasharray="4,4"/>`;
+
+      let horizLines = `
+        <line x1="${xStart}" y1="${yA1}" x2="${xStart + 12 * stepW}" y2="${yA1}" stroke="#334155" stroke-width="1" stroke-dasharray="3,3"/>
+        <line x1="${xStart}" y1="${yA0}" x2="${xStart + 12 * stepW}" y2="${yA0}" stroke="#334155" stroke-width="1" stroke-dasharray="3,3"/>
+        <line x1="${xStart}" y1="${yB1}" x2="${xStart + 12 * stepW}" y2="${yB1}" stroke="#334155" stroke-width="1" stroke-dasharray="3,3"/>
+        <line x1="${xStart}" y1="${yB0}" x2="${xStart + 12 * stepW}" y2="${yB0}" stroke="#334155" stroke-width="1" stroke-dasharray="3,3"/>
+      `;
+
+      let leftAxis = `
+        <line x1="${xStart}" y1="18" x2="${xStart}" y2="${svgH - 12}" stroke="#cbd5e1" stroke-width="2"/>
+        <text x="${xStart - 8}" y="${yA1 + 4}" fill="#f8fafc" font-size="11.5" font-weight="800" font-family="JetBrains Mono" text-anchor="end">A:1</text>
+        <text x="${xStart - 8}" y="${yA0 + 4}" fill="#94a3b8" font-size="11.5" font-weight="800" font-family="JetBrains Mono" text-anchor="end">A:0</text>
+        <text x="${xStart - 8}" y="${yB1 + 4}" fill="#f8fafc" font-size="11.5" font-weight="800" font-family="JetBrains Mono" text-anchor="end">B:1</text>
+        <text x="${xStart - 8}" y="${yB0 + 4}" fill="#94a3b8" font-size="11.5" font-weight="800" font-family="JetBrains Mono" text-anchor="end">B:0</text>
+      `;
+
+      let outPaths = '';
+      gateOutputs.forEach(go => {
+        horizLines += `
+          <line x1="${xStart}" y1="${go.y1}" x2="${xStart + 12 * stepW}" y2="${go.y1}" stroke="#334155" stroke-width="1" stroke-dasharray="3,3"/>
+          <line x1="${xStart}" y1="${go.y0}" x2="${xStart + 12 * stepW}" y2="${go.y0}" stroke="#334155" stroke-width="1" stroke-dasharray="3,3"/>
+        `;
+        leftAxis += `
+          <text x="${xStart - 8}" y="${go.y1 + 4}" fill="${go.color}" font-size="10.5" font-weight="800" font-family="JetBrains Mono" text-anchor="end">1</text>
+          <text x="${xStart - 8}" y="${go.y0 + 4}" fill="${go.color}" font-size="10.5" font-weight="800" font-family="JetBrains Mono" text-anchor="end">0</text>
+          <text x="${xStart + 12 * stepW + 6}" y="${go.y1 + 18}" fill="${go.color}" font-size="11" font-weight="800" font-family="JetBrains Mono" text-anchor="start">${go.label}</text>
+        `;
+        const pathStr = buildWavePath(go.bits, xStart, stepW, go.y1, go.y0);
+        outPaths += `<path d="${pathStr}" fill="none" stroke="${go.color}" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>`;
+      });
+
+      const pathA = buildWavePath(prob.A, xStart, stepW, yA1, yA0);
+      const pathB = buildWavePath(prob.B, xStart, stepW, yB1, yB0);
+
+      container.innerHTML = `
+        <div class="diagram-title">
+          <span>${isCompare ? 'Multi-Gate Comparison Mode — All 6 Gates' : prob.title}</span>
+          <span style="color:${isCompare ? 'var(--purple)' : 'var(--emerald)'};">${isCompare ? 'Side-by-Side View' : '12 Intervals (t1–t12)'}</span>
+        </div>
+        <svg class="timing-svg" viewBox="0 0 ${svgW + (isCompare ? 110 : 0)} ${svgH}" preserveAspectRatio="xMidYMid meet">
+          <rect id="highlight-${prob.id}" x="-100" y="16" width="${stepW}" height="${svgH - 28}" fill="rgba(56, 189, 248, 0.15)" stroke="#38bdf8" stroke-width="1.5" stroke-dasharray="3,3" pointer-events="none"/>
+          ${horizLines}
+          ${gridLines}
+          ${intervalLabels}
+          ${leftAxis}
+          ${bitLabels}
+          <path d="${pathA}" fill="none" stroke="#f59e0b" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+          <path d="${pathB}" fill="none" stroke="#38bdf8" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+          ${outPaths}
+          ${hoverRects}
+        </svg>
+        <div class="inspector-panel" id="inspector-${prob.id}">
+          <div><span>🔍 Inspector: </span><span class="active-val" id="insp-interval-${prob.id}">مرر فوق أي فترة t1..t12</span></div>
+          <div><span id="insp-details-${prob.id}">A = ?, B = ? &rarr; Output = ?</span></div>
+        </div>
+      `;
+
+      renderWaveformTable(prob.id);
+    }
+
+    function renderAllTimingDiagrams() {
+      waveformProblems.forEach(prob => {
+        renderSingleTimingDiagram(prob.id);
+      });
+    }
+
+    function inspectInterval(probId, index) {
+      const prob = waveformProblems.find(p => p.id === probId);
+      if (!prob) return;
+
+      const hl = document.getElementById(`highlight-${probId}`);
+      if (hl) {
+        hl.setAttribute('x', xStart + index * stepW);
+      }
+
+      const intvSpan = document.getElementById(`insp-interval-${probId}`);
+      const detSpan = document.getElementById(`insp-details-${probId}`);
+      if (intvSpan && detSpan) {
+        const a = prob.A[index];
+        const b = prob.B[index];
+        const isCompare = compareState[probId];
+        intvSpan.innerHTML = `Interval <b>t${index + 1}</b>`;
+
+        if (!isCompare) {
+          const x = prob.X[index];
+          detSpan.innerHTML = `Input A = <span style="color:#fbbf24">${a}</span>, Input B = <span style="color:#38bdf8">${b}</span> &rarr; Output <b>X = <span style="color:${x ? '#34d399' : '#f43f5e'}">${x}</span></b> (${prob.ruleExplain})`;
+        } else {
+          const andVal = a & b;
+          const orVal = a | b;
+          const nandVal = andVal ? 0 : 1;
+          const norVal = orVal ? 0 : 1;
+          const xorVal = a ^ b;
+          const xnorVal = (a === b) ? 1 : 0;
+          detSpan.innerHTML = `A=${a}, B=${b} | <span style="color:#34d399">AND:${andVal}</span>, <span style="color:#38bdf8">OR:${orVal}</span>, <span style="color:#c084fc">NAND:${nandVal}</span>, <span style="color:#f43f5e">NOR:${norVal}</span>, <span style="color:#fbbf24">XOR:${xorVal}</span>, <span style="color:#a78bfa">XNOR:${xnorVal}</span>`;
+        }
+      }
+    }
+
+    function renderWaveformTable(probId) {
+      const prob = waveformProblems.find(p => p.id === probId);
+      const tableContainer = document.getElementById(`table-${probId}`);
+      if (!prob || !tableContainer) return;
+
+      const isQuiz = quizState[probId].active;
+      const isCompare = compareState[probId];
+
+      let thCols = '<th class="sig-col">Signal</th>';
+      let rowA = '<td class="sig-col" style="color:#f59e0b; font-weight:800;">Input A</td>';
+      let rowB = '<td class="sig-col" style="color:#38bdf8; font-weight:800;">Input B</td>';
+
+      for (let i = 0; i < 12; i++) {
+        thCols += `<th>t${i + 1}</th>`;
+        rowA += `<td>${prob.A[i]}</td>`;
+        rowB += `<td>${prob.B[i]}</td>`;
+      }
+
+      let extraRows = '';
+      if (!isCompare) {
+        let rowX = `<td class="sig-col" style="color:#34d399; font-weight:800;">${prob.gateLabel}</td>`;
+        let score = 0;
+        for (let i = 0; i < 12; i++) {
+          if (!isQuiz) {
+            const xVal = prob.X[i];
+            const xColor = xVal === 1 ? 'color:#34d399; font-weight:800;' : 'color:#f43f5e;';
+            rowX += `<td style="${xColor}">${xVal}</td>`;
+          } else {
+            const userVal = quizState[probId].userVals[i];
+            let btnClass = 'quiz-cell-btn';
+            if (userVal !== '?') {
+              if (userVal === prob.X[i]) {
+                btnClass += ' correct';
+                score++;
+              } else {
+                btnClass += ' wrong';
+              }
+            }
+            rowX += `<td><button class="${btnClass}" onclick="toggleQuizCell('${probId}', ${i})">${userVal}</button></td>`;
+          }
+        }
+        extraRows = `<tr>${rowX}</tr>`;
+
+        let quizControls = '';
+        if (isQuiz) {
+          quizControls = `
+            <div class="quiz-bar">
+              <div>درجتك الحالية: <span class="quiz-score-badge">${score} / 12</span> ${score === 12 ? '🎉 ممتاز!' : ''}</div>
+              <div style="display:flex; gap:6px;">
+                <button class="quiz-action-btn" onclick="checkAllQuiz('${probId}')">✔️ كشف كل الإجابات</button>
+                <button class="quiz-action-btn" onclick="resetQuiz('${probId}')">🔄 إعادة الاختبار</button>
+              </div>
+            </div>
+          `;
+        }
+
+        tableContainer.innerHTML = `
+          <table>
+            <thead><tr>${thCols}</tr></thead>
+            <tbody>
+              <tr>${rowA}</tr>
+              <tr>${rowB}</tr>
+              ${extraRows}
+            </tbody>
+          </table>
+          ${quizControls}
+        `;
+      } else {
+        allGatesList.forEach(g => {
+          let row = `<td class="sig-col" style="color:${g.color}; font-weight:800;">${g.name}</td>`;
+          for (let i = 0; i < 12; i++) {
+            const outBit = calculateGateOutput(prob.A[i], prob.B[i], g.key);
+            const col = outBit === 1 ? `color:${g.color}; font-weight:800;` : 'color:#64748b;';
+            row += `<td style="${col}">${outBit}</td>`;
+          }
+          extraRows += `<tr>${row}</tr>`;
+        });
+
+        tableContainer.innerHTML = `
+          <table>
+            <thead><tr>${thCols}</tr></thead>
+            <tbody>
+              <tr>${rowA}</tr>
+              <tr>${rowB}</tr>
+              ${extraRows}
+            </tbody>
+          </table>
+          <div class="quiz-bar" style="color:var(--purple);">
+            <span>📊 وضع المقارنة نشط: يعرض مخرجات البوابات الست معاً لنفس نبضات الدخل t1–t12</span>
+          </div>
+        `;
+      }
+    }
+
+    function toggleQuizMode(probId) {
+      quizState[probId].active = !quizState[probId].active;
+      const card = document.getElementById(`card-${probId}`);
+      if (card) {
+        const qBtn = card.querySelector('.quiz-mode-btn');
+        if (qBtn) {
+          if (quizState[probId].active) {
+            qBtn.classList.add('active');
+            qBtn.innerHTML = '📋 وضع المذاكرة (Study)';
+          } else {
+            qBtn.classList.remove('active');
+            qBtn.innerHTML = '✍️ اختبر نفسك (Quiz)';
+          }
+        }
+      }
+
+      if (circuitProblems[probId]) {
+        renderCircuitTable(probId);
+      } else {
+        renderWaveformTable(probId);
+      }
+    }
+
+    function toggleQuizCell(probId, index) {
+      const cur = quizState[probId].userVals[index];
+      if (cur === '?') quizState[probId].userVals[index] = 0;
+      else if (cur === 0) quizState[probId].userVals[index] = 1;
+      else quizState[probId].userVals[index] = 0;
+
+      if (circuitProblems[probId]) renderCircuitTable(probId);
+      else renderWaveformTable(probId);
+    }
+
+    function checkAllQuiz(probId) {
+      if (circuitProblems[probId]) {
+        quizState[probId].userVals = [...circuitProblems[probId].Q];
+        renderCircuitTable(probId);
+      } else {
+        const prob = waveformProblems.find(p => p.id === probId);
+        if (prob) {
+          quizState[probId].userVals = [...prob.X];
+          renderWaveformTable(probId);
+        }
+      }
+    }
+
+    function resetQuiz(probId) {
+      if (circuitProblems[probId]) {
+        quizState[probId].userVals = ['?', '?', '?', '?'];
+        renderCircuitTable(probId);
+      } else {
+        quizState[probId].userVals = Array(12).fill('?');
+        renderWaveformTable(probId);
+      }
+    }
+
+    /* =========================================================================
+       CUSTOM WAVEFORM GENERATOR SIMULATOR
+    ========================================================================= */
+    const customSimData = {
+      intervals: 8,
+      A: [0, 1, 1, 0, 1, 0, 0, 1],
+      B: [1, 1, 0, 0, 1, 1, 0, 1],
+      gate: 'AND'
+    };
+
+    function updateCustomSim() {
+      const gate = document.getElementById('sim-custom-gate').value;
+      customSimData.gate = gate;
+
+      const N = customSimData.intervals;
+      const X = [];
+      for (let i = 0; i < N; i++) {
+        X.push(calculateGateOutput(customSimData.A[i], customSimData.B[i], gate));
+      }
+
+      const x0 = 50;
+      const w0 = 70;
+      const totalW = x0 + N * w0 + 15;
+      const totalH = 220;
+
+      const simYA1 = 34, simYA0 = 68;
+      const simYB1 = 98, simYB0 = 132;
+      const simYX1 = 162, simYX0 = 196;
+
+      let grid = '';
+      let labels = '';
+      let bitLabels = '';
+      let interactiveZones = '';
+
+      for (let i = 0; i < N; i++) {
+        const x = x0 + i * w0;
+        const cx = x + w0 / 2;
+
+        grid += `<line x1="${x}" y1="18" x2="${x}" y2="204" stroke="#f59e0b" stroke-opacity="0.3" stroke-width="1.3" stroke-dasharray="4,4"/>`;
+        labels += `<text x="${cx}" y="14" fill="#94a3b8" font-size="11.5" font-weight="800" font-family="JetBrains Mono" text-anchor="middle">t${i + 1}</text>`;
+
+        const aVal = customSimData.A[i];
+        const bVal = customSimData.B[i];
+        const xVal = X[i];
+
+        bitLabels += `<text x="${cx}" y="56" fill="${aVal ? '#fbbf24' : '#64748b'}" font-size="12" font-weight="800" font-family="JetBrains Mono" text-anchor="middle" pointer-events="none">${aVal}</text>`;
+        bitLabels += `<text x="${cx}" y="120" fill="${bVal ? '#38bdf8' : '#64748b'}" font-size="12" font-weight="800" font-family="JetBrains Mono" text-anchor="middle" pointer-events="none">${bVal}</text>`;
+        bitLabels += `<text x="${cx}" y="184" fill="${xVal ? '#34d399' : '#f43f5e'}" font-size="13" font-weight="800" font-family="JetBrains Mono" text-anchor="middle" pointer-events="none">${xVal}</text>`;
+
+        interactiveZones += `<rect x="${x}" y="22" width="${w0}" height="55" fill="transparent" cursor="pointer" title="اضغط لتبديل قيمة Input A" onclick="toggleSimSegment('A', ${i})"/>`;
+        interactiveZones += `<rect x="${x}" y="86" width="${w0}" height="55" fill="transparent" cursor="pointer" title="اضغط لتبديل قيمة Input B" onclick="toggleSimSegment('B', ${i})"/>`;
+      }
+      grid += `<line x1="${x0 + N * w0}" y1="18" x2="${x0 + N * w0}" y2="204" stroke="#f59e0b" stroke-opacity="0.3" stroke-width="1.3" stroke-dasharray="4,4"/>`;
+
+      const axes = `
+        <line x1="${x0}" y1="18" x2="${x0}" y2="204" stroke="#cbd5e1" stroke-width="2"/>
+        <text x="${x0 - 8}" y="${simYA1 + 4}" fill="#f8fafc" font-size="12" font-weight="800" font-family="JetBrains Mono" text-anchor="end">A:1</text>
+        <text x="${x0 - 8}" y="${simYA0 + 4}" fill="#94a3b8" font-size="12" font-weight="800" font-family="JetBrains Mono" text-anchor="end">A:0</text>
+        <text x="${x0 - 8}" y="${simYB1 + 4}" fill="#f8fafc" font-size="12" font-weight="800" font-family="JetBrains Mono" text-anchor="end">B:1</text>
+        <text x="${x0 - 8}" y="${simYB0 + 4}" fill="#94a3b8" font-size="12" font-weight="800" font-family="JetBrains Mono" text-anchor="end">B:0</text>
+        <text x="${x0 - 8}" y="${simYX1 + 4}" fill="#34d399" font-size="12" font-weight="800" font-family="JetBrains Mono" text-anchor="end">X:1</text>
+        <text x="${x0 - 8}" y="${simYX0 + 4}" fill="#34d399" font-size="12" font-weight="800" font-family="JetBrains Mono" text-anchor="end">X:0</text>
+      `;
+
+      const pathA = buildWavePath(customSimData.A, x0, w0, simYA1, simYA0);
+      const pathB = buildWavePath(customSimData.B, x0, w0, simYB1, simYB0);
+      const pathX = buildWavePath(X, x0, w0, simYX1, simYX0);
+
+      const simContainer = document.getElementById('sim-custom-container');
+      simContainer.innerHTML = `
+        <svg class="timing-svg" viewBox="0 0 ${totalW} ${totalH}" preserveAspectRatio="xMidYMid meet">
+          ${grid}
+          ${axes}
+          ${labels}
+          ${bitLabels}
+          <path d="${pathA}" fill="none" stroke="#f59e0b" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+          <path d="${pathB}" fill="none" stroke="#38bdf8" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+          <path d="${pathX}" fill="none" stroke="#34d399" stroke-width="3.6" stroke-linejoin="round" stroke-linecap="round"/>
+          ${interactiveZones}
+        </svg>
+      `;
+
+      let thCols = '<th class="sig-col">Signal</th>';
+      let rowA = '<td class="sig-col" style="color:#f59e0b; font-weight:800;">Input A</td>';
+      let rowB = '<td class="sig-col" style="color:#38bdf8; font-weight:800;">Input B</td>';
+      let rowX = `<td class="sig-col" style="color:#34d399; font-weight:800;">X (${gate})</td>`;
+
+      for (let i = 0; i < N; i++) {
+        thCols += `<th>t${i + 1}</th>`;
+        rowA += `<td><button class="quiz-cell-btn" onclick="toggleSimSegment('A', ${i})" style="color:#fbbf24;">${customSimData.A[i]}</button></td>`;
+        rowB += `<td><button class="quiz-cell-btn" onclick="toggleSimSegment('B', ${i})" style="color:#38bdf8;">${customSimData.B[i]}</button></td>`;
+        const xVal = X[i];
+        const xColor = xVal === 1 ? 'color:#34d399; font-weight:800;' : 'color:#f43f5e;';
+        rowX += `<td style="${xColor}">${xVal}</td>`;
+      }
+
+      document.getElementById('sim-custom-table').innerHTML = `
+        <table>
+          <thead><tr>${thCols}</tr></thead>
+          <tbody>
+            <tr>${rowA}</tr>
+            <tr>${rowB}</tr>
+            <tr>${rowX}</tr>
+          </tbody>
+        </table>
+      `;
+    }
+
+    function toggleSimSegment(signal, index) {
+      if (signal === 'A') {
+        customSimData.A[index] = customSimData.A[index] === 1 ? 0 : 1;
+      } else {
+        customSimData.B[index] = customSimData.B[index] === 1 ? 0 : 1;
+      }
+      updateCustomSim();
+    }
+
+    function randomizeCustomSim() {
+      for (let i = 0; i < customSimData.intervals; i++) {
+        customSimData.A[i] = Math.random() > 0.5 ? 1 : 0;
+        customSimData.B[i] = Math.random() > 0.5 ? 1 : 0;
+      }
+      updateCustomSim();
+    }
+
+    function resetCustomSim() {
+      for (let i = 0; i < customSimData.intervals; i++) {
+        customSimData.A[i] = 0;
+        customSimData.B[i] = 0;
+      }
+      updateCustomSim();
+    }
+
+    /* =========================================================================
+       UI CONTROLS & FILTERING
+    ========================================================================= */
+    function toggleCardSolution(btn) {
+      const card = btn.closest('.card');
+      const sol = card.querySelector('.solution-content');
+      if (sol.classList.contains('show')) {
+        sol.classList.remove('show');
+        btn.classList.add('collapsed');
+        btn.innerHTML = '👁️ Show Steps';
+      } else {
+        sol.classList.add('show');
+        btn.classList.remove('collapsed');
+        btn.innerHTML = '🙈 Hide Steps';
+      }
+    }
+
+    function toggleAllSolutions(show) {
+      const buttons = document.querySelectorAll('.sol-toggle-btn');
+      const solutions = document.querySelectorAll('.solution-content');
+
+      solutions.forEach((sol, idx) => {
+        const btn = buttons[idx];
+        if (show) {
+          sol.classList.add('show');
+          if (btn) {
+            btn.classList.remove('collapsed');
+            btn.innerHTML = '🙈 Hide Steps';
+          }
+        } else {
+          sol.classList.remove('show');
+          if (btn) {
+            btn.classList.add('collapsed');
+            btn.innerHTML = '👁️ Show Steps';
+          }
+        }
+      });
+    }
+
+    function filterGroup(groupNum) {
+      for (let i = 0; i <= 4; i++) {
+        const btn = document.getElementById(`filter-btn-${i}`);
+        if (btn) btn.classList.remove('active');
+      }
+      const activeBtn = document.getElementById(`filter-btn-${groupNum}`);
+      if (activeBtn) activeBtn.classList.add('active');
+
+      const cards = document.querySelectorAll('.card');
+      cards.forEach(card => {
+        const g = card.getAttribute('data-group');
+        if (groupNum === 0 || !g || g == groupNum) {
+          card.style.display = 'block';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+      updateCircuitDisplay('q2');
+      updateCircuitDisplay('q3');
+      updateCircuitDisplay('q4');
+      renderAllTimingDiagrams();
+      updateCustomSim();
+
+      if (typeof renderMathInElement === 'function') {
+        renderMathInElement(document.body, {
+          delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "$", right: "$", display: false}
+          ],
+          throwOnError: false
+        });
+      }
+    });
+  </script>
+</body>
+</html>
