@@ -1,0 +1,2413 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <title>Nested Loops (Control Structures — Ch. 2.2 in C++) — Master Educational Portal</title>
+  
+  <!-- KaTeX for ultra-fast, lightweight mathematical rendering -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+  
+  <style>
+    :root {
+      --bg-base: #070b12;
+      --bg-card: #0f1624;
+      --bg-code: #05080f;
+      --border-card: #1e293b;
+      --cyan: #38bdf8;
+      --emerald: #34d399;
+      --amber: #fbbf24;
+      --purple: #c084fc;
+      --rose: #f43f5e;
+      --text-main: #e2e8f0;
+      --text-muted: #94a3b8;
+      --font-mono: "Fira Code", Consolas, "Courier New", monospace;
+      --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    }
+    
+    *, *::before, *::after { 
+      box-sizing: border-box !important; 
+      margin: 0; 
+      padding: 0;
+      max-width: 100% !important;
+    }
+    
+    html, body {
+      width: 100% !important;
+      min-height: 100%;
+      background-color: var(--bg-base);
+      color: var(--text-main);
+      font-family: var(--font-sans);
+      line-height: 1.62;
+      overflow-x: hidden !important;
+      position: relative !important;
+      padding-bottom: 75px;
+    }
+
+    .container {
+      width: 100% !important;
+      max-width: 960px !important;
+      margin: 0 auto;
+      padding: 10px 12px;
+      overflow-x: hidden !important;
+    }
+
+    /* KaTeX Mathematical Shields */
+    .katex-display {
+      max-width: 100% !important;
+      overflow-x: auto !important;
+      overflow-y: hidden !important;
+      padding: 6px 0 !important;
+      margin: 0.5em 0 !important;
+      direction: ltr !important;
+      -webkit-overflow-scrolling: touch !important;
+    }
+    .katex {
+      font-size: 1.05em !important;
+      white-space: nowrap !important;
+    }
+    .math-scroll {
+      width: 100% !important;
+      overflow-x: auto !important;
+      overflow-y: hidden !important;
+      direction: ltr !important;
+      -webkit-overflow-scrolling: touch !important;
+      padding: 8px 12px;
+      margin: 8px 0;
+      background: rgba(0, 0, 0, 0.4);
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      text-align: center;
+    }
+
+    /* Top Sticky Module Switcher */
+    .lecture-switch-wrapper {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 10px;
+      position: sticky;
+      top: 6px;
+      z-index: 1002;
+      background: rgba(7, 11, 18, 0.95);
+      backdrop-filter: blur(14px);
+      padding: 6px;
+      border-radius: 12px;
+      border: 1px solid var(--border-card);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.65);
+    }
+    .lecture-tab {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8px 10px;
+      border-radius: 8px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
+      color: var(--text-muted);
+      background: #101726;
+      border: 1px solid #1e293b;
+      transition: all 0.2s ease;
+      text-align: center;
+      user-select: none;
+    }
+    .lecture-tab:hover {
+      color: #fff;
+      border-color: rgba(56, 189, 248, 0.4);
+    }
+    .lecture-tab.active {
+      background: rgba(56, 189, 248, 0.15);
+      border-color: var(--cyan);
+      color: var(--cyan);
+      box-shadow: 0 0 12px rgba(56, 189, 248, 0.25);
+    }
+
+    /* Sub-navigation Tabs */
+    .nav-tabs-wrapper {
+      position: sticky;
+      top: 54px;
+      z-index: 1000;
+      background: rgba(7, 11, 18, 0.95);
+      backdrop-filter: blur(12px);
+      padding: 6px;
+      border-radius: 10px;
+      border: 1px solid var(--border-card);
+      margin-bottom: 14px;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5);
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .nav-tabs-wrapper::-webkit-scrollbar { display: none; }
+    .nav-tabs {
+      display: flex;
+      gap: 6px;
+      width: max-content;
+    }
+    .tab-btn {
+      padding: 6px 11px;
+      background: #101726;
+      border: 1px solid #1e293b;
+      color: var(--text-muted);
+      border-radius: 6px;
+      font-weight: 700;
+      font-size: 0.76rem;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+      user-select: none;
+    }
+    .tab-btn:hover {
+      color: #fff;
+      border-color: rgba(56, 189, 248, 0.4);
+    }
+    .tab-btn.active {
+      background: rgba(56, 189, 248, 0.15);
+      border-color: var(--cyan);
+      color: var(--cyan);
+    }
+    .tab-btn.all-parts-btn {
+      background: rgba(52, 211, 153, 0.12);
+      border-color: rgba(52, 211, 153, 0.35);
+      color: var(--emerald);
+    }
+    .tab-btn.all-parts-btn.active {
+      background: rgba(52, 211, 153, 0.25);
+      border-color: var(--emerald);
+      color: #fff;
+    }
+
+    /* Header */
+    .header {
+      padding: 6px 0 14px 0;
+      border-bottom: 1px solid var(--border-card);
+      margin-bottom: 16px;
+    }
+    .header-top-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 8px;
+    }
+    .header-badge {
+      display: inline-block;
+      background: rgba(56, 189, 248, 0.12);
+      color: var(--cyan);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+    }
+    .print-btn {
+      background: rgba(52, 211, 153, 0.15);
+      border: 1px solid var(--emerald);
+      color: var(--emerald);
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 0.74rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+    .print-btn:hover {
+      background: rgba(52, 211, 153, 0.3);
+      color: #fff;
+    }
+    .header h1 {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 6px;
+      line-height: 1.4;
+      word-break: break-word;
+    }
+    .header p {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    /* View Panels */
+    .view-panel {
+      display: none;
+      animation: fadeIn 0.22s ease-in-out;
+    }
+    .view-panel.active-panel {
+      display: block;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Headings */
+    .lecture-content-wrapper h2 {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: #fff;
+      padding: 9px 12px;
+      border-radius: 8px;
+      margin-top: 1rem;
+      margin-bottom: 1rem;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.4);
+      border: 1px solid rgba(255,255,255,0.08);
+      word-break: break-word;
+    }
+    .lecture-content-wrapper h2.purple  { background: linear-gradient(90deg, #3b0764, #0f1624); border-left: 5px solid var(--purple); }
+    .lecture-content-wrapper h2.blue    { background: linear-gradient(90deg, #0c4a6e, #0f1624); border-left: 5px solid var(--cyan); }
+    .lecture-content-wrapper h2.orange  { background: linear-gradient(90deg, #7c2d12, #0f1624); border-left: 5px solid var(--amber); }
+    .lecture-content-wrapper h2.emerald { background: linear-gradient(90deg, #064e3b, #0f1624); border-left: 5px solid var(--emerald); }
+    .lecture-content-wrapper h2.pink    { background: linear-gradient(90deg, #831843, #0f1624); border-left: 5px solid var(--rose); }
+
+    /* Cards */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-card);
+      border-radius: 10px;
+      margin-bottom: 16px;
+      width: 100%;
+      overflow: hidden;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
+    }
+    .card-header {
+      background: rgba(255, 255, 255, 0.02);
+      border-bottom: 1px solid var(--border-card);
+      padding: 12px 14px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 10px;
+      width: 100%;
+    }
+    .prob-tag {
+      font-weight: 800;
+      font-size: 0.9rem;
+      color: var(--cyan);
+      width: 100%;
+      word-break: break-word;
+      overflow-wrap: break-word;
+      line-height: 1.45;
+    }
+    
+    .code-inline {
+      font-family: var(--font-mono);
+      color: #38bdf8;
+      background: rgba(56, 189, 248, 0.1);
+      padding: 1px 5px;
+      border-radius: 4px;
+      font-size: 0.86em;
+      border: 1px solid rgba(56, 189, 248, 0.2);
+      display: inline-block;
+    }
+
+    .sol-toggle-btn {
+      background: rgba(56, 189, 248, 0.12);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      color: var(--cyan);
+      padding: 5px 12px;
+      border-radius: 6px;
+      font-size: 0.76rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+      user-select: none;
+    }
+    .sol-toggle-btn:hover {
+      background: rgba(56, 189, 248, 0.25);
+      color: #fff;
+    }
+    .sol-toggle-btn.active {
+      background: rgba(244, 63, 94, 0.15);
+      border-color: var(--rose);
+      color: var(--rose);
+    }
+
+    .card-body {
+      padding: 12px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      width: 100%;
+    }
+    
+    .question-prompt {
+      background: rgba(56, 189, 248, 0.05);
+      border-left: 3px solid var(--cyan);
+      padding: 9px 12px;
+      font-size: 0.84rem;
+      color: #f1f5f9;
+      border-radius: 4px;
+      line-height: 1.55;
+    }
+
+    /* Terminal & Code Block Structure */
+    .code-container {
+      border: 1px solid #1e293b;
+      border-radius: 8px;
+      overflow: hidden;
+      background: var(--bg-code);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+      margin: 8px 0;
+      width: 100% !important;
+      max-width: 100% !important;
+    }
+    .terminal-header {
+      background: #090e1a;
+      border-bottom: 1px solid #1e293b;
+      padding: 6px 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .terminal-dots { display: flex; gap: 5px; }
+    .dot { width: 8px; height: 8px; border-radius: 50%; }
+    .dot.red { background: #ef4444; }
+    .dot.yellow { background: #f59e0b; }
+    .dot.green { background: #10b981; }
+    .terminal-title {
+      font-family: var(--font-mono);
+      font-size: 0.74rem;
+      color: #94a3b8;
+    }
+    .copy-btn {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid #334155;
+      color: #cbd5e1;
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .copy-btn:hover {
+      color: #fff;
+      border-color: var(--cyan);
+      background: rgba(56, 189, 248, 0.15);
+    }
+    
+    .code-snippet {
+      margin: 0;
+      padding: 12px 14px;
+      background: var(--bg-code);
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      color: #e2e8f0;
+      line-height: 1.6;
+      overflow-x: auto !important;
+      tab-size: 4;
+      text-align: left !important;
+      -webkit-overflow-scrolling: touch;
+      width: 100% !important;
+      max-width: 100% !important;
+    }
+    .code-kw { color: #f43f5e; font-weight: bold; }
+    .code-var { color: #38bdf8; }
+    .code-num { color: #fbbf24; }
+    .code-str { color: #34d399; }
+    
+    /* Deep-Dive Explanation Cards */
+    .explain-block {
+      background: rgba(15, 22, 36, 0.95);
+      border: 1px solid rgba(56, 189, 248, 0.25);
+      border-left: 4px solid var(--cyan);
+      border-radius: 6px;
+      padding: 8px 11px;
+      margin-top: 12px;
+      margin-bottom: 4px;
+      font-family: var(--font-sans);
+      font-size: 0.81rem;
+      line-height: 1.55;
+      color: #d1d5db;
+      white-space: normal !important;
+      word-break: break-word !important;
+      overflow-wrap: anywhere !important;
+      box-sizing: border-box !important;
+      text-align: left;
+    }
+    .explain-block .badge-row {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-bottom: 4px;
+    }
+    .explain-badge {
+      font-size: 0.69rem;
+      font-weight: 800;
+      padding: 1px 6px;
+      border-radius: 4px;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+    }
+    .badge-logic { background: rgba(56, 189, 248, 0.15); color: var(--cyan); border: 1px solid rgba(56, 189, 248, 0.35); }
+    .badge-memory { background: rgba(251, 191, 36, 0.15); color: var(--amber); border: 1px solid rgba(251, 191, 36, 0.35); }
+    .badge-flow { background: rgba(52, 211, 153, 0.15); color: var(--emerald); border: 1px solid rgba(52, 211, 153, 0.35); }
+    .badge-trap { background: rgba(244, 63, 94, 0.15); color: var(--rose); border: 1px solid rgba(244, 63, 94, 0.35); }
+    .badge-scope { background: rgba(192, 132, 252, 0.15); color: var(--purple); border: 1px solid rgba(192, 132, 252, 0.35); }
+
+    .solution-content {
+      display: none;
+      animation: fadeIn 0.25s ease-in-out;
+    }
+    .solution-content.show {
+      display: block;
+    }
+
+    .step-block {
+      background: var(--bg-code);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 8px;
+      padding: 10px 12px;
+      font-size: 0.84rem;
+      line-height: 1.6;
+      margin-bottom: 8px;
+    }
+    .step-label {
+      font-size: 0.72rem;
+      font-weight: 800;
+      margin-bottom: 6px;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+    }
+    .label-blue { color: var(--cyan); }
+    .label-amber { color: var(--amber); }
+    .label-green { color: var(--emerald); }
+    .label-purple { color: var(--purple); }
+    .label-rose { color: var(--rose); }
+
+    .result-badge {
+      display: inline-block;
+      background: rgba(52, 211, 153, 0.12);
+      border: 1px solid rgba(52, 211, 153, 0.28);
+      color: var(--emerald);
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-weight: 700;
+      font-size: 0.84rem;
+      font-family: var(--font-mono);
+    }
+
+    /* Output Console Box */
+    .output-box {
+      margin: 8px 0;
+      padding: 10px 14px;
+      background: #020611;
+      border: 1px dashed rgba(56, 189, 248, 0.35);
+      border-radius: 6px;
+      font-family: var(--font-mono);
+      font-size: 0.84rem;
+      color: var(--emerald);
+      overflow-x: auto;
+      line-height: 1.5;
+    }
+
+    /* Tables */
+    .table-scroll-container {
+      width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      margin: 8px 0 12px 0;
+      border: 1px solid #1e293b;
+      border-radius: 8px;
+      background: var(--bg-card);
+    }
+    .scroll-hint {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      font-size: 0.72rem;
+      color: var(--cyan);
+      background: rgba(56, 189, 248, 0.08);
+      padding: 5px 8px;
+      text-align: center;
+      border-bottom: 1px solid #1e293b;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+    }
+    table {
+      width: 100%;
+      min-width: 580px;
+      border-collapse: collapse;
+      background: var(--bg-card);
+      font-size: 0.83rem;
+    }
+    th {
+      background: #1e293b;
+      color: var(--cyan);
+      font-weight: 700;
+      padding: 10px 12px;
+      border: 1px solid #334155;
+      text-align: left;
+      white-space: nowrap;
+    }
+    td {
+      padding: 10px 12px;
+      border: 1px solid #1e293b;
+      color: #e2e8f0;
+      vertical-align: middle;
+      text-align: left;
+      line-height: 1.5;
+    }
+    tr:nth-child(even) td { background: #0b1120; }
+
+    /* Callout */
+    .callout {
+      background: #0d1527;
+      border: 1px solid #334155;
+      border-radius: 8px;
+      padding: 12px 16px;
+      margin: 12px 0 16px 0;
+      width: 100%;
+    }
+    .callout.purple { border-left: 4px solid var(--purple); }
+    .callout.blue   { border-left: 4px solid var(--cyan); }
+    .callout.orange { border-left: 4px solid var(--amber); }
+    .callout.emerald{ border-left: 4px solid var(--emerald); }
+    .callout.pink   { border-left: 4px solid var(--rose); }
+    .callout h4 {
+      margin: 0 0 6px 0;
+      font-size: 0.94rem;
+      font-weight: 700;
+      color: #fff;
+    }
+    .callout ul {
+      margin: 0;
+      padding-left: 1.25rem;
+      color: #cbd5e1;
+      font-size: 0.83rem;
+      line-height: 1.6;
+    }
+    .callout li { margin-bottom: 5px; }
+
+    /* Global Toggle Bar */
+    .global-toggle-bar {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 12px;
+      background: rgba(255, 255, 255, 0.03);
+      padding: 6px 10px;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+    .global-toggle-bar button {
+      padding: 5px 12px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      border-radius: 6px;
+      cursor: pointer;
+      border: 1px solid #1e293b;
+      background: #111722;
+      color: #cbd5e1;
+      transition: all 0.2s ease;
+    }
+    .global-toggle-bar button:hover {
+      border-color: var(--cyan);
+      color: #fff;
+    }
+
+    /* Grid 2 Column */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin: 10px 0;
+    }
+    @media (max-width: 680px) {
+      .grid-2 { grid-template-columns: 1fr; }
+    }
+
+    /* Simulator */
+    .simulator-box {
+      background: #080c14;
+      border: 1px solid #1e293b;
+      border-radius: 10px;
+      padding: 14px;
+      margin: 14px 0;
+    }
+    .sim-controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      margin-bottom: 12px;
+      background: rgba(255,255,255,0.02);
+      padding: 10px;
+      border-radius: 8px;
+    }
+    .sim-btn {
+      padding: 6px 14px;
+      background: rgba(56, 189, 248, 0.14);
+      border: 1px solid var(--cyan);
+      color: #fff;
+      border-radius: 6px;
+      font-weight: 700;
+      font-size: 0.78rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .sim-btn:hover {
+      background: rgba(56, 189, 248, 0.28);
+    }
+    .sim-select, .sim-input {
+      background: #111722;
+      border: 1px solid #334155;
+      color: #f1f5f9;
+      padding: 5px 8px;
+      border-radius: 6px;
+      font-size: 0.78rem;
+    }
+    .grid-visualizer {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      background: #05070a;
+      padding: 14px;
+      border-radius: 8px;
+      min-height: 140px;
+      border: 1px dashed #1e293b;
+      align-items: flex-start;
+      overflow-x: auto;
+    }
+    .sim-row {
+      display: flex;
+      gap: 6px;
+    }
+    .sim-cell {
+      width: 34px;
+      height: 34px;
+      border-radius: 4px;
+      background: #111722;
+      border: 1px solid #1e293b;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 0.82rem;
+      color: #64748b;
+      transition: all 0.2s ease;
+    }
+    .sim-cell.printed {
+      background: rgba(52, 211, 153, 0.2);
+      border-color: var(--emerald);
+      color: var(--emerald);
+    }
+    .sim-cell.active-cell {
+      background: rgba(56, 189, 248, 0.35);
+      border-color: var(--cyan);
+      color: #fff;
+      transform: scale(1.1);
+      box-shadow: 0 0 10px rgba(56, 189, 248, 0.4);
+    }
+    .sim-status {
+      margin-top: 12px;
+      font-size: 0.8rem;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .sim-tag {
+      background: #1e293b;
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-family: var(--font-mono);
+      color: var(--cyan);
+    }
+
+    /* MCQ Engine */
+    .mcq-container {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin-top: 10px;
+    }
+    .mcq-card {
+      background: #0b111d;
+      border: 1px solid #1e293b;
+      border-radius: 8px;
+      padding: 14px;
+    }
+    .mcq-question {
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 10px;
+      line-height: 1.5;
+    }
+    .mcq-options {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+    .mcq-opt-btn {
+      background: #111827;
+      border: 1px solid #334155;
+      color: #e2e8f0;
+      padding: 9px 12px;
+      border-radius: 6px;
+      font-size: 0.82rem;
+      text-align: left;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-family: inherit;
+    }
+    .mcq-opt-btn:hover {
+      border-color: var(--cyan);
+      background: rgba(56, 189, 248, 0.08);
+    }
+    .mcq-opt-btn.correct {
+      background: rgba(52, 211, 153, 0.2) !important;
+      border-color: var(--emerald) !important;
+      color: #fff !important;
+    }
+    .mcq-opt-btn.incorrect {
+      background: rgba(244, 63, 94, 0.2) !important;
+      border-color: var(--rose) !important;
+      color: #fff !important;
+    }
+    .mcq-feedback {
+      display: none;
+      margin-top: 10px;
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 0.82rem;
+      line-height: 1.5;
+    }
+    .mcq-feedback.show-feed {
+      display: block;
+    }
+    .quiz-score-badge {
+      display: inline-block;
+      background: rgba(56, 189, 248, 0.15);
+      border: 1px solid var(--cyan);
+      color: var(--cyan);
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 0.84rem;
+      font-weight: 800;
+      margin-bottom: 14px;
+    }
+
+    /* Print Optimized Styling */
+    @media print {
+      body {
+        background-color: #ffffff !important;
+        color: #000000 !important;
+        font-size: 11pt !important;
+        padding-bottom: 0 !important;
+      }
+      .lecture-switch-wrapper,
+      .nav-tabs-wrapper,
+      .global-toggle-bar,
+      .sol-toggle-btn,
+      .copy-btn,
+      .print-btn,
+      .simulator-box,
+      .sim-controls,
+      #lec-tab-2,
+      .scroll-hint {
+        display: none !important;
+      }
+      .container {
+        max-width: 100% !important;
+        padding: 0 !important;
+      }
+      .view-panel {
+        display: block !important;
+        page-break-inside: avoid;
+      }
+      .card {
+        border: 1px solid #cccccc !important;
+        background: #ffffff !important;
+        box-shadow: none !important;
+        page-break-inside: avoid;
+        margin-bottom: 12px !important;
+      }
+      .card-header {
+        background: #f1f5f9 !important;
+        border-bottom: 1px solid #cccccc !important;
+      }
+      .prob-tag {
+        color: #000000 !important;
+      }
+      .solution-content {
+        display: block !important;
+      }
+      .code-snippet, .output-box {
+        background: #f8fafc !important;
+        color: #0f172a !important;
+        border: 1px solid #cbd5e1 !important;
+      }
+      .code-kw { color: #be123c !important; }
+      .code-var { color: #0284c7 !important; }
+      .code-num { color: #b45309 !important; }
+      .code-str { color: #047857 !important; }
+      .explain-block {
+        background: #f8fafc !important;
+        color: #0f172a !important;
+        border: 1px solid #cbd5e1 !important;
+        border-left: 3px solid #0284c7 !important;
+      }
+      table {
+        min-width: 100% !important;
+      }
+      th {
+        background: #e2e8f0 !important;
+        color: #000000 !important;
+        border: 1px solid #94a3b8 !important;
+      }
+      td {
+        color: #000000 !important;
+        border: 1px solid #cbd5e1 !important;
+        background: #ffffff !important;
+      }
+      tr:nth-child(even) td {
+        background: #f8fafc !important;
+      }
+      .callout {
+        background: #f8fafc !important;
+        color: #000000 !important;
+        border: 1px solid #cbd5e1 !important;
+      }
+      .callout h4 {
+        color: #000000 !important;
+      }
+      .callout ul {
+        color: #334155 !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <!-- Top Sticky Mode Switcher Bar -->
+    <div class="lecture-switch-wrapper">
+      <div id="lec-tab-1" class="lecture-tab active" onclick="switchCourseModule(1)">Chapter 2.2: Nested Loops Study Portal</div>
+      <div id="lec-tab-2" class="lecture-tab" onclick="switchCourseModule(2)">Trace Simulator &amp; Visualizer</div>
+    </div>
+
+    <!-- Sub-navigation Tabs -->
+    <div class="nav-tabs-wrapper" id="subnav-wrapper-1">
+      <div class="nav-tabs">
+        <div id="part-btn-0" class="tab-btn all-parts-btn" onclick="showPart(0)">All Parts (Full Lecture)</div>
+        <div id="part-btn-6" class="tab-btn active" style="background: rgba(251, 191, 36, 0.18); border-color: var(--amber); color: #fbbf24;" onclick="showPart(6)">⚡ Exam Quick Cheat-Sheet</div>
+        <div id="part-btn-1" class="tab-btn" onclick="showPart(1)">Part 1: Concept &amp; Mechanics</div>
+        <div id="part-btn-2" class="tab-btn" onclick="showPart(2)">Part 2: Core Patterns &amp; Trace Tables</div>
+        <div id="part-btn-3" class="tab-btn" onclick="showPart(3)">Part 3: Iteration Math &amp; Limits</div>
+        <div id="part-btn-4" class="tab-btn" onclick="showPart(4)">Part 4: Pitfalls &amp; Debugging</div>
+        <div id="part-btn-5" class="tab-btn" onclick="showPart(5)">Part 5: Applications &amp; Practice</div>
+        <div id="part-btn-7" class="tab-btn" onclick="showPart(7)">🎯 Classic Pattern Challenges</div>
+        <div id="part-btn-8" class="tab-btn" onclick="showPart(8)">📝 MCQ &amp; Tracing Quiz</div>
+      </div>
+    </div>
+
+    <!-- Header -->
+    <div class="header">
+      <div class="header-top-row">
+        <span class="header-badge" id="header-badge">CONTOSO CS101 • CONTROL STRUCTURES CHAPTER 2.2</span>
+        <button class="print-btn" onclick="window.print()">🖨️ Print / Save as PDF</button>
+      </div>
+      <h1 id="page-main-title">Exam Quick Cheat-Sheet: 6 Golden Rules, Formulas &amp; Traps</h1>
+      <p id="page-main-desc">Comprehensive interactive portal for <b>Nested Loops</b> featuring deep-dive architectural explanations above every line of code, memory lifecycle tracking, control flow pointers, and live interactive simulation.</p>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- MODULE 1: COMPREHENSIVE LECTURE CONTENT -->
+    <!-- ============================================================ -->
+    <div id="lecture-container">
+
+      <!-- PART 1: CONCEPT & MECHANICS -->
+      <div id="part-view-1" class="view-panel">
+        <div class="lecture-content-wrapper">
+          <h2 class="purple">Part 1: Single vs. Nested Loops &amp; The Golden Execution Model</h2>
+          
+          <div class="callout purple">
+            <h4>🎯 Lecture Learning Objectives</h4>
+            <ul>
+              <li><b>Explain the idea:</b> Accurately describe the distinct roles of the outer loop (managing rows/groups) and inner loop (handling columns/items).</li>
+              <li><b>Trace execution:</b> Count how many times each loop runs and track variable memory addresses in RAM.</li>
+              <li><b>Predict output:</b> Read nested-loop C++ code and determine the exact formatted console output.</li>
+              <li><b>Build patterns:</b> Leverage nested control structures for 2D grids, tables, and geometric shapes.</li>
+            </ul>
+          </div>
+
+          <!-- Single Loop Anatomy -->
+          <div class="card">
+            <div class="card-header">
+              <span class="prob-tag">Single Loop Anatomy: How it Executes in Memory</span>
+            </div>
+            <div class="card-body">
+              <div class="question-prompt">
+                A simple loop printing <span class="code-inline">1 2 3</span> to observe the complete lifecycle of variable <span class="code-inline">i</span>:
+              </div>
+              <div class="code-container">
+                <div class="terminal-header">
+                  <div class="terminal-dots"><div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div></div>
+                  <span class="terminal-title">single_loop_anatomy.cpp</span>
+                  <button class="copy-btn" onclick="copyCode(this)">Copy Code</button>
+                </div>
+                <pre class="code-snippet"><div class="explain-block">
+  <div class="badge-row">
+    <span class="explain-badge badge-logic">🧠 Logic &amp; Rationale</span>
+    <span class="explain-badge badge-memory">💾 Memory &amp; State</span>
+    <span class="explain-badge badge-flow">⚙️ Control Flow</span>
+  </div>
+  <b>Single Loop Header Dissection:</b>
+  <br>&bull; <span class="code-inline">int i = 1</span>: <b>Initialization step</b>. Allocates 4 bytes in stack memory for integer <span class="code-inline">i</span> and assigns initial value 1. Executes <i>exactly once</i> at loop entry.
+  <br>&bull; <span class="code-inline">i &lt;= 3</span>: <b>Continuation condition</b>. Evaluated prior to entering the body on every pass. If true, body executes; if false, loop terminates.
+  <br>&bull; <span class="code-inline">i++</span>: <b>Post-expression update</b>. Increments <span class="code-inline">i</span> by 1 <i>after</i> the body finishes, immediately before re-evaluating the condition.
+</div><span class="code-kw">for</span> (<span class="code-kw">int</span> <span class="code-var">i</span> = <span class="code-num">1</span>; <span class="code-var">i</span> &lt;= <span class="code-num">3</span>; <span class="code-var">i</span>++) {
+
+<div class="explain-block">
+  <div class="badge-row">
+    <span class="explain-badge badge-logic">🧠 I/O Stream Action</span>
+  </div>
+  Streams the current integer value stored in variable <span class="code-inline">i</span> to the console buffer, followed by a space delimiter. No newline is printed, keeping outputs on a continuous horizontal line.
+</div>    cout &lt;&lt; <span class="code-var">i</span> &lt;&lt; <span class="code-str">" "</span>;
+
+<div class="explain-block">
+  <div class="badge-row">
+    <span class="explain-badge badge-scope">🔒 Scope Boundary</span>
+    <span class="explain-badge badge-flow">⚙️ Branching Jump</span>
+  </div>
+  Closing brace signals the end of one iteration. Control jumps back to the update step <span class="code-inline">i++</span>, then tests <span class="code-inline">i &lt;= 3</span> again. When <span class="code-inline">i</span> hits 4, condition evaluates to false, terminating the loop.
+</div>}</pre>
+              </div>
+            </div>
+          </div>
+
+          <!-- Execution Order & Mechanics -->
+          <div class="table-scroll-container">
+            <div class="scroll-hint">👈 Swipe horizontally to view full technical comparison 👉</div>
+            <table>
+              <thead>
+                <tr><th style="width:25%">Concept</th><th style="width:40%">C++ Code Syntax &amp; Mental Model</th><th>Execution Behavior &amp; Mechanics</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><b>Clock Metaphor</b></td>
+                  <td>
+                    <span class="result-badge">Outer Loop = Hour Hand (Slow)</span><br>
+                    <span class="result-badge" style="margin-top:4px;">Inner Loop = Minute Hand (Fast)</span>
+                  </td>
+                  <td>The hour hand cannot advance from 1 to 2 until the minute hand completes a full 60-minute sweep. Similarly, the outer loop advances to the next row <i>only after</i> the inner loop executes all its column iterations from start to finish.</td>
+                </tr>
+                <tr>
+                  <td><b>Inner Loop Reset</b></td>
+                  <td>
+                    <span class="code-inline">col resets to initial value on each row</span>
+                  </td>
+                  <td>Each time the outer loop advances to a new row, the inner loop's initialization statement runs anew. The inner variable (e.g., <span class="code-inline">col = 1</span>) resets to its initial state, re-running all columns from scratch.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- PART 2: PATTERNS & TRACE TABLES -->
+      <div id="part-view-2" class="view-panel">
+        <div class="lecture-content-wrapper">
+          <h2 class="blue">Part 2: Core Patterns &amp; Systematic Trace Tables</h2>
+
+          <!-- Example 1 -->
+          <div class="card">
+            <div class="card-header">
+              <span class="prob-tag">Example 1: Print a Rectangle of Stars <span class="code-inline">(3 Rows &times; 4 Columns)</span></span>
+              <button class="sol-toggle-btn active" onclick="toggleCardSolution(this)">👁️ Show Trace Table</button>
+            </div>
+            <div class="card-body">
+              <div class="question-prompt">
+                Three outer iterations &times; four inner iterations = 12 stars total.
+                <div class="code-container">
+                  <div class="terminal-header">
+                    <div class="terminal-dots"><div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div></div>
+                    <span class="terminal-title">stars_rectangle.cpp</span>
+                    <button class="copy-btn" onclick="copyCode(this)">Copy Code</button>
+                  </div>
+                  <pre class="code-snippet"><div class="explain-block">
+  <div class="badge-row">
+    <span class="explain-badge badge-logic">🧠 Outer Loop (Row Manager)</span>
+    <span class="explain-badge badge-memory">💾 row = 1 to 3</span>
+  </div>
+  <b>Purpose:</b> Manages the row progression.
+  <br>&bull; Initializes <span class="code-inline">row = 1</span> in stack memory.
+  <br>&bull; Condition <span class="code-inline">row &lt;= 3</span> guarantees that exactly 3 rows are produced.
+  <br>&bull; During each outer cycle, <span class="code-inline">row</span> remains fixed while the inner loop generates all columns for that row.
+</div><span class="code-kw">for</span> (<span class="code-kw">int</span> <span class="code-var">row</span> = <span class="code-num">1</span>; <span class="code-var">row</span> &lt;= <span class="code-num">3</span>; <span class="code-var">row</span>++) {
+
+<div class="explain-block">
+  <div class="badge-row">
+    <span class="explain-badge badge-logic">🧠 Inner Loop (Column Worker)</span>
+    <span class="explain-badge badge-memory">💾 col = 1 to 4</span>
+  </div>
+  <b>Purpose:</b> Fills columns in the currently active row.
+  <br>&bull; Resets <span class="code-inline">col = 1</span> at the start of every new row.
+  <br>&bull; Condition <span class="code-inline">col &lt;= 4</span> forces 4 consecutive prints horizontally before yielding control back to the outer loop.
+</div>    <span class="code-kw">for</span> (<span class="code-kw">int</span> <span class="code-var">col</span> = <span class="code-num">1</span>; <span class="code-var">col</span> &lt;= <span class="code-num">4</span>; <span class="code-var">col</span>++) {
+
+<div class="explain-block">
+  <div class="badge-row">
+    <span class="explain-badge badge-logic">🧠 Horizontal Print</span>
+  </div>
+  Outputs a star followed by a space without advancing the terminal cursor down. Repeats 4 times per row.
+</div>        cout &lt;&lt; <span class="code-str">"* "</span>;
+
+<div class="explain-block">
+  <div class="badge-row">
+    <span class="explain-badge badge-scope">🔒 Inner Loop Termination</span>
+  </div>
+  After column 4 finishes (<span class="code-inline">col = 5</span> fails condition), inner loop exits and control proceeds to the next statement.
+</div>    }
+
+<div class="explain-block">
+  <div class="badge-row">
+    <span class="explain-badge badge-logic">🧠 Row Terminator</span>
+    <span class="explain-badge badge-trap">⚠️ Critical Placement</span>
+  </div>
+  <b>Critical placement:</b> Positioned <i>outside the inner loop, but inside the outer loop</i>. Once all 4 columns are printed, flushes buffer and drops cursor to a fresh line for the next row.
+</div>    cout &lt;&lt; endl;
+
+<div class="explain-block">
+  <div class="badge-row">
+    <span class="explain-badge badge-flow">⚙️ Outer Loop Cycle Repeat</span>
+  </div>
+  CPU jumps to <span class="code-inline">row++</span> (incrementing <span class="code-inline">row</span> to 2), then evaluates <span class="code-inline">row &lt;= 3</span> to begin row 2.
+</div>}</pre>
+                </div>
+                <b>Printed Output Grid:</b>
+                <div class="output-box">
+* * * * 
+* * * * 
+* * * * 
+                </div>
+              </div>
+              <div class="solution-content show">
+                <div class="step-block">
+                  <div class="step-label label-blue">Step-by-Step Trace Table</div>
+                  <div class="table-scroll-container">
+                    <table>
+                      <thead>
+                        <tr><th>Outer (row)</th><th>Inner (col)</th><th>Printed</th><th>Action</th></tr>
+                      </thead>
+                      <tbody>
+                        <tr><td>1</td><td>1</td><td>*</td><td>Print star at col 1</td></tr>
+                        <tr><td>1</td><td>2</td><td>*</td><td>Print star at col 2</td></tr>
+                        <tr><td>1</td><td>3</td><td>*</td><td>Print star at col 3</td></tr>
+                        <tr><td>1</td><td>4</td><td>* + newline</td><td>Print star, finish row 1 via <span class="code-inline">endl</span></td></tr>
+                        <tr><td>2</td><td>1</td><td>*</td><td><b>col resets to 1</b>; start row 2</td></tr>
+                        <tr><td>2</td><td>2, 3, 4</td><td>* * * + newline</td><td>Print remaining stars of row 2; finish row</td></tr>
+                        <tr><td>3</td><td>1, 2, 3, 4</td><td>* * * * + newline</td><td><b>col resets to 1</b>; print row 3; loop terminates</td></tr>
+                      </tbody>
+                    </table>
+                  </div>
+                  <div>Total Stars Printed: <span class="result-badge">3 &times; 4 = 12 Stars</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Example 2 -->
+          <div class="card">
+            <div class="card-header">
+              <span class="prob-tag">Example 2: 5 &times; 5 Multiplication Table <span class="code-inline">(Tab Formatted \t)</span></span>
+              <button class="sol-toggle-btn active" onclick="toggleCardSolution(this)">👁️ Show Explanation &amp; Products</button>
+            </div>
+            <div class="card-body">
+              <div class="question-prompt">
+                The outer loop chooses the base number; the inner loop multiplies it by 1–5:
+                <div class="code-container">
+                  <div class="terminal-header">
+                    <div class="terminal-dots"><div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div></div>
+                    <span class="terminal-title">multiplication_table.cpp</span>
+                    <button class="copy-btn" onclick="copyCode(this)">Copy Code</button>
+                  </div>
+                  <pre class="code-snippet"><div class="explain-block">
+  <div class="badge-row">
+    <span class="explain-badge badge-logic">🧠 Base Multiplicand</span>
+    <span class="explain-badge badge-memory">💾 Variable i</span>
+  </div>
+  <b>Base multiplier setup:</b> Variable <span class="code-inline">i</span> sets the primary multiplication table row (1, 2, 3, 4, 5). Remains constant across the current row.
+</div><span class="code-kw">for</span> (<span class="code-kw">int</span> <span class="code-var">i</span> = <span class="code-num">1</span>; <span class="code-var">i</span> &lt;= <span class="code-num">5</span>; <span class="code-var">i</span>++) {
+
+<div class="explain-block">
+  <div class="badge-row">
+    <span class="explain-badge badge-logic">🧠 Multiplier Factor</span>
+    <span class="explain-badge badge-memory">💾 Variable j</span>
+  </div>
+  <b>Column multiplier factor:</b> Variable <span class="code-inline">j</span> iterates from 1 to 5, providing the secondary factor for row <span class="code-inline">i</span>.
+</div>    <span class="code-kw">for</span> (<span class="code-kw">int</span> <span class="code-var">j</span> = <span class="code-num">1</span>; <span class="code-var">j</span> &lt;= <span class="code-num">5</span>; <span class="code-var">j</span>++) {
+
+<div class="explain-block">
+  <div class="badge-row">
+    <span class="explain-badge badge-logic">🧠 Product Calculation &amp; Formatting</span>
+  </div>
+  <b>Arithmetic &amp; Alignment:</b> Computes <span class="code-inline">i * j</span> in registers, then appends the tab escape sequence <span class="code-inline">"\t"</span>. This aligns single-digit and double-digit integers in clean vertical columns.
+</div>        cout &lt;&lt; <span class="code-var">i</span> * <span class="code-var">j</span> &lt;&lt; <span class="code-str">"\t"</span>;
+
+<div class="explain-block">
+  <div class="badge-row">
+    <span class="explain-badge badge-scope">🔒 Multiplier Iteration End</span>
+  </div>
+  Inner loop closes after generating 5 products for the current table row.
+</div>    }
+
+<div class="explain-block">
+  <div class="badge-row">
+    <span class="explain-badge badge-flow">⚙️ Line Feed</span>
+  </div>
+  Newline drops cursor to begin the next multiplication row.
+</div>    cout &lt;&lt; endl;
+
+<div class="explain-block">
+  <div class="badge-row">
+    <span class="explain-badge badge-flow">⚙️ Next Multiplicand</span>
+  </div>
+  Increments <span class="code-inline">i</span> to construct the next multiplication table row.
+</div>}</pre>
+                </div>
+              </div>
+              <div class="solution-content show">
+                <div class="step-block">
+                  <div class="step-label label-green">Resulting Products Matrix (5 &times; 5)</div>
+                  <div class="table-scroll-container">
+                    <table style="text-align:center;">
+                      <thead><tr><th>i \ j</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th></tr></thead>
+                      <tbody>
+                        <tr><td><b>1</b></td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td></tr>
+                        <tr><td><b>2</b></td><td>2</td><td>4</td><td>6</td><td>8</td><td>10</td></tr>
+                        <tr><td><b>3</b></td><td>3</td><td>6</td><td>9</td><td>12</td><td>15</td></tr>
+                        <tr><td><b>4</b></td><td>4</td><td>8</td><td>12</td><td>16</td><td>20</td></tr>
+                        <tr><td><b>5</b></td><td>5</td><td>10</td><td>15</td><td>20</td><td>25</td></tr>
+                      </tbody>
+                    </table>
+                  </div>
+                  <div style="margin-top:6px;">Key note: The tab escape character <span class="code-inline">\t</span> separates and aligns columns neatly across terminal outputs.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Example 3 -->
+          <div class="card">
+            <div class="card-header">
+              <span class="prob-tag">Example 3: Understand Changing Variables <span class="code-inline">(Printing ij)</span></span>
+              <button class="sol-toggle-btn active" onclick="toggleCardSolution(this)">👁️ Show Variable Analysis</button>
+            </div>
+            <div class="card-body">
+              <div class="question-prompt">
+                Track both loop variables to see which value changes rapidly versus slowly:
+                <div class="code-container">
+                  <div class="terminal-header">
+                    <div class="terminal-dots"><div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div></div>
+                    <span class="terminal-title">print_ij.cpp</span>
+                    <button class="copy-btn" onclick="copyCode(this)">Copy Code</button>
+                  </div>
+                  <pre class="code-snippet"><div class="explain-block">
+  <div class="badge-row">
+    <span class="explain-badge badge-logic">🧠 Slow Outer Counter</span>
+    <span class="explain-badge badge-memory">💾 i = 1, 2, 3</span>
+  </div>
+  Outer counter <span class="code-inline">i</span> runs only 3 times. Acts as the tens digit in the printed pattern because it remains constant over multiple inner iterations.
+</div><span class="code-kw">for</span> (<span class="code-kw">int</span> <span class="code-var">i</span> = <span class="code-num">1</span>; <span class="code-var">i</span> &lt;= <span class="code-num">3</span>; <span class="code-var">i</span>++) {
+
+<div class="explain-block">
+  <div class="badge-row">
+    <span class="explain-badge badge-logic">🧠 Rapid Inner Counter</span>
+    <span class="explain-badge badge-memory">💾 j = 1, 2</span>
+  </div>
+  Inner counter <span class="code-inline">j</span> iterates twice per outer step. Acts as the units digit because it rapidly toggles 1, 2, then resets.
+</div>    <span class="code-kw">for</span> (<span class="code-kw">int</span> <span class="code-var">j</span> = <span class="code-num">1</span>; <span class="code-var">j</span> &lt;= <span class="code-num">2</span>; <span class="code-var">j</span>++) {
+
+<div class="explain-block">
+  <div class="badge-row">
+    <span class="explain-badge badge-logic">🧠 Adjacent Streaming</span>
+  </div>
+  Streams value <span class="code-inline">i</span> immediately followed by <span class="code-inline">j</span> (no arithmetic addition operator), creating compound numbers like 11, 12.
+</div>        cout &lt;&lt; <span class="code-var">i</span> &lt;&lt; <span class="code-var">j</span> &lt;&lt; <span class="code-str">" "</span>;
+
+<div class="explain-block">
+  <div class="badge-row">
+    <span class="explain-badge badge-scope">🔒 Inner Iteration Close</span>
+  </div>
+  Inner loop closes after <span class="code-inline">j</span> passes 1 and 2.
+</div>    }
+
+<div class="explain-block">
+  <div class="badge-row">
+    <span class="explain-badge badge-flow">⚙️ Outer Progression</span>
+  </div>
+  Outer iteration completes without <span class="code-inline">endl</span>, keeping all output on a single horizontal line.
+</div>}</pre>
+                </div>
+              </div>
+              <div class="solution-content show">
+                <div class="step-block">
+                  <div class="step-label label-amber">Memory Tracking &amp; Value Progression:</div>
+                  <div>&bull; When <span class="code-inline">i = 1</span>: <span class="code-inline">j</span> takes values 1 and 2 &rarr; prints <span class="result-badge">11 12</span></div>
+                  <div style="margin-top:4px;">&bull; When <span class="code-inline">i = 2</span>: <span class="code-inline">j</span> resets to 1 and 2 &rarr; prints <span class="result-badge">21 22</span></div>
+                  <div style="margin-top:4px;">&bull; When <span class="code-inline">i = 3</span>: <span class="code-inline">j</span> resets to 1 and 2 &rarr; prints <span class="result-badge">31 32</span></div>
+                  <div style="margin-top:8px;">Complete Single-Line Output:</div>
+                  <div class="output-box">11 12 21 22 31 32</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Example 4 -->
+          <div class="card">
+            <div class="card-header">
+              <span class="prob-tag">Example 4: Build a Triangle <span class="code-inline">(Dependent Limit: col &lt;= row)</span></span>
+              <button class="sol-toggle-btn active" onclick="toggleCardSolution(this)">👁️ Show Geometric Comparison</button>
+            </div>
+            <div class="card-body">
+              <div class="question-prompt">
+                The inner loop upper limit depends on the outer loop variable:
+                <div class="code-container">
+                  <div class="terminal-header">
+                    <div class="terminal-dots"><div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div></div>
+                    <span class="terminal-title">triangle.cpp</span>
+                    <button class="copy-btn" onclick="copyCode(this)">Copy Code</button>
+                  </div>
+                  <pre class="code-snippet"><div class="explain-block">
+  <div class="badge-row">
+    <span class="explain-badge badge-logic">🧠 Triangle Height Controller</span>
+    <span class="explain-badge badge-memory">💾 row = 1 to 5</span>
+  </div>
+  Outer loop controls triangle height. The current value of <span class="code-inline">row</span> dictates the maximum star capacity for that line.
+</div><span class="code-kw">for</span> (<span class="code-kw">int</span> <span class="code-var">row</span> = <span class="code-num">1</span>; <span class="code-var">row</span> &lt;= <span class="code-num">5</span>; <span class="code-var">row</span>++) {
+
+<div class="explain-block">
+  <div class="badge-row">
+    <span class="explain-badge badge-logic">🧠 Triangular Dependent Ceiling</span>
+    <span class="explain-badge badge-trap">⚠️ Condition: col &lt;= row</span>
+  </div>
+  <b>Triangle Mechanism:</b> The inner limit is dynamic (<span class="code-inline">col &lt;= row</span>) rather than static:
+  <br>&bull; Row 1: inner loop runs up to <span class="code-inline">col &lt;= 1</span> (1 star).
+  <br>&bull; Row 5: inner loop runs up to <span class="code-inline">col &lt;= 5</span> (5 stars).
+</div>    <span class="code-kw">for</span> (<span class="code-kw">int</span> <span class="code-var">col</span> = <span class="code-num">1</span>; <span class="code-var">col</span> &lt;= <span class="code-var">row</span>; <span class="code-var">col</span>++) {
+
+<div class="explain-block">
+  <div class="badge-row">
+    <span class="explain-badge badge-logic">🧠 Print Single Star</span>
+  </div>
+  Outputs one star for the active column position.
+</div>        cout &lt;&lt; <span class="code-str">"* "</span>;
+
+<div class="explain-block">
+  <div class="badge-row">
+    <span class="explain-badge badge-scope">🔒 Inner Sweep End</span>
+  </div>
+  Inner loop closes after matching the current row's required star count.
+</div>    }
+
+<div class="explain-block">
+  <div class="badge-row">
+    <span class="explain-badge badge-flow">⚙️ Advance Line</span>
+  </div>
+  Drops cursor down to render the next, broader row of the triangle.
+</div>    cout &lt;&lt; endl;
+
+<div class="explain-block">
+  <div class="badge-row">
+    <span class="explain-badge badge-flow">⚙️ Outer Row Expansion</span>
+  </div>
+  <span class="code-inline">row</span> increments, raising the inner limit by one additional star for the next pass.
+</div>}</pre>
+                </div>
+              </div>
+              <div class="solution-content show">
+                <div class="step-block">
+                  <div class="step-label label-purple">Pattern Output &amp; Mechanics:</div>
+                  <div class="output-box">
+* 
+* * 
+* * * 
+* * * * 
+* * * * * 
+                  </div>
+                  <div>&bull; Row 1 prints 1 star; row 5 prints 5 stars.</div>
+                  <div>&bull; <b>Rectangle (<span class="code-inline">col &lt;= 4</span>):</b> Same number of columns on every single row.</div>
+                  <div>&bull; <b>Triangle (<span class="code-inline">col &lt;= row</span>):</b> Columns expand dynamically as <span class="code-inline">row</span> increases.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- PART 3: ITERATION MATH -->
+      <div id="part-view-3" class="view-panel">
+        <div class="lecture-content-wrapper">
+          <h2 class="orange">Part 3: Calculating Iterations — Independent vs Dependent Loops</h2>
+
+          <div class="callout orange">
+            <h4>🔢 Arithmetic Rules for Inner Body Executions</h4>
+            <ul>
+              <li>
+                <b>Independent Loops:</b> Multiply the iteration counts:
+                <div class="math-scroll">
+                  $$\text{Total Executions} = \text{Outer Count} \times \text{Inner Count}$$
+                </div>
+              </li>
+              <li>
+                <b>Dependent Loops:</b> Count row-by-row and sum the arithmetic series:
+                <div class="math-scroll">
+                  $$\text{Total Executions} = 1 + 2 + 3 + \dots + N = \frac{N(N+1)}{2}$$
+                </div>
+              </li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <span class="prob-tag">Counting Dependent Iterations Row-by-Row</span>
+            </div>
+            <div class="card-body">
+              <div class="code-container">
+                <pre class="code-snippet"><div class="explain-block">
+  <div class="badge-row">
+    <span class="explain-badge badge-logic">🧠 Outer Loop (N = 4 Rows)</span>
+  </div>
+  Outer loop controls 4 lines (i = 1, 2, 3, 4).
+</div><span class="code-kw">for</span> (<span class="code-kw">int</span> <span class="code-var">i</span> = <span class="code-num">1</span>; <span class="code-var">i</span> &lt;= <span class="code-num">4</span>; <span class="code-var">i</span>++) {
+
+<div class="explain-block">
+  <div class="badge-row">
+    <span class="explain-badge badge-logic">🧠 Dependent Limit (j &lt;= i)</span>
+  </div>
+  Inner loop executes <span class="code-inline">i</span> times in each row, producing a variable execution count per line.
+</div>    <span class="code-kw">for</span> (<span class="code-kw">int</span> <span class="code-var">j</span> = <span class="code-num">1</span>; <span class="code-var">j</span> &lt;= <span class="code-var">i</span>; <span class="code-var">j</span>++) {
+
+<div class="explain-block">
+  <div class="badge-row">
+    <span class="explain-badge badge-logic">🧠 Stream Sequence</span>
+  </div>
+  Prints <span class="code-inline">j</span> followed by space, producing an incremental sequence starting from 1 on every line.
+</div>        cout &lt;&lt; <span class="code-var">j</span> &lt;&lt; <span class="code-str">" "</span>;
+
+<div class="explain-block">
+  <div class="badge-row">
+    <span class="explain-badge badge-scope">🔒 Row Items Finished</span>
+  </div>
+  Inner loop finishes for the current row.
+</div>    }
+
+<div class="explain-block">
+  <div class="badge-row">
+    <span class="explain-badge badge-flow">⚙️ Line Feed</span>
+  </div>
+  Advances cursor to start the next numbered series on a new line.
+</div>    cout &lt;&lt; endl;
+
+<div class="explain-block">
+  <div class="badge-row">
+    <span class="explain-badge badge-flow">⚙️ Outer Cycle Repeat</span>
+  </div>
+  Outer iteration completes, advancing to row <span class="code-inline">i + 1</span>.
+</div>}</pre>
+              </div>
+              <div class="step-block">
+                <div>&bull; Row 1 (<span class="code-inline">i=1</span>): prints <span class="result-badge">1</span> &rarr; 1 print</div>
+                <div>&bull; Row 2 (<span class="code-inline">i=2</span>): prints <span class="result-badge">1 2</span> &rarr; 2 prints</div>
+                <div>&bull; Row 3 (<span class="code-inline">i=3</span>): prints <span class="result-badge">1 2 3</span> &rarr; 3 prints</div>
+                <div>&bull; Row 4 (<span class="code-inline">i=4</span>): prints <span class="result-badge">1 2 3 4</span> &rarr; 4 prints</div>
+                <div style="margin-top:8px;">
+                  <span class="result-badge" style="font-size:0.9rem;">Total = 1 + 2 + 3 + 4 = 10 prints</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PART 4: PITFALLS & DEBUGGING -->
+      <div id="part-view-4" class="view-panel">
+        <div class="lecture-content-wrapper">
+          <h2 class="pink">Part 4: Common Mistakes &amp; The Debugging Guide</h2>
+
+          <div class="table-scroll-container">
+            <table>
+              <thead>
+                <tr><th>Mistake Type</th><th>Erroneous Code Example</th><th>Consequence &amp; How to Fix</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><b>Wrong Variable Update</b></td>
+                  <td><span class="code-inline" style="color:#f43f5e;">for (int col=1; col&lt;=4; row++)</span></td>
+                  <td><b>Deadly Bug:</b> Creates an <b>Infinite Loop</b> because <span class="code-inline">col</span> never increments and remains 1 forever.
+                  <br><b>Fix:</b> Update <span class="code-inline">col++</span> inside the inner loop header.</td>
+                </tr>
+                <tr>
+                  <td><b>Missing Braces</b></td>
+                  <td><span class="code-inline" style="color:#f43f5e;">for(...) cout &lt;&lt; "*"; cout &lt;&lt; endl;</span></td>
+                  <td>Without braces <span class="code-inline">{ }</span>, only the very first statement belongs to the loop. The newline executes only once at the end.</td>
+                </tr>
+                <tr>
+                  <td><b>No Newline</b></td>
+                  <td>Omitting <span class="code-inline">cout &lt;&lt; endl;</span></td>
+                  <td>All row items concatenate into a single gigantic horizontal line without 2D shape.</td>
+                </tr>
+                <tr>
+                  <td><b>Off-by-One Limits</b></td>
+                  <td><span class="code-inline">i &lt; 5</span> vs <span class="code-inline">i &lt;= 5</span></td>
+                  <td>The first executes 4 times (1 to 4); the second executes 5 full times (1 to 5).</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Debug It Section -->
+          <div class="card">
+            <div class="card-header">
+              <span class="prob-tag">Debug It: Dissecting the Infinite Loop Trap (Slide 15)</span>
+              <button class="sol-toggle-btn active" onclick="toggleCardSolution(this)">👁️ Show Solution &amp; Correction</button>
+            </div>
+            <div class="card-body">
+              <div class="question-prompt">
+                Identify the bug in the following C++ code snippet before looking at the fix:
+                <div class="code-container">
+                  <pre class="code-snippet"><div class="explain-block">
+  <div class="badge-row">
+    <span class="explain-badge badge-logic">🧠 Outer Loop OK</span>
+  </div>
+  Outer loop is structured properly to handle 3 rows.
+</div><span class="code-kw">for</span> (<span class="code-kw">int</span> <span class="code-var">row</span> = <span class="code-num">1</span>; <span class="code-var">row</span> &lt;= <span class="code-num">3</span>; <span class="code-var">row</span>++) {
+
+<div class="explain-block">
+  <div class="badge-row">
+    <span class="explain-badge badge-trap">⚠️ Fatal Bug Here!</span>
+    <span class="explain-badge badge-logic">🧠 Bug Mechanics</span>
+  </div>
+  <b>Catastrophic defect:</b> The post-expression updates <span class="code-inline">row++</span> instead of <span class="code-inline">col++</span>!
+  <br>&bull; The continuation test checks <span class="code-inline">col &lt;= 4</span>.
+  <br>&bull; However, <span class="code-inline">col</span> is never incremented in RAM; it remains 1 forever!
+  <br>&bull; The test <span class="code-inline">1 &lt;= 4</span> evaluates to true indefinitely, locking the CPU in an infinite print cycle.
+</div>    <span class="code-kw">for</span> (<span class="code-kw">int</span> <span class="code-var">col</span> = <span class="code-num">1</span>; <span class="code-var">col</span> &lt;= <span class="code-num">4</span>; <span style="color:#f43f5e; font-weight:bold;">row++</span>) {
+
+<div class="explain-block">
+  <div class="badge-row">
+    <span class="explain-badge badge-logic">🧠 Unstoppable Stream</span>
+  </div>
+  Executes without end due to the broken loop condition.
+</div>        cout &lt;&lt; <span class="code-str">"* "</span>;
+
+<div class="explain-block">
+  <div class="badge-row">
+    <span class="explain-badge badge-flow">⚙️ Dead Code Barrier</span>
+  </div>
+  Control is trapped within the inner loop scope and never escapes.
+</div>    }
+
+<div class="explain-block">
+  <div class="badge-row">
+    <span class="explain-badge badge-flow">⚙️ Unreachable Statement</span>
+  </div>
+  This newline statement is never reached due to the infinite loop above.
+</div>    cout &lt;&lt; endl;
+
+<div class="explain-block">
+  <div class="badge-row">
+    <span class="explain-badge badge-flow">⚙️ Outer Closure</span>
+  </div>
+  Outer scope never completes cleanly.
+</div>}</pre>
+                </div>
+              </div>
+              <div class="solution-content show">
+                <div class="step-block">
+                  <div class="step-label label-rose">Root Cause &amp; Solution:</div>
+                  <div>&bull; <b>Problem:</b> The update expression in the inner loop increments <span class="code-inline">row++</span> instead of <span class="code-inline">col++</span>. The condition <span class="code-inline">col &lt;= 4</span> remains true indefinitely.</div>
+                  <div style="margin-top:6px;">&bull; <b>Correction:</b> Replace with <span class="result-badge">col++</span>.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PART 5: APPLICATIONS & PRACTICE -->
+      <div id="part-view-5" class="view-panel">
+        <div class="lecture-content-wrapper">
+          <h2 class="emerald">Part 5: Applications, Solved Practice &amp; Exit Ticket</h2>
+
+          <div class="global-toggle-bar">
+            <button onclick="toggleAllSolutions(true)">👁️ Show All Solutions</button>
+            <button onclick="toggleAllSolutions(false)">🙈 Hide All Solutions</button>
+          </div>
+
+          <!-- Real World Applications -->
+          <div class="grid-2">
+            <div style="background:var(--bg-card); border:1px solid rgba(56,189,248,0.25); border-radius:8px; padding:12px;">
+              <h3 style="color:var(--cyan); margin-bottom:4px;">1. Grids &amp; Seating Plans</h3>
+              <p style="font-size:0.83rem; color:#cbd5e1;">Rows &times; columns for airplane seats, theater bookings, and game boards.</p>
+            </div>
+            <div style="background:var(--bg-card); border:1px solid rgba(56,189,248,0.25); border-radius:8px; padding:12px;">
+              <h3 style="color:var(--emerald); margin-bottom:4px;">2. Formatted Tables</h3>
+              <p style="font-size:0.83rem; color:#cbd5e1;">Multiplication tables, payroll breakdowns, and formatted tabular data reports.</p>
+            </div>
+            <div style="background:var(--bg-card); border:1px solid rgba(56,189,248,0.25); border-radius:8px; padding:12px;">
+              <h3 style="color:var(--amber); margin-bottom:4px;">3. 2D Matrices</h3>
+              <p style="font-size:0.83rem; color:#cbd5e1;">Visiting and manipulating every <span class="code-inline">matrix[row][col]</span> element in algorithms.</p>
+            </div>
+            <div style="background:var(--bg-card); border:1px solid rgba(56,189,248,0.25); border-radius:8px; padding:12px;">
+              <h3 style="color:var(--purple); margin-bottom:4px;">4. ASCII Art &amp; Patterns</h3>
+              <p style="font-size:0.83rem; color:#cbd5e1;">Rendering triangles, pyramids, borders, and character-based game visual assets.</p>
+            </div>
+          </div>
+
+          <!-- Practice Problem -->
+          <div class="card" style="margin-top:14px;">
+            <div class="card-header">
+              <span class="prob-tag">Practice: Predict the Output for Summing Loop Variables <span class="code-inline">(i + j)</span></span>
+              <button class="sol-toggle-btn active" onclick="toggleCardSolution(this)">👁️ Show Output</button>
+            </div>
+            <div class="card-body">
+              <div class="question-prompt">
+                Trace outer variable <span class="code-inline">i</span> and inner variable <span class="code-inline">j</span> to calculate outputs:
+                <div class="code-container">
+                  <div class="terminal-header">
+                    <div class="terminal-dots"><div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div></div>
+                    <span class="terminal-title">predict_sum.cpp</span>
+                    <button class="copy-btn" onclick="copyCode(this)">Copy Code</button>
+                  </div>
+                  <pre class="code-snippet"><div class="explain-block">
+  <div class="badge-row">
+    <span class="explain-badge badge-logic">🧠 Outer Counter (Row Factor)</span>
+    <span class="explain-badge badge-memory">💾 i = 1, 2, 3</span>
+  </div>
+  Runs 3 passes. Defines the base addend for the row, and dictates the line's maximum inner execution ceiling.
+</div><span class="code-kw">for</span> (<span class="code-kw">int</span> <span class="code-var">i</span> = <span class="code-num">1</span>; <span class="code-var">i</span> &lt;= <span class="code-num">3</span>; <span class="code-var">i</span>++) {
+
+<div class="explain-block">
+  <div class="badge-row">
+    <span class="explain-badge badge-logic">🧠 Inner Counter (Dynamic Ceiling)</span>
+    <span class="explain-badge badge-memory">💾 j = 1 to i</span>
+  </div>
+  Resets to 1 each row and runs up to <span class="code-inline">i</span>. Produces 1 value on row 1, 2 on row 2, and 3 on row 3.
+</div>    <span class="code-kw">for</span> (<span class="code-kw">int</span> <span class="code-var">j</span> = <span class="code-num">1</span>; <span class="code-var">j</span> &lt;= <span class="code-var">i</span>; <span class="code-var">j</span>++) {
+
+<div class="explain-block">
+  <div class="badge-row">
+    <span class="explain-badge badge-logic">🧠 Evaluate Addition</span>
+  </div>
+  Adds outer variable <span class="code-inline">i</span> to inner variable <span class="code-inline">j</span> in ALU, streaming the result followed by space.
+</div>        cout &lt;&lt; <span class="code-var">i</span> + <span class="code-var">j</span> &lt;&lt; <span class="code-str">" "</span>;
+
+<div class="explain-block">
+  <div class="badge-row">
+    <span class="explain-badge badge-scope">🔒 Row Sums Completed</span>
+  </div>
+  Inner loop finishes for current row.
+</div>    }
+
+<div class="explain-block">
+  <div class="badge-row">
+    <span class="explain-badge badge-flow">⚙️ Advance Line</span>
+  </div>
+  Moves cursor down to print the subsequent addition group on a fresh row.
+</div>    cout &lt;&lt; endl;
+
+<div class="explain-block">
+  <div class="badge-row">
+    <span class="explain-badge badge-flow">⚙️ Outer Cycle Repeat</span>
+  </div>
+  Increments <span class="code-inline">i</span> and advances to next row.
+</div>}</pre>
+                </div>
+              </div>
+              <div class="solution-content show">
+                <div class="step-block">
+                  <div class="step-label label-blue">Row-by-Row Trace:</div>
+                  <div>&bull; Row 1 (<span class="code-inline">i=1</span>): <span class="code-inline">j=1</span> &rarr; prints <span class="result-badge">1 + 1 = 2</span> then newline.</div>
+                  <div>&bull; Row 2 (<span class="code-inline">i=2</span>): <span class="code-inline">j=1, 2</span> &rarr; prints <span class="result-badge">2 + 1 = 3</span> and <span class="result-badge">2 + 2 = 4</span> then newline.</div>
+                  <div>&bull; Row 3 (<span class="code-inline">i=3</span>): <span class="code-inline">j=1, 2, 3</span> &rarr; prints <span class="result-badge">3+1=4</span>, <span class="result-badge">3+2=5</span>, <span class="result-badge">3+3=6</span>.</div>
+                  <div style="margin-top:8px;">Complete Output:</div>
+                  <div class="output-box">
+2 
+3 4 
+4 5 6 
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Exit Ticket -->
+          <div class="card">
+            <div class="card-header">
+              <span class="prob-tag">Exit Ticket: Lecture Review Questions (Slide 20)</span>
+              <button class="sol-toggle-btn active" onclick="toggleCardSolution(this)">👁️ Show Model Answers</button>
+            </div>
+            <div class="card-body">
+              <div class="question-prompt">
+                1. In a nested loop, when does the inner loop restart?
+                <br>2. How many times does the body run if the outer loop runs 4 times and the inner loop runs 3 times each time?
+                <br>3. What changes when the inner loop condition is <span class="code-inline">j &lt;= i</span>?
+              </div>
+              <div class="solution-content show">
+                <div class="step-block">
+                  <div class="step-label label-green">1. When does the inner loop restart?</div>
+                  <div>The inner loop restarts its complete execution <b>every time the outer loop advances to its next iteration (the next row)</b>.</div>
+                </div>
+                <div class="step-block">
+                  <div class="step-label label-amber">2. Execution count for 4 outer &times; 3 inner:</div>
+                  <div>The loops are independent, so: <span class="result-badge">Total = 4 &times; 3 = 12 times</span>.</div>
+                </div>
+                <div class="step-block">
+                  <div class="step-label label-purple">3. Effect of condition j &lt;= i:</div>
+                  <div>The output shape changes from a fixed-width rectangle to a <b>growing triangular pattern</b>, and the total executions equal the Gauss arithmetic series <span class="result-badge">N(N+1)/2</span>.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- PART 6: EXAM CHEAT SHEET -->
+      <div id="part-view-6" class="view-panel active-panel">
+        <div class="lecture-content-wrapper">
+          <h2 class="orange" style="background: linear-gradient(90deg, #78350f, #0f1624); border-left: 5px solid var(--amber);">
+            ⚡ Exam Quick Cheat-Sheet: 6 Golden Rules, Formulas &amp; Traps
+          </h2>
+
+          <div class="callout orange" style="border-left-color: var(--amber); background: rgba(245, 158, 11, 0.08);">
+            <h4 style="color: #fbbf24;">📌 Rapid Revision Guide Before Entering Your Exam</h4>
+            <p style="font-size: 0.83rem; color: #e2e8f0;">
+              Key summary of essential rules tested in multiple-choice (MCQ) and code tracing exam questions.
+            </p>
+          </div>
+
+          <!-- Rule 1 -->
+          <div class="card" style="border-left: 3px solid var(--cyan);">
+            <div class="card-header">
+              <span class="prob-tag" style="color: var(--cyan);">Rule 1: Independent Loop Executions (Multiplication Principle)</span>
+            </div>
+            <div class="card-body">
+              <p style="font-size: 0.84rem; color: #cbd5e1;">
+                When the inner loop termination condition is constant and independent of the outer loop variable, multiply the two limits:
+              </p>
+              <div class="math-scroll">
+                $$\text{Total Executions} = \text{Outer} \times \text{Inner} = N \times M$$
+              </div>
+              <div class="step-block">
+                <div class="step-label label-blue">Quick Trace with Deep Explanation:</div>
+                <div class="code-container">
+                  <pre class="code-snippet"><div class="explain-block">
+  <div class="badge-row">
+    <span class="explain-badge badge-logic">🧠 Outer Loop (4 Iterations)</span>
+  </div>
+  Outer counter <span class="code-inline">i</span> runs 4 times for values 0, 1, 2, 3.
+</div><span class="code-kw">for</span> (<span class="code-kw">int</span> <span class="code-var">i</span> = <span class="code-num">0</span>; <span class="code-var">i</span> &lt; <span class="code-num">4</span>; <span class="code-var">i</span>++) {
+
+<div class="explain-block">
+  <div class="badge-row">
+    <span class="explain-badge badge-logic">🧠 Inner Loop (5 Iterations)</span>
+  </div>
+  Inner counter <span class="code-inline">j</span> runs a static 5 times (1, 2, 3, 4, 5) per pass of <span class="code-inline">i</span>.
+</div>    <span class="code-kw">for</span> (<span class="code-kw">int</span> <span class="code-var">j</span> = <span class="code-num">1</span>; <span class="code-var">j</span> &lt;= <span class="code-num">5</span>; <span class="code-var">j</span>++) {
+
+<div class="explain-block">
+  <div class="badge-row">
+    <span class="explain-badge badge-memory">💾 Print Execution Count</span>
+  </div>
+  Body executes 4 &times; 5 = 20 total times.
+</div>        cout &lt;&lt; <span class="code-str">"*"</span>;
+    }
+}</pre>
+                </div>
+                <div>Result: <span class="result-badge">4 &times; 5 = 20 stars</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Rule 2 -->
+          <div class="card" style="border-left: 3px solid var(--emerald);">
+            <div class="card-header">
+              <span class="prob-tag" style="color: var(--emerald);">Rule 2: Dependent Triangular Loops (Gauss Summation)</span>
+            </div>
+            <div class="card-body">
+              <p style="font-size: 0.84rem; color: #cbd5e1;">
+                If the inner condition is bounded by the outer counter (<span class="code-inline">j &lt;= i</span>) from 1 to <span class="code-inline">N</span>, executions follow the triangular number formula:
+              </p>
+              <div class="math-scroll">
+                $$\text{Total Executions} = 1 + 2 + 3 + \dots + N = \frac{N(N + 1)}{2}$$
+              </div>
+              <div class="step-block">
+                <div class="step-label label-green">Example for N = 5:</div>
+                <div>Calculation: <span class="result-badge">5 &times; 6 / 2 = 15 total iterations</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Rule 3 -->
+          <div class="card" style="border-left: 3px solid var(--rose);">
+            <div class="card-header">
+              <span class="prob-tag" style="color: var(--rose);">Rule 3: The break &amp; continue Trap in Nested Loops</span>
+            </div>
+            <div class="card-body">
+              <p style="font-size: 0.84rem; color: #cbd5e1;">
+                <b style="color: #f43f5e;">⚠️ Golden Exam Rule:</b> A <span class="code-inline">break;</span> statement exits <b>only the innermost loop enclosing it</b>. It never terminates the outer loop!
+              </p>
+              <div class="step-block">
+                <div class="step-label label-rose">Tricky Trace Question with Deep Analysis:</div>
+                <div class="code-container">
+                  <pre class="code-snippet"><div class="explain-block">
+  <div class="badge-row">
+    <span class="explain-badge badge-logic">🧠 Outer Loop Continues</span>
+  </div>
+  Outer loop executes 3 passes (i = 1, 2, 3) and is immune to the inner break.
+</div><span class="code-kw">for</span> (<span class="code-kw">int</span> <span class="code-var">i</span> = <span class="code-num">1</span>; <span class="code-var">i</span> &lt;= <span class="code-num">3</span>; <span class="code-var">i</span>++) {
+
+<div class="explain-block">
+  <div class="badge-row">
+    <span class="explain-badge badge-logic">🧠 Inner Loop Target</span>
+  </div>
+  Inner counter <span class="code-inline">j</span> starts at 1.
+</div>    <span class="code-kw">for</span> (<span class="code-kw">int</span> <span class="code-var">j</span> = <span class="code-num">1</span>; <span class="code-var">j</span> &lt;= <span class="code-num">4</span>; <span class="code-var">j</span>++) {
+
+<div class="explain-block">
+  <div class="badge-row">
+    <span class="explain-badge badge-trap">⚠️ Break Trap</span>
+  </div>
+  <b>Break Behavior:</b> When <span class="code-inline">j == 2</span>, <span class="code-inline">break</span> aborts the inner loop only! Loops passes for j=2, 3, 4 are skipped, and control returns directly to the outer loop to start the next <span class="code-inline">i</span>.
+</div>        <span class="code-kw">if</span> (<span class="code-var">j</span> == <span class="code-num">2</span>) <span class="code-kw">break</span>;
+
+<div class="explain-block">
+  <div class="badge-row">
+    <span class="explain-badge badge-logic">🧠 Execution Condition</span>
+  </div>
+  Only runs when <span class="code-inline">j = 1</span> in each outer loop pass.
+</div>        cout &lt;&lt; <span class="code-var">i</span> &lt;&lt; <span class="code-var">j</span> &lt;&lt; <span class="code-str">" "</span>;
+    }
+}</pre>
+                </div>
+                <div>Output: <span class="result-badge">11 21 31</span> (The outer loop still executes for i=1, 2, and 3).</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Rule 4 -->
+          <div class="card" style="border-left: 3px solid var(--amber);">
+            <div class="card-header">
+              <span class="prob-tag" style="color: var(--amber);">Rule 4: Proper Placement of cout &lt;&lt; endl;</span>
+            </div>
+            <div class="card-body">
+              <ul style="font-size: 0.83rem; color: #cbd5e1; padding-left: 1.25rem;">
+                <li>The correct place for <span class="code-inline">cout &lt;&lt; endl;</span> is at the <b>bottom of the outer loop body</b> (after all columns of that row have printed).</li>
+                <li>Placing <span class="code-inline">endl</span> inside the inner loop forces a newline after every single character, collapsing your 2D grid into a single vertical column.</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Rule 5 -->
+          <div class="card" style="border-left: 3px solid var(--purple);">
+            <div class="card-header">
+              <span class="prob-tag" style="color: var(--purple);">Rule 5: Printing i vs Printing j</span>
+            </div>
+            <div class="card-body">
+              <div class="table-scroll-container">
+                <table>
+                  <thead>
+                    <tr><th>Print Statement</th><th>Output Form</th><th>Underlying Mechanic</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><span class="code-inline">cout &lt;&lt; i;</span></td>
+                      <td style="font-family:var(--font-mono); color:var(--cyan);">1 1 1<br>2 2 2<br>3 3 3</td>
+                      <td><b>Constant across each row:</b> Variable <span class="code-inline">i</span> does not change while the inner loop is running.</td>
+                    </tr>
+                    <tr>
+                      <td><span class="code-inline">cout &lt;&lt; j;</span></td>
+                      <td style="font-family:var(--font-mono); color:var(--emerald);">1 2 3<br>1 2 3<br>1 2 3</td>
+                      <td><b>Incremental across each row:</b> Variable <span class="code-inline">j</span> increments on every column step.</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- Rule 6 -->
+          <div class="card" style="border-left: 3px solid #f43f5e;">
+            <div class="card-header">
+              <span class="prob-tag" style="color: #f43f5e;">Rule 6: Accidental Infinite Loop via Wrong Update Variable</span>
+            </div>
+            <div class="card-body">
+              <p style="font-size: 0.84rem; color: #cbd5e1;">
+                The most frequent syntax mistake in exams is writing <span class="code-inline">row++</span> in the inner loop header. This leaves <span class="code-inline">col</span> forever stuck at 1, keeping the termination condition permanently satisfied.
+              </p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- PART 7: CLASSIC PATTERN CHALLENGES -->
+      <div id="part-view-7" class="view-panel">
+        <div class="lecture-content-wrapper">
+          <h2 class="cyan">🎯 Classic Pattern Challenges (Lab &amp; Exam Favorites)</h2>
+
+          <!-- Challenge 1 -->
+          <div class="card">
+            <div class="card-header">
+              <span class="prob-tag">Challenge 1: Inverted Right Triangle</span>
+              <button class="sol-toggle-btn active" onclick="toggleCardSolution(this)">👁️ Show Solution</button>
+            </div>
+            <div class="card-body">
+              <div class="question-prompt">Print 5 stars on row 1, 4 on row 2, down to 1 star on row 5.</div>
+              <div class="solution-content show">
+                <div class="code-container">
+                  <div class="terminal-header">
+                    <span class="terminal-title">inverted_triangle.cpp</span>
+                    <button class="copy-btn" onclick="copyCode(this)">Copy Code</button>
+                  </div>
+                  <pre class="code-snippet"><div class="explain-block">
+  <div class="badge-row">
+    <span class="explain-badge badge-logic">🧠 Decrementing Row Loop</span>
+    <span class="explain-badge badge-memory">💾 i = 5 down to 1</span>
+  </div>
+  <b>Logic:</b> Outer loop counts downwards from 5 to 1 using <span class="code-inline">i--</span>. The decreasing value of <span class="code-inline">i</span> directly defines the star target for each row.
+</div><span class="code-kw">for</span> (<span class="code-kw">int</span> <span class="code-var">i</span> = <span class="code-num">5</span>; <span class="code-var">i</span> &gt;= <span class="code-num">1</span>; <span class="code-var">i</span>--) {
+
+<div class="explain-block">
+  <div class="badge-row">
+    <span class="explain-badge badge-logic">🧠 Dynamic Decreasing Bound</span>
+  </div>
+  Inner counter runs from 1 to <span class="code-inline">i</span>. Prints 5 stars on pass 1, then 4, 3, 2, and finally 1.
+</div>    <span class="code-kw">for</span> (<span class="code-kw">int</span> <span class="code-var">j</span> = <span class="code-num">1</span>; <span class="code-var">j</span> &lt;= <span class="code-var">i</span>; <span class="code-var">j</span>++) {
+
+<div class="explain-block">
+  <div class="badge-row">
+    <span class="explain-badge badge-logic">🧠 Render Star</span>
+  </div>
+  Prints single star glyph.
+</div>        cout &lt;&lt; <span class="code-str">"* "</span>;
+    }
+
+<div class="explain-block">
+  <div class="badge-row">
+    <span class="explain-badge badge-flow">⚙️ Advance Line</span>
+  </div>
+  Newline advances cursor to render the subsequent smaller row.
+</div>    cout &lt;&lt; endl;
+}</pre>
+                </div>
+                <div class="output-box">
+* * * * * 
+* * * * 
+* * * 
+* * 
+* 
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Challenge 2 -->
+          <div class="card">
+            <div class="card-header">
+              <span class="prob-tag">Challenge 2: Hollow Square Grid (Border Only)</span>
+              <button class="sol-toggle-btn active" onclick="toggleCardSolution(this)">👁️ Show Solution</button>
+            </div>
+            <div class="card-body">
+              <div class="question-prompt">Print stars only along the perimeter boundary of a 5 &times; 5 square.</div>
+              <div class="solution-content show">
+                <div class="code-container">
+                  <div class="terminal-header">
+                    <span class="terminal-title">hollow_square.cpp</span>
+                    <button class="copy-btn" onclick="copyCode(this)">Copy Code</button>
+                  </div>
+                  <pre class="code-snippet"><div class="explain-block">
+  <div class="badge-row">
+    <span class="explain-badge badge-logic">🧠 Dimension Definition</span>
+  </div>
+  Sets square side dimension (5 rows &times; 5 columns).
+</div><span class="code-kw">int</span> <span class="code-var">n</span> = <span class="code-num">5</span>;
+
+<div class="explain-block">
+  <div class="badge-row">
+    <span class="explain-badge badge-logic">🧠 Row Iteration</span>
+  </div>
+  Iterates over rows from 1 to n.
+</div><span class="code-kw">for</span> (<span class="code-kw">int</span> <span class="code-var">i</span> = <span class="code-num">1</span>; <span class="code-var">i</span> &lt;= <span class="code-var">n</span>; <span class="code-var">i</span>++) {
+
+<div class="explain-block">
+  <div class="badge-row">
+    <span class="explain-badge badge-logic">🧠 Column Iteration</span>
+  </div>
+  Iterates over columns from 1 to n.
+</div>    <span class="code-kw">for</span> (<span class="code-kw">int</span> <span class="code-var">j</span> = <span class="code-num">1</span>; <span class="code-var">j</span> &lt;= <span class="code-var">n</span>; <span class="code-var">j</span>++) {
+
+<div class="explain-block">
+  <div class="badge-row">
+    <span class="explain-badge badge-logic">🧠 Boundary Predicate</span>
+  </div>
+  <b>Perimeter condition:</b> Print a star only when situated on one of the 4 outer edges:
+  <br>&bull; <span class="code-inline">i == 1</span> (Top border)
+  <br>&bull; <span class="code-inline">i == n</span> (Bottom border)
+  <br>&bull; <span class="code-inline">j == 1</span> (Left border)
+  <br>&bull; <span class="code-inline">j == n</span> (Right border)
+</div>        <span class="code-kw">if</span> (<span class="code-var">i</span> == <span class="code-num">1</span> || <span class="code-var">i</span> == <span class="code-num">n</span> || <span class="code-var">j</span> == <span class="code-num">1</span> || <span class="code-var">j</span> == <span class="code-num">n</span>)
+            cout &lt;&lt; <span class="code-str">"* "</span>;
+
+<div class="explain-block">
+  <div class="badge-row">
+    <span class="explain-badge badge-logic">🧠 Hollow Interior</span>
+  </div>
+  Outputs two spaces for interior cells to maintain grid geometry without printing stars.
+</div>        <span class="code-kw">else</span>
+            cout &lt;&lt; <span class="code-str">"  "</span>;
+    }
+
+<div class="explain-block">
+  <div class="badge-row">
+    <span class="explain-badge badge-flow">⚙️ Complete Row</span>
+  </div>
+  Advances to next square row.
+</div>    cout &lt;&lt; endl;
+}</pre>
+                </div>
+                <div class="output-box">
+* * * * * 
+*       * 
+*       * 
+*       * 
+* * * * * 
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- PART 8: MCQ & TRACING QUIZ ENGINE -->
+      <div id="part-view-8" class="view-panel">
+        <div class="lecture-content-wrapper">
+          <h2 class="purple">📝 Interactive MCQ &amp; Tracing Quiz Engine</h2>
+          <div class="quiz-score-badge" id="quizScoreDisplay">Score: 0 / 4 Answered</div>
+
+          <div class="mcq-container">
+            <!-- Q1 -->
+            <div class="mcq-card" id="qcard-1">
+              <div class="mcq-question">
+                <b>Question 1:</b> What happens when a <span class="code-inline">break;</span> statement executes inside an inner loop?
+              </div>
+              <div class="mcq-options">
+                <button class="mcq-opt-btn" onclick="checkAnswer(1, 0, false)">A) Terminates the entire program immediately.</button>
+                <button class="mcq-opt-btn" onclick="checkAnswer(1, 1, false)">B) Terminates both the outer and inner loops.</button>
+                <button class="mcq-opt-btn" onclick="checkAnswer(1, 2, true)">C) Exits only the inner loop; the outer loop continues running.</button>
+                <button class="mcq-opt-btn" onclick="checkAnswer(1, 3, false)">D) Skips only the current column iteration and stays in the inner loop.</button>
+              </div>
+              <div class="mcq-feedback" id="feedback-1"></div>
+            </div>
+
+            <!-- Q2 -->
+            <div class="mcq-card" id="qcard-2">
+              <div class="mcq-question">
+                <b>Question 2:</b> How many times will <span class="code-inline">"Hi"</span> be printed by the following code?
+                <div class="code-container" style="margin-top:6px;">
+                  <pre class="code-snippet"><span class="code-kw">for</span> (<span class="code-kw">int</span> <span class="code-var">i</span> = <span class="code-num">0</span>; <span class="code-var">i</span> &lt; <span class="code-num">3</span>; <span class="code-var">i</span>++) {
+    <span class="code-kw">for</span> (<span class="code-kw">int</span> <span class="code-var">j</span> = <span class="code-num">1</span>; <span class="code-var">j</span> &lt;= <span class="code-num">4</span>; <span class="code-var">j</span>++) {
+        cout &lt;&lt; <span class="code-str">"Hi"</span>;
+    }
+}</pre>
+                </div>
+              </div>
+              <div class="mcq-options">
+                <button class="mcq-opt-btn" onclick="checkAnswer(2, 0, false)">A) 7 times</button>
+                <button class="mcq-opt-btn" onclick="checkAnswer(2, 1, true)">B) 12 times</button>
+                <button class="mcq-opt-btn" onclick="checkAnswer(2, 2, false)">C) 15 times</button>
+                <button class="mcq-opt-btn" onclick="checkAnswer(2, 3, false)">D) 8 times</button>
+              </div>
+              <div class="mcq-feedback" id="feedback-2"></div>
+            </div>
+
+            <!-- Q3 -->
+            <div class="mcq-card" id="qcard-3">
+              <div class="mcq-question">
+                <b>Question 3:</b> What is the exact printed output of this nested loop?
+                <div class="code-container" style="margin-top:6px;">
+                  <pre class="code-snippet"><span class="code-kw">for</span> (<span class="code-kw">int</span> <span class="code-var">i</span> = <span class="code-num">1</span>; <span class="code-var">i</span> &lt;= <span class="code-num">2</span>; <span class="code-var">i</span>++) {
+    <span class="code-kw">for</span> (<span class="code-kw">int</span> <span class="code-var">j</span> = <span class="code-num">1</span>; <span class="code-var">j</span> &lt;= <span class="code-num">2</span>; <span class="code-var">j</span>++) {
+        <span class="code-kw">if</span> (<span class="code-var">j</span> == <span class="code-num">2</span>) <span class="code-kw">break</span>;
+        cout &lt;&lt; <span class="code-var">i</span> &lt;&lt; <span class="code-var">j</span> &lt;&lt; <span class="code-str">" "</span>;
+    }
+}</pre>
+                </div>
+              </div>
+              <div class="mcq-options">
+                <button class="mcq-opt-btn" onclick="checkAnswer(3, 0, false)">A) 11 12 21 22</button>
+                <button class="mcq-opt-btn" onclick="checkAnswer(3, 1, true)">B) 11 21</button>
+                <button class="mcq-opt-btn" onclick="checkAnswer(3, 2, false)">C) 11 only</button>
+                <button class="mcq-opt-btn" onclick="checkAnswer(3, 3, false)">D) 21 22</button>
+              </div>
+              <div class="mcq-feedback" id="feedback-3"></div>
+            </div>
+
+            <!-- Q4 -->
+            <div class="mcq-card" id="qcard-4">
+              <div class="mcq-question">
+                <b>Question 4:</b> If the outer loop executes $N$ times and the inner condition is <span class="code-inline">j &lt;= i</span> (starting from 1), what formula computes the total executions?
+              </div>
+              <div class="mcq-options">
+                <button class="mcq-opt-btn" onclick="checkAnswer(4, 0, false)">A) $N \times (N - 1)$</button>
+                <button class="mcq-opt-btn" onclick="checkAnswer(4, 1, false)">B) $N^2$</button>
+                <button class="mcq-opt-btn" onclick="checkAnswer(4, 2, true)">C) $\frac{N(N + 1)}{2}$</button>
+                <button class="mcq-opt-btn" onclick="checkAnswer(4, 3, false)">D) $2N + 1$</button>
+              </div>
+              <div class="mcq-feedback" id="feedback-4"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- MODULE 2: LIVE SIMULATOR & VISUALIZER -->
+    <!-- ============================================================ -->
+    <div id="simulator-container" style="display: none;">
+      <div class="lecture-content-wrapper">
+        <h2 class="purple">Live Interactive Nested Loop Visualizer &amp; Simulator</h2>
+        <p style="font-size:0.84rem; color:var(--text-muted); margin-bottom:12px;">
+          Simulate how <span class="code-inline">row</span> and <span class="code-inline">col</span> counters execute in memory. Step through manually or use auto-play.
+        </p>
+
+        <div class="simulator-box">
+          <div class="sim-controls">
+            <div>
+              <label style="font-size:0.78rem; font-weight:700;">Pattern:</label>
+              <select id="simPattern" class="sim-select" onchange="resetSimulator()">
+                <option value="rect">Rectangle (col &le; maxCols)</option>
+                <option value="triangle">Triangle (col &le; row)</option>
+              </select>
+            </div>
+            <div>
+              <label style="font-size:0.78rem; font-weight:700;">Rows:</label>
+              <input type="number" id="simRows" class="sim-input" value="4" min="2" max="6" style="width:55px;" onchange="resetSimulator()">
+            </div>
+            <div>
+              <label style="font-size:0.78rem; font-weight:700;">Cols:</label>
+              <input type="number" id="simCols" class="sim-input" value="4" min="2" max="6" style="width:55px;" onchange="resetSimulator()">
+            </div>
+            <button class="sim-btn" onclick="stepSimulator()">▶ Step</button>
+            <button class="sim-btn" onclick="autoPlaySimulator()" id="simPlayBtn">⚡ Auto Play</button>
+            <button class="sim-btn" style="border-color:var(--rose); color:var(--rose);" onclick="resetSimulator()">↺ Reset</button>
+          </div>
+
+          <div class="grid-visualizer" id="simGrid"></div>
+
+          <div class="sim-status">
+            <div>Active Row (row): <span class="sim-tag" id="simRowVal">-</span></div>
+            <div>Active Col (col): <span class="sim-tag" id="simColVal">-</span></div>
+            <div>Total Printed: <span class="sim-tag" id="simCountVal">0</span></div>
+            <div>Current Status: <span class="sim-tag" id="simStatusMsg">Ready</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    let currentPart = 6; // default to cheat sheet
+    let currentModule = 1;
+    let answeredQuestions = {};
+    let correctCount = 0;
+
+    const partTitles = [
+      "All Parts: Complete Chapter 2.2 Nested Loops Overview",
+      "Part 1: Concept, Mechanics & Single vs Nested Loops",
+      "Part 2: Core Patterns & Systematic Trace Tables",
+      "Part 3: Iteration Mathematics — Independent vs Dependent Loops",
+      "Part 4: Common Pitfalls & The Debugging Guide",
+      "Part 5: Applications, Solved Practice & Exit Ticket",
+      "Exam Quick Cheat-Sheet: 6 Golden Rules, Formulas & Traps",
+      "Part 7: Classic Pattern Challenges (Inverted Triangle, Hollow Square)",
+      "Part 8: Interactive MCQ & Tracing Quiz Engine"
+    ];
+
+    function showPart(num) {
+      currentPart = num;
+      document.getElementById('page-main-title').innerText = partTitles[num];
+      
+      for (let i = 0; i <= 8; i++) {
+        const b = document.getElementById('part-btn-' + i);
+        if (b) b.classList.remove('active');
+      }
+      const activeBtn = document.getElementById('part-btn-' + num);
+      if (activeBtn) activeBtn.classList.add('active');
+
+      for (let i = 1; i <= 8; i++) {
+        const p = document.getElementById('part-view-' + i);
+        if (p) {
+          if (num === 0) p.classList.add('active-panel');
+          else p.classList.remove('active-panel');
+        }
+      }
+
+      if (num !== 0) {
+        const activePart = document.getElementById('part-view-' + num);
+        if (activePart) activePart.classList.add('active-panel');
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function switchCourseModule(modNum) {
+      currentModule = modNum;
+      const tab1 = document.getElementById('lec-tab-1');
+      const tab2 = document.getElementById('lec-tab-2');
+      const subnav = document.getElementById('subnav-wrapper-1');
+      const lecCont = document.getElementById('lecture-container');
+      const simCont = document.getElementById('simulator-container');
+
+      if (modNum === 1) {
+        tab1.classList.add('active');
+        tab2.classList.remove('active');
+        subnav.style.display = 'block';
+        lecCont.style.display = 'block';
+        simCont.style.display = 'none';
+        showPart(currentPart);
+      } else {
+        tab2.classList.add('active');
+        tab1.classList.remove('active');
+        subnav.style.display = 'none';
+        lecCont.style.display = 'none';
+        simCont.style.display = 'block';
+        document.getElementById('header-badge').innerText = "CONTOSO CS101 • LIVE INTERACTIVE VISUALIZER";
+        document.getElementById('page-main-title').innerText = "Trace Simulator: Visualizing Nested Loop Execution";
+        resetSimulator();
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function toggleCardSolution(btn) {
+      const card = btn.closest('.card');
+      const sol = card.querySelector('.solution-content');
+      if (sol.classList.contains('show')) {
+        sol.classList.remove('show');
+        btn.classList.remove('active');
+        btn.innerHTML = '👁️ Show Solution';
+      } else {
+        sol.classList.add('show');
+        btn.classList.add('active');
+        btn.innerHTML = '🙈 Hide Solution';
+      }
+    }
+
+    function toggleAllSolutions(show) {
+      const buttons = document.querySelectorAll('#part-view-5 .sol-toggle-btn');
+      const solutions = document.querySelectorAll('#part-view-5 .solution-content');
+
+      solutions.forEach((sol, idx) => {
+        const btn = buttons[idx];
+        if (show) {
+          sol.classList.add('show');
+          if (btn) {
+            btn.classList.add('active');
+            btn.innerHTML = '🙈 Hide Solution';
+          }
+        } else {
+          sol.classList.remove('show');
+          if (btn) {
+            btn.classList.remove('active');
+            btn.innerHTML = '👁️ Show Solution';
+          }
+        }
+      });
+    }
+
+    function copyCode(btn) {
+      const snippet = btn.closest('.code-container').querySelector('.code-snippet');
+      const clone = snippet.cloneNode(true);
+      clone.querySelectorAll('.explain-block').forEach(c => c.remove());
+      const cleanCode = clone.innerText.trim();
+
+      const textarea = document.createElement('textarea');
+      textarea.value = cleanCode;
+      textarea.style.position = 'fixed';
+      textarea.style.opacity = '0';
+      document.body.appendChild(textarea);
+      textarea.select();
+      try {
+        document.execCommand('copy');
+        const orig = btn.innerText;
+        btn.innerText = 'Copied!';
+        btn.style.color = '#34d399';
+        btn.style.borderColor = '#34d399';
+        setTimeout(() => {
+          btn.innerText = orig;
+          btn.style.color = '';
+          btn.style.borderColor = '';
+        }, 1800);
+      } catch (err) {
+        console.error('Copy failed', err);
+      }
+      document.body.removeChild(textarea);
+    }
+
+    /* MCQ Engine Logic */
+    const quizExplanations = {
+      1: "Correct! In C++, a break statement terminates only the nearest enclosing loop (the inner loop), allowing the outer loop to continue its remaining passes.",
+      2: "Correct! The outer loop runs 3 times (i = 0, 1, 2) and the inner loop runs 4 times (j = 1, 2, 3, 4). Total executions = 3 * 4 = 12 times.",
+      3: "Correct! For i = 1, j=1 prints '11', then j=2 triggers break. For i = 2, j=1 prints '21', then j=2 triggers break. Final output: '11 21 '.",
+      4: "Correct! This is Gauss's arithmetic series: 1 + 2 + 3 + ... + N = N(N + 1) / 2."
+    };
+
+    function checkAnswer(qNum, optIdx, isCorrect) {
+      if (answeredQuestions[qNum]) return;
+      answeredQuestions[qNum] = true;
+
+      const card = document.getElementById('qcard-' + qNum);
+      const buttons = card.querySelectorAll('.mcq-opt-btn');
+      const feedback = document.getElementById('feedback-' + qNum);
+
+      buttons.forEach((btn, idx) => {
+        btn.style.pointerEvents = 'none';
+        if (idx === optIdx) {
+          btn.classList.add(isCorrect ? 'correct' : 'incorrect');
+        }
+      });
+
+      if (isCorrect) correctCount++;
+
+      feedback.className = 'mcq-feedback show-feed ' + (isCorrect ? 'label-green' : 'label-rose');
+      feedback.style.background = isCorrect ? 'rgba(52, 211, 153, 0.1)' : 'rgba(244, 63, 94, 0.1)';
+      feedback.style.border = isCorrect ? '1px solid rgba(52, 211, 153, 0.3)' : '1px solid rgba(244, 63, 94, 0.3)';
+      feedback.innerHTML = `<b>${isCorrect ? '✅ Correct Answer!' : '❌ Incorrect!'}</b> ${quizExplanations[qNum]}`;
+
+      document.getElementById('quizScoreDisplay').innerText = `Score: ${correctCount} / ${Object.keys(answeredQuestions).length} Answered (Total 4 Questions)`;
+    }
+
+    /* Simulator Logic */
+    let simR = 1;
+    let simC = 1;
+    let simTimer = null;
+    let printedCount = 0;
+
+    function resetSimulator() {
+      if (simTimer) {
+        clearInterval(simTimer);
+        simTimer = null;
+        document.getElementById('simPlayBtn').innerText = '⚡ Auto Play';
+      }
+      simR = 1;
+      simC = 1;
+      printedCount = 0;
+
+      const maxR = parseInt(document.getElementById('simRows').value) || 4;
+      const maxC = parseInt(document.getElementById('simCols').value) || 4;
+      const grid = document.getElementById('simGrid');
+      grid.innerHTML = '';
+
+      for (let r = 1; r <= maxR; r++) {
+        const rowDiv = document.createElement('div');
+        rowDiv.className = 'sim-row';
+        rowDiv.id = 'sim-r-' + r;
+
+        for (let c = 1; c <= maxC; c++) {
+          const cell = document.createElement('div');
+          cell.className = 'sim-cell';
+          cell.id = `cell-${r}-${c}`;
+          cell.innerText = '*';
+          rowDiv.appendChild(cell);
+        }
+        grid.appendChild(rowDiv);
+      }
+
+      document.getElementById('simRowVal').innerText = '-';
+      document.getElementById('simColVal').innerText = '-';
+      document.getElementById('simCountVal').innerText = '0';
+      document.getElementById('simStatusMsg').innerText = 'Ready';
+    }
+
+    function stepSimulator() {
+      const maxR = parseInt(document.getElementById('simRows').value) || 4;
+      const maxC = parseInt(document.getElementById('simCols').value) || 4;
+      const pattern = document.getElementById('simPattern').value;
+
+      if (simR > maxR) {
+        document.getElementById('simStatusMsg').innerText = 'Completed!';
+        if (simTimer) {
+          clearInterval(simTimer);
+          simTimer = null;
+          document.getElementById('simPlayBtn').innerText = '⚡ Auto Play';
+        }
+        return;
+      }
+
+      const limitC = (pattern === 'triangle') ? simR : maxC;
+
+      const prevActive = document.querySelector('.sim-cell.active-cell');
+      if (prevActive) {
+        prevActive.classList.remove('active-cell');
+        prevActive.classList.add('printed');
+      }
+
+      const currentCell = document.getElementById(`cell-${simR}-${simC}`);
+      if (currentCell) {
+        currentCell.classList.add('active-cell');
+      }
+
+      document.getElementById('simRowVal').innerText = simR;
+      document.getElementById('simColVal').innerText = simC;
+      printedCount++;
+      document.getElementById('simCountVal').innerText = printedCount;
+      document.getElementById('simStatusMsg').innerText = `Running (Row ${simR}, Col ${simC})`;
+
+      simC++;
+      if (simC > limitC) {
+        simR++;
+        simC = 1;
+      }
+    }
+
+    function autoPlaySimulator() {
+      const btn = document.getElementById('simPlayBtn');
+      if (simTimer) {
+        clearInterval(simTimer);
+        simTimer = null;
+        btn.innerText = '⚡ Auto Play';
+      } else {
+        btn.innerText = '⏸ Pause';
+        simTimer = setInterval(() => {
+          stepSimulator();
+        }, 320);
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+      if (typeof renderMathInElement === 'function') {
+        renderMathInElement(document.body, {
+          delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "$", right: "$", display: false}
+          ],
+          throwOnError: false
+        });
+      }
+      resetSimulator();
+    });
+  </script>
+</body>
+</html>
