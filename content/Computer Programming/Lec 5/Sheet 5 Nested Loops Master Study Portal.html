@@ -1,0 +1,2018 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <title>حل شيت 5: البرمجة المهيكلة (الحلقات المتداخلة) — كبسولة القواعد والمختبر الهندسي الشامل</title>
+  
+  <!-- KaTeX for rapid mathematical rendering -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+  
+  <style>
+    :root {
+      --bg-base: #06090f;
+      --bg-card: #0d1320;
+      --bg-block: #090e18;
+      --bg-code: #03060c;
+      --border-card: #1e293b;
+      --border-subtle: rgba(56, 189, 248, 0.2);
+      --cyan: #38bdf8;
+      --emerald: #34d399;
+      --amber: #fbbf24;
+      --purple: #c084fc;
+      --rose: #f43f5e;
+      --text-main: #e2e8f0;
+      --text-muted: #94a3b8;
+      --font-mono: "Fira Code", Consolas, "Courier New", monospace;
+      --font-sans: "Cairo", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+    
+    *, *::before, *::after { 
+      box-sizing: border-box !important; 
+      margin: 0; 
+      padding: 0;
+      max-width: 100%;
+    }
+    
+    html, body {
+      width: 100% !important;
+      min-height: 100%;
+      background-color: var(--bg-base);
+      color: var(--text-main);
+      font-family: var(--font-sans);
+      line-height: 1.65;
+      overflow-x: hidden !important;
+      position: relative !important;
+      padding-bottom: 75px;
+    }
+
+    .container {
+      width: 100% !important;
+      max-width: 960px !important;
+      margin: 0 auto;
+      padding: 10px 12px;
+      overflow-x: hidden !important;
+    }
+
+    /* KaTeX Safeguards */
+    .katex-display {
+      max-width: 100% !important;
+      overflow-x: auto !important;
+      overflow-y: hidden !important;
+      padding: 6px 0 !important;
+      direction: ltr !important;
+      -webkit-overflow-scrolling: touch !important;
+    }
+    .katex {
+      font-size: 1.05em !important;
+      white-space: nowrap !important;
+    }
+
+    /* Top Sticky Navigation Switcher */
+    .lecture-switch-wrapper {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 12px;
+      position: sticky;
+      top: 6px;
+      z-index: 1002;
+      background: rgba(6, 9, 15, 0.95);
+      backdrop-filter: blur(14px);
+      padding: 6px;
+      border-radius: 12px;
+      border: 1px solid var(--border-card);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.7);
+    }
+    .lecture-tab {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 9px 8px;
+      border-radius: 8px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      cursor: pointer;
+      color: var(--text-muted);
+      background: #0f1624;
+      border: 1px solid #1e293b;
+      transition: all 0.2s ease;
+      text-align: center;
+      user-select: none;
+    }
+    .lecture-tab:hover {
+      color: #fff;
+      border-color: rgba(56, 189, 248, 0.4);
+    }
+    .lecture-tab.active {
+      background: rgba(56, 189, 248, 0.15);
+      border-color: var(--cyan);
+      color: var(--cyan);
+      box-shadow: 0 0 12px rgba(56, 189, 248, 0.25);
+    }
+    .lecture-tab.highlight-tab {
+      border-color: rgba(251, 191, 36, 0.4);
+      color: var(--amber);
+    }
+    .lecture-tab.highlight-tab.active {
+      background: rgba(251, 191, 36, 0.18);
+      border-color: var(--amber);
+      color: #fff;
+      box-shadow: 0 0 12px rgba(251, 191, 36, 0.35);
+    }
+
+    /* Sub Navigation */
+    .subnav-tabs {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      scrollbar-width: none;
+      padding-bottom: 6px;
+      margin-bottom: 14px;
+    }
+    .subnav-tabs::-webkit-scrollbar { display: none; }
+    .subnav-pill {
+      background: #0d1320;
+      border: 1px solid #1e293b;
+      color: var(--text-muted);
+      padding: 5px 12px;
+      border-radius: 6px;
+      font-size: 0.76rem;
+      font-weight: 700;
+      text-decoration: none;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+    }
+    .subnav-pill:hover {
+      color: #fff;
+      border-color: var(--cyan);
+    }
+
+    /* Header */
+    .header {
+      padding: 6px 0 14px 0;
+      border-bottom: 1px solid var(--border-card);
+      margin-bottom: 16px;
+    }
+    .header-top-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 8px;
+    }
+    .header-badge {
+      display: inline-block;
+      background: rgba(56, 189, 248, 0.12);
+      color: var(--cyan);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-size: 0.72rem;
+      font-weight: 700;
+    }
+    .print-btn {
+      background: rgba(52, 211, 153, 0.15);
+      border: 1px solid var(--emerald);
+      color: var(--emerald);
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 0.74rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+    .print-btn:hover {
+      background: rgba(52, 211, 153, 0.3);
+      color: #fff;
+    }
+    .header h1 {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 6px;
+      line-height: 1.4;
+      word-break: break-word;
+    }
+    .header p {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    /* Summary Cheat Card Banner */
+    .cheat-summary-banner {
+      background: linear-gradient(135deg, rgba(13, 21, 37, 0.98), rgba(20, 14, 38, 0.95));
+      border: 1px solid rgba(251, 191, 36, 0.4);
+      border-radius: 10px;
+      padding: 12px 14px;
+      margin-bottom: 18px;
+      box-shadow: 0 6px 22px rgba(0, 0, 0, 0.5);
+    }
+    .cheat-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 10px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding-bottom: 8px;
+    }
+    .cheat-title {
+      font-size: 0.96rem;
+      font-weight: 800;
+      color: var(--amber);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .cheat-badge {
+      background: rgba(251, 191, 36, 0.15);
+      border: 1px solid var(--amber);
+      color: var(--amber);
+      font-size: 0.7rem;
+      font-weight: 800;
+      padding: 2px 8px;
+      border-radius: 4px;
+    }
+    .cheat-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.81rem;
+    }
+    .cheat-table th {
+      background: #090e1a;
+      color: var(--amber);
+      padding: 8px 10px;
+      border: 1px solid #1e293b;
+      text-align: right;
+      white-space: nowrap;
+    }
+    .cheat-table td {
+      padding: 8px 10px;
+      border: 1px solid #1e293b;
+      color: #e2e8f0;
+      vertical-align: middle;
+      line-height: 1.5;
+    }
+    .cheat-table tr:nth-child(even) td { background: rgba(10, 16, 28, 0.7); }
+
+    /* View Panels */
+    .view-panel {
+      display: none;
+      animation: fadeIn 0.22s ease-in-out;
+    }
+    .view-panel.active-panel {
+      display: block;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Section Headings */
+    .lecture-content-wrapper h2 {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: #fff;
+      padding: 9px 12px;
+      border-radius: 8px;
+      margin-top: 1rem;
+      margin-bottom: 1rem;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.4);
+      border: 1px solid rgba(255,255,255,0.08);
+      word-break: break-word;
+    }
+    .lecture-content-wrapper h2.amber { background: linear-gradient(270deg, #78350f, #0d1320); border-right: 5px solid var(--amber); }
+    .lecture-content-wrapper h2.cyan { background: linear-gradient(270deg, #0c4a6e, #0d1320); border-right: 5px solid var(--cyan); }
+    .lecture-content-wrapper h2.emerald { background: linear-gradient(270deg, #064e3b, #0d1320); border-right: 5px solid var(--emerald); }
+
+    /* Cards */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-card);
+      border-radius: 10px;
+      margin-bottom: 18px;
+      width: 100% !important;
+      overflow: hidden;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
+    }
+    .card-header {
+      background: rgba(255, 255, 255, 0.02);
+      border-bottom: 1px solid var(--border-card);
+      padding: 12px 14px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
+      width: 100%;
+    }
+    .prob-tag {
+      font-weight: 800;
+      font-size: 0.94rem;
+      color: var(--cyan);
+      width: 100%;
+      word-break: break-word;
+      overflow-wrap: break-word;
+      line-height: 1.45;
+    }
+    .prob-subtext {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+    
+    .code-inline {
+      direction: ltr !important;
+      display: inline-block !important;
+      unicode-bidi: isolate !important;
+      font-family: var(--font-mono);
+      color: #38bdf8;
+      background: rgba(56, 189, 248, 0.1);
+      padding: 1px 6px;
+      border-radius: 4px;
+      font-size: 0.86em;
+      border: 1px solid rgba(56, 189, 248, 0.2);
+    }
+
+    .math-symbol {
+      direction: ltr !important;
+      display: inline-block !important;
+      unicode-bidi: isolate !important;
+      font-family: var(--font-mono);
+      color: #fbbf24;
+      font-weight: 700;
+      padding: 0 3px;
+    }
+
+    .card-body {
+      padding: 12px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      width: 100% !important;
+    }
+    
+    .question-prompt {
+      background: rgba(56, 189, 248, 0.05);
+      border-right: 3px solid var(--cyan);
+      padding: 10px 12px;
+      font-size: 0.84rem;
+      color: #f1f5f9;
+      border-radius: 4px;
+      line-height: 1.55;
+      width: 100%;
+    }
+
+    /* Terminal & Code Blocks */
+    .code-container {
+      border: 1px solid #1e293b;
+      border-radius: 8px;
+      overflow: hidden;
+      background: var(--bg-block);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+      margin: 8px 0;
+      width: 100% !important;
+    }
+    
+    .terminal-header {
+      background: #070b13;
+      border-bottom: 1px solid #1e293b;
+      padding: 8px 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px;
+      direction: ltr !important;
+    }
+    
+    .terminal-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex: 1 1 auto;
+      min-width: 0;
+    }
+    
+    .terminal-dots { 
+      display: flex; 
+      gap: 5px; 
+      flex-shrink: 0;
+    }
+    .dot { width: 8px; height: 8px; border-radius: 50%; }
+    .dot.red { background: #ef4444; }
+    .dot.yellow { background: #f59e0b; }
+    .dot.green { background: #10b981; }
+    
+    .terminal-title {
+      font-family: var(--font-mono);
+      font-size: 0.74rem;
+      color: #94a3b8;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 100%;
+    }
+    
+    .copy-btn {
+      background: rgba(56, 189, 248, 0.12);
+      border: 1px solid rgba(56, 189, 248, 0.4);
+      color: var(--cyan);
+      font-size: 0.74rem;
+      font-weight: 700;
+      padding: 5px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+      flex-shrink: 0;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .copy-btn:hover {
+      background: rgba(56, 189, 248, 0.25);
+      color: #fff;
+    }
+
+    .program-flow {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      padding: 10px;
+      width: 100% !important;
+      background: var(--bg-code);
+    }
+    
+    .code-row {
+      display: flex;
+      flex-direction: column;
+      width: 100% !important;
+      gap: 6px;
+    }
+
+    /* Full-width right-aligned explanation cards */
+    .explain-block {
+      width: 100% !important;
+      max-width: 100% !important;
+      box-sizing: border-box !important;
+      direction: rtl !important;
+      text-align: right !important;
+      background: rgba(13, 21, 37, 0.98);
+      border: 1px solid rgba(56, 189, 248, 0.25);
+      border-right: 4px solid var(--cyan);
+      border-radius: 6px;
+      padding: 9px 12px;
+      font-family: var(--font-sans);
+      font-size: 0.81rem;
+      line-height: 1.55;
+      color: #cbd5e1;
+      white-space: normal !important;
+      word-break: break-word !important;
+      overflow-wrap: anywhere !important;
+    }
+    .explain-block .badge-row {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-bottom: 5px;
+      direction: rtl !important;
+      justify-content: flex-start;
+    }
+    .explain-badge {
+      font-size: 0.69rem;
+      font-weight: 800;
+      padding: 1px 7px;
+      border-radius: 4px;
+      letter-spacing: 0.02em;
+    }
+    .badge-logic { background: rgba(56, 189, 248, 0.15); color: var(--cyan); border: 1px solid rgba(56, 189, 248, 0.35); }
+    .badge-memory { background: rgba(251, 191, 36, 0.15); color: var(--amber); border: 1px solid rgba(251, 191, 36, 0.35); }
+    .badge-flow { background: rgba(52, 211, 153, 0.15); color: var(--emerald); border: 1px solid rgba(52, 211, 153, 0.35); }
+    .badge-trap { background: rgba(244, 63, 94, 0.15); color: var(--rose); border: 1px solid rgba(244, 63, 94, 0.35); }
+    .badge-opt { background: rgba(192, 132, 252, 0.15); color: var(--purple); border: 1px solid rgba(192, 132, 252, 0.35); }
+
+    .code-line {
+      width: 100% !important;
+      box-sizing: border-box !important;
+      background: #020408;
+      border: 1px solid #1a2436;
+      border-radius: 6px;
+      padding: 8px 12px;
+      font-family: var(--font-mono);
+      font-size: 0.83rem;
+      color: #e2e8f0;
+      line-height: 1.6;
+      direction: ltr !important;
+      text-align: left !important;
+      overflow-x: auto !important;
+      white-space: pre !important;
+      tab-size: 4;
+      -webkit-overflow-scrolling: touch;
+    }
+    .code-kw { color: #f43f5e; font-weight: bold; }
+    .code-var { color: #38bdf8; }
+    .code-num { color: #fbbf24; }
+    .code-str { color: #34d399; }
+    
+    .step-block {
+      background: var(--bg-code);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 8px;
+      padding: 10px 12px;
+      font-size: 0.84rem;
+      line-height: 1.6;
+      margin-bottom: 8px;
+      width: 100%;
+    }
+    .step-label {
+      font-size: 0.72rem;
+      font-weight: 800;
+      margin-bottom: 6px;
+      letter-spacing: 0.03em;
+    }
+    .label-blue { color: var(--cyan); }
+    .label-amber { color: var(--amber); }
+    .label-green { color: var(--emerald); }
+    .label-purple { color: var(--purple); }
+
+    .result-badge {
+      display: inline-block;
+      background: rgba(52, 211, 153, 0.12);
+      border: 1px solid rgba(52, 211, 153, 0.28);
+      color: var(--emerald);
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-weight: 700;
+      font-size: 0.84rem;
+      direction: ltr !important;
+      unicode-bidi: isolate;
+    }
+
+    /* Output Console */
+    .output-box {
+      margin: 8px 0;
+      padding: 10px 14px;
+      background: #020611;
+      border: 1px dashed rgba(56, 189, 248, 0.35);
+      border-radius: 6px;
+      font-family: var(--font-mono);
+      font-size: 0.84rem;
+      color: var(--emerald);
+      overflow-x: auto;
+      direction: ltr !important;
+      text-align: left !important;
+      line-height: 1.5;
+    }
+
+    /* Trace Tables */
+    .table-scroll-container {
+      width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      margin: 8px 0 12px 0;
+      border: 1px solid #1e293b;
+      border-radius: 8px;
+      background: var(--bg-card);
+    }
+    .scroll-hint {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      font-size: 0.72rem;
+      color: var(--cyan);
+      background: rgba(56, 189, 248, 0.08);
+      padding: 5px 8px;
+      text-align: center;
+      border-bottom: 1px solid #1e293b;
+      font-weight: 700;
+    }
+    table {
+      width: 100%;
+      min-width: 560px;
+      border-collapse: collapse;
+      background: var(--bg-card);
+      font-size: 0.82rem;
+    }
+    th {
+      background: #1e293b;
+      color: var(--cyan);
+      font-weight: 700;
+      padding: 10px 12px;
+      border: 1px solid #334155;
+      text-align: right;
+      white-space: nowrap;
+    }
+    td {
+      padding: 9px 12px;
+      border: 1px solid #1e293b;
+      color: #e2e8f0;
+      vertical-align: middle;
+      text-align: right;
+      line-height: 1.5;
+    }
+    tr:nth-child(even) td { background: #0b1120; }
+
+    /* Sandbox Simulator */
+    .sandbox-panel {
+      background: #080c14;
+      border: 1px solid #1e293b;
+      border-radius: 10px;
+      padding: 14px;
+      margin-bottom: 16px;
+    }
+    .sandbox-controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      margin-bottom: 12px;
+      background: rgba(255, 255, 255, 0.02);
+      padding: 10px;
+      border-radius: 8px;
+    }
+    .sandbox-btn {
+      padding: 6px 14px;
+      background: rgba(56, 189, 248, 0.15);
+      border: 1px solid var(--cyan);
+      color: #fff;
+      border-radius: 6px;
+      font-weight: 700;
+      font-size: 0.78rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .sandbox-btn:hover { background: rgba(56, 189, 248, 0.3); }
+    .sandbox-select, .sandbox-input {
+      background: #111722;
+      border: 1px solid #334155;
+      color: #f1f5f9;
+      padding: 5px 8px;
+      border-radius: 6px;
+      font-size: 0.78rem;
+    }
+    .sandbox-canvas {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      background: #04070d;
+      padding: 14px;
+      border-radius: 8px;
+      min-height: 140px;
+      border: 1px dashed #1e293b;
+      align-items: center;
+      justify-content: center;
+      overflow-x: auto;
+      font-family: var(--font-mono);
+      font-size: 1.1rem;
+    }
+    .sandbox-row { display: flex; gap: 8px; }
+    .sandbox-cell {
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 4px;
+      background: #101726;
+      border: 1px solid #1e293b;
+      color: #cbd5e1;
+      font-weight: 700;
+    }
+    .sandbox-cell.x-cell { color: var(--rose); background: rgba(244, 63, 94, 0.15); border-color: var(--rose); }
+    .sandbox-cell.o-cell { color: var(--cyan); background: rgba(56, 189, 248, 0.15); border-color: var(--cyan); }
+    .sandbox-cell.hash-cell { color: var(--emerald); background: rgba(52, 211, 153, 0.15); border-color: var(--emerald); }
+    .sandbox-cell.diag-cell { color: var(--amber); background: rgba(251, 191, 36, 0.2); border-color: var(--amber); }
+
+    /* Print Styles */
+    @media print {
+      body {
+        background-color: #ffffff !important;
+        color: #000000 !important;
+        font-size: 10.5pt !important;
+        padding-bottom: 0 !important;
+      }
+      .lecture-switch-wrapper, .subnav-tabs, .copy-btn, .print-btn, .sandbox-controls, .scroll-hint {
+        display: none !important;
+      }
+      .container { max-width: 100% !important; padding: 0 !important; }
+      .view-panel { display: block !important; page-break-inside: avoid; }
+      .card {
+        border: 1px solid #cbd5e1 !important;
+        background: #ffffff !important;
+        box-shadow: none !important;
+        page-break-inside: avoid;
+        margin-bottom: 12px !important;
+      }
+      .card-header { background: #f8fafc !important; border-bottom: 1px solid #cbd5e1 !important; }
+      .prob-tag { color: #000000 !important; }
+      .code-line, .output-box {
+        background: #f8fafc !important;
+        color: #0f172a !important;
+        border: 1px solid #cbd5e1 !important;
+      }
+      .code-kw { color: #be123c !important; }
+      .code-var { color: #0284c7 !important; }
+      .code-num { color: #b45309 !important; }
+      .code-str { color: #047857 !important; }
+      .explain-block {
+        background: #f8fafc !important;
+        color: #0f172a !important;
+        border: 1px solid #cbd5e1 !important;
+        border-right: 3px solid #0284c7 !important;
+      }
+      table { min-width: 100% !important; }
+      th { background: #f1f5f9 !important; color: #000000 !important; border: 1px solid #94a3b8 !important; }
+      td { color: #000000 !important; border: 1px solid #cbd5e1 !important; background: #ffffff !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <!-- Top Mode Switcher Bar -->
+    <div class="lecture-switch-wrapper">
+      <div id="tab-btn-1" class="lecture-tab active" onclick="switchMainTab(1)">Part A: كود الأسئلة 1 - 5</div>
+      <div id="tab-btn-2" class="lecture-tab" onclick="switchMainTab(2)">Part B: تتبع المخرجات 6 - 9</div>
+      <div id="tab-btn-3" class="lecture-tab highlight-tab" onclick="switchMainTab(3)">⚡ تحليل الكفاءة (Big-O والتحسينات)</div>
+      <div id="tab-btn-4" class="lecture-tab" onclick="switchMainTab(4)">المحاكي التفاعلي</div>
+    </div>
+
+    <!-- Header -->
+    <div class="header">
+      <div class="header-top-row">
+        <span class="header-badge">جامعة بنها • كلية الهندسة بشبرا • شيت 5: البرمجة المهيكلة</span>
+        <button class="print-btn" onclick="window.print()">🖨️ طباعة الشيت / حفظ PDF</button>
+      </div>
+      <h1 id="page-title">حل وتفكيك شيت 5: الحلقات المتداخلة (Nested Loops) بالشرح المعماري العميق</h1>
+      <p id="page-desc">شرح تحليلي شامل لكل سطر كود C++ مع حركة الذاكرة، جداول التتبع الكاملة، كبسولة المراجعة السريعة، وقسم هندسي لدراسة التعقيد والتحسينات.</p>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- NEW FEATURE: SUMMARY CHEAT-CARD (TABLE OF CORE RULES) -->
+    <!-- ============================================================ -->
+    <div class="cheat-summary-banner">
+      <div class="cheat-header">
+        <div class="cheat-title">
+          <span>⚡ جدول المقارنة السريع لقواعد الشيت والمراجعة المركزة</span>
+        </div>
+        <span class="cheat-badge">Exam Ready Cheat-Sheet</span>
+      </div>
+      <div class="table-scroll-container" style="margin:0; border:none; background:transparent;">
+        <table class="cheat-table">
+          <thead>
+            <tr>
+              <th style="width:20%">المسألة / القاعدة</th>
+              <th style="width:42%">الشرط البرمجي الحاسم (Core Condition)</th>
+              <th>السر الفني والغرض في الامتحان</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><b>1. شطرنج التناوب (X / O)</b></td>
+              <td dir="ltr" style="font-family:var(--font-mono); color:var(--cyan); text-align:right;">
+                if ((row + col) % 2 == 0) cout &lt;&lt; 'X'; else cout &lt;&lt; 'O';
+              </td>
+              <td>جمع الإحداثيات يبدأ بـ 0 (زوجي لـ X)، والخلية المجاورة مجموعها 1 (فردي لـ O) مما يحقق التناوب التلقائي أفقياً ورأسياً.</td>
+            </tr>
+            <tr>
+              <td><b>2. المستطيل المفرغ (#)</b></td>
+              <td dir="ltr" style="font-family:var(--font-mono); color:var(--emerald); text-align:right;">
+                if (r == 1 || r == rows || c == 1 || c == cols)
+              </td>
+              <td>استخدام معامل <span class="code-inline">||</span> يكتشف إذا كانت الخلية تقع على أي طرف من الأطراف الأربعة (أعلى، أسفل، يمين، يسار).</td>
+            </tr>
+            <tr>
+              <td><b>3. الأعداد الأولية</b></td>
+              <td dir="ltr" style="font-family:var(--font-mono); color:var(--purple); text-align:right;">
+                for (int d = 2; d * d &lt;= num; d++) if (num % d == 0) { isPrime = false; break; }
+              </td>
+              <td>افتراض الأولية براية <span class="code-inline">bool</span>، واستخدام <span class="code-inline">break</span> الفوري عند أول قاسم لتوفير الوقت حتى جذر الرقم.</td>
+            </tr>
+            <tr>
+              <td><b>4. شبكة الضرب والمجاميع</b></td>
+              <td dir="ltr" style="font-family:var(--font-mono); color:var(--amber); text-align:right;">
+                Rows: rowSum = 0 per i | Cols: loop j outside, loop i inside
+              </td>
+              <td>تصفير مجموع الصف <span class="code-inline">rowSum = 0</span> في بداية كل سطر، وعكس ترتيب اللوب (تثبيت j والدوران بـ i) لحساب مجموع كل عمود.</td>
+            </tr>
+            <tr>
+              <td><b>5. الأزواج غير المكررة (Target T)</b></td>
+              <td dir="ltr" style="font-family:var(--font-mono); color:var(--rose); text-align:right;">
+                for (int i = 0; ...) for (int j = i + 1; ...)
+              </td>
+              <td>بدء العداد الداخلي من <span class="code-inline">j = i + 1</span> يضمن هندسياً أن <span class="code-inline">i &lt; j</span> دائماً ويمنع تكرار الزوج المعكوس مثل (7, 2).</td>
+            </tr>
+            <tr>
+              <td><b>6. مصفوفة الأقطار (Trace Q9)</b></td>
+              <td dir="ltr" style="font-family:var(--font-mono); color:var(--cyan); text-align:right;">
+                j == i &rarr; 'D' | j &lt; i &rarr; 'L' | j &gt; i &rarr; 'U'
+              </td>
+              <td>القطر الرئيسي تتساوى فيه الإحداثيات (D)، وأسفله يكون رقم العمود أصغر من الصف (L)، وأعلاه يكون العمود أكبر (U).</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- TAB 1: PART A (WRITE THE CODE Q1 TO Q5) -->
+    <!-- ============================================================ -->
+    <div id="tab-view-1" class="view-panel active-panel">
+      
+      <!-- Subnav Quick Jump -->
+      <div class="subnav-tabs">
+        <a href="#q1" class="subnav-pill">س1: رقعة الشطرنج التبادلية (X/O)</a>
+        <a href="#q2" class="subnav-pill">س2: المستطيل المفرغ (#)</a>
+        <a href="#q3" class="subnav-pill">س3: الأعداد الأولية في نطاق</a>
+        <a href="#q4" class="subnav-pill">س4: شبكة الضرب مع مجاميع الصفوف والأعمدة</a>
+        <a href="#q5" class="subnav-pill">س5: إيجاد الأزواج ذات المجموع المستهدف</a>
+      </div>
+
+      <!-- QUESTION 1 -->
+      <div class="card" id="q1">
+        <div class="card-header">
+          <span class="prob-tag">مسألة 1: رقعة الشطرنج التبادلية المتناوبة (Numbered Checkerboard)</span>
+          <span class="prob-subtext">Part A — Question 1: Print n &times; n checkerboard using X and O. First row starts with X, next with O, alternating across.</span>
+        </div>
+        <div class="card-body">
+          <div class="question-prompt">
+            <b>المطلوب:</b> كتابة برنامج C++ يستقبل عدداً صحيحاً <span class="math-symbol">n</span> (حيث <span class="math-symbol">3 &le; n &le; 9</span>) ويطبع شبكة شطرنج بأبعاد <span class="code-inline">n &times; n</span> مكونة من المحرفين <span class="code-inline">X</span> و <span class="code-inline">O</span> بحيث يبدأ السطر الأول بـ X والسطر التالي بـ O ويتناوبان عبر كل صف باستخدام الحلقات المتداخلة.<br>
+            <b>مثال عندما <span class="math-symbol">n = 4</span>:</b>
+            <div class="output-box">
+XOXO
+OXOX
+XOXO
+OXOX
+            </div>
+          </div>
+
+          <div class="code-container">
+            <div class="terminal-header">
+              <div class="terminal-left">
+                <div class="terminal-dots"><div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div></div>
+                <span class="terminal-title">q1_checkerboard.cpp</span>
+              </div>
+              <button class="copy-btn" onclick="copyCleanCode(this)">📋 نسخ الكود</button>
+            </div>
+            <div class="program-flow">
+              
+              <div class="code-row">
+                <div class="explain-block">
+                  <div class="badge-row">
+                    <span class="explain-badge badge-logic">🧠 توجيهات المعالج والمكتبات</span>
+                    <span class="explain-badge badge-memory">💾 فضاء التسمية القياسي</span>
+                  </div>
+                  تضمين مكتبة الإدخال والإخراج القياسية <span class="code-inline">&lt;iostream&gt;</span> لاستخدام <span class="code-inline">cin</span> و <span class="code-inline">cout</span>، وتفعيل فضاء التسمية القياسي لتفادي تكرار كتابة <span class="code-inline">std::</span> قبل كل أمر.
+                </div>
+                <div class="code-line"><span class="code-kw">#include</span> <span class="code-str">&lt;iostream&gt;</span>
+<span class="code-kw">using namespace</span> std;
+
+<span class="code-kw">int</span> main() {</div>
+              </div>
+
+              <div class="code-row">
+                <div class="explain-block">
+                  <div class="badge-row">
+                    <span class="explain-badge badge-memory">💾 حجز متغير البعد n</span>
+                    <span class="explain-badge badge-flow">⚙️ قراءة المدخل</span>
+                  </div>
+                  حجز مساحة 4 بايت في ذاكرة الـ Stack لمتغير صحيح اسمه <span class="code-inline">n</span> يمثل أبعاد الشبكة (<span class="code-inline">n &times; n</span>). يتم استقبال قيمته من المستخدم بواسطة معامل الاستخراج <span class="code-inline">cin</span>.
+                </div>
+                <div class="code-line">    <span class="code-kw">int</span> <span class="code-var">n</span>;
+    cin &gt;&gt; <span class="code-var">n</span>;</div>
+              </div>
+
+              <div class="code-row">
+                <div class="explain-block">
+                  <div class="badge-row">
+                    <span class="explain-badge badge-logic">🧠 الحلقة الخارجية: إدارة الصفوف</span>
+                    <span class="explain-badge badge-memory">💾 row = 0 إلى n - 1</span>
+                  </div>
+                  <b>لماذا بدأنا الترقيم من 0؟</b> استخدام الترقيم الصفري <span class="code-inline">row = 0</span> يبسط المنطق الرياضي جداً:
+                  <br>&bull; في الصف الأول (<span class="code-inline">row = 0</span>)، الصف زوجي فيجب أن يبدأ بـ X.
+                  <br>&bull; في الصف الثاني (<span class="code-inline">row = 1</span>)، الصف فردي فيجب أن يبدأ بـ O.
+                </div>
+                <div class="code-line">    <span class="code-kw">for</span> (<span class="code-kw">int</span> <span class="code-var">row</span> = <span class="code-num">0</span>; <span class="code-var">row</span> &lt; <span class="code-var">n</span>; <span class="code-var">row</span>++) {</div>
+              </div>
+
+              <div class="code-row">
+                <div class="explain-block">
+                  <div class="badge-row">
+                    <span class="explain-badge badge-logic">🧠 الحلقة الداخلية: رسم أعمدة السطر</span>
+                    <span class="explain-badge badge-memory">💾 col = 0 إلى n - 1</span>
+                  </div>
+                  تدور <span class="code-inline">n</span> دورة كاملة لكل صف لطباعة المحارف الأفقية المتجاورة من العمود 0 حتى <span class="code-inline">n - 1</span>.
+                </div>
+                <div class="code-line">        <span class="code-kw">for</span> (<span class="code-kw">int</span> <span class="code-var">col</span> = <span class="code-num">0</span>; <span class="code-var">col</span> &lt; <span class="code-var">n</span>; <span class="code-var">col</span>++) {</div>
+              </div>
+
+              <div class="code-row">
+                <div class="explain-block">
+                  <div class="badge-row">
+                    <span class="explain-badge badge-logic">🧠 السر الرياضي لرقعة الشطرنج</span>
+                    <span class="explain-badge badge-trap">⚠️ فحص التناوب الزوجي والفردي</span>
+                  </div>
+                  <b>المنطق العبقري:</b> حاصل جمع رقم الصف مع رقم العمود <span class="code-inline">(row + col)</span> يتناوب بين الزوجي والفردي على شكل رقعة شطرنج:
+                  <br>&bull; الخلية (0,0): مجموعها 0 (زوجي) &rarr; تطبع 'X'.
+                  <br>&bull; الخلية (0,1): مجموعها 1 (فردي) &rarr; تطبع 'O'.
+                  <br>&bull; الخلية (1,0): مجموعها 1 (فردي) &rarr; تبدأ بـ 'O' محققة شرط المسألة تماماً!
+                </div>
+                <div class="code-line">            <span class="code-kw">if</span> ((<span class="code-var">row</span> + <span class="code-var">col</span>) % <span class="code-num">2</span> == <span class="code-num">0</span>) {
+                cout &lt;&lt; <span class="code-str">'X'</span>;
+            } <span class="code-kw">else</span> {
+                cout &lt;&lt; <span class="code-str">'O'</span>;
+            }
+        }</div>
+              </div>
+
+              <div class="code-row">
+                <div class="explain-block">
+                  <div class="badge-row">
+                    <span class="explain-badge badge-flow">⚙️ إسقاط السطر وبدء صف جديد</span>
+                  </div>
+                  بعد اكتمال طباعة جميع أعمدة الصف الحالي، ننزل لسطر جديد بواسطة <span class="code-inline">endl</span> لبدء السطر التالي.
+                </div>
+                <div class="code-line">        cout &lt;&lt; endl;
+    }
+    <span class="code-kw">return</span> <span class="code-num">0</span>;
+}</div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- QUESTION 2 -->
+      <div class="card" id="q2">
+        <div class="card-header">
+          <span class="prob-tag">مسألة 2: المستطيل المفرغ (Hollow Rectangle)</span>
+          <span class="prob-subtext">Part A — Question 2: Read rows and cols (3..12), print hollow rectangle of # with spaces inside.</span>
+        </div>
+        <div class="card-body">
+          <div class="question-prompt">
+            <b>المطلوب:</b> قراءة عدد الصفوف <span class="code-inline">rows</span> والأعمدة <span class="code-inline">cols</span> (بين 3 و 12)، وطباعة مستطيل مفرغ بمحرف <span class="code-inline">#</span> بحيث يظهر الإطار فقط ممتلئاً بينما الداخل مساحات فارغة.<br>
+            <b>مثال عندما rows = 4 و cols = 6:</b>
+            <div class="output-box">
+######
+#    #
+#    #
+######
+            </div>
+          </div>
+
+          <div class="code-container">
+            <div class="terminal-header">
+              <div class="terminal-left">
+                <div class="terminal-dots"><div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div></div>
+                <span class="terminal-title">q2_hollow_rectangle.cpp</span>
+              </div>
+              <button class="copy-btn" onclick="copyCleanCode(this)">📋 نسخ الكود</button>
+            </div>
+            <div class="program-flow">
+              
+              <div class="code-row">
+                <div class="explain-block">
+                  <div class="badge-row">
+                    <span class="explain-badge badge-memory">💾 حجز وقراءة الأبعاد</span>
+                  </div>
+                  حجز متغيرين للأبعاد؛ <span class="code-inline">rows</span> للارتفاع الرأسي و <span class="code-inline">cols</span> للعرض الأفقي للمستطيل.
+                </div>
+                <div class="code-line"><span class="code-kw">#include</span> <span class="code-str">&lt;iostream&gt;</span>
+<span class="code-kw">using namespace</span> std;
+
+<span class="code-kw">int</span> main() {
+    <span class="code-kw">int</span> <span class="code-var">rows</span>, <span class="code-var">cols</span>;
+    cin &gt;&gt; <span class="code-var">rows</span> &gt;&gt; <span class="code-var">cols</span>;</div>
+              </div>
+
+              <div class="code-row">
+                <div class="explain-block">
+                  <div class="badge-row">
+                    <span class="explain-badge badge-logic">🧠 حلقة الصفوف: المرور من 1 إلى rows</span>
+                  </div>
+                  الترقيم هنا يبدأ من 1 إلى <span class="code-inline">rows</span> لتسهيل المقارنة المباشرة مع الحواف الأربعة للمستطيل.
+                </div>
+                <div class="code-line">    <span class="code-kw">for</span> (<span class="code-kw">int</span> <span class="code-var">r</span> = <span class="code-num">1</span>; <span class="code-var">r</span> &lt;= <span class="code-var">rows</span>; <span class="code-var">r</span>++) {</div>
+              </div>
+
+              <div class="code-row">
+                <div class="explain-block">
+                  <div class="badge-row">
+                    <span class="explain-badge badge-logic">🧠 حلقة الأعمدة: المرور من 1 إلى cols</span>
+                  </div>
+                  المرور على خلايا السطر الحالي عموداً عموداً لرسم المحارف.
+                </div>
+                <div class="code-line">        <span class="code-kw">for</span> (<span class="code-kw">int</span> <span class="code-var">c</span> = <span class="code-num">1</span>; <span class="code-var">c</span> &lt;= <span class="code-var">cols</span>; <span class="code-var">c</span>++) {</div>
+              </div>
+
+              <div class="code-row">
+                <div class="explain-block">
+                  <div class="badge-row">
+                    <span class="explain-badge badge-logic">🧠 معادلة الإطار الهندسي الرباعي</span>
+                    <span class="explain-badge badge-trap">⚠️ استخدام المعامل المنطقي OR (||)</span>
+                  </div>
+                  <b>متى تكون الخلية على الإطار الخارجي؟</b> إذا تحقق أي شرط من الشروط الأربعة:
+                  <br>&bull; <span class="code-inline">r == 1</span>: الصف العلوي الأول بالكامل.
+                  <br>&bull; <span class="code-inline">r == rows</span>: الصف السفلي الأخير بالكامل.
+                  <br>&bull; <span class="code-inline">c == 1</span>: العمود الأيسر الأول بالكامل.
+                  <br>&bull; <span class="code-inline">c == cols</span>: العمود الأيمن الأخير بالكامل.
+                  <br>إذا تحقق أي منها نطبع <span class="code-inline">#</span>، وإلا نطبع مسافة فارغة <span class="code-inline">' '</span> لتفريغ القلب الداخلي.
+                </div>
+                <div class="code-line">            <span class="code-kw">if</span> (<span class="code-var">r</span> == <span class="code-num">1</span> || <span class="code-var">r</span> == <span class="code-var">rows</span> || <span class="code-var">c</span> == <span class="code-num">1</span> || <span class="code-var">c</span> == <span class="code-var">cols</span>) {
+                cout &lt;&lt; <span class="code-str">'#'</span>;
+            } <span class="code-kw">else</span> {
+                cout &lt;&lt; <span class="code-str">' '</span>;
+            }
+        }</div>
+              </div>
+
+              <div class="code-row">
+                <div class="explain-block">
+                  <div class="badge-row">
+                    <span class="explain-badge badge-flow">⚙️ إغلاق الصف والنزول للسطر التالي</span>
+                  </div>
+                  بعد اكتمال طباعة أعمدة الصف، ننزل لسطر جديد لإظهار شكل المستطيل.
+                </div>
+                <div class="code-line">        cout &lt;&lt; endl;
+    }
+    <span class="code-kw">return</span> <span class="code-num">0</span>;
+}</div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- QUESTION 3 -->
+      <div class="card" id="q3">
+        <div class="card-header">
+          <span class="prob-tag">مسألة 3: طباعة الأعداد الأولية في نطاق (Prime Numbers in a Range)</span>
+          <span class="prob-subtext">Part A — Question 3: Read n (2..100). Outer loop tests candidates, inner loop checks divisors. No prewritten list.</span>
+        </div>
+        <div class="card-body">
+          <div class="question-prompt">
+            <b>المطلوب:</b> قراءة عدد <span class="math-symbol">n</span> (حيث <span class="math-symbol">2 &le; n &le; 100</span>)، وطباعة كافة الأعداد الأولية من 2 إلى <span class="math-symbol">n</span>. يجب استخدام حلقة خارجية لفحص كل رقم مرشح، وحلقة داخلية للبحث عن أي قاسم يقبل القسمة عليه دون استخدام قوائم جاهزة.<br>
+            <b>مثال عندما <span class="math-symbol">n = 15</span>:</b>
+            <div class="output-box">
+2 3 5 7 11 13
+            </div>
+          </div>
+
+          <div class="code-container">
+            <div class="terminal-header">
+              <div class="terminal-left">
+                <div class="terminal-dots"><div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div></div>
+                <span class="terminal-title">q3_prime_range.cpp</span>
+              </div>
+              <button class="copy-btn" onclick="copyCleanCode(this)">📋 نسخ الكود</button>
+            </div>
+            <div class="program-flow">
+              
+              <div class="code-row">
+                <div class="explain-block">
+                  <div class="badge-row">
+                    <span class="explain-badge badge-logic">🧠 اللوب الخارجي: الأرقام المرشحة</span>
+                    <span class="explain-badge badge-memory">💾 num = 2 إلى n</span>
+                  </div>
+                  العدد الأولي هو عدد صحيح أكبر من 1 يقبل القسمة على نفسه وعلى 1 فقط. لذلك يبدأ الفحص من أول عدد أولي في الوجود وهو <span class="code-inline">num = 2</span> حتى الحد الأقصى <span class="code-inline">n</span>.
+                </div>
+                <div class="code-line"><span class="code-kw">#include</span> <span class="code-str">&lt;iostream&gt;</span>
+<span class="code-kw">using namespace</span> std;
+
+<span class="code-kw">int</span> main() {
+    <span class="code-kw">int</span> <span class="code-var">n</span>;
+    cin &gt;&gt; <span class="code-var">n</span>;
+
+    <span class="code-kw">for</span> (<span class="code-kw">int</span> <span class="code-var">num</span> = <span class="code-num">2</span>; <span class="code-var">num</span> &lt;= <span class="code-var">n</span>; <span class="code-var">num</span>++) {</div>
+              </div>
+
+              <div class="code-row">
+                <div class="explain-block">
+                  <div class="badge-row">
+                    <span class="explain-badge badge-memory">💾 راية التأكيد (Boolean Flag)</span>
+                    <span class="explain-badge badge-logic">🧠 افتراض الأولية أولاً</span>
+                  </div>
+                  نعرف متغيراً منطقياً <span class="code-inline">isPrime = true</span>، معناه: "نفترض أن الرقم أولي حتى يثبت العكس بالدليل القاطع". يُعاد تعيين هذه الراية إلى true في كل دورة للرقم الجديد.
+                </div>
+                <div class="code-line">        <span class="code-kw">bool</span> <span class="code-var">isPrime</span> = <span class="code-kw">true</span>;</div>
+              </div>
+
+              <div class="code-row">
+                <div class="explain-block">
+                  <div class="badge-row">
+                    <span class="explain-badge badge-logic">🧠 اللوب الداخلي: البحث عن قاسم مشترك</span>
+                    <span class="explain-badge badge-flow">⚙️ فحص قواسم d</span>
+                  </div>
+                  نختبر هل يقبل الرقم <span class="code-inline">num</span> القسمة على أي عدد يبدأ من 2 حتى ما قبل الرقم نفسه (<span class="code-inline">d &lt; num</span>)؟
+                </div>
+                <div class="code-line">        <span class="code-kw">for</span> (<span class="code-kw">int</span> <span class="code-var">d</span> = <span class="code-num">2</span>; <span class="code-var">d</span> &lt; <span class="code-var">num</span>; <span class="code-var">d</span>++) {</div>
+              </div>
+
+              <div class="code-row">
+                <div class="explain-block">
+                  <div class="badge-row">
+                    <span class="explain-badge badge-logic">🧠 فحص باقي القسمة (Modulo Zero)</span>
+                    <span class="explain-badge badge-flow">⚙️ إسقاط الراية واستخدام break</span>
+                  </div>
+                  إذا كان باقي قسمة <span class="code-inline">num % d == 0</span>، فهذا يعني أن الرقم وجد قاسماً يقبل القسمة عليه!
+                  <br>&bull; نقوم بتحويل الراية <span class="code-inline">isPrime = false</span>.
+                  <br>&bull; نستدعي <span class="code-inline">break;</span> فوراً للخروج من اللوب الداخلي لتوفير وقت المعالج، فبمجرد وجود قاسم واحد يسقط شرط الأولية ولا داعي لفحص باقي الأعداد.
+                </div>
+                <div class="code-line">            <span class="code-kw">if</span> (<span class="code-var">num</span> % <span class="code-var">d</span> == <span class="code-num">0</span>) {
+                <span class="code-var">isPrime</span> = <span class="code-kw">false</span>;
+                <span class="code-kw">break</span>;
+            }
+        }</div>
+              </div>
+
+              <div class="code-row">
+                <div class="explain-block">
+                  <div class="badge-row">
+                    <span class="explain-badge badge-flow">⚙️ التحقق النهائي وطباعة الأولي</span>
+                  </div>
+                  إذا انتهت الحلقة الداخلية وظلت الراية <span class="code-inline">isPrime == true</span> دون أن تنكسر، فهذا يؤكد أن الرقم أولي، فنقوم بطباعته متبوعاً بمسافة.
+                </div>
+                <div class="code-line">        <span class="code-kw">if</span> (<span class="code-var">isPrime</span>) {
+            cout &lt;&lt; <span class="code-var">num</span> &lt;&lt; <span class="code-str">" "</span>;
+        }
+    }
+    cout &lt;&lt; endl;
+    <span class="code-kw">return</span> <span class="code-num">0</span>;
+}</div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- QUESTION 4 -->
+      <div class="card" id="q4">
+        <div class="card-header">
+          <span class="prob-tag">مسألة 4: شبكة الضرب مع مجاميع الصفوف والأعمدة (Grid with Totals)</span>
+          <span class="prob-subtext">Part A — Question 4: Print n &times; n grid (i*j). After each row print row sum. After grid, print each column sum using nested loops.</span>
+        </div>
+        <div class="card-body">
+          <div class="question-prompt">
+            <b>المطلوب:</b> قراءة <span class="math-symbol">n</span> (حيث <span class="math-symbol">2 &le; n &le; 8</span>)، وطباعة شبكة ضرب <span class="code-inline">n &times; n</span> حيث كل خانة تساوي <span class="code-inline">i &times; j</span>. بعد كل سطر نطبع مجموع ذلك السطر <span class="code-inline">row sum=...</span>، وبعد انتهاء الشبكة بالكامل نطبع مجموع كل عمود من الأعمدة باستخدام لوب متداخل لحساب مجاميع الأعمدة.<br>
+            <b>مثال عندما <span class="math-symbol">n = 3</span>:</b>
+            <div class="output-box">
+1 2 3  row sum=6
+2 4 6  row sum=12
+3 6 9  row sum=18
+Column sums: 6 12 18
+            </div>
+          </div>
+
+          <div class="code-container">
+            <div class="terminal-header">
+              <div class="terminal-left">
+                <div class="terminal-dots"><div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div></div>
+                <span class="terminal-title">q4_mult_grid_totals.cpp</span>
+              </div>
+              <button class="copy-btn" onclick="copyCleanCode(this)">📋 نسخ الكود</button>
+            </div>
+            <div class="program-flow">
+              
+              <div class="code-row">
+                <div class="explain-block">
+                  <div class="badge-row">
+                    <span class="explain-badge badge-logic">🧠 الجزء الأول: طباعة الصفوف وحساب مجموع كل سطر</span>
+                    <span class="explain-badge badge-memory">💾 rowSum يتصفر لكل سطر</span>
+                  </div>
+                  الحلقة الخارجية تمر على الصفوف من 1 إلى <span class="code-inline">n</span>. في كل صف جديد ننشئ عداد التراكم <span class="code-inline">rowSum = 0</span> لحساب مجموع خلايا هذا السطر فقط وتفريغ القديم.
+                </div>
+                <div class="code-line"><span class="code-kw">#include</span> <span class="code-str">&lt;iostream&gt;</span>
+<span class="code-kw">using namespace</span> std;
+
+<span class="code-kw">int</span> main() {
+    <span class="code-kw">int</span> <span class="code-var">n</span>;
+    cin &gt;&gt; <span class="code-var">n</span>;
+
+    <span class="code-kw">for</span> (<span class="code-kw">int</span> <span class="code-var">i</span> = <span class="code-num">1</span>; <span class="code-var">i</span> &lt;= <span class="code-num">n</span>; <span class="code-var">i</span>++) {
+        <span class="code-kw">int</span> <span class="code-var">rowSum</span> = <span class="code-num">0</span>;</div>
+              </div>
+
+              <div class="code-row">
+                <div class="explain-block">
+                  <div class="badge-row">
+                    <span class="explain-badge badge-logic">🧠 حساب قيمة الخلية وإضافتها للمجموع</span>
+                  </div>
+                  نحسب قيمة الخلية <span class="code-inline">val = i * j</span>، ونطبعها، ثم نراكمها فوراً في <span class="code-inline">rowSum += val</span>.
+                </div>
+                <div class="code-line">        <span class="code-kw">for</span> (<span class="code-kw">int</span> <span class="code-var">j</span> = <span class="code-num">1</span>; <span class="code-var">j</span> &lt;= <span class="code-num">n</span>; <span class="code-var">j</span>++) {
+            <span class="code-kw">int</span> <span class="code-var">val</span> = <span class="code-var">i</span> * <span class="code-var">j</span>;
+            cout &lt;&lt; <span class="code-var">val</span> &lt;&lt; <span class="code-str">" "</span>;
+            <span class="code-var">rowSum</span> += <span class="code-var">val</span>;
+        }</div>
+              </div>
+
+              <div class="code-row">
+                <div class="explain-block">
+                  <div class="badge-row">
+                    <span class="explain-badge badge-flow">⚙️ طباعة مجموع السطر والنزول لسطر جديد</span>
+                  </div>
+                  بعد اكتمال أعمدة السطر، نطبع عبارة <span class="code-inline">row sum=</span> والقيمة المتراكمة ثم ننزل لسطر جديد.
+                </div>
+                <div class="code-line">        cout &lt;&lt; <span class="code-str">" row sum="</span> &lt;&lt; <span class="code-var">rowSum</span> &lt;&lt; endl;
+    }</div>
+              </div>
+
+              <div class="code-row">
+                <div class="explain-block">
+                  <div class="badge-row">
+                    <span class="explain-badge badge-logic">🧠 الجزء الثاني: حساب مجاميع الأعمدة بالقلب المكاني</span>
+                    <span class="explain-badge badge-trap">⚠️ تثبيت العمود وتدوير الصفوف!</span>
+                  </div>
+                  <b>سر مجاميع الأعمدة:</b> لحساب مجموع العمود رقم <span class="code-inline">j</span>، يجب أن نجعل <b>حلقة الأعمدة j هي الحلقة الخارجية</b> لتثبيت العمود، بينما <b>حلقة الصفوف i هي الحلقة الداخلية</b> لتجمع القيم رأسياً من أعلى إلى أسفل!
+                </div>
+                <div class="code-line">    cout &lt;&lt; <span class="code-str">"Column sums: "</span>;
+    <span class="code-kw">for</span> (<span class="code-kw">int</span> <span class="code-var">j</span> = <span class="code-num">1</span>; <span class="code-var">j</span> &lt;= <span class="code-num">n</span>; <span class="code-var">j</span>++) {
+        <span class="code-kw">int</span> <span class="code-var">colSum</span> = <span class="code-num">0</span>;
+        <span class="code-kw">for</span> (<span class="code-kw">int</span> <span class="code-var">i</span> = <span class="code-num">1</span>; <span class="code-var">i</span> &lt;= <span class="code-num">n</span>; <span class="code-var">i</span>++) {
+            <span class="code-kw">colSum</span> += (<span class="code-var">i</span> * <span class="code-var">j</span>);
+        }
+        cout &lt;&lt; <span class="code-var">colSum</span> &lt;&lt; <span class="code-str">" "</span>;
+    }
+    cout &lt;&lt; endl;
+
+    <span class="code-kw">return</span> <span class="code-num">0</span>;
+}</div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- QUESTION 5 -->
+      <div class="card" id="q5">
+        <div class="card-header">
+          <span class="prob-tag">مسألة 5: إيجاد الأزواج ذات المجموع المستهدف (Find All Pairs with Target Sum)</span>
+          <span class="prob-subtext">Part A — Question 5: Read n (2..10) integers, read target T. Print distinct position pairs (i, j) where i &lt; j and values[i] + values[j] == T.</span>
+        </div>
+        <div class="card-body">
+          <div class="question-prompt">
+            <b>المطلوب:</b> قراءة <span class="math-symbol">n</span> من الأعداد الصحيحة في مصفوفة، ثم قراءة القيمة المستهدفة <span class="math-symbol">T</span>. طباعة كل زوج من المواضع المختلفة <span class="code-inline">(i, j)</span> بحيث يكون موضع المؤشر الأول أقل من الثاني (<span class="math-symbol">i &lt; j</span>) وحاصل جمعهما يساوي القيمة المستهدفة <span class="math-symbol">T</span>. طباعة كل موضع مرة واحدة فقط.<br>
+            <b>مثال:</b> الأعداد هي <span class="code-inline">{2, 7, 4, 5, 3}</span> والهدف <span class="code-inline">T = 9</span>:<br>
+            الأزواج بالقيم هي <span class="code-inline">(2, 7)</span> و <span class="code-inline">(4, 5)</span>، ولا يُطبع <span class="code-inline">(7, 2)</span> لأن الترتيب مقيد بـ <span class="math-symbol">i &lt; j</span>.
+          </div>
+
+          <div class="code-container">
+            <div class="terminal-header">
+              <div class="terminal-left">
+                <div class="terminal-dots"><div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div></div>
+                <span class="terminal-title">q5_pairs_target_sum.cpp</span>
+              </div>
+              <button class="copy-btn" onclick="copyCleanCode(this)">📋 نسخ الكود</button>
+            </div>
+            <div class="program-flow">
+              
+              <div class="code-row">
+                <div class="explain-block">
+                  <div class="badge-row">
+                    <span class="explain-badge badge-memory">💾 حجز مصفوفة الأعداد وقراءتها</span>
+                  </div>
+                  حجز مصفوفة بحجم أقصى 10 عناصر كما طلبت المسألة (<span class="code-inline">2 &le; n &le; 10</span>). نقرأ <span class="code-inline">n</span> ثم نستقبل عناصر المصفوفة بالكامل عبر حلقة أحادية.
+                </div>
+                <div class="code-line"><span class="code-kw">#include</span> <span class="code-str">&lt;iostream&gt;</span>
+<span class="code-kw">using namespace</span> std;
+
+<span class="code-kw">int</span> main() {
+    <span class="code-kw">int</span> <span class="code-var">n</span>;
+    cin &gt;&gt; <span class="code-var">n</span>;
+    <span class="code-kw">int</span> <span class="code-var">values</span>[<span class="code-num">10</span>];
+    <span class="code-kw">for</span> (<span class="code-kw">int</span> <span class="code-var">k</span> = <span class="code-num">0</span>; <span class="code-var">k</span> &lt; <span class="code-var">n</span>; <span class="code-var">k</span>++) {
+        cin &gt;&gt; <span class="code-var">values</span>[<span class="code-var">k</span>];
+    }
+
+    <span class="code-kw">int</span> <span class="code-var">T</span>;
+    cin &gt;&gt; <span class="code-var">T</span>;</div>
+              </div>
+
+              <div class="code-row">
+                <div class="explain-block">
+                  <div class="badge-row">
+                    <span class="explain-badge badge-logic">🧠 العنصر الأول i في الزوج</span>
+                  </div>
+                  الحلقة الخارجية تختار موضع العنصر الأول <span class="code-inline">i</span> من أول المصفوفة حتى قبل الأخير (<span class="code-inline">i &lt; n - 1</span>).
+                </div>
+                <div class="code-line">    <span class="code-kw">for</span> (<span class="code-kw">int</span> <span class="code-var">i</span> = <span class="code-num">0</span>; <span class="code-var">i</span> &lt; <span class="code-var">n</span> - <span class="code-num">1</span>; <span class="code-var">i</span>++) {</div>
+              </div>
+
+              <div class="code-row">
+                <div class="explain-block">
+                  <div class="badge-row">
+                    <span class="explain-badge badge-logic">🧠 السر البرمجي لعدم التكرار: j = i + 1</span>
+                    <span class="explain-badge badge-trap">⚠️ ضمان شرط i &lt; j دائماً</span>
+                  </div>
+                  <b>كيف نضمن عدم تكرار الزوج المعكوس؟</b>
+                  <br>بجعل الحلقة الداخلية تبدأ دائماً من العنصر الذي يلي <span class="code-inline">i</span> مباشرة: <span class="code-inline">int j = i + 1</span>.
+                  <br>هذا السطر يمنع مقارنة العنصر مع نفسه، ويمنع فحص الزوج المعكوس (7, 2) إذا فحصنا (2, 7) مسبقاً!
+                </div>
+                <div class="code-line">        <span class="code-kw">for</span> (<span class="code-kw">int</span> <span class="code-var">j</span> = <span class="code-var">i</span> + <span class="code-num">1</span>; <span class="code-var">j</span> &lt; <span class="code-var">n</span>; <span class="code-var">j</span>++) {
+
+            <span class="code-kw">if</span> (<span class="code-var">values</span>[<span class="code-var">i</span>] + <span class="code-var">values</span>[<span class="code-var">j</span>] == <span class="code-var">T</span>) {
+                cout &lt;&lt; <span class="code-str">"("</span> &lt;&lt; <span class="code-var">values</span>[<span class="code-var">i</span>] &lt;&lt; <span class="code-str">", "</span> &lt;&lt; <span class="code-var">values</span>[<span class="code-var">j</span>] &lt;&lt; <span class="code-str">") "</span>;
+            }
+        }
+    }
+    cout &lt;&lt; endl;
+    <span class="code-kw">return</span> <span class="code-num">0</span>;
+}</div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- TAB 2: PART B (TRACE THE OUTPUT Q6 TO Q9) -->
+    <!-- ============================================================ -->
+    <div id="tab-view-2" class="view-panel">
+      
+      <div class="subnav-tabs">
+        <a href="#q6" class="subnav-pill">س6: تتبع حاصل الضرب والشرط الزوجي</a>
+        <a href="#q7" class="subnav-pill">س7: تتبع المثلث التنازلي والمجموع</a>
+        <a href="#q8" class="subnav-pill">س8: تتبع العداد التراكمي بقفزات 2</a>
+        <a href="#q9" class="subnav-pill">س9: تتبع مصفوفة الأقطار (D, L, U)</a>
+      </div>
+
+      <!-- QUESTION 6 -->
+      <div class="card" id="q6">
+        <div class="card-header">
+          <span class="prob-tag">مسألة 6: تتبع مخرجات فحص باقي القسمة والضرب (Question 6 Trace)</span>
+          <span class="prob-subtext">Part B — Question 6: Trace code with if ((i + j) % 2 == 0) cout &lt;&lt; i * j &lt;&lt; " "; else cout &lt;&lt; "  ";</span>
+        </div>
+        <div class="card-body">
+          <div class="question-prompt">
+            <b>كود المسألة المعطى في الشيت:</b>
+            <div class="code-line" style="margin-top:6px;"><span class="code-kw">for</span> (<span class="code-kw">int</span> <span class="code-var">i</span> = <span class="code-num">1</span>; <span class="code-var">i</span> &lt;= <span class="code-num">3</span>; <span class="code-var">i</span>++) {
+    <span class="code-kw">for</span> (<span class="code-kw">int</span> <span class="code-var">j</span> = <span class="code-num">1</span>; <span class="code-var">j</span> &lt;= <span class="code-num">4</span>; <span class="code-var">j</span>++) {
+        <span class="code-kw">if</span> ((<span class="code-var">i</span> + <span class="code-var">j</span>) % <span class="code-num">2</span> == <span class="code-num">0</span>)
+            cout &lt;&lt; <span class="code-var">i</span> * <span class="code-var">j</span> &lt;&lt; <span class="code-str">" "</span>;
+        <span class="code-kw">else</span>
+            cout &lt;&lt; <span class="code-str">"  "</span>;
+    }
+    cout &lt;&lt; endl;
+}</div>
+          </div>
+
+          <div class="step-block">
+            <div class="step-label label-blue">جدول التتبع التفصيلي لكل دورة (Trace Table - 12 Iteration):</div>
+            <div class="table-scroll-container">
+              <table>
+                <thead>
+                  <tr><th>الصف i</th><th>العمود j</th><th>مجموع (i+j)</th><th>هل زوجي؟ (% 2 == 0)</th><th>المطبوع في التيرمينال</th><th>السبب الفني</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>1</td><td>1</td><td>2</td><td>نعم (True)</td><td dir="ltr" style="text-align:right; font-weight:bold; color:var(--emerald);">1 </td><td>حاصل ضرب 1 &times; 1 = 1 متبوع بمسافة</td></tr>
+                  <tr><td>1</td><td>2</td><td>3</td><td>لا (False)</td><td dir="ltr" style="text-align:right; color:var(--amber);">[مسافتان]</td><td>طباعة مسافتين فارغتين "  "</td></tr>
+                  <tr><td>1</td><td>3</td><td>4</td><td>نعم (True)</td><td dir="ltr" style="text-align:right; font-weight:bold; color:var(--emerald);">3 </td><td>حاصل ضرب 1 &times; 3 = 3 متبوع بمسافة</td></tr>
+                  <tr><td>1</td><td>4</td><td>5</td><td>لا (False)</td><td dir="ltr" style="text-align:right; color:var(--amber);">[مسافتان]</td><td>طباعة مسافتين، ثم <span class="code-inline">endl</span> سطر جديد</td></tr>
+                  <tr><td>2</td><td>1</td><td>3</td><td>لا (False)</td><td dir="ltr" style="text-align:right; color:var(--amber);">[مسافتان]</td><td>بدء السطر الثاني بمسافتين</td></tr>
+                  <tr><td>2</td><td>2</td><td>4</td><td>نعم (True)</td><td dir="ltr" style="text-align:right; font-weight:bold; color:var(--emerald);">4 </td><td>حاصل ضرب 2 &times; 2 = 4 متبوع بمسافة</td></tr>
+                  <tr><td>2</td><td>3</td><td>5</td><td>لا (False)</td><td dir="ltr" style="text-align:right; color:var(--amber);">[مسافتان]</td><td>طباعة مسافتين فارغتين</td></tr>
+                  <tr><td>2</td><td>4</td><td>6</td><td>نعم (True)</td><td dir="ltr" style="text-align:right; font-weight:bold; color:var(--emerald);">8 </td><td>حاصل ضرب 2 &times; 4 = 8، ثم <span class="code-inline">endl</span> سطر جديد</td></tr>
+                  <tr><td>3</td><td>1</td><td>4</td><td>نعم (True)</td><td dir="ltr" style="text-align:right; font-weight:bold; color:var(--emerald);">3 </td><td>حاصل ضرب 3 &times; 1 = 3 متبوع بمسافة</td></tr>
+                  <tr><td>3</td><td>2</td><td>5</td><td>لا (False)</td><td dir="ltr" style="text-align:right; color:var(--amber);">[مسافتان]</td><td>طباعة مسافتين فارغتين</td></tr>
+                  <tr><td>3</td><td>3</td><td>6</td><td>نعم (True)</td><td dir="ltr" style="text-align:right; font-weight:bold; color:var(--emerald);">9 </td><td>حاصل ضرب 3 &times; 3 = 9 متبوع بمسافة</td></tr>
+                  <tr><td>3</td><td>4</td><td>7</td><td>لا (False)</td><td dir="ltr" style="text-align:right; color:var(--amber);">[مسافتان]</td><td>طباعة مسافتين، ثم <span class="code-inline">endl</span> ونهاية البرنامج</td></tr>
+                </tbody>
+              </table>
+            </div>
+            
+            <div style="margin-top:10px;">
+              <b>المخرجات النهائية الدقيقة (Exact Terminal Output):</b>
+              <div class="output-box" style="white-space:pre;">1   3   
+  4   8 
+3   9   </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- QUESTION 7 -->
+      <div class="card" id="q7">
+        <div class="card-header">
+          <span class="prob-tag">مسألة 7: تتبع المثلث التنازلي مع جمع العدادين (Question 7 Trace)</span>
+          <span class="prob-subtext">Part B — Question 7: Trace row=4 down to 1, col=1 to row: cout &lt;&lt; col + row &lt;&lt; " ";</span>
+        </div>
+        <div class="card-body">
+          <div class="question-prompt">
+            <b>كود المسألة المعطى في الشيت:</b>
+            <div class="code-line" style="margin-top:6px;"><span class="code-kw">for</span> (<span class="code-kw">int</span> <span class="code-var">row</span> = <span class="code-num">4</span>; <span class="code-var">row</span> &gt;= <span class="code-num">1</span>; <span class="code-var">row</span>--) {
+    <span class="code-kw">for</span> (<span class="code-kw">int</span> <span class="code-var">col</span> = <span class="code-num">1</span>; <span class="code-var">col</span> &lt;= <span class="code-var">row</span>; <span class="code-var">col</span>++) {
+        cout &lt;&lt; <span class="code-var">col</span> + <span class="code-var">row</span> &lt;&lt; <span class="code-str">" "</span>;
+    }
+    cout &lt;&lt; endl;
+}</div>
+          </div>
+
+          <div class="step-block">
+            <div class="step-label label-green">مسار التتبع بالتحليل الرياضي (Row by Row Trace):</div>
+            <div style="font-size:0.84rem; line-height:1.7;">
+              &bull; <b>السطر الأول (<span class="code-inline">row = 4</span>):</b> اللوب الداخلي يدور من <span class="code-inline">col = 1</span> إلى 4:
+              <br>&nbsp;&nbsp;- <span class="code-inline">col=1</span>: 1 + 4 = 5
+              <br>&nbsp;&nbsp;- <span class="code-inline">col=2</span>: 2 + 4 = 6
+              <br>&nbsp;&nbsp;- <span class="code-inline">col=3</span>: 3 + 4 = 7
+              <br>&nbsp;&nbsp;- <span class="code-inline">col=4</span>: 4 + 4 = 8 &rarr; المطبوع: <span class="result-badge">5 6 7 8 </span>
+              <br>&bull; <b>السطر الثاني (<span class="code-inline">row = 3</span>):</b> اللوب الداخلي يدور من <span class="code-inline">col = 1</span> إلى 3:
+              <br>&nbsp;&nbsp;- <span class="code-inline">col=1</span>: 1 + 3 = 4
+              <br>&nbsp;&nbsp;- <span class="code-inline">col=2</span>: 2 + 3 = 5
+              <br>&nbsp;&nbsp;- <span class="code-inline">col=3</span>: 3 + 3 = 6 &rarr; المطبوع: <span class="result-badge">4 5 6 </span>
+              <br>&bull; <b>السطر الثالث (<span class="code-inline">row = 2</span>):</b> اللوب الداخلي يدور من <span class="code-inline">col = 1</span> إلى 2:
+              <br>&nbsp;&nbsp;- <span class="code-inline">col=1</span>: 1 + 2 = 3
+              <br>&nbsp;&nbsp;- <span class="code-inline">col=2</span>: 2 + 2 = 4 &rarr; المطبوع: <span class="result-badge">3 4 </span>
+              <br>&bull; <b>السطر الرابع (<span class="code-inline">row = 1</span>):</b> اللوب الداخلي يدور من <span class="code-inline">col = 1</span> إلى 1 فقط:
+              <br>&nbsp;&nbsp;- <span class="code-inline">col=1</span>: 1 + 1 = 2 &rarr; المطبوع: <span class="result-badge">2 </span>
+            </div>
+            
+            <div style="margin-top:10px;">
+              <b>المخرجات النهائية الدقيقة (Exact Terminal Output):</b>
+              <div class="output-box">5 6 7 8 
+4 5 6 
+3 4 
+2 </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- QUESTION 8 -->
+      <div class="card" id="q8">
+        <div class="card-header">
+          <span class="prob-tag">مسألة 8: تتبع العداد التراكمي الكلي مع قفزات الزيادة 2 (Question 8 Trace)</span>
+          <span class="prob-subtext">Part B — Question 8: Trace total += i + j with j starting at i and incrementing by 2 (j += 2).</span>
+        </div>
+        <div class="card-body">
+          <div class="question-prompt">
+            <b>كود المسألة المعطى في الشيت:</b>
+            <div class="code-line" style="margin-top:6px;"><span class="code-kw">int</span> <span class="code-var">total</span> = <span class="code-num">0</span>;
+<span class="code-kw">for</span> (<span class="code-kw">int</span> <span class="code-var">i</span> = <span class="code-num">1</span>; <span class="code-var">i</span> &lt;= <span class="code-num">3</span>; <span class="code-var">i</span>++) {
+    <span class="code-kw">for</span> (<span class="code-kw">int</span> <span class="code-var">j</span> = <span class="code-var">i</span>; <span class="code-var">j</span> &lt;= <span class="code-num">4</span>; <span class="code-var">j</span> += <span class="code-num">2</span>) {
+        <span class="code-var">total</span> += <span class="code-var">i</span> + <span class="code-var">j</span>;
+        cout &lt;&lt; <span class="code-var">total</span> &lt;&lt; <span class="code-str">" "</span>;
+    }
+}
+cout &lt;&lt; endl;</div>
+          </div>
+
+          <div class="step-block">
+            <div class="step-label label-amber">تتبع حركة المتغير total في الذاكرة RAM خطوة بخطوة:</div>
+            <div class="table-scroll-container">
+              <table>
+                <thead>
+                  <tr><th>الدورة</th><th>قيمة i</th><th>قيمة j</th><th>العملية الحسابية (i + j)</th><th>قيمة total القديمة + الإضافة</th><th>قيمة total الجديدة المطبوعة</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>1</td><td>1</td><td>1 (يبدأ من i)</td><td>1 + 1 = 2</td><td>0 + 2</td><td dir="ltr" style="text-align:right; font-weight:bold; color:var(--emerald);">2 </td></tr>
+                  <tr><td>2</td><td>1</td><td>3 (زيادة بـ 2)</td><td>1 + 3 = 4</td><td>2 + 4</td><td dir="ltr" style="text-align:right; font-weight:bold; color:var(--emerald);">6 </td></tr>
+                  <tr><td>-</td><td>1</td><td>5 (فشل الشرط)</td><td>يتوقف اللوب الداخلي لأن 5 &gt; 4 وينتقل لـ i=2</td><td>-</td><td>-</td></tr>
+                  <tr><td>3</td><td>2</td><td>2 (يبدأ من i)</td><td>2 + 2 = 4</td><td>6 + 4</td><td dir="ltr" style="text-align:right; font-weight:bold; color:var(--emerald);">10 </td></tr>
+                  <tr><td>4</td><td>2</td><td>4 (زيادة بـ 2)</td><td>2 + 4 = 6</td><td>10 + 6</td><td dir="ltr" style="text-align:right; font-weight:bold; color:var(--emerald);">16 </td></tr>
+                  <tr><td>-</td><td>2</td><td>6 (فشل الشرط)</td><td>يتوقف اللوب الداخلي لأن 6 &gt; 4 وينتقل لـ i=3</td><td>-</td><td>-</td></tr>
+                  <tr><td>5</td><td>3</td><td>3 (يبدأ من i)</td><td>3 + 3 = 6</td><td>16 + 6</td><td dir="ltr" style="text-align:right; font-weight:bold; color:var(--emerald);">22 </td></tr>
+                  <tr><td>-</td><td>3</td><td>5 (فشل الشرط)</td><td>يتوقف اللوب الداخلي لأن 5 &gt; 4 وتنتهي الدورة الخارجية تماماً</td><td>-</td><td>-</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div style="margin-top:10px;">
+              <b>المخرجات النهائية الدقيقة (Exact Terminal Output على سطر واحد):</b>
+              <div class="output-box">2 6 10 16 22 </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- QUESTION 9 -->
+      <div class="card" id="q9">
+        <div class="card-header">
+          <span class="prob-tag">مسألة 9: تتبع مصفوفة الأقطار (Diagonal D, Lower L, Upper U)</span>
+          <span class="prob-subtext">Part B — Question 9: Trace i=1..4, j=1..4: if (j == i) D, else if (j &lt; i) L, else U.</span>
+        </div>
+        <div class="card-body">
+          <div class="question-prompt">
+            <b>كود المسألة المعطى في الشيت:</b>
+            <div class="code-line" style="margin-top:6px;"><span class="code-kw">for</span> (<span class="code-kw">int</span> <span class="code-var">i</span> = <span class="code-num">1</span>; <span class="code-var">i</span> &lt;= <span class="code-num">4</span>; <span class="code-var">i</span>++) {
+    <span class="code-kw">for</span> (<span class="code-kw">int</span> <span class="code-var">j</span> = <span class="code-num">1</span>; <span class="code-var">j</span> &lt;= <span class="code-num">4</span>; <span class="code-var">j</span>++) {
+        <span class="code-kw">if</span> (<span class="code-var">j</span> == <span class="code-var">i</span>)
+            cout &lt;&lt; <span class="code-str">"D"</span>;
+        <span class="code-kw">else if</span> (<span class="code-var">j</span> &lt; <span class="code-var">i</span>)
+            cout &lt;&lt; <span class="code-str">"L"</span>;
+        <span class="code-kw">else</span>
+            cout &lt;&lt; <span class="code-str">"U"</span>;
+    }
+    cout &lt;&lt; endl;
+}</div>
+          </div>
+
+          <div class="step-block">
+            <div class="step-label label-blue">التفسير الرياضي لمصفوفة الجبر الخطي 4 &times; 4:</div>
+            <div style="font-size:0.84rem; line-height:1.7;">
+              تقسم هذه الشروط الثلاثة أي مصفوفة مربعة إلى 3 مناطق هندسية رئيسية:
+              <br>&bull; <span class="code-inline">j == i</span>: <b>القطر الرئيسي (Main Diagonal)</b> &rarr; يطبع الحرف <span class="result-badge" style="color:var(--amber);">D</span>.
+              <br>&bull; <span class="code-inline">j &lt; i</span>: <b>المثلث السفلي (Lower Triangle)</b> أسفل القطر &rarr; يطبع الحرف <span class="result-badge" style="color:var(--rose);">L</span>.
+              <br>&bull; <span class="code-inline">j &gt; i</span>: <b>المثلث العلوي (Upper Triangle)</b> أعلى القطر &rarr; يطبع الحرف <span class="result-badge" style="color:var(--cyan);">U</span>.
+            </div>
+
+            <div class="table-scroll-container" style="margin-top:10px;">
+              <table>
+                <thead>
+                  <tr><th>الصف i</th><th>العمود j=1</th><th>العمود j=2</th><th>العمود j=3</th><th>العمود j=4</th><th>السطر المطبوع</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>1</td><td>j==i &rarr; <b>D</b></td><td>j&gt;i &rarr; <b>U</b></td><td>j&gt;i &rarr; <b>U</b></td><td>j&gt;i &rarr; <b>U</b></td><td dir="ltr" style="text-align:right; font-weight:bold; color:var(--emerald);">DUUU</td></tr>
+                  <tr><td>2</td><td>j&lt;i &rarr; <b>L</b></td><td>j==i &rarr; <b>D</b></td><td>j&gt;i &rarr; <b>U</b></td><td>j&gt;i &rarr; <b>U</b></td><td dir="ltr" style="text-align:right; font-weight:bold; color:var(--emerald);">LDUU</td></tr>
+                  <tr><td>3</td><td>j&lt;i &rarr; <b>L</b></td><td>j&lt;i &rarr; <b>L</b></td><td>j==i &rarr; <b>D</b></td><td>j&gt;i &rarr; <b>U</b></td><td dir="ltr" style="text-align:right; font-weight:bold; color:var(--emerald);">LLDU</td></tr>
+                  <tr><td>4</td><td>j&lt;i &rarr; <b>L</b></td><td>j&lt;i &rarr; <b>L</b></td><td>j&lt;i &rarr; <b>L</b></td><td>j==i &rarr; <b>D</b></td><td dir="ltr" style="text-align:right; font-weight:bold; color:var(--emerald);">LLLD</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div style="margin-top:10px;">
+              <b>المخرجات النهائية الدقيقة (Exact Terminal Output):</b>
+              <div class="output-box">DUUU
+LDUU
+LLDU
+LLLD</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- TAB 3: ADVANCED ENGINEERING LAB (BIG-O, OPTIMIZATIONS & EDGES) -->
+    <!-- ============================================================ -->
+    <div id="tab-view-3" class="view-panel">
+      
+      <!-- Topic 1: Time Complexity -->
+      <div class="card">
+        <div class="card-header">
+          <span class="prob-tag" style="color:var(--amber);">المحور 1: التعقيد الزمني والحسابي للخورازميات (Time Complexity &amp; Big-O Notation)</span>
+          <span class="prob-subtext">لماذا نحسب Big-O؟ وكيف تحسب عدد الخطوات الفعلية في الحلقات المتداخلة؟</span>
+        </div>
+        <div class="card-body">
+          <div class="explain-block" style="border-right-color: var(--amber);">
+            <div class="badge-row">
+              <span class="explain-badge badge-logic">🧠 المفهوم الهندسي لـ Big-O</span>
+            </div>
+            <b>ما هو التعقيد الزمني (Time Complexity)؟</b>
+            <br>هو مقياس رياضي يعبر عن <b>معدل نمو عدد العمليات التي ينفذها المعالج (CPU)</b> كلما كبر حجم المدخلات <span class="math-symbol">n</span>. لا نقيس الوقت بالثواني لأن سرعة الأجهزة تختلف، بل نقيسه بعدد الخطوات الحسابية الأساسية:
+            <br>&bull; <b>التعقيد الخطي <span class="code-inline">O(n)</span>:</b> حلقة تكرارية فردية واحدة تدور <span class="math-symbol">n</span> مرة.
+            <br>&bull; <b>التعقيد التربيعي <span class="code-inline">O(n&sup2;)</span>:</b> حلقتان متداخلتان؛ اللوب الخارجي يدور <span class="math-symbol">n</span> مرة وبداخله لوب يدور <span class="math-symbol">n</span> مرة، فيكون الإجمالي:
+            <div style="text-align:center; margin:6px 0; font-weight:bold; color:var(--amber);">
+              Total Operations = n &times; n = n&sup2;
+            </div>
+          </div>
+
+          <div class="step-block">
+            <div class="step-label label-amber">جدول مقارنة كفاءة الخوارزميات مع نمو حجم المدخلات:</div>
+            <div class="table-scroll-container">
+              <table>
+                <thead>
+                  <tr><th>الرتبة (Big-O)</th><th>المعنى البرمجي</th><th>عدد العمليات عندما n = 10</th><th>عدد العمليات عندما n = 100</th><th>عدد العمليات عندما n = 1000</th></tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><b style="color:var(--emerald);">O(1)</b></td>
+                    <td>عملية ثابتة فورية (جمع/طباعة مباشرة)</td>
+                    <td>1</td>
+                    <td>1</td>
+                    <td>1</td>
+                  </tr>
+                  <tr>
+                    <td><b style="color:var(--cyan);">O(n)</b></td>
+                    <td>حلقة فردية واحدة (Single Loop)</td>
+                    <td>10</td>
+                    <td>100</td>
+                    <td>1,000</td>
+                  </tr>
+                  <tr>
+                    <td><b style="color:var(--purple);">O(n &radic;n)</b></td>
+                    <td>فحص الأعداد الأولية بعد التحسين الرياضي</td>
+                    <td>~31</td>
+                    <td>~1,000</td>
+                    <td>~31,620</td>
+                  </tr>
+                  <tr>
+                    <td><b style="color:var(--rose);">O(n&sup2;)</b></td>
+                    <td>حلقات متداخلة مزدوجة (Nested Loops الشيت)</td>
+                    <td>100</td>
+                    <td>10,000</td>
+                    <td><b>1,000,000 خطوة!</b></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Topic 2: Performance Optimizations -->
+      <div class="card">
+        <div class="card-header">
+          <span class="prob-tag" style="color:var(--purple);">المحور 2: أسرار تحسين الأداء البرمجي (Optimization Lab)</span>
+          <span class="prob-subtext">كيف تجعل الكود أسرع 10 أضعاف وتقلل استنزاف المعالج والذاكرة؟</span>
+        </div>
+        <div class="card-body">
+          
+          <!-- Optimization A: Square Root Prime -->
+          <div class="question-prompt" style="border-right-color: var(--purple);">
+            <b>التقنية الأولى: التحسين الرياضي بالجذر التربيعي للأعداد الأولية (<span class="code-inline">d * d &le; num</span>)</b><br>
+            في المسألة رقم 3، فحصنا القواسم حتى <span class="code-inline">num - 1</span>. ولكن رياضياً: أي قاسم أكبر من الجذر التربيعي للرقم يجب أن يكون مضروباً في قاسم أصغر من الجذر!
+            <br><b>مثال توضيحي:</b> لفحص الرقم 100: قواسمه هي: (2 &times; 50)، (4 &times; 25)، (5 &times; 20)، (10 &times; 10).
+            <br>لاحظ أننا لسنا بحاجة للبحث عن 50 أو 25 لأننا اكتشفنا شركاءهم (2 و 4) مبكراً! فإذا لم نجد أي قاسم حتى الجذر التربيعي ($\sqrt{100} = 10$)، فالرقم أولي حتماً!
+          </div>
+
+          <div class="code-container">
+            <div class="terminal-header">
+              <div class="terminal-left">
+                <div class="terminal-dots"><div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div></div>
+                <span class="terminal-title">optimized_prime.cpp</span>
+              </div>
+              <button class="copy-btn" onclick="copyCleanCode(this)">📋 نسخ الكود المحسن</button>
+            </div>
+            <div class="program-flow">
+              <div class="code-row">
+                <div class="explain-block">
+                  <div class="badge-row">
+                    <span class="explain-badge badge-opt">⚡ التحسين بالشرط: d * d &lt;= num</span>
+                    <span class="explain-badge badge-logic">🧠 توفير 90% من دورات المعالج</span>
+                  </div>
+                  <b>لماذا كتبنا <span class="code-inline">d * d &lt;= num</span> بدلاً من <span class="code-inline">d &lt; num</span>؟</b>
+                  <br>&bull; شرط <span class="code-inline">d * d &lt;= num</span> يكافئ رياضياً <span class="code-inline">d &le; &radic;num</span> ولكن بدون استدعاء دالة <span class="code-inline">sqrt()</span> الثقيلة التي تستهلك وقتاً إضافياً في الحسابات العشرية!
+                  <br>&bull; <b>المقارنة العملية:</b> عند فحص الرقم 97، الكود العادي يدور <b>95 دورة</b>، بينما الكود المحسن يدور <b>8 دورات فقط</b> (من 2 إلى 9)!
+                </div>
+                <div class="code-line"><span class="code-kw">#include</span> <span class="code-str">&lt;iostream&gt;</span>
+<span class="code-kw">using namespace</span> std;
+
+<span class="code-kw">int</span> main() {
+    <span class="code-kw">int</span> <span class="code-var">n</span> = <span class="code-num">100</span>;
+    <span class="code-kw">for</span> (<span class="code-kw">int</span> <span class="code-var">num</span> = <span class="code-num">2</span>; <span class="code-var">num</span> &lt;= <span class="code-var">n</span>; <span class="code-var">num</span>++) {
+        <span class="code-kw">bool</span> <span class="code-var">isPrime</span> = <span class="code-kw">true</span>;
+        <span class="code-kw">for</span> (<span class="code-kw">int</span> <span class="code-var">d</span> = <span class="code-num">2</span>; <span class="code-var">d</span> * <span class="code-var">d</span> &lt;= <span class="code-var">num</span>; <span class="code-var">d</span>++) {
+            <span class="code-kw">if</span> (<span class="code-var">num</span> % <span class="code-var">d</span> == <span class="code-num">0</span>) {
+                <span class="code-var">isPrime</span> = <span class="code-kw">false</span>;
+                <span class="code-kw">break</span>;
+            }
+        }
+        <span class="code-kw">if</span> (<span class="code-var">isPrime</span>) cout &lt;&lt; <span class="code-var">num</span> &lt;&lt; <span class="code-str">" "</span>;
+    }
+    cout &lt;&lt; endl;
+    <span class="code-kw">return</span> <span class="code-num">0</span>;
+}</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Optimization B: Single-Pass Column Sum -->
+          <div class="question-prompt" style="border-right-color: var(--purple); margin-top:14px;">
+            <b>التقنية الثانية: دمج حساب مجاميع الأعمدة في مسار واحد (Single-Pass Accumulator)</b><br>
+            في المسألة 4، أنشأنا لوباً متداخلاً أول لطباعة الصفوف، ثم لوباً متداخلاً ثانياً بالكامل لحساب الأعمدة.
+            <br><b>الحل الهندسي الأذكى:</b> يمكننا إنشاء مصفوفة بسيطة <span class="code-inline">colSums[n + 1] = {0}</span>؛ وأثناء مرور اللوب الداخلي لطباعة الرقم، نراكمه فوراً في عموده المقابل! بهذا نلغي الحلقة المتداخلة الثانية بالكامل ونوفر نصف وقت التنفيذ!
+          </div>
+
+          <div class="code-container">
+            <div class="terminal-header">
+              <div class="terminal-left">
+                <div class="terminal-dots"><div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div></div>
+                <span class="terminal-title">single_pass_totals.cpp</span>
+              </div>
+              <button class="copy-btn" onclick="copyCleanCode(this)">📋 نسخ الكود المدمج</button>
+            </div>
+            <div class="program-flow">
+              <div class="code-row">
+                <div class="explain-block">
+                  <div class="badge-row">
+                    <span class="explain-badge badge-opt">⚡ إلغاء اللوب الثاني بالكامل</span>
+                    <span class="explain-badge badge-memory">💾 مصفوفة التراكم colSums</span>
+                  </div>
+                  <b>كيف تعمل هذه الفكرة؟</b>
+                  <br>&bull; ننشئ مصفوفة <span class="code-inline">colSums[10] = {0}</span> تمثل حصالة لكل عمود.
+                  <br>&bull; عندما نصل للخلية <span class="code-inline">(i=2, j=3)</span> وقيمتها 6: نقوم بإضافتها مباشرة في حصالة العمود الثالث <span class="code-inline">colSums[3] += 6</span>.
+                  <br>&bull; بعد انتهاء شبكة الجدول، تكون مجاميع الأعمدة جاهزة ومحسوبة بالفعل! لا نحتاج إلا حلقة أحادية بسيطة <span class="code-inline">O(n)</span> لعرضها بدلاً من تشغيل لوب متداخل إضافي <span class="code-inline">O(n&sup2;)</span>!
+                </div>
+                <div class="code-line"><span class="code-kw">#include</span> <span class="code-str">&lt;iostream&gt;</span>
+<span class="code-kw">using namespace</span> std;
+
+<span class="code-kw">int</span> main() {
+    <span class="code-kw">int</span> <span class="code-var">n</span> = <span class="code-num">3</span>;
+    <span class="code-kw">int</span> <span class="code-var">colSums</span>[<span class="code-num">10</span>] = {<span class="code-num">0</span>}; <span class="code-cmt">// مصفوفة التراكم اللحظي</span>
+
+    <span class="code-kw">for</span> (<span class="code-kw">int</span> <span class="code-var">i</span> = <span class="code-num">1</span>; <span class="code-var">i</span> &lt;= <span class="code-num">n</span>; <span class="code-var">i</span>++) {
+        <span class="code-kw">int</span> <span class="code-var">rowSum</span> = <span class="code-num">0</span>;
+        <span class="code-kw">for</span> (<span class="code-kw">int</span> <span class="code-var">j</span> = <span class="code-num">1</span>; <span class="code-var">j</span> &lt;= <span class="code-num">n</span>; <span class="code-var">j</span>++) {
+            <span class="code-kw">int</span> <span class="code-var">val</span> = <span class="code-var">i</span> * <span class="code-var">j</span>;
+            cout &lt;&lt; <span class="code-var">val</span> &lt;&lt; <span class="code-str">" "</span>;
+            <span class="code-var">rowSum</span> += <span class="code-var">val</span>;
+            <span class="code-var">colSums</span>[<span class="code-var">j</span>] += <span class="code-var">val</span>; <span class="code-cmt">// تراكم فوري للعمود</span>
+        }
+        cout &lt;&lt; <span class="code-str">" row sum="</span> &lt;&lt; <span class="code-var">rowSum</span> &lt;&lt; endl;
+    }
+
+    cout &lt;&lt; <span class="code-str">"Column sums: "</span>;
+    <span class="code-kw">for</span> (<span class="code-kw">int</span> <span class="code-var">j</span> = <span class="code-num">1</span>; <span class="code-var">j</span> &lt;= <span class="code-num">n</span>; <span class="code-var">j</span>++) {
+        cout &lt;&lt; <span class="code-var">colSums</span>[<span class="code-var">j</span>] &lt;&lt; <span class="code-str">" "</span>; <span class="code-cmt">// طباعة مباشرة في خطوة واحدة</span>
+    }
+    cout &lt;&lt; endl;
+    <span class="code-kw">return</span> <span class="code-num">0</span>;
+}</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Topic 3: Edge Cases & Boundary Handling -->
+      <div class="card">
+        <div class="card-header">
+          <span class="prob-tag" style="color:var(--emerald);">المحور 3: حالات الحواف والحدود القصوى (Edge Cases &amp; Boundary Validation)</span>
+          <span class="prob-subtext">كيف تحمي برنامجك من الانهيار عند إدخال قيم شاذة أو غير متوقعة؟</span>
+        </div>
+        <div class="card-body">
+          <div class="explain-block" style="border-right-color: var(--emerald);">
+            <div class="badge-row">
+              <span class="explain-badge badge-logic">🧠 ما هي حالات الحواف (Edge Cases)؟</span>
+              <span class="explain-badge badge-trap">⚠️ أسئلة الفخاخ</span>
+            </div>
+            حالات الحواف هي <b>القيم الواقعة عند أقصى أطراف النطاق المسموح</b>. في الشيت حُددت الشروط التالية:
+            <br>&bull; في الشطرنج: <span class="math-symbol">3 &le; n &le; 9</span> &rarr; الحواف هي <span class="code-inline">n = 3</span> (أصغر شبكة) و <span class="code-inline">n = 9</span> (أكبر شبكة).
+            <br>&bull; في المستطيل: <span class="code-inline">rows, cols &isin; [3..12]</span> &rarr; الحواف تشمل المستطيل المربع الأدنى <span class="code-inline">3 &times; 3</span> أو الأقصى <span class="code-inline">12 &times; 12</span>.
+            <br>&bull; في مسألة جمع الأزواج (Target Sum): ماذا لو لم يعثر البرنامج على <b>أي زوج يحقق المجموع T</b> إطلاقاً؟
+          </div>
+
+          <div class="question-prompt" style="border-right-color: var(--emerald);">
+            <b>معالجة حالة عدم العثور على أي زوج (Handling Empty Match Sets):</b><br>
+            إذا لم نضع راية تحذير، فسينتهي البرنامج دون طباعة أي شيء، مما يترك شاشة المستخدم سوداء ومبهمة. الطريقة الهندسية الصحيحة هي إضافة متغير منطقي <span class="code-inline">bool pairFound = false</span>؛ إذا ظل false حتى نهاية الحلقات، نطبع رسالة واضحة: <span class="code-inline">"No pairs found matching target T"</span>.
+          </div>
+
+          <div class="code-container">
+            <div class="terminal-header">
+              <div class="terminal-left">
+                <div class="terminal-dots"><div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div></div>
+                <span class="terminal-title">robust_pairs_edge_case.cpp</span>
+              </div>
+              <button class="copy-btn" onclick="copyCleanCode(this)">📋 نسخ الكود الآمن</button>
+            </div>
+            <div class="program-flow">
+              <div class="code-row">
+                <div class="explain-block">
+                  <div class="badge-row">
+                    <span class="explain-badge badge-logic">🧠 حماية المدخلات بحلقة التحقق (Validation Loop)</span>
+                    <span class="explain-badge badge-trap">⚠️ فحص شروط المسألة بدقة</span>
+                  </div>
+                  نستخدم حلقة <span class="code-inline">while</span> تمنع المستخدم من إدخال أرقام خارج النطاق <span class="code-inline">2 &le; n &le; 10</span>. إذا أدخل رقماً خاطئاً يُجبره البرنامج على إعادة الإدخال فوراً.
+                </div>
+                <div class="code-line"><span class="code-kw">#include</span> <span class="code-str">&lt;iostream&gt;</span>
+<span class="code-kw">using namespace</span> std;
+
+<span class="code-kw">int</span> main() {
+    <span class="code-kw">int</span> <span class="code-var">n</span>;
+    cin &gt;&gt; <span class="code-var">n</span>;
+    <span class="code-kw">while</span> (<span class="code-var">n</span> &lt; <span class="code-num">2</span> || <span class="code-var">n</span> &gt; <span class="code-num">10</span>) {
+        cout &lt;&lt; <span class="code-str">"Invalid n! Must be between 2 and 10: "</span>;
+        cin &gt;&gt; <span class="code-var">n</span>;
+    }
+
+    <span class="code-kw">int</span> <span class="code-var">values</span>[<span class="code-num">10</span>];
+    <span class="code-kw">for</span> (<span class="code-kw">int</span> <span class="code-var">k</span> = <span class="code-num">0</span>; <span class="code-var">k</span> &lt; <span class="code-var">n</span>; <span class="code-var">k</span>++) cin &gt;&gt; <span class="code-var">values</span>[<span class="code-var">k</span>];
+
+    <span class="code-kw">int</span> <span class="code-var">T</span>;
+    cin &gt;&gt; <span class="code-var">T</span>;
+
+    <span class="code-kw">bool</span> <span class="code-var">pairFound</span> = <span class="code-kw">false</span>; <span class="code-cmt">// راية لاكتشاف حالة الحافة الفارغة</span>
+    <span class="code-kw">for</span> (<span class="code-kw">int</span> <span class="code-var">i</span> = <span class="code-num">0</span>; <span class="code-var">i</span> &lt; <span class="code-num">n</span> - <span class="code-num">1</span>; <span class="code-var">i</span>++) {
+        <span class="code-kw">for</span> (<span class="code-kw">int</span> <span class="code-var">j</span> = <span class="code-var">i</span> + <span class="code-num">1</span>; <span class="code-var">j</span> &lt; <span class="code-var">n</span>; <span class="code-var">j</span>++) {
+            <span class="code-kw">if</span> (<span class="code-var">values</span>[<span class="code-var">i</span>] + <span class="code-var">values</span>[<span class="code-var">j</span>] == <span class="code-var">T</span>) {
+                cout &lt;&lt; <span class="code-str">"("</span> &lt;&lt; <span class="code-var">values</span>[<span class="code-var">i</span>] &lt;&lt; <span class="code-str">", "</span> &lt;&lt; <span class="code-var">values</span>[<span class="code-var">j</span>] &lt;&lt; <span class="code-str">") "</span>;
+                <span class="code-var">pairFound</span> = <span class="code-kw">true</span>;
+            }
+        }
+    }
+
+    <span class="code-cmt">// معالجة حالة الحافة عند عدم وجود أي أزواج</span>
+    <span class="code-kw">if</span> (!<span class="code-var">pairFound</span>) {
+        cout &lt;&lt; <span class="code-str">"No pairs found with sum = "</span> &lt;&lt; <span class="code-var">T</span>;
+    }
+    cout &lt;&lt; endl;
+    <span class="code-kw">return</span> <span class="code-num">0</span>;
+}</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- TAB 4: INTERACTIVE MATRIX & LOOP SANDBOX -->
+    <!-- ============================================================ -->
+    <div id="tab-view-4" class="view-panel">
+      <div class="sandbox-panel">
+        <h2 style="font-size:1.1rem; color:#fff; margin-bottom:6px;">المحاكي التفاعلي اللحظي لمسائل الشيت (Sheet 5 Live Sandbox)</h2>
+        <p style="font-size:0.83rem; color:var(--text-muted); margin-bottom:12px;">
+          اختر أي مسألة من مسائل الشيت وتحكم في الأبعاد بنفسك لمشاهدة الشبكة تتشكل أمامك مباشرة في المتصفح!
+        </p>
+
+        <div class="sandbox-controls">
+          <div>
+            <label style="font-size:0.78rem; font-weight:700;">المسألة المراد محاكاتها:</label>
+            <select id="sandboxSelect" class="sandbox-select" onchange="runSandbox()">
+              <option value="checkerboard">مسألة 1: رقعة الشطرنج التناوبية (X / O)</option>
+              <option value="hollow">مسألة 2: المستطيل المفرغ (#)</option>
+              <option value="matrix_diag">مسألة 9: مصفوفة الأقطار (D, L, U)</option>
+              <option value="mult_grid">مسألة 4: شبكة الضرب مع المجاميع</option>
+            </select>
+          </div>
+          <div>
+            <label style="font-size:0.78rem; font-weight:700;">البعد N (أو الصفوف):</label>
+            <input type="number" id="sandboxDim1" class="sandbox-input" value="4" min="2" max="8" style="width:55px;" onchange="runSandbox()">
+          </div>
+          <div id="sandboxDim2Wrapper" style="display:none;">
+            <label style="font-size:0.78rem; font-weight:700;">الأعمدة Cols:</label>
+            <input type="number" id="sandboxDim2" class="sandbox-input" value="6" min="3" max="8" style="width:55px;" onchange="runSandbox()">
+          </div>
+          <button class="sandbox-btn" onclick="runSandbox()">⚡ تشغيل المحاكاة</button>
+        </div>
+
+        <div class="sandbox-canvas" id="sandboxCanvas"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    function switchMainTab(tabIndex) {
+      for (let i = 1; i <= 4; i++) {
+        const btn = document.getElementById('tab-btn-' + i);
+        const view = document.getElementById('tab-view-' + i);
+        if (btn) btn.classList.remove('active');
+        if (view) view.classList.remove('active-panel');
+      }
+      const activeBtn = document.getElementById('tab-btn-' + tabIndex);
+      const activeView = document.getElementById('tab-view-' + tabIndex);
+      if (activeBtn) activeBtn.classList.add('active');
+      if (activeView) activeView.classList.add('active-panel');
+      
+      if (tabIndex === 4) {
+        runSandbox();
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function copyCleanCode(btn) {
+      const card = btn.closest('.card');
+      const lines = card.querySelectorAll('.code-line');
+      let cleanCode = '';
+      lines.forEach(line => {
+        cleanCode += line.innerText + '\n';
+      });
+
+      const textarea = document.createElement('textarea');
+      textarea.value = cleanCode.trim();
+      textarea.style.position = 'fixed';
+      textarea.style.opacity = '0';
+      document.body.appendChild(textarea);
+      textarea.select();
+      try {
+        document.execCommand('copy');
+        const orig = btn.innerText;
+        btn.innerText = 'تم النسخ بنجاح! ✓';
+        btn.style.color = '#34d399';
+        btn.style.borderColor = '#34d399';
+        setTimeout(() => {
+          btn.innerText = orig;
+          btn.style.color = '';
+          btn.style.borderColor = '';
+        }, 1800);
+      } catch (err) {
+        console.error('Copy failed', err);
+      }
+      document.body.removeChild(textarea);
+    }
+
+    function runSandbox() {
+      const type = document.getElementById('sandboxSelect').value;
+      const dim1 = parseInt(document.getElementById('sandboxDim1').value) || 4;
+      const dim2Input = document.getElementById('sandboxDim2');
+      const dim2Wrapper = document.getElementById('sandboxDim2Wrapper');
+      const canvas = document.getElementById('sandboxCanvas');
+      canvas.innerHTML = '';
+
+      if (type === 'hollow') {
+        dim2Wrapper.style.display = 'inline-block';
+      } else {
+        dim2Wrapper.style.display = 'none';
+      }
+
+      if (type === 'checkerboard') {
+        for (let r = 0; r < dim1; r++) {
+          const rowDiv = document.createElement('div');
+          rowDiv.className = 'sandbox-row';
+          for (let c = 0; c < dim1; c++) {
+            const cell = document.createElement('div');
+            const isX = (r + c) % 2 === 0;
+            cell.className = 'sandbox-cell ' + (isX ? 'x-cell' : 'o-cell');
+            cell.innerText = isX ? 'X' : 'O';
+            rowDiv.appendChild(cell);
+          }
+          canvas.appendChild(rowDiv);
+        }
+      } else if (type === 'hollow') {
+        const rows = dim1;
+        const cols = parseInt(dim2Input.value) || 6;
+        for (let r = 1; r <= rows; r++) {
+          const rowDiv = document.createElement('div');
+          rowDiv.className = 'sandbox-row';
+          for (let c = 1; c <= cols; c++) {
+            const cell = document.createElement('div');
+            const isBorder = (r === 1 || r === rows || c === 1 || c === cols);
+            cell.className = 'sandbox-cell ' + (isBorder ? 'hash-cell' : '');
+            cell.innerText = isBorder ? '#' : ' ';
+            rowDiv.appendChild(cell);
+          }
+          canvas.appendChild(rowDiv);
+        }
+      } else if (type === 'matrix_diag') {
+        for (let i = 1; i <= dim1; i++) {
+          const rowDiv = document.createElement('div');
+          rowDiv.className = 'sandbox-row';
+          for (let j = 1; j <= dim1; j++) {
+            const cell = document.createElement('div');
+            if (j === i) {
+              cell.className = 'sandbox-cell diag-cell';
+              cell.innerText = 'D';
+            } else if (j < i) {
+              cell.className = 'sandbox-cell x-cell';
+              cell.innerText = 'L';
+            } else {
+              cell.className = 'sandbox-cell o-cell';
+              cell.innerText = 'U';
+            }
+            rowDiv.appendChild(cell);
+          }
+          canvas.appendChild(rowDiv);
+        }
+      } else if (type === 'mult_grid') {
+        const pre = document.createElement('pre');
+        pre.style.color = '#38bdf8';
+        pre.style.lineHeight = '1.8';
+        pre.style.fontSize = '0.9rem';
+        let text = '';
+        for (let i = 1; i <= dim1; i++) {
+          let sum = 0;
+          for (let j = 1; j <= dim1; j++) {
+            let val = i * j;
+            sum += val;
+            text += val + '\t';
+          }
+          text += ' row sum = ' + sum + '\n';
+        }
+        text += '\nColumn sums:\t';
+        for (let j = 1; j <= dim1; j++) {
+          let colSum = 0;
+          for (let i = 1; i <= dim1; i++) {
+            colSum += (i * j);
+          }
+          text += colSum + '\t';
+        }
+        pre.innerText = text;
+        canvas.appendChild(pre);
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+      if (typeof renderMathInElement === 'function') {
+        renderMathInElement(document.body, {
+          delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "$", right: "$", display: false}
+          ],
+          throwOnError: false
+        });
+      }
+    });
+  </script>
+</body>
+</html>
