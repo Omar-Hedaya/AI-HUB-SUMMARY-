@@ -1,0 +1,2423 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <title>التكرار المتداخل (Nested Loops - Ch. 2.2) — الشرح التحليلي العميق والمرجع الكامل</title>
+  
+  <!-- KaTeX for rapid mathematical rendering -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+  
+  <style>
+    :root {
+      --bg-base: #070b12;
+      --bg-card: #0f1624;
+      --bg-code: #05080f;
+      --border-card: #1e293b;
+      --cyan: #38bdf8;
+      --emerald: #34d399;
+      --amber: #fbbf24;
+      --purple: #c084fc;
+      --rose: #f43f5e;
+      --text-main: #e2e8f0;
+      --text-muted: #94a3b8;
+      --font-mono: "Fira Code", Consolas, "Courier New", monospace;
+      --font-sans: "Cairo", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+    
+    *, *::before, *::after { 
+      box-sizing: border-box !important; 
+      margin: 0; 
+      padding: 0;
+      max-width: 100% !important;
+    }
+    
+    html, body {
+      width: 100% !important;
+      min-height: 100%;
+      background-color: var(--bg-base);
+      color: var(--text-main);
+      font-family: var(--font-sans);
+      line-height: 1.65;
+      overflow-x: hidden !important;
+      position: relative !important;
+      padding-bottom: 75px;
+    }
+
+    .container {
+      width: 100% !important;
+      max-width: 960px !important;
+      margin: 0 auto;
+      padding: 10px 12px;
+      overflow-x: hidden !important;
+    }
+
+    /* KaTeX Mathematical Shields */
+    .katex-display {
+      max-width: 100% !important;
+      overflow-x: auto !important;
+      overflow-y: hidden !important;
+      padding: 6px 0 !important;
+      margin: 0.5em 0 !important;
+      direction: ltr !important;
+      -webkit-overflow-scrolling: touch !important;
+    }
+    .katex {
+      font-size: 1.05em !important;
+      white-space: nowrap !important;
+    }
+    .math-scroll {
+      width: 100% !important;
+      overflow-x: auto !important;
+      overflow-y: hidden !important;
+      direction: ltr !important;
+      -webkit-overflow-scrolling: touch !important;
+      padding: 8px 12px;
+      margin: 8px 0;
+      background: rgba(0, 0, 0, 0.4);
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      text-align: center;
+    }
+
+    /* Top Sticky Module Switcher */
+    .lecture-switch-wrapper {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 10px;
+      position: sticky;
+      top: 6px;
+      z-index: 1002;
+      background: rgba(7, 11, 18, 0.95);
+      backdrop-filter: blur(14px);
+      padding: 6px;
+      border-radius: 12px;
+      border: 1px solid var(--border-card);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.65);
+    }
+    .lecture-tab {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8px 10px;
+      border-radius: 8px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
+      color: var(--text-muted);
+      background: #101726;
+      border: 1px solid #1e293b;
+      transition: all 0.2s ease;
+      text-align: center;
+      user-select: none;
+    }
+    .lecture-tab:hover {
+      color: #fff;
+      border-color: rgba(56, 189, 248, 0.4);
+    }
+    .lecture-tab.active {
+      background: rgba(56, 189, 248, 0.15);
+      border-color: var(--cyan);
+      color: var(--cyan);
+      box-shadow: 0 0 12px rgba(56, 189, 248, 0.25);
+    }
+
+    /* Sub-navigation Tabs */
+    .nav-tabs-wrapper {
+      position: sticky;
+      top: 54px;
+      z-index: 1000;
+      background: rgba(7, 11, 18, 0.95);
+      backdrop-filter: blur(12px);
+      padding: 6px;
+      border-radius: 10px;
+      border: 1px solid var(--border-card);
+      margin-bottom: 14px;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5);
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .nav-tabs-wrapper::-webkit-scrollbar { display: none; }
+    .nav-tabs {
+      display: flex;
+      gap: 6px;
+      width: max-content;
+    }
+    .tab-btn {
+      padding: 6px 11px;
+      background: #101726;
+      border: 1px solid #1e293b;
+      color: var(--text-muted);
+      border-radius: 6px;
+      font-weight: 700;
+      font-size: 0.76rem;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+      user-select: none;
+    }
+    .tab-btn:hover {
+      color: #fff;
+      border-color: rgba(56, 189, 248, 0.4);
+    }
+    .tab-btn.active {
+      background: rgba(56, 189, 248, 0.15);
+      border-color: var(--cyan);
+      color: var(--cyan);
+    }
+    .tab-btn.all-parts-btn {
+      background: rgba(52, 211, 153, 0.12);
+      border-color: rgba(52, 211, 153, 0.35);
+      color: var(--emerald);
+    }
+    .tab-btn.all-parts-btn.active {
+      background: rgba(52, 211, 153, 0.25);
+      border-color: var(--emerald);
+      color: #fff;
+    }
+
+    /* Header */
+    .header {
+      padding: 6px 0 14px 0;
+      border-bottom: 1px solid var(--border-card);
+      margin-bottom: 16px;
+    }
+    .header-top-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 8px;
+    }
+    .header-badge {
+      display: inline-block;
+      background: rgba(56, 189, 248, 0.12);
+      color: var(--cyan);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+    }
+    .print-btn {
+      background: rgba(52, 211, 153, 0.15);
+      border: 1px solid var(--emerald);
+      color: var(--emerald);
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 0.74rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+    .print-btn:hover {
+      background: rgba(52, 211, 153, 0.3);
+      color: #fff;
+    }
+    .header h1 {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 6px;
+      line-height: 1.4;
+      word-break: break-word;
+    }
+    .header p {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    /* Views */
+    .view-panel {
+      display: none;
+      animation: fadeIn 0.22s ease-in-out;
+    }
+    .view-panel.active-panel {
+      display: block;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Headings */
+    .lecture-content-wrapper h2 {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: #fff;
+      padding: 9px 12px;
+      border-radius: 8px;
+      margin-top: 1rem;
+      margin-bottom: 1rem;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.4);
+      border: 1px solid rgba(255,255,255,0.08);
+      word-break: break-word;
+    }
+    .lecture-content-wrapper h2.purple  { background: linear-gradient(270deg, #3b0764, #0f1624); border-right: 5px solid var(--purple); }
+    .lecture-content-wrapper h2.blue    { background: linear-gradient(270deg, #0c4a6e, #0f1624); border-right: 5px solid var(--cyan); }
+    .lecture-content-wrapper h2.orange  { background: linear-gradient(270deg, #7c2d12, #0f1624); border-right: 5px solid var(--amber); }
+    .lecture-content-wrapper h2.emerald { background: linear-gradient(270deg, #064e3b, #0f1624); border-right: 5px solid var(--emerald); }
+    .lecture-content-wrapper h2.pink    { background: linear-gradient(270deg, #831843, #0f1624); border-right: 5px solid var(--rose); }
+
+    /* Responsive Cards */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-card);
+      border-radius: 10px;
+      margin-bottom: 16px;
+      width: 100%;
+      overflow: hidden;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
+    }
+    .card-header {
+      background: rgba(255, 255, 255, 0.02);
+      border-bottom: 1px solid var(--border-card);
+      padding: 12px 14px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 10px;
+      width: 100%;
+    }
+    .prob-tag {
+      font-weight: 800;
+      font-size: 0.9rem;
+      color: var(--cyan);
+      width: 100%;
+      word-break: break-word;
+      overflow-wrap: break-word;
+      line-height: 1.45;
+    }
+    
+    .code-inline {
+      direction: ltr !important;
+      display: inline-block !important;
+      unicode-bidi: isolate !important;
+      font-family: var(--font-mono);
+      color: #38bdf8;
+      background: rgba(56, 189, 248, 0.1);
+      padding: 1px 5px;
+      border-radius: 4px;
+      font-size: 0.86em;
+      border: 1px solid rgba(56, 189, 248, 0.2);
+    }
+
+    .sol-toggle-btn {
+      background: rgba(56, 189, 248, 0.12);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      color: var(--cyan);
+      padding: 5px 12px;
+      border-radius: 6px;
+      font-size: 0.76rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+      user-select: none;
+    }
+    .sol-toggle-btn:hover {
+      background: rgba(56, 189, 248, 0.25);
+      color: #fff;
+    }
+    .sol-toggle-btn.active {
+      background: rgba(244, 63, 94, 0.15);
+      border-color: var(--rose);
+      color: var(--rose);
+    }
+
+    .card-body {
+      padding: 12px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      width: 100%;
+    }
+    
+    .question-prompt {
+      background: rgba(56, 189, 248, 0.05);
+      border-right: 3px solid var(--cyan);
+      padding: 9px 12px;
+      font-size: 0.84rem;
+      color: #f1f5f9;
+      border-radius: 4px;
+      line-height: 1.55;
+    }
+
+    /* Terminal & Code Block Structure */
+    .code-container {
+      border: 1px solid #1e293b;
+      border-radius: 8px;
+      overflow: hidden;
+      background: var(--bg-code);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+      margin: 8px 0;
+      width: 100% !important;
+      max-width: 100% !important;
+    }
+    .terminal-header {
+      background: #090e1a;
+      border-bottom: 1px solid #1e293b;
+      padding: 6px 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      direction: ltr !important;
+    }
+    .terminal-dots { display: flex; gap: 5px; }
+    .dot { width: 8px; height: 8px; border-radius: 50%; }
+    .dot.red { background: #ef4444; }
+    .dot.yellow { background: #f59e0b; }
+    .dot.green { background: #10b981; }
+    .terminal-title {
+      font-family: var(--font-mono);
+      font-size: 0.74rem;
+      color: #94a3b8;
+    }
+    .copy-btn {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid #334155;
+      color: #cbd5e1;
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .copy-btn:hover {
+      color: #fff;
+      border-color: var(--cyan);
+      background: rgba(56, 189, 248, 0.15);
+    }
+    
+    /* Code Snippet Container */
+    .code-snippet {
+      margin: 0;
+      padding: 12px 14px;
+      background: var(--bg-code);
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      color: #e2e8f0;
+      line-height: 1.6;
+      overflow-x: auto !important;
+      tab-size: 4;
+      direction: ltr !important;
+      text-align: left !important;
+      -webkit-overflow-scrolling: touch;
+      width: 100% !important;
+      max-width: 100% !important;
+    }
+    .code-kw { color: #f43f5e; font-weight: bold; }
+    .code-var { color: #38bdf8; }
+    .code-num { color: #fbbf24; }
+    .code-str { color: #34d399; }
+    
+    /* DEEP EXPLANATORY CALLOUT BOXES ABOVE CODE LINES */
+    .explain-block {
+      direction: rtl !important;
+      text-align: right !important;
+      background: rgba(15, 22, 36, 0.95);
+      border: 1px solid rgba(56, 189, 248, 0.25);
+      border-right: 4px solid var(--cyan);
+      border-radius: 6px;
+      padding: 8px 11px;
+      margin-top: 12px;
+      margin-bottom: 4px;
+      font-family: var(--font-sans);
+      font-size: 0.81rem;
+      line-height: 1.55;
+      color: #d1d5db;
+      white-space: normal !important;
+      word-break: break-word !important;
+      overflow-wrap: anywhere !important;
+      box-sizing: border-box !important;
+    }
+    .explain-block .badge-row {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-bottom: 4px;
+    }
+    .explain-badge {
+      font-size: 0.69rem;
+      font-weight: 800;
+      padding: 1px 6px;
+      border-radius: 4px;
+      letter-spacing: 0.02em;
+    }
+    .badge-logic { background: rgba(56, 189, 248, 0.15); color: var(--cyan); border: 1px solid rgba(56, 189, 248, 0.35); }
+    .badge-memory { background: rgba(251, 191, 36, 0.15); color: var(--amber); border: 1px solid rgba(251, 191, 36, 0.35); }
+    .badge-flow { background: rgba(52, 211, 153, 0.15); color: var(--emerald); border: 1px solid rgba(52, 211, 153, 0.35); }
+    .badge-trap { background: rgba(244, 63, 94, 0.15); color: var(--rose); border: 1px solid rgba(244, 63, 94, 0.35); }
+    .badge-scope { background: rgba(192, 132, 252, 0.15); color: var(--purple); border: 1px solid rgba(192, 132, 252, 0.35); }
+
+    .solution-content {
+      display: none;
+      animation: fadeIn 0.25s ease-in-out;
+    }
+    .solution-content.show {
+      display: block;
+    }
+
+    .step-block {
+      background: var(--bg-code);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 8px;
+      padding: 10px 12px;
+      font-size: 0.84rem;
+      line-height: 1.6;
+      margin-bottom: 8px;
+    }
+    .step-label {
+      font-size: 0.72rem;
+      font-weight: 800;
+      margin-bottom: 6px;
+      letter-spacing: 0.03em;
+    }
+    .label-blue { color: var(--cyan); }
+    .label-amber { color: var(--amber); }
+    .label-green { color: var(--emerald); }
+    .label-purple { color: var(--purple); }
+    .label-rose { color: var(--rose); }
+
+    .result-badge {
+      display: inline-block;
+      background: rgba(52, 211, 153, 0.12);
+      border: 1px solid rgba(52, 211, 153, 0.28);
+      color: var(--emerald);
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-weight: 700;
+      font-size: 0.84rem;
+      direction: ltr !important;
+      unicode-bidi: isolate;
+    }
+
+    /* Output Console Box */
+    .output-box {
+      margin: 8px 0;
+      padding: 10px 14px;
+      background: #020611;
+      border: 1px dashed rgba(56, 189, 248, 0.35);
+      border-radius: 6px;
+      font-family: var(--font-mono);
+      font-size: 0.84rem;
+      color: var(--emerald);
+      overflow-x: auto;
+      direction: ltr !important;
+      text-align: left !important;
+      line-height: 1.5;
+    }
+
+    /* Tables */
+    .table-scroll-container {
+      width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      margin: 8px 0 12px 0;
+      border: 1px solid #1e293b;
+      border-radius: 8px;
+      background: var(--bg-card);
+    }
+    .scroll-hint {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      font-size: 0.72rem;
+      color: var(--cyan);
+      background: rgba(56, 189, 248, 0.08);
+      padding: 5px 8px;
+      text-align: center;
+      border-bottom: 1px solid #1e293b;
+      font-weight: 700;
+    }
+    table {
+      width: 100%;
+      min-width: 580px;
+      border-collapse: collapse;
+      background: var(--bg-card);
+      font-size: 0.83rem;
+    }
+    th {
+      background: #1e293b;
+      color: var(--cyan);
+      font-weight: 700;
+      padding: 10px 12px;
+      border: 1px solid #334155;
+      text-align: right;
+      white-space: nowrap;
+    }
+    td {
+      padding: 10px 12px;
+      border: 1px solid #1e293b;
+      color: #e2e8f0;
+      vertical-align: middle;
+      text-align: right;
+      line-height: 1.5;
+    }
+    tr:nth-child(even) td { background: #0b1120; }
+
+    /* Callout */
+    .callout {
+      background: #0d1527;
+      border: 1px solid #334155;
+      border-radius: 8px;
+      padding: 12px 16px;
+      margin: 12px 0 16px 0;
+      width: 100%;
+    }
+    .callout.purple { border-right: 4px solid var(--purple); }
+    .callout.blue   { border-right: 4px solid var(--cyan); }
+    .callout.orange { border-right: 4px solid var(--amber); }
+    .callout.emerald{ border-right: 4px solid var(--emerald); }
+    .callout.pink   { border-right: 4px solid var(--rose); }
+    .callout h4 {
+      margin: 0 0 6px 0;
+      font-size: 0.94rem;
+      font-weight: 700;
+      color: #fff;
+    }
+    .callout ul {
+      margin: 0;
+      padding-right: 1.25rem;
+      color: #cbd5e1;
+      font-size: 0.83rem;
+      line-height: 1.6;
+    }
+    .callout li { margin-bottom: 5px; }
+
+    /* Global Toggle Bar */
+    .global-toggle-bar {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 12px;
+      background: rgba(255, 255, 255, 0.03);
+      padding: 6px 10px;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+    .global-toggle-bar button {
+      padding: 5px 12px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      border-radius: 6px;
+      cursor: pointer;
+      border: 1px solid #1e293b;
+      background: #111722;
+      color: #cbd5e1;
+      transition: all 0.2s ease;
+    }
+    .global-toggle-bar button:hover {
+      border-color: var(--cyan);
+      color: #fff;
+    }
+
+    /* Grid 2 Column */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin: 10px 0;
+    }
+    @media (max-width: 680px) {
+      .grid-2 { grid-template-columns: 1fr; }
+    }
+
+    /* Simulator */
+    .simulator-box {
+      background: #080c14;
+      border: 1px solid #1e293b;
+      border-radius: 10px;
+      padding: 14px;
+      margin: 14px 0;
+    }
+    .sim-controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      margin-bottom: 12px;
+      background: rgba(255,255,255,0.02);
+      padding: 10px;
+      border-radius: 8px;
+    }
+    .sim-btn {
+      padding: 6px 14px;
+      background: rgba(56, 189, 248, 0.14);
+      border: 1px solid var(--cyan);
+      color: #fff;
+      border-radius: 6px;
+      font-weight: 700;
+      font-size: 0.78rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .sim-btn:hover {
+      background: rgba(56, 189, 248, 0.28);
+    }
+    .sim-select, .sim-input {
+      background: #111722;
+      border: 1px solid #334155;
+      color: #f1f5f9;
+      padding: 5px 8px;
+      border-radius: 6px;
+      font-size: 0.78rem;
+    }
+    .grid-visualizer {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      background: #05070a;
+      padding: 14px;
+      border-radius: 8px;
+      min-height: 140px;
+      border: 1px dashed #1e293b;
+      align-items: flex-start;
+      overflow-x: auto;
+      direction: ltr !important;
+    }
+    .sim-row {
+      display: flex;
+      gap: 6px;
+    }
+    .sim-cell {
+      width: 34px;
+      height: 34px;
+      border-radius: 4px;
+      background: #111722;
+      border: 1px solid #1e293b;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 0.82rem;
+      color: #64748b;
+      transition: all 0.2s ease;
+    }
+    .sim-cell.printed {
+      background: rgba(52, 211, 153, 0.2);
+      border-color: var(--emerald);
+      color: var(--emerald);
+    }
+    .sim-cell.active-cell {
+      background: rgba(56, 189, 248, 0.35);
+      border-color: var(--cyan);
+      color: #fff;
+      transform: scale(1.1);
+      box-shadow: 0 0 10px rgba(56, 189, 248, 0.4);
+    }
+    .sim-status {
+      margin-top: 12px;
+      font-size: 0.8rem;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .sim-tag {
+      background: #1e293b;
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-family: var(--font-mono);
+      color: var(--cyan);
+    }
+
+    /* MCQ Engine */
+    .mcq-container {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin-top: 10px;
+    }
+    .mcq-card {
+      background: #0b111d;
+      border: 1px solid #1e293b;
+      border-radius: 8px;
+      padding: 14px;
+    }
+    .mcq-question {
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 10px;
+      line-height: 1.5;
+    }
+    .mcq-options {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+    .mcq-opt-btn {
+      background: #111827;
+      border: 1px solid #334155;
+      color: #e2e8f0;
+      padding: 9px 12px;
+      border-radius: 6px;
+      font-size: 0.82rem;
+      text-align: right;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-family: inherit;
+    }
+    .mcq-opt-btn:hover {
+      border-color: var(--cyan);
+      background: rgba(56, 189, 248, 0.08);
+    }
+    .mcq-opt-btn.correct {
+      background: rgba(52, 211, 153, 0.2) !important;
+      border-color: var(--emerald) !important;
+      color: #fff !important;
+    }
+    .mcq-opt-btn.incorrect {
+      background: rgba(244, 63, 94, 0.2) !important;
+      border-color: var(--rose) !important;
+      color: #fff !important;
+    }
+    .mcq-feedback {
+      display: none;
+      margin-top: 10px;
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 0.82rem;
+      line-height: 1.5;
+    }
+    .mcq-feedback.show-feed {
+      display: block;
+    }
+    .quiz-score-badge {
+      display: inline-block;
+      background: rgba(56, 189, 248, 0.15);
+      border: 1px solid var(--cyan);
+      color: var(--cyan);
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 0.84rem;
+      font-weight: 800;
+      margin-bottom: 14px;
+    }
+
+    /* Print Optimized Styling */
+    @media print {
+      body {
+        background-color: #ffffff !important;
+        color: #000000 !important;
+        font-size: 11pt !important;
+        padding-bottom: 0 !important;
+      }
+      .lecture-switch-wrapper,
+      .nav-tabs-wrapper,
+      .global-toggle-bar,
+      .sol-toggle-btn,
+      .copy-btn,
+      .print-btn,
+      .simulator-box,
+      .sim-controls,
+      #lec-tab-2,
+      .scroll-hint {
+        display: none !important;
+      }
+      .container {
+        max-width: 100% !important;
+        padding: 0 !important;
+      }
+      .view-panel {
+        display: block !important;
+        page-break-inside: avoid;
+      }
+      .card {
+        border: 1px solid #cccccc !important;
+        background: #ffffff !important;
+        box-shadow: none !important;
+        page-break-inside: avoid;
+        margin-bottom: 12px !important;
+      }
+      .card-header {
+        background: #f1f5f9 !important;
+        border-bottom: 1px solid #cccccc !important;
+      }
+      .prob-tag {
+        color: #000000 !important;
+      }
+      .solution-content {
+        display: block !important;
+      }
+      .code-snippet, .output-box {
+        background: #f8fafc !important;
+        color: #0f172a !important;
+        border: 1px solid #cbd5e1 !important;
+      }
+      .code-kw { color: #be123c !important; }
+      .code-var { color: #0284c7 !important; }
+      .code-num { color: #b45309 !important; }
+      .code-str { color: #047857 !important; }
+      .explain-block {
+        background: #f8fafc !important;
+        color: #0f172a !important;
+        border: 1px solid #cbd5e1 !important;
+        border-right: 3px solid #0284c7 !important;
+      }
+      table {
+        min-width: 100% !important;
+      }
+      th {
+        background: #e2e8f0 !important;
+        color: #000000 !important;
+        border: 1px solid #94a3b8 !important;
+      }
+      td {
+        color: #000000 !important;
+        border: 1px solid #cbd5e1 !important;
+        background: #ffffff !important;
+      }
+      tr:nth-child(even) td {
+        background: #f8fafc !important;
+      }
+      .callout {
+        background: #f8fafc !important;
+        color: #000000 !important;
+        border: 1px solid #cbd5e1 !important;
+      }
+      .callout h4 {
+        color: #000000 !important;
+      }
+      .callout ul {
+        color: #334155 !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <!-- Top Sticky Mode Switcher Bar -->
+    <div class="lecture-switch-wrapper">
+      <div id="lec-tab-1" class="lecture-tab active" onclick="switchCourseModule(1)">الفصل 2.2: الحلقات المتداخلة (الشرح العميق)</div>
+      <div id="lec-tab-2" class="lecture-tab" onclick="switchCourseModule(2)">المحاكي التفاعلي ومسار التتبع</div>
+    </div>
+
+    <!-- Sub-navigation Tabs -->
+    <div class="nav-tabs-wrapper" id="subnav-wrapper-1">
+      <div class="nav-tabs">
+        <div id="part-btn-0" class="tab-btn all-parts-btn" onclick="showPart(0)">جميع الأقسام (كل المحاضرة)</div>
+        <div id="part-btn-6" class="tab-btn active" style="background: rgba(251, 191, 36, 0.18); border-color: var(--amber); color: #fbbf24;" onclick="showPart(6)">⚡ كبسولة ليلة الامتحان</div>
+        <div id="part-btn-1" class="tab-btn" onclick="showPart(1)">الجزء 1: المفهوم وآلية التنفيذ</div>
+        <div id="part-btn-2" class="tab-btn" onclick="showPart(2)">الجزء 2: الأنماط وجداول التتبع</div>
+        <div id="part-btn-3" class="tab-btn" onclick="showPart(3)">الجزء 3: الحسابات والمتسلسلات</div>
+        <div id="part-btn-4" class="tab-btn" onclick="showPart(4)">الجزء 4: الأخطاء وتصحيحها</div>
+        <div id="part-btn-5" class="tab-btn" onclick="showPart(5)">الجزء 5: التطبيقات وبطاقة التقييم</div>
+        <div id="part-btn-7" class="tab-btn" onclick="showPart(7)">🎯 تحديات الأنماط الشائعة</div>
+        <div id="part-btn-8" class="tab-btn" onclick="showPart(8)">📝 بنك الأسئلة التفاعلي</div>
+      </div>
+    </div>
+
+    <!-- Header -->
+    <div class="header">
+      <div class="header-top-row">
+        <span class="header-badge" id="header-badge">CONTOSO CS101 • التحكم البرمجي الفصل 2.2</span>
+        <button class="print-btn" onclick="window.print()">🖨️ طباعة الملخص / حفظ PDF</button>
+      </div>
+      <h1 id="page-main-title">كبسولة ليلة الامتحان: القواعد الذهبية الست، القوانين والأفخاخ</h1>
+      <p id="page-main-desc">منصة تعليمية تحليلية لمحاضرة <b>التكرار المتداخل (Nested Loops)</b> مع شرح تفصيلي لمنطق الكود، وحركة المتغيرات بالذاكرة، ومسار التحكم البرمجي.</p>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- MODULE 1: COMPREHENSIVE LECTURE CONTENT -->
+    <!-- ============================================================ -->
+    <div id="lecture-container">
+
+      <!-- PART 1: CONCEPT & MECHANICS -->
+      <div id="part-view-1" class="view-panel">
+        <div class="lecture-content-wrapper">
+          <h2 class="purple">الجزء 1: تشريح الحلقة الفردية مقابل المتداخلة ونموذج التنفيذ الذهبي</h2>
+          
+          <div class="callout purple">
+            <h4>🎯 أهداف المحاضرة الأساسية (Lecture Learning Objectives)</h4>
+            <ul>
+              <li><b>شرح الفكرة:</b> استيعاب ووصف وظيفة الحلقة الخارجية (<span class="code-inline">Outer Loop</span>) كمنظم عام للصفوف، والداخلية (<span class="code-inline">Inner Loop</span>) كمعالج لعناصر السطر.</li>
+              <li><b>تتبع التنفيذ:</b> عد وحساب مرات تكرار كل حلقة وتتبع قيم المتغيرات بدقة في الذاكرة (<span class="code-inline">RAM</span>).</li>
+              <li><b>توقع المخرجات:</b> قراءة أكواد C++ المتداخلة واستنتاج ناتجها المطبوع خطوة بخطوة قبل تشغيل البرنامج.</li>
+              <li><b>بناء الأنماط:</b> توظيف الحلقات المتداخلة لإنشاء الشبكات الثنائية، الجداول الرياضية، ورسم الأشكال الهندسية.</li>
+            </ul>
+          </div>
+
+          <!-- Single Loop Anatomy -->
+          <div class="card">
+            <div class="card-header">
+              <span class="prob-tag">تشريح الحلقة الفردية: كيف تتحرك في الذاكرة؟</span>
+            </div>
+            <div class="card-body">
+              <div class="question-prompt">
+                كود بسيط يطبع الأرقام <span class="code-inline">1 2 3</span> لملاحظة دورة حياة المتغير <span class="code-inline">i</span>:
+              </div>
+              <div class="code-container">
+                <div class="terminal-header">
+                  <div class="terminal-dots"><div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div></div>
+                  <span class="terminal-title">single_loop_anatomy.cpp</span>
+                  <button class="copy-btn" onclick="copyCode(this)">نسخ الكود</button>
+                </div>
+                <pre class="code-snippet"><div class="explain-block">
+  <div class="badge-row">
+    <span class="explain-badge badge-logic">🧠 المنطق البرمجي</span>
+    <span class="explain-badge badge-memory">💾 الذاكرة</span>
+    <span class="explain-badge badge-flow">⚙️ مسار التحكم</span>
+  </div>
+  <b>ترويسة الحلقة الفردية:</b>
+  <br>&bull; <span class="code-inline">int i = 1</span>: خطوة التهيئة، تُحجز خانة في الذاكرة لمتغير صحيح اسمه <span class="code-inline">i</span> وتُسند له القيمة 1 <b>(تُنفذ مرة واحدة فقط عند البداية)</b>.
+  <br>&bull; <span class="code-inline">i &lt;= 3</span>: شرط الاستمرار، يُفحص قبل الدخول لجسم الحلقة؛ طالما أن القيمة &le; 3 يُسمح بالتنفيذ.
+  <br>&bull; <span class="code-inline">i++</span>: خطوة التحديث، تزيد قيمة <span class="code-inline">i</span> بمقدار 1 <b>بعد اكتمال تنفيذ جسم الحلقة كاملاً</b> ثم يُعاد فحص الشرط.
+</div><span class="code-kw">for</span> (<span class="code-kw">int</span> <span class="code-var">i</span> = <span class="code-num">1</span>; <span class="code-var">i</span> &lt;= <span class="code-num">3</span>; <span class="code-var">i</span>++) {
+
+<div class="explain-block">
+  <div class="badge-row">
+    <span class="explain-badge badge-logic">🧠 عملية الإخراج</span>
+  </div>
+  يقوم مجرى الإخراج <span class="code-inline">cout</span> بقراءة القيمة اللحظية للمتغير <span class="code-inline">i</span> من الذاكرة وإرسالها إلى شاشة العرض متبوعة بمسافة. لا يتم النزول لسطر جديد هنا، فتظهر الأرقام بجوار بعضها.
+</div>    cout &lt;&lt; <span class="code-var">i</span> &lt;&lt; <span class="code-str">" "</span>;
+
+<div class="explain-block">
+  <div class="badge-row">
+    <span class="explain-badge badge-scope">🔒 حدود النطاق (Scope)</span>
+    <span class="explain-badge badge-flow">⚙️ القفز التلقائي</span>
+  </div>
+  قوس الإغلاق يعلن نهاية دورة واحدة؛ يقفز المعالج فوراً إلى خطوة التحديث <span class="code-inline">i++</span> بالأعلى، ثم يفحص الشرط من جديد حتى يصبح <span class="code-inline">i = 4</span> فيفشل الشرط وتتوقف الحلقة تماماً.
+</div>}</pre>
+              </div>
+            </div>
+          </div>
+
+          <!-- Execution Order & Mechanics -->
+          <div class="table-scroll-container">
+            <div class="scroll-hint">👈 اسحب الجدول أفقياً لتصفح المقارنة الفنية الكاملة 👉</div>
+            <table>
+              <thead>
+                <tr><th style="width:25%">المفهوم التقني</th><th style="width:40%">الشفرة البرمجية والتشبيه الذهني</th><th>آلية وسلوك التنفيذ البرمجي الدقيق</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><b>تشبيه عقارب الساعة<br>(Clock Metaphor)</b></td>
+                  <td>
+                    <span class="result-badge">Outer = عقرب الساعات (بطيء)</span><br>
+                    <span class="result-badge" style="margin-top:4px;">Inner = عقرب الدقائق (سريع)</span>
+                  </td>
+                  <td>عقرب الساعات لا ينتقل من الساعة 1 إلى الساعة 2 إلا بعد أن يكمل عقرب الدقائق دورة كاملة (60 دقيقة). بالمثل، لا ينتقل اللوب الخارجي للسطر التالي إلا بعد اكتمال جميع دورات اللوب الداخلي بالكامل.</td>
+                </tr>
+                <tr>
+                  <td><b>إعادة ضبط العداد الداخلي<br>(Inner Loop Reset)</b></td>
+                  <td>
+                    <span class="code-inline">col resets to initial value</span>
+                  </td>
+                  <td>في كل مرة ينتهي فيها السطر وتزيد دورة اللوب الخارجي، يُعاد استدعاء سطر بداية اللوب الداخلي، فيبدأ عداد الأعمدة من قيمته الابتدائية (مثلاً <span class="code-inline">col = 1</span>) كأنه يبدأ لأول مرة.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- PART 2: PATTERNS & TRACE TABLES -->
+      <div id="part-view-2" class="view-panel">
+        <div class="lecture-content-wrapper">
+          <h2 class="blue">الجزء 2: الأنماط الأساسية وجداول التتبع المنظم (Trace Tables)</h2>
+
+          <!-- Example 1 -->
+          <div class="card">
+            <div class="card-header">
+              <span class="prob-tag">مثال 1: طباعة مستطيل النجوم <span class="code-inline">(3 صفوف &times; 4 أعمدة)</span></span>
+              <button class="sol-toggle-btn active" onclick="toggleCardSolution(this)">👁️ إظهار جدول التتبع</button>
+            </div>
+            <div class="card-body">
+              <div class="question-prompt">
+                ثلاث دورات خارجية &times; أربع دورات داخلية = 12 نجمة إجمالاً:
+                <div class="code-container">
+                  <div class="terminal-header">
+                    <div class="terminal-dots"><div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div></div>
+                    <span class="terminal-title">stars_rectangle.cpp</span>
+                    <button class="copy-btn" onclick="copyCode(this)">نسخ الكود</button>
+                  </div>
+                  <pre class="code-snippet"><div class="explain-block">
+  <div class="badge-row">
+    <span class="explain-badge badge-logic">🧠 الحلقة الخارجية (Outer Loop)</span>
+    <span class="explain-badge badge-memory">💾 مسؤول الصفوف</span>
+  </div>
+  <b>الهدف:</b> إنشاء وإدارة الصفوف.
+  <br>&bull; يبدأ العداد <span class="code-inline">row = 1</span> ويمثل رقم السطر الأول.
+  <br>&bull; الشرط <span class="code-inline">row &lt;= 3</span> يضمن أن الشبكة ستتكون من 3 صفوف بالضبط.
+  <br>&bull; في كل دورة لهذا اللوب، يثبت المتغير <span class="code-inline">row</span> بينما يقوم اللوب الداخلي برسم كامل أعمدة هذا السطر.
+</div><span class="code-kw">for</span> (<span class="code-kw">int</span> <span class="code-var">row</span> = <span class="code-num">1</span>; <span class="code-var">row</span> &lt;= <span class="code-num">3</span>; <span class="code-var">row</span>++) {
+
+<div class="explain-block">
+  <div class="badge-row">
+    <span class="explain-badge badge-logic">🧠 الحلقة الداخلية (Inner Loop)</span>
+    <span class="explain-badge badge-memory">💾 مسؤول الأعمدة</span>
+  </div>
+  <b>الهدف:</b> رسم محتويات السطر المفتوح حالياً.
+  <br>&bull; يبدأ العداد <span class="code-inline">col = 1</span> ويعاد ضبطه إلى 1 مع كل صف جديد.
+  <br>&bull; الشرط <span class="code-inline">col &lt;= 4</span> يجبر هذه الحلقة على الدوران 4 مرات متتالية داخل نفس الصف لطباعة 4 أعمدة.
+</div>    <span class="code-kw">for</span> (<span class="code-kw">int</span> <span class="code-var">col</span> = <span class="code-num">1</span>; <span class="code-var">col</span> &lt;= <span class="code-num">4</span>; <span class="code-var">col</span>++) {
+
+<div class="explain-block">
+  <div class="badge-row">
+    <span class="explain-badge badge-logic">🧠 الطباعة الأفقية</span>
+  </div>
+  طباعة نجمة ومسافة على شاشة المخرجات دون نزول سطر جديد. هذا الأمر سيتكرر 4 مرات متجاورة في كل سطر.
+</div>        cout &lt;&lt; <span class="code-str">"* "</span>;
+
+<div class="explain-block">
+  <div class="badge-row">
+    <span class="explain-badge badge-scope">🔒 نهاية اللوب الداخلي</span>
+  </div>
+  عند اكتمال العمود الرابع (<span class="code-inline">col = 5</span> يفشل الشرط)، تنتهي الحلقة الداخلية وينتقل التحكم إلى السطر التالي مباشرة خارجها.
+</div>    }
+
+<div class="explain-block">
+  <div class="badge-row">
+    <span class="explain-badge badge-logic">🧠 النزول لسطر جديد</span>
+    <span class="explain-badge badge-trap">⚠️ موقع حرج</span>
+  </div>
+  <b>الموقع الحاسم:</b> هذا السطر كُتب <b>خارج اللوب الداخلي ولكن داخل اللوب الخارجي</b>. معناه: بعد أن تنتهي من طباعة جميع الأعمدة الأربعة للسطر الحالي، انزل إلى سطر جديد في الشاشة قبل أن تبدأ الصف التالي.
+</div>    cout &lt;&lt; endl;
+
+<div class="explain-block">
+  <div class="badge-row">
+    <span class="explain-badge badge-flow">⚙️ نهاية اللوب الخارجي</span>
+  </div>
+  يقفز المعالج إلى <span class="code-inline">row++</span> ليزيد رقم الصف (يصبح 2)، ويعود لفحص الشرط <span class="code-inline">row &lt;= 3</span> لتبدأ دورة صف جديدة بالكامل.
+</div>}</pre>
+                </div>
+                <b>المخرجات المطبوعة:</b>
+                <div class="output-box">
+* * * * 
+* * * * 
+* * * * 
+                </div>
+              </div>
+              <div class="solution-content show">
+                <div class="step-block">
+                  <div class="step-label label-blue">جدول التتبع خطوة بخطوة (Trace Table)</div>
+                  <div class="table-scroll-container">
+                    <table>
+                      <thead>
+                        <tr><th>الخارجي (row)</th><th>الداخلي (col)</th><th>المطبوع</th><th>الإجراء البرمجي الحادث</th></tr>
+                      </thead>
+                      <tbody>
+                        <tr><td>1</td><td>1</td><td dir="ltr" style="text-align:right;">*</td><td>طباعة نجمة في العمود 1</td></tr>
+                        <tr><td>1</td><td>2</td><td dir="ltr" style="text-align:right;">*</td><td>طباعة نجمة في العمود 2</td></tr>
+                        <tr><td>1</td><td>3</td><td dir="ltr" style="text-align:right;">*</td><td>طباعة نجمة في العمود 3</td></tr>
+                        <tr><td>1</td><td>4</td><td dir="ltr" style="text-align:right;">* + newline</td><td>طباعة نجمة وإنهاء السطر الأول بواسطة <span class="code-inline">endl</span></td></tr>
+                        <tr><td>2</td><td>1</td><td dir="ltr" style="text-align:right;">*</td><td><b>إعادة ضبط col إلى 1</b> وبدء السطر الثاني</td></tr>
+                        <tr><td>2</td><td>2, 3, 4</td><td dir="ltr" style="text-align:right;">* * * + newline</td><td>طباعة باقي نجوم السطر الثاني ثم النزول لسطر جديد</td></tr>
+                        <tr><td>3</td><td>1, 2, 3, 4</td><td dir="ltr" style="text-align:right;">* * * * + newline</td><td><b>إعادة ضبط col إلى 1</b> وطباعة السطر الثالث والأخير ثم إنهاء اللوب</td></tr>
+                      </tbody>
+                    </table>
+                  </div>
+                  <div>إجمالي النجوم المطبوعة: <span class="result-badge">3 &times; 4 = 12 Star</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Example 2 -->
+          <div class="card">
+            <div class="card-header">
+              <span class="prob-tag">مثال 2: جدول الضرب التنسيقي 5 &times; 5 <span class="code-inline">(باستخدام \t)</span></span>
+              <button class="sol-toggle-btn active" onclick="toggleCardSolution(this)">👁️ إظهار الشرح والمصفوفة</button>
+            </div>
+            <div class="card-body">
+              <div class="question-prompt">
+                الحلقة الخارجية تختار المضروب الأول؛ والحلقة الداخلية تضربه في الأرقام من 1 إلى 5:
+                <div class="code-container">
+                  <div class="terminal-header">
+                    <div class="terminal-dots"><div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div></div>
+                    <span class="terminal-title">multiplication_table.cpp</span>
+                    <button class="copy-btn" onclick="copyCode(this)">نسخ الكود</button>
+                  </div>
+                  <pre class="code-snippet"><div class="explain-block">
+  <div class="badge-row">
+    <span class="explain-badge badge-logic">🧠 المضروب الأساسي (الصف)</span>
+    <span class="explain-badge badge-memory">💾 المتغير i</span>
+  </div>
+  <b>تحديد جدول الرقم:</b> المتغير <span class="code-inline">i</span> يمثل الرقم الأساسي الذي نريد طباعة جدول مضاعفاته (1 ثم 2 ثم 3 ثم 4 ثم 5). يظل ثابتاً طوال الصف الواحد.
+</div><span class="code-kw">for</span> (<span class="code-kw">int</span> <span class="code-var">i</span> = <span class="code-num">1</span>; <span class="code-var">i</span> &lt;= <span class="code-num">5</span>; <span class="code-var">i</span>++) {
+
+<div class="explain-block">
+  <div class="badge-row">
+    <span class="explain-badge badge-logic">🧠 المضاعف الدوري (العمود)</span>
+    <span class="explain-badge badge-memory">💾 المتغير j</span>
+  </div>
+  <b>توليد المضاعفات:</b> المتغير <span class="code-inline">j</span> يبدأ من 1 ويصل إلى 5، ليمثل المعامل الذي نضرب فيه الرقم <span class="code-inline">i</span> داخل هذا السطر.
+</div>    <span class="code-kw">for</span> (<span class="code-kw">int</span> <span class="code-var">j</span> = <span class="code-num">1</span>; <span class="code-var">j</span> &lt;= <span class="code-num">5</span>; <span class="code-var">j</span>++) {
+
+<div class="explain-block">
+  <div class="badge-row">
+    <span class="explain-badge badge-logic">🧠 الحساب والجدولة</span>
+  </div>
+  <b>العملية والتنسيق:</b> يُحسب ناتج العملية الحسابية <span class="code-inline">i * j</span> فورياً في المعالج، ثم يُطبع متبوعاً بمحرف الجدولة <span class="code-inline">"\t"</span>. فائدة <span class="code-inline">\t</span> هي ترك مسافة تبويب أفقية ثابتة تجعل الأعداد ذات الخانة الواحدة والخانethnic متطابقة رأسياً فوق بعضها كالأعمدة المحترفة.
+</div>        cout &lt;&lt; <span class="code-var">i</span> * <span class="code-var">j</span> &lt;&lt; <span class="code-str">"\t"</span>;
+
+<div class="explain-block">
+  <div class="badge-row">
+    <span class="explain-badge badge-scope">🔒 انتهاء مضاعفات الرقم الحالي</span>
+  </div>
+  نهاية حلقة المضاعفات بعد طباعة 5 نواتج في السطر نفسه.
+</div>    }
+
+<div class="explain-block">
+  <div class="badge-row">
+    <span class="explain-badge badge-flow">⚙️ فصل جداول الضرب بسطر</span>
+  </div>
+  النزول إلى سطر جديد لبدء جدول الرقم التالي في سطر مستقل ونظيف.
+</div>    cout &lt;&lt; endl;
+
+<div class="explain-block">
+  <div class="badge-row">
+    <span class="explain-badge badge-flow">⚙️ الانتقال للمضروب التالي</span>
+  </div>
+  تزيد قيمة <span class="code-inline">i</span> بمقدار 1 لتبدأ مضاعفات الرقم التالي.
+</div>}</pre>
+                </div>
+              </div>
+              <div class="solution-content show">
+                <div class="step-block">
+                  <div class="step-label label-green">المصفوفة الناتجة لجدول الضرب (5 &times; 5)</div>
+                  <div class="table-scroll-container">
+                    <table style="text-align:center; direction:ltr;">
+                      <thead><tr><th>i \ j</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th></tr></thead>
+                      <tbody>
+                        <tr><td><b>1</b></td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td></tr>
+                        <tr><td><b>2</b></td><td>2</td><td>4</td><td>6</td><td>8</td><td>10</td></tr>
+                        <tr><td><b>3</b></td><td>3</td><td>6</td><td>9</td><td>12</td><td>15</td></tr>
+                        <tr><td><b>4</b></td><td>4</td><td>8</td><td>12</td><td>16</td><td>20</td></tr>
+                        <tr><td><b>5</b></td><td>5</td><td>10</td><td>15</td><td>20</td><td>25</td></tr>
+                      </tbody>
+                    </table>
+                  </div>
+                  <div style="margin-top:6px;">ملاحظة فنية: رمز الهروب <span class="code-inline">\t</span> يُنشئ مسافة جدولة تفصل بين الأعمدة وتضمن محاذاة الأرقام بشكل شبكي منسق.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Example 3 -->
+          <div class="card">
+            <div class="card-header">
+              <span class="prob-tag">مثال 3: تتبع المتغيرات المتغيرة <span class="code-inline">(طباعة العدادين ij)</span></span>
+              <button class="sol-toggle-btn active" onclick="toggleCardSolution(this)">👁️ إظهار تحليل المتغيرات</button>
+            </div>
+            <div class="card-body">
+              <div class="question-prompt">
+                تتبع كلا العدادين لمعرفة أيهما يتغير بسرعة وأيهما يتغير ببطء:
+                <div class="code-container">
+                  <div class="terminal-header">
+                    <div class="terminal-dots"><div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div></div>
+                    <span class="terminal-title">print_ij.cpp</span>
+                    <button class="copy-btn" onclick="copyCode(this)">نسخ الكود</button>
+                  </div>
+                  <pre class="code-snippet"><div class="explain-block">
+  <div class="badge-row">
+    <span class="explain-badge badge-logic">🧠 العداد البطيء</span>
+    <span class="explain-badge badge-memory">💾 i = 1, 2, 3</span>
+  </div>
+  العداد الخارجي <span class="code-inline">i</span> يدور 3 مرات فقط. يمثل منزلة العشرات في المخرجات الرقمية لأنه يظل ثابتاً لفترة أطول.
+</div><span class="code-kw">for</span> (<span class="code-kw">int</span> <span class="code-var">i</span> = <span class="code-num">1</span>; <span class="code-var">i</span> &lt;= <span class="code-num">3</span>; <span class="code-var">i</span>++) {
+
+<div class="explain-block">
+  <div class="badge-row">
+    <span class="explain-badge badge-logic">🧠 العداد السريع</span>
+    <span class="explain-badge badge-memory">💾 j = 1, 2</span>
+  </div>
+  العداد الداخلي <span class="code-inline">j</span> يدور مرتين في كل دورة للمتغير <span class="code-inline">i</span>. يمثل منزلة الآحاد لأنه يدور بسرعة ويعاد ضبطه إلى 1 فوراً عند كل زيادة في <span class="code-inline">i</span>.
+</div>    <span class="code-kw">for</span> (<span class="code-kw">int</span> <span class="code-var">j</span> = <span class="code-num">1</span>; <span class="code-var">j</span> &lt;= <span class="code-num">2</span>; <span class="code-var">j</span>++) {
+
+<div class="explain-block">
+  <div class="badge-row">
+    <span class="explain-badge badge-logic">🧠 الدمج البصري للعدادين</span>
+  </div>
+  طباعة قيمة <span class="code-inline">i</span> متبوعة مباشرة بقيمة <span class="code-inline">j</span> دون أي علامة جمع رياضية، مما يؤدي لظهور الرقمين مدمجين كعدد ثنائي الخانات مثل 11 ثم 12، متبوعين بمسافة.
+</div>        cout &lt;&lt; <span class="code-var">i</span> &lt;&lt; <span class="code-var">j</span> &lt;&lt; <span class="code-str">" "</span>;
+
+<div class="explain-block">
+  <div class="badge-row">
+    <span class="explain-badge badge-scope">🔒 انتهاء دورة j الحالية</span>
+  </div>
+  إغلاق حلقة <span class="code-inline">j</span> بعد المرور على 1 و 2.
+</div>    }
+
+<div class="explain-block">
+  <div class="badge-row">
+    <span class="explain-badge badge-flow">⚙️ انتقال i للدورة التالية</span>
+  </div>
+  نهاية دورة <span class="code-inline">i</span> دون أمر <span class="code-inline">endl</span>؛ مما يجعل النتائج كلها تطبع على سطر واحد أفقي متصل.
+</div>}</pre>
+                </div>
+              </div>
+              <div class="solution-content show">
+                <div class="step-block">
+                  <div class="step-label label-amber">مسار التتبع اليدوي وقيم العدادات:</div>
+                  <div>&bull; عندما <span class="code-inline">i = 1</span>: العداد <span class="code-inline">j</span> يأخذ 1 ثم 2 &rarr; ينطبع <span class="result-badge">11 12</span></div>
+                  <div style="margin-top:4px;">&bull; عندما <span class="code-inline">i = 2</span>: يُعاد ضبط <span class="code-inline">j</span> إلى 1 ثم 2 &rarr; ينطبع <span class="result-badge">21 22</span></div>
+                  <div style="margin-top:4px;">&bull; عندما <span class="code-inline">i = 3</span>: يُعاد ضبط <span class="code-inline">j</span> إلى 1 ثم 2 &rarr; ينطبع <span class="result-badge">31 32</span></div>
+                  <div style="margin-top:8px;">المخرجات النهائية الكاملة على سطر واحد:</div>
+                  <div class="output-box">11 12 21 22 31 32</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Example 4 -->
+          <div class="card">
+            <div class="card-header">
+              <span class="prob-tag">مثال 4: بناء المثلث بالحد التابع <span class="code-inline">(الشرط التابع: col &lt;= row)</span></span>
+              <button class="sol-toggle-btn active" onclick="toggleCardSolution(this)">👁️ إظهار المقارنة الهندسية</button>
+            </div>
+            <div class="card-body">
+              <div class="question-prompt">
+                الحد الأقصى لعداد الحلقة الداخلية يعتمد على قيمة عداد الحلقة الخارجية:
+                <div class="code-container">
+                  <div class="terminal-header">
+                    <div class="terminal-dots"><div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div></div>
+                    <span class="terminal-title">triangle.cpp</span>
+                    <button class="copy-btn" onclick="copyCode(this)">نسخ الكود</button>
+                  </div>
+                  <pre class="code-snippet"><div class="explain-block">
+  <div class="badge-row">
+    <span class="explain-badge badge-logic">🧠 السطر المتحكم بالارتفاع</span>
+    <span class="explain-badge badge-memory">💾 row = 1 to 5</span>
+  </div>
+  الحلقة الخارجية تتحكم في ارتفاع المثلث (عدد الصفوف من 1 إلى 5). القيمة الحالية لـ <span class="code-inline">row</span> ستكون هي نفسها الحد الأقصى لعدد النجوم التي ستُطبع في هذا السطر.
+</div><span class="code-kw">for</span> (<span class="code-kw">int</span> <span class="code-var">row</span> = <span class="code-num">1</span>; <span class="code-var">row</span> &lt;= <span class="code-num">5</span>; <span class="code-var">row</span>++) {
+
+<div class="explain-block">
+  <div class="badge-row">
+    <span class="explain-badge badge-logic">🧠 سر النمط المثلثي (الحد التابع)</span>
+    <span class="explain-badge badge-trap">⚠️ col &lt;= row</span>
+  </div>
+  <b>المنطق الجوهري للمثلث:</b> شرط التوقف هنا ليس عدداً ثابتاً مثل 5، بل هو <span class="code-inline">col &lt;= row</span>!
+  <br>&bull; في السطر الأول (<span class="code-inline">row=1</span>): تدور الحلقة الداخلية حتى <span class="code-inline">col &lt;= 1</span> (نجمة واحدة).
+  <br>&bull; في السطر الخامس (<span class="code-inline">row=5</span>): تدور الحلقة الداخلية حتى <span class="code-inline">col &lt;= 5</span> (خمس نجوم).
+</div>    <span class="code-kw">for</span> (<span class="code-kw">int</span> <span class="code-var">col</span> = <span class="code-num">1</span>; <span class="code-var">col</span> &lt;= <span class="code-var">row</span>; <span class="code-var">col</span>++) {
+
+<div class="explain-block">
+  <div class="badge-row">
+    <span class="explain-badge badge-logic">🧠 طباعة نجمة واحدة</span>
+  </div>
+  طباعة النجمة المكونة لضلع أو جسد المثلث في العمود الحالي.
+</div>        cout &lt;&lt; <span class="code-str">"* "</span>;
+
+<div class="explain-block">
+  <div class="badge-row">
+    <span class="explain-badge badge-scope">🔒 انتهاء نجوم السطر الحالي</span>
+  </div>
+  إغلاق اللوب الداخلي بعد طباعة عدد نجوم مساوٍ تماماً لرقم السطر الحالي.
+</div>    }
+
+<div class="explain-block">
+  <div class="badge-row">
+    <span class="explain-badge badge-flow">⚙️ الانتقال لطباعة سطر مثلثي أوسع</span>
+  </div>
+  النزول لسطر جديد لإعطاء الشكل الهندسي المدرج للمثلث القائم.
+</div>    cout &lt;&lt; endl;
+
+<div class="explain-block">
+  <div class="badge-row">
+    <span class="explain-badge badge-flow">⚙️ زيادة رقم الصف</span>
+  </div>
+  تزيد <span class="code-inline">row</span> فيتسع سقف الحلقة الداخلية في الدورة القادمة بنجمة إضافية.
+</div>}</pre>
+                </div>
+              </div>
+              <div class="solution-content show">
+                <div class="step-block">
+                  <div class="step-label label-purple">المخرجات وآلية العمل:</div>
+                  <div class="output-box">
+* 
+* * 
+* * * 
+* * * * 
+* * * * * 
+                  </div>
+                  <div>&bull; السطر 1 يطبع نجمة واحدة؛ والسطر 5 يطبع 5 نجوم.</div>
+                  <div>&bull; <b>المستطيل (<span class="code-inline">col &lt;= 4</span>):</b> نفس عدد الأعمدة في كل سطر.</div>
+                  <div>&bull; <b>المثلث (<span class="code-inline">col &lt;= row</span>):</b> عدد الأعمدة يتزايد ديناميكياً كلما زادت قيمة السطر <span class="code-inline">row</span>.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- PART 3: ITERATION MATH -->
+      <div id="part-view-3" class="view-panel">
+        <div class="lecture-content-wrapper">
+          <h2 class="orange">الجزء 3: الحسابات الرياضية للتكرارات — الحلقات المستقلة مقابل التابعة</h2>
+
+          <div class="callout orange">
+            <h4>🔢 القواعد الحسابية لعدد مرات تنفيذ جسم اللوب الداخلي</h4>
+            <ul>
+              <li>
+                <b>الحلقات المستقلة (Independent Loops):</b> نضرب عدد دورات الخارجية في عدد دورات الداخلية:
+                <div class="math-scroll">
+                  $$\text{Total Executions} = \text{Outer Count} \times \text{Inner Count}$$
+                </div>
+              </li>
+              <li>
+                <b>الحلقات التابعة (Dependent Loops):</b> نجمع عدد مرات التكرار سطراً بسطر وفق متسلسلة غاوس:
+                <div class="math-scroll">
+                  $$\text{Total Executions} = 1 + 2 + 3 + \dots + N = \frac{N(N+1)}{2}$$
+                </div>
+              </li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <span class="prob-tag">تتبع عدد تكرارات الحلقات التابعة سطراً بسطر مع الشرح التحليلي</span>
+            </div>
+            <div class="card-body">
+              <div class="code-container">
+                <pre class="code-snippet"><div class="explain-block">
+  <div class="badge-row">
+    <span class="explain-badge badge-logic">🧠 العداد الخارجي (N = 4)</span>
+  </div>
+  حلقة تدور 4 دورات تمثل عدد الأسطر الإجمالي (1، 2، 3، 4).
+</div><span class="code-kw">for</span> (<span class="code-kw">int</span> <span class="code-var">i</span> = <span class="code-num">1</span>; <span class="code-var">i</span> &lt;= <span class="code-num">4</span>; <span class="code-var">i</span>++) {
+
+<div class="explain-block">
+  <div class="badge-row">
+    <span class="explain-badge badge-logic">🧠 عدد دورات ديناميكي</span>
+    <span class="explain-badge badge-memory">💾 j &lt;= i</span>
+  </div>
+  العداد الداخلي يدور عدداً من المرات مساوياً لقيمة <span class="code-inline">i</span> الحالية في كل سطر.
+</div>    <span class="code-kw">for</span> (<span class="code-kw">int</span> <span class="code-var">j</span> = <span class="code-num">1</span>; <span class="code-var">j</span> &lt;= <span class="code-var">i</span>; <span class="code-var">j</span>++) {
+
+<div class="explain-block">
+  <div class="badge-row">
+    <span class="explain-badge badge-logic">🧠 طباعة رقم العمود</span>
+  </div>
+  طباعة قيمة <span class="code-inline">j</span> متبوعة بمسافة؛ سينتج في كل سطر متوالية تبدأ دائماً من الرقم 1.
+</div>        cout &lt;&lt; <span class="code-var">j</span> &lt;&lt; <span class="code-str">" "</span>;
+
+<div class="explain-block">
+  <div class="badge-row">
+    <span class="explain-badge badge-scope">🔒 اكتمال دورات السطر</span>
+  </div>
+  انتهاء التكرار الداخلي للسطر الحالي.
+</div>    }
+
+<div class="explain-block">
+  <div class="badge-row">
+    <span class="explain-badge badge-flow">⚙️ كسر السطر</span>
+  </div>
+  النزول إلى سطر جديد لطباعة السلسلة الرقمية التالية.
+</div>    cout &lt;&lt; endl;
+
+<div class="explain-block">
+  <div class="badge-row">
+    <span class="explain-badge badge-flow">⚙️ إكمال الدورة الخارجية</span>
+  </div>
+  نهاية دورة الصف والانتقال للصف التالي.
+</div>}</pre>
+              </div>
+              <div class="step-block">
+                <div>&bull; السطر 1 (<span class="code-inline">i=1</span>): يطبع <span class="result-badge">1</span> &rarr; مرة واحدة</div>
+                <div>&bull; السطر 2 (<span class="code-inline">i=2</span>): يطبع <span class="result-badge">1 2</span> &rarr; مرتان</div>
+                <div>&bull; السطر 3 (<span class="code-inline">i=3</span>): يطبع <span class="result-badge">1 2 3</span> &rarr; 3 مرات</div>
+                <div>&bull; السطر 4 (<span class="code-inline">i=4</span>): يطبع <span class="result-badge">1 2 3 4</span> &rarr; 4 مرات</div>
+                <div style="margin-top:8px;">
+                  <span class="result-badge" style="font-size:0.9rem;">الإجمالي = 1 + 2 + 3 + 4 = 10 مرات طباعة</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PART 4: PITFALLS & DEBUGGING -->
+      <div id="part-view-4" class="view-panel">
+        <div class="lecture-content-wrapper">
+          <h2 class="pink">الجزء 4: الأخطاء الشائعة وجلسة تنقيح الأخطاء (Debug It)</h2>
+
+          <div class="table-scroll-container">
+            <table>
+              <thead>
+                <tr><th>نوع الخطأ</th><th>الكود الخاطئ أو السلوك</th><th>النتيجة والحل النموذجي</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><b>تعديل العداد الخاطئ<br>(Wrong Variable)</b></td>
+                  <td><span class="code-inline" style="color:#f43f5e;">for (int col=1; col&lt;=4; row++)</span></td>
+                  <td><b>كارثة برمجية:</b> يؤدي إلى <b>حلقة لا نهائية (Infinite Loop)</b> لأن <span class="code-inline">col</span> لا يزداد أبداً ويظل 1 للأبد.
+                  <br><b>التصحيح:</b> استخدام <span class="code-inline">col++</span> في ترويسة اللوب الداخلي.</td>
+                </tr>
+                <tr>
+                  <td><b>نسيان الأقواس المعقوفة<br>(Missing Braces)</b></td>
+                  <td><span class="code-inline" style="color:#f43f5e;">for(...) cout &lt;&lt; "*"; cout &lt;&lt; endl;</span></td>
+                  <td>بدون الأقواس <span class="code-inline">{ }</span>، تعتبر لغة C++ جملة الطباعة الأولى فقط تابعة للحلقة، وتُنفذ جملة السطر الجديد مرة واحدة في النهاية فقط.</td>
+                </tr>
+                <tr>
+                  <td><b>نسيان النزول لسطر جديد<br>(No Newline)</b></td>
+                  <td>نسيان كتابة <span class="code-inline">cout &lt;&lt; endl;</span></td>
+                  <td>تتلاصق جميع العناصر في سطر أفقي واحد طويل جداً وتفقد التنسيق الشبكي.</td>
+                </tr>
+                <tr>
+                  <td><b>أخطاء حدود الزيادة<br>(Off-by-One Limits)</b></td>
+                  <td><span class="code-inline">i &lt; 5</span> مقابل <span class="code-inline">i &lt;= 5</span></td>
+                  <td>الأولى تدور 4 مرات فقط (من 1 إلى 4)؛ بينما الثانية تدور 5 مرات كاملة (من 1 إلى 5).</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Debug It Section -->
+          <div class="card">
+            <div class="card-header">
+              <span class="prob-tag">Debug It: تشريح الخطأ الكارثي في ترويسة اللوب الداخلي (Slide 15)</span>
+              <button class="sol-toggle-btn active" onclick="toggleCardSolution(this)">👁️ إظهار الحل والتصحيح</button>
+            </div>
+            <div class="card-body">
+              <div class="question-prompt">
+                اكتشف الخطأ البرمجي الدقيق وسبب حدوث اللوب اللانهائي:
+                <div class="code-container">
+                  <pre class="code-snippet"><div class="explain-block">
+  <div class="badge-row">
+    <span class="explain-badge badge-logic">🧠 حلقة الصفوف السليمة</span>
+  </div>
+  هذه الحلقة الخارجية سليمة برمجياً وتنتظر انتهاء الحلقة الداخلية للمرور على الصفوف الثلاثة.
+</div><span class="code-kw">for</span> (<span class="code-kw">int</span> <span class="code-var">row</span> = <span class="code-num">1</span>; <span class="code-var">row</span> &lt;= <span class="code-num">3</span>; <span class="code-var">row</span>++) {
+
+<div class="explain-block">
+  <div class="badge-row">
+    <span class="explain-badge badge-trap">⚠️ الخطأ القاتل هنا!</span>
+    <span class="explain-badge badge-logic">🧠 تحليل العطل البرمجي</span>
+  </div>
+  <b>موطن الكارثة البرمجية:</b> تم كتابة <span class="code-inline">row++</span> بدلاً من <span class="code-inline">col++</span> في خطوة التحديث!
+  <br>&bull; المتغير المفحوص في الشرط هو <span class="code-inline">col &lt;= 4</span>.
+  <br>&bull; لكن المتغير الذي يزداد في الذاكرة هو <span class="code-inline">row</span>!
+  <br>&bull; النتيجة: المتغير <span class="code-inline">col</span> يظل ثابتاً عند 1 طوال الوقت، والشرط <span class="code-inline">1 &lt;= 4</span> يظل صائباً (True) إلى الأبد، فيعلق المعالج في طباعة نجوم مستمرة وتنهار استجابة البرنامج!
+</div>    <span class="code-kw">for</span> (<span class="code-kw">int</span> <span class="code-var">col</span> = <span class="code-num">1</span>; <span class="code-var">col</span> &lt;= <span class="code-num">4</span>; <span style="color:#f43f5e; font-weight:bold;">row++</span>) {
+
+<div class="explain-block">
+  <div class="badge-row">
+    <span class="explain-badge badge-logic">🧠 الطباعة المستمرة للأبد</span>
+  </div>
+  تظل هذه الجملة تطبع نجوماً بدون توقف ولا يستطيع المعالج الخروج من هذا اللوب أبداً.
+</div>        cout &lt;&lt; <span class="code-str">"* "</span>;
+
+<div class="explain-block">
+  <div class="badge-row">
+    <span class="explain-badge badge-flow">⚙️ كود ميت لا يُصل إليه</span>
+  </div>
+  هذا القوس يعيد التنفيذ لنفس اللوب الداخلي للأبد.
+</div>    }
+
+<div class="explain-block">
+  <div class="badge-row">
+    <span class="explain-badge badge-flow">⚙️ سطر معزول</span>
+  </div>
+  لن يصل التنفيذ إلى أمر <span class="code-inline">endl</span> إطلاقاً بسبب دوران اللوب الداخلي للأبد.
+</div>    cout &lt;&lt; endl;
+
+<div class="explain-block">
+  <div class="badge-row">
+    <span class="explain-badge badge-flow">⚙️ نهاية لن تتحقق</span>
+  </div>
+  نهاية اللوب الخارجي.
+</div>}</pre>
+                </div>
+              </div>
+              <div class="solution-content show">
+                <div class="step-block">
+                  <div class="step-label label-rose">السبب والحل النموذجي:</div>
+                  <div>&bull; <b>المشكلة:</b> تم وضع <span class="code-inline">row++</span> في خطوة التحديث داخل الحلقة الداخلية بدلاً من <span class="code-inline">col++</span>، مما يترك الشرط <span class="code-inline">col &lt;= 4</span> صائباً للأبد.</div>
+                  <div style="margin-top:6px;">&bull; <b>التصحيح السليم:</b> استبدالها بـ <span class="result-badge">col++</span>.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PART 5: APPLICATIONS & PRACTICE -->
+      <div id="part-view-5" class="view-panel">
+        <div class="lecture-content-wrapper">
+          <h2 class="emerald">الجزء 5: التطبيقات الواقعية، مسألة التتبع وبطاقة التقييم</h2>
+
+          <div class="global-toggle-bar">
+            <button onclick="toggleAllSolutions(true)">👁️ إظهار جميع الحلول</button>
+            <button onclick="toggleAllSolutions(false)">🙈 إخفاء جميع الحلول</button>
+          </div>
+
+          <!-- Real World Applications -->
+          <div class="grid-2">
+            <div style="background:var(--bg-card); border:1px solid rgba(56,189,248,0.25); border-radius:8px; padding:12px;">
+              <h3 style="color:var(--cyan); margin-bottom:4px;">1. الشبكات ومخططات المقاعد</h3>
+              <p style="font-size:0.83rem; color:#cbd5e1;">الصفوف &times; الأعمدة لحجز مقاعد الطائرات، السينما، ورقعات الألعاب والشطرنج.</p>
+            </div>
+            <div style="background:var(--bg-card); border:1px solid rgba(56,189,248,0.25); border-radius:8px; padding:12px;">
+              <h3 style="color:var(--emerald); margin-bottom:4px;">2. الجداول المنسقة والتقارير</h3>
+              <p style="font-size:0.83rem; color:#cbd5e1;">جداول الضرب، كشوف المرتبات، وعرض البيانات المالية المقسمة حسب الشهور.</p>
+            </div>
+            <div style="background:var(--bg-card); border:1px solid rgba(56,189,248,0.25); border-radius:8px; padding:12px;">
+              <h3 style="color:var(--amber); margin-bottom:4px;">3. المصفوفات الثنائية (2D Matrices)</h3>
+              <p style="font-size:0.83rem; color:#cbd5e1;">المرور على كل عنصر <span class="code-inline">matrix[row][col]</span> لإجراء العمليات الحسابية عليه.</p>
+            </div>
+            <div style="background:var(--bg-card); border:1px solid rgba(56,189,248,0.25); border-radius:8px; padding:12px;">
+              <h3 style="color:var(--purple); margin-bottom:4px;">4. الرسوم النمطية (ASCII Art)</h3>
+              <p style="font-size:0.83rem; color:#cbd5e1;">رسم المثلثات، الأهرامات، والإطارات الهندسية بواسطة الحروف والرموز.</p>
+            </div>
+          </div>
+
+          <!-- Practice Problem -->
+          <div class="card" style="margin-top:14px;">
+            <div class="card-header">
+              <span class="prob-tag">تدريب: توقع المخرجات لجمع العدادين <span class="code-inline">(i + j)</span> مع الشرح التفصيلي</span>
+              <button class="sol-toggle-btn active" onclick="toggleCardSolution(this)">👁️ إظهار المخرجات</button>
+            </div>
+            <div class="card-body">
+              <div class="question-prompt">
+                تتبع قيمة العداد الخارجي <span class="code-inline">i</span> والعداد الداخلي <span class="code-inline">j</span> وكيف يتغير حاصل جمعهما:
+                <div class="code-container">
+                  <div class="terminal-header">
+                    <div class="terminal-dots"><div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div></div>
+                    <span class="terminal-title">predict_sum.cpp</span>
+                    <button class="copy-btn" onclick="copyCode(this)">نسخ الكود</button>
+                  </div>
+                  <pre class="code-snippet"><div class="explain-block">
+  <div class="badge-row">
+    <span class="explain-badge badge-logic">🧠 العداد الخارجي (الحد الأساسي)</span>
+    <span class="explain-badge badge-memory">💾 i = 1, 2, 3</span>
+  </div>
+  يدور لـ 3 أسطر متتالية. يمثل الحد الثابت الأول في عملية الجمع للسطر الحالي، كما يمثل الحد الأقصى لعدد عناصر السطر.
+</div><span class="code-kw">for</span> (<span class="code-kw">int</span> <span class="code-var">i</span> = <span class="code-num">1</span>; <span class="code-var">i</span> &lt;= <span class="code-num">3</span>; <span class="code-var">i</span>++) {
+
+<div class="explain-block">
+  <div class="badge-row">
+    <span class="explain-badge badge-logic">🧠 العداد الداخلي (الحد المتغير)</span>
+    <span class="explain-badge badge-memory">💾 j = 1 to i</span>
+  </div>
+  يبدأ دائماً من 1 ويتوقف عند قيمة <span class="code-inline">i</span> الحالية. هذا يحدد عدد الأرقام المطبوعة في كل سطر:
+  <br>&bull; السطر الأول: رقم واحد فقط (<span class="code-inline">j=1</span>).
+  <br>&bull; السطر الثاني: رقمان (<span class="code-inline">j=1, 2</span>).
+  <br>&bull; السطر الثالث: 3 أرقام (<span class="code-inline">j=1, 2, 3</span>).
+</div>    <span class="code-kw">for</span> (<span class="code-kw">int</span> <span class="code-var">j</span> = <span class="code-num">1</span>; <span class="code-var">j</span> &lt;= <span class="code-var">i</span>; <span class="code-var">j</span>++) {
+
+<div class="explain-block">
+  <div class="badge-row">
+    <span class="explain-badge badge-logic">🧠 الحساب والطباعة اللحظية</span>
+  </div>
+  يجمع المعالج قيمة العداد الخارجي <span class="code-inline">i</span> مع العداد الداخلي <span class="code-inline">j</span> ويطبع الناتج مباشرة على الشاشة متبوعاً بمسافة.
+</div>        cout &lt;&lt; <span class="code-var">i</span> + <span class="code-var">j</span> &lt;&lt; <span class="code-str">" "</span>;
+
+<div class="explain-block">
+  <div class="badge-row">
+    <span class="explain-badge badge-scope">🔒 انتهاء عناصر السطر الحسابية</span>
+  </div>
+  إغلاق حلقة الجمع الداخلية.
+</div>    }
+
+<div class="explain-block">
+  <div class="badge-row">
+    <span class="explain-badge badge-flow">⚙️ النزول للسطر التالي</span>
+  </div>
+  الانتقال إلى سطر جديد لتبدأ المجموعة الحسابية التالية على سطر مستقل.
+</div>    cout &lt;&lt; endl;
+
+<div class="explain-block">
+  <div class="badge-row">
+    <span class="explain-badge badge-flow">⚙️ إكمال الدورة الخارجية</span>
+  </div>
+  نهاية دورة السطر وزيادة قيمة <span class="code-inline">i</span>.
+</div>}</pre>
+                </div>
+              </div>
+              <div class="solution-content show">
+                <div class="step-block">
+                  <div class="step-label label-blue">تتبع التنفيذ سطراً بسطر:</div>
+                  <div>&bull; السطر 1 (<span class="code-inline">i=1</span>): <span class="code-inline">j=1</span> &rarr; ينطبع <span class="result-badge">1 + 1 = 2</span> ثم سطر جديد.</div>
+                  <div>&bull; السطر 2 (<span class="code-inline">i=2</span>): <span class="code-inline">j=1, 2</span> &rarr; ينطبع <span class="result-badge">2 + 1 = 3</span> و <span class="result-badge">2 + 2 = 4</span> ثم سطر جديد.</div>
+                  <div>&bull; السطر 3 (<span class="code-inline">i=3</span>): <span class="code-inline">j=1, 2, 3</span> &rarr; ينطبع <span class="result-badge">3+1=4</span>، <span class="result-badge">3+2=5</span>، <span class="result-badge">3+3=6</span>.</div>
+                  <div style="margin-top:8px;">المخرجات النهائية الكاملة:</div>
+                  <div class="output-box">
+2 
+3 4 
+4 5 6 
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Exit Ticket -->
+          <div class="card">
+            <div class="card-header">
+              <span class="prob-tag">بطاقة التقييم الختامي: أسئلة المحاضرة (Slide 20)</span>
+              <button class="sol-toggle-btn active" onclick="toggleCardSolution(this)">👁️ إظهار الإجابات النموذجية</button>
+            </div>
+            <div class="card-body">
+              <div class="question-prompt">
+                1. متى يُعاد ضبط وبدء الحلقة الداخلية من جديد؟
+                <br>2. كم مرة يُنفذ جسم الحلقة إذا دارت الخارجية 4 مرات والداخلية 3 مرات في كل دورة؟
+                <br>3. ما الذي يتغير عند استبدال شرط الداخلية بـ <span class="code-inline">j &lt;= i</span>؟
+              </div>
+              <div class="solution-content show">
+                <div class="step-block">
+                  <div class="step-label label-green">1. متى تبدأ الحلقة الداخلية مجدداً؟</div>
+                  <div>يُعاد ضبط الحلقة الداخلية من قيمتها الابتدائية <b>في كل مرة تنتقل فيها الحلقة الخارجية إلى دورتها التالية (السطر التالي)</b>.</div>
+                </div>
+                <div class="step-block">
+                  <div class="step-label label-amber">2. عدد التنفيذ لـ 4 دورات خارجية &times; 3 داخلية:</div>
+                  <div>الحلقتان مستقلتان، إذن: <span class="result-badge">الإجمالي = 4 &times; 3 = 12 مرة</span>.</div>
+                </div>
+                <div class="step-block">
+                  <div class="step-label label-purple">3. أثر الشرط j &lt;= i:</div>
+                  <div>يتحول الشكل من مستطيل ثابت الأعمدة إلى <b>نمط مثلثي متزايد</b>، ويُحسب إجمالي المرات بمتسلسلة غاوس الحسابية <span class="result-badge">N(N+1)/2</span>.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- PART 6: EXAM CHEAT SHEET -->
+      <div id="part-view-6" class="view-panel active-panel">
+        <div class="lecture-content-wrapper">
+          <h2 class="orange" style="background: linear-gradient(270deg, #78350f, #0f1624); border-right: 5px solid var(--amber);">
+            ⚡ كبسولة ليلة الامتحان: القواعد الذهبية الست، القوانين والأفخاخ
+          </h2>
+
+          <div class="callout orange" style="border-right-color: var(--amber); background: rgba(245, 158, 11, 0.08);">
+            <h4 style="color: #fbbf24;">📌 دليلك السريع للمراجعة قبل دخول لجنة الامتحان</h4>
+            <p style="font-size: 0.83rem; color: #e2e8f0;">
+              ملخص لأهم القواعد الحسابية والأفخاخ البرمجية التي تتكرر باستمرار في أسئلة الاختيار من متعدد (MCQ) وتتبع الأكواد (Tracing).
+            </p>
+          </div>
+
+          <!-- Rule 1 -->
+          <div class="card" style="border-right: 3px solid var(--cyan);">
+            <div class="card-header">
+              <span class="prob-tag" style="color: var(--cyan);">القاعدة 1: حساب تكرار الحلقات المستقلة (مبدأ الضرب)</span>
+            </div>
+            <div class="card-body">
+              <p style="font-size: 0.84rem; color: #cbd5e1;">
+                عندما يكون شرط توقف اللوب الداخلي ثابتاً ولا يعتمد على عداد اللوب الخارجي، نضرب عدد دورات الحلقتين:
+              </p>
+              <div class="math-scroll">
+                $$\text{Total Executions} = \text{Outer} \times \text{Inner} = N \times M$$
+              </div>
+              <div class="step-block">
+                <div class="step-label label-blue">مثال تطبيقي سريع مع الشرح:</div>
+                <div class="code-container">
+                  <pre class="code-snippet"><div class="explain-block">
+  <div class="badge-row">
+    <span class="explain-badge badge-logic">🧠 الخارجية: 4 دورات مستقلة</span>
+  </div>
+  العداد <span class="code-inline">i</span> يدور 4 دورات لقيم 0 و 1 و 2 و 3.
+</div><span class="code-kw">for</span> (<span class="code-kw">int</span> <span class="code-var">i</span> = <span class="code-num">0</span>; <span class="code-var">i</span> &lt; <span class="code-num">4</span>; <span class="code-var">i</span>++) {
+
+<div class="explain-block">
+  <div class="badge-row">
+    <span class="explain-badge badge-logic">🧠 الداخلية: 5 دورات مستقلة</span>
+  </div>
+  العداد <span class="code-inline">j</span> يدور 5 دورات ثابتة لقيم 1 و 2 و 3 و 4 و 5 في كل دورة للمتغير <span class="code-inline">i</span> دون أي ارتباط بقيمته.
+</div>    <span class="code-kw">for</span> (<span class="code-kw">int</span> <span class="code-var">j</span> = <span class="code-num">1</span>; <span class="code-var">j</span> &lt;= <span class="code-num">5</span>; <span class="code-var">j</span>++) {
+
+<div class="explain-block">
+  <div class="badge-row">
+    <span class="explain-badge badge-memory">💾 تنفيذ أمر الطباعة</span>
+  </div>
+  ستُنفذ جملة الطباعة 4 &times; 5 = 20 مرة.
+</div>        cout &lt;&lt; <span class="code-str">"*"</span>;
+    }
+}</pre>
+                </div>
+                <div>الناتج: <span class="result-badge">4 &times; 5 = 20 نجمة</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Rule 2 -->
+          <div class="card" style="border-right: 3px solid var(--emerald);">
+            <div class="card-header">
+              <span class="prob-tag" style="color: var(--emerald);">القاعدة 2: الحلقات التابعة لنمط المثلث (متسلسلة غاوس الحسابية)</span>
+            </div>
+            <div class="card-body">
+              <p style="font-size: 0.84rem; color: #cbd5e1;">
+                إذا كان شرط الداخلية مقيداً بعداد الخارجية (<span class="code-inline">j &lt;= i</span>) من 1 إلى <span class="code-inline">N</span>، تُحسب التكرارات بقانون مجموع المتسلسلة:
+              </p>
+              <div class="math-scroll">
+                $$\text{Total Executions} = 1 + 2 + 3 + \dots + N = \frac{N(N + 1)}{2}$$
+              </div>
+              <div class="step-block">
+                <div class="step-label label-green">مثال عند N = 5:</div>
+                <div>الحساب: <span class="result-badge">5 &times; 6 / 2 = 15 تكراراً إجمالياً</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Rule 3 -->
+          <div class="card" style="border-right: 3px solid var(--rose);">
+            <div class="card-header">
+              <span class="prob-tag" style="color: var(--rose);">القاعدة 3: فخ جملتي break و continue في الحلقات المتداخلة</span>
+            </div>
+            <div class="card-body">
+              <p style="font-size: 0.84rem; color: #cbd5e1;">
+                <b style="color: #f43f5e;">⚠️ قاعدة امتحانية ذهبية:</b> جملة <span class="code-inline">break;</span> تخرج <b>من أضيق حلقة تحيط بها مباشرة فقط (Innermost Loop)</b>، ولا توقف الحلقة الخارجية أبداً!
+              </p>
+              <div class="step-block">
+                <div class="step-label label-rose">سؤال تتبع خادع في الامتحانات:</div>
+                <div class="code-container">
+                  <pre class="code-snippet"><div class="explain-block">
+  <div class="badge-row">
+    <span class="explain-badge badge-logic">🧠 اللوب الخارجي المستمر</span>
+  </div>
+  اللوب الخارجي يدور 3 مرات (i = 1, 2, 3) ولن يتأثر بـ break الداخلية.
+</div><span class="code-kw">for</span> (<span class="code-kw">int</span> <span class="code-var">i</span> = <span class="code-num">1</span>; <span class="code-var">i</span> &lt;= <span class="code-num">3</span>; <span class="code-var">i</span>++) {
+
+<div class="explain-block">
+  <div class="badge-row">
+    <span class="explain-badge badge-logic">🧠 اللوب الداخلي المستهدف بـ break</span>
+  </div>
+  يبدأ العداد <span class="code-inline">j</span> من 1.
+</div>    <span class="code-kw">for</span> (<span class="code-kw">int</span> <span class="code-var">j</span> = <span class="code-num">1</span>; <span class="code-var">j</span> &lt;= <span class="code-num">4</span>; <span class="code-var">j</span>++) {
+
+<div class="explain-block">
+  <div class="badge-row">
+    <span class="explain-badge badge-trap">⚠️ فخ break</span>
+  </div>
+  <b>أثر break:</b> عندما تصبح <span class="code-inline">j = 2</span>، يتم تنفيذ أمر <span class="code-inline">break</span>. هذا يخرج بالبرنامج فوراً من حلقة <span class="code-inline">j</span> فقط ويسقط ما تبقى من دوراتها (j=2, 3, 4)، ثم يُسلم التحكم فوراً إلى نهاية حلقة <span class="code-inline">i</span> الخارجية لتكمل الدورة التالية!
+</div>        <span class="code-kw">if</span> (<span class="code-var">j</span> == <span class="code-num">2</span>) <span class="code-kw">break</span>;
+
+<div class="explain-block">
+  <div class="badge-row">
+    <span class="explain-badge badge-logic">🧠 المطبوع الفعلي</span>
+  </div>
+  لن يُطبع هذا السطر إلا عندما تكون <span class="code-inline">j = 1</span> فقط في كل دورة خارجية!
+</div>        cout &lt;&lt; <span class="code-var">i</span> &lt;&lt; <span class="code-var">j</span> &lt;&lt; <span class="code-str">" "</span>;
+    }
+}</pre>
+                </div>
+                <div>المخرجات: <span class="result-badge">11 21 31</span> (الحلقة الخارجية تواصل دوراتها لقيم i=1, 2, 3).</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Rule 4 -->
+          <div class="card" style="border-right: 3px solid var(--amber);">
+            <div class="card-header">
+              <span class="prob-tag" style="color: var(--amber);">القاعدة 4: الموضع الصحيح لجملة النزول لسطر جديد (cout &lt;&lt; endl)</span>
+            </div>
+            <div class="card-body">
+              <ul style="font-size: 0.83rem; color: #cbd5e1; padding-right: 1.25rem;">
+                <li>الموضع الصحيح لـ <span class="code-inline">cout &lt;&lt; endl;</span> هو في <b>نهاية جسم الحلقة الخارجية</b> (بعد اكتمال طباعة جميع أعمدة السطر).</li>
+                <li>وضع أمر <span class="code-inline">endl</span> داخل اللوب الداخلي يؤدي لنزول سطر بعد كل عنصر منفرد، مما يحول الشبكة إلى عمود رأسي واحد.</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Rule 5 -->
+          <div class="card" style="border-right: 3px solid var(--purple);">
+            <div class="card-header">
+              <span class="prob-tag" style="color: var(--purple);">القاعدة 5: الفرق الحاسم بين طباعة العداد i وطباعة العداد j</span>
+            </div>
+            <div class="card-body">
+              <div class="table-scroll-container">
+                <table>
+                  <thead>
+                    <tr><th>جملة الطباعة</th><th>شكل المخرجات</th><th>التفسير البرمجي</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><span class="code-inline">cout &lt;&lt; i;</span></td>
+                      <td style="font-family:var(--font-mono); color:var(--cyan); direction:ltr; text-align:right;">1 1 1<br>2 2 2<br>3 3 3</td>
+                      <td><b>ثبات الرقم عبر السطر:</b> المتغير <span class="code-inline">i</span> ثابت طوال دورات الحلقة الداخلية ولا يتغير إلا عند النزول لسطر جديد.</td>
+                    </tr>
+                    <tr>
+                      <td><span class="code-inline">cout &lt;&lt; j;</span></td>
+                      <td style="font-family:var(--font-mono); color:var(--emerald); direction:ltr; text-align:right;">1 2 3<br>1 2 3<br>1 2 3</td>
+                      <td><b>تغير وتزايد الأرقام عبر السطر:</b> المتغير <span class="code-inline">j</span> يزداد في كل عمود ويعاد ضبطه إلى 1 عند كل سطر جديد.</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- Rule 6 -->
+          <div class="card" style="border-right: 3px solid #f43f5e;">
+            <div class="card-header">
+              <span class="prob-tag" style="color: #f43f5e;">القاعدة 6: فخ الحلقة اللانهائية بسبب المتغير الخاطئ في خطوة التحديث</span>
+            </div>
+            <div class="card-body">
+              <p style="font-size: 0.84rem; color: #cbd5e1;">
+                أكثر الأخطاء القاتلة شيوعاً في الامتحانات كتابة <span class="code-inline">row++</span> في ترويسة اللوب الداخلي، مما يترك المتغير <span class="code-inline">col</span> ثابتاً عند 1 ولا ينكسر شرطه أبداً.
+              </p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- PART 7: CLASSIC PATTERN CHALLENGES -->
+      <div id="part-view-7" class="view-panel">
+        <div class="lecture-content-wrapper">
+          <h2 class="cyan">🎯 تحديات الأنماط الشائعة (المفضلة في الامتحانات والمعامل)</h2>
+
+          <!-- Challenge 1 -->
+          <div class="card">
+            <div class="card-header">
+              <span class="prob-tag">تحدي 1: نمط المثلث المقلوب (Inverted Right Triangle)</span>
+              <button class="sol-toggle-btn active" onclick="toggleCardSolution(this)">👁️ إظهار الحل</button>
+            </div>
+            <div class="card-body">
+              <div class="question-prompt">المطلوب: طباعة 5 نجوم في السطر الأول، 4 في السطر الثاني، حتى نجمة واحدة في السطر الخامس.</div>
+              <div class="solution-content show">
+                <div class="code-container">
+                  <div class="terminal-header">
+                    <span class="terminal-title">inverted_triangle.cpp</span>
+                    <button class="copy-btn" onclick="copyCode(this)">نسخ الكود</button>
+                  </div>
+                  <pre class="code-snippet"><div class="explain-block">
+  <div class="badge-row">
+    <span class="explain-badge badge-logic">🧠 عد تنازلي للأسطر</span>
+    <span class="explain-badge badge-memory">💾 i = 5 down to 1</span>
+  </div>
+  <b>المنطق:</b> نبدأ من <span class="code-inline">i = 5</span> وننقص <span class="code-inline">i--</span> في كل دورة حتى نصل إلى 1. هذا الرقم التنازلي يحدد مباشرة عدد النجوم التي يحتاجها السطر.
+</div><span class="code-kw">for</span> (<span class="code-kw">int</span> <span class="code-var">i</span> = <span class="code-num">5</span>; <span class="code-var">i</span> &gt;= <span class="code-num">1</span>; <span class="code-var">i</span>--) {
+
+<div class="explain-block">
+  <div class="badge-row">
+    <span class="explain-badge badge-logic">🧠 حلقة طباعة تابعة للعدد التنازلي</span>
+  </div>
+  تبدأ <span class="code-inline">j</span> من 1 وتتوقف عند <span class="code-inline">i</span>. في السطر الأول تطبع 5 نجوم، ثم 4، ثم 3، ثم 2، وأخيراً نجمة واحدة.
+</div>    <span class="code-kw">for</span> (<span class="code-kw">int</span> <span class="code-var">j</span> = <span class="code-num">1</span>; <span class="code-var">j</span> &lt;= <span class="code-var">i</span>; <span class="code-var">j</span>++) {
+
+<div class="explain-block">
+  <div class="badge-row">
+    <span class="explain-badge badge-logic">🧠 رسم النجمة</span>
+  </div>
+  طباعة النجمة في العمود الحالي.
+</div>        cout &lt;&lt; <span class="code-str">"* "</span>;
+    }
+
+<div class="explain-block">
+  <div class="badge-row">
+    <span class="explain-badge badge-flow">⚙️ النزول للسطر التنازلي التالي</span>
+  </div>
+  نزول سطر جديد للانتقال للسطر ذي النجوم الأقل.
+</div>    cout &lt;&lt; endl;
+}</pre>
+                </div>
+                <div class="output-box">
+* * * * * 
+* * * * 
+* * * 
+* * 
+* 
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Challenge 2 -->
+          <div class="card">
+            <div class="card-header">
+              <span class="prob-tag">تحدي 2: نمط المربع المفرغ (Hollow Square Grid)</span>
+              <button class="sol-toggle-btn active" onclick="toggleCardSolution(this)">👁️ إظهار الحل</button>
+            </div>
+            <div class="card-body">
+              <div class="question-prompt">المطلوب: طباعة النجوم فقط على حواف وإطار مربع بحجم 5 &times; 5 مع ترك المركز فارغاً.</div>
+              <div class="solution-content show">
+                <div class="code-container">
+                  <div class="terminal-header">
+                    <span class="terminal-title">hollow_square.cpp</span>
+                    <button class="copy-btn" onclick="copyCode(this)">نسخ الكود</button>
+                  </div>
+                  <pre class="code-snippet"><div class="explain-block">
+  <div class="badge-row">
+    <span class="explain-badge badge-logic">🧠 تعريف البعد الثابت</span>
+  </div>
+  حجم ضلع المربع (5 صفوف في 5 أعمدة).
+</div><span class="code-kw">int</span> <span class="code-var">n</span> = <span class="code-num">5</span>;
+
+<div class="explain-block">
+  <div class="badge-row">
+    <span class="explain-badge badge-logic">🧠 حلقة صفوف المربع</span>
+  </div>
+  تمر على الصفوف من 1 إلى n.
+</div><span class="code-kw">for</span> (<span class="code-kw">int</span> <span class="code-var">i</span> = <span class="code-num">1</span>; <span class="code-var">i</span> &lt;= <span class="code-var">n</span>; <span class="code-var">i</span>++) {
+
+<div class="explain-block">
+  <div class="badge-row">
+    <span class="explain-badge badge-logic">🧠 حلقة أعمدة المربع</span>
+  </div>
+  تمر على أعمدة المربع من 1 إلى n.
+</div>    <span class="code-kw">for</span> (<span class="code-kw">int</span> <span class="code-var">j</span> = <span class="code-num">1</span>; <span class="code-var">j</span> &lt;= <span class="code-var">n</span>; <span class="code-var">j</span>++) {
+
+<div class="explain-block">
+  <div class="badge-row">
+    <span class="explain-badge badge-logic">🧠 شرط الحواف الهندسية</span>
+  </div>
+  <b>معادلة الإطار:</b> نطبع نجمة فقط إذا كنا نقف على أحد الحدود الأربعة:
+  <br>&bull; <span class="code-inline">i == 1</span> (الضلع العلوي).
+  <br>&bull; <span class="code-inline">i == n</span> (الضلع السفلي).
+  <br>&bull; <span class="code-inline">j == 1</span> (الضلع الأيمن).
+  <br>&bull; <span class="code-inline">j == n</span> (الضلع الأيسر).
+</div>        <span class="code-kw">if</span> (<span class="code-var">i</span> == <span class="code-num">1</span> || <span class="code-var">i</span> == <span class="code-var">n</span> || <span class="code-var">j</span> == <span class="code-num">1</span> || <span class="code-var">j</span> == <span class="code-num">n</span>)
+            cout &lt;&lt; <span class="code-str">"* "</span>;
+
+<div class="explain-block">
+  <div class="badge-row">
+    <span class="explain-badge badge-logic">🧠 تجويف قلب المربع</span>
+  </div>
+  إذا لم نكن على الحواف (أي داخل التجويف الداخلي)، نطبع مسافتين فارغتين للحفاظ على الفراغ وأبعاد الشبكة.
+</div>        <span class="code-kw">else</span>
+            cout &lt;&lt; <span class="code-str">"  "</span>;
+    }
+
+<div class="explain-block">
+  <div class="badge-row">
+    <span class="explain-badge badge-flow">⚙️ نزول سطر بعد كل صف</span>
+  </div>
+  اكتمال صف من صفوف المربع.
+</div>    cout &lt;&lt; endl;
+}</pre>
+                </div>
+                <div class="output-box">
+* * * * * 
+*       * 
+*       * 
+*       * 
+* * * * * 
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- PART 8: MCQ & TRACING QUIZ ENGINE -->
+      <div id="part-view-8" class="view-panel">
+        <div class="lecture-content-wrapper">
+          <h2 class="purple">📝 بنك الأسئلة التفاعلي واختبار التتبع الذاتي</h2>
+          <div class="quiz-score-badge" id="quizScoreDisplay">النتيجة: تم حل 0 من 4 أسئلة</div>
+
+          <div class="mcq-container">
+            <!-- Q1 -->
+            <div class="mcq-card" id="qcard-1">
+              <div class="mcq-question">
+                <b>س 1:</b> ماذا يحدث عند تنفيذ جملة <span class="code-inline">break;</span> داخل الحلقة الداخلية (Inner Loop)؟
+              </div>
+              <div class="mcq-options">
+                <button class="mcq-opt-btn" onclick="checkAnswer(1, 0, false)">أ) تُنهي البرنامج بالكامل فوراً.</button>
+                <button class="mcq-opt-btn" onclick="checkAnswer(1, 1, false)">ب) تُنهي الحلقة الخارجية والداخلية معاً في نفس اللحظة.</button>
+                <button class="mcq-opt-btn" onclick="checkAnswer(1, 2, true)">ج) تخرج فقط من الحلقة الداخلية الحالية، وتستمر الحلقة الخارجية في باقي دوراتها.</button>
+                <button class="mcq-opt-btn" onclick="checkAnswer(1, 3, false)">د) تتخطى دورة العمود الحالية فقط وتظل في الحلقة الداخلية.</button>
+              </div>
+              <div class="mcq-feedback" id="feedback-1"></div>
+            </div>
+
+            <!-- Q2 -->
+            <div class="mcq-card" id="qcard-2">
+              <div class="mcq-question">
+                <b>س 2:</b> كم عدد المرات التي ستُطبع فيها كلمة <span class="code-inline">"Hi"</span> في الكود التالي؟
+                <div class="code-container" style="margin-top:6px;">
+                  <pre class="code-snippet"><span class="code-kw">for</span> (<span class="code-kw">int</span> <span class="code-var">i</span> = <span class="code-num">0</span>; <span class="code-var">i</span> &lt; <span class="code-num">3</span>; <span class="code-var">i</span>++) {
+    <span class="code-kw">for</span> (<span class="code-kw">int</span> <span class="code-var">j</span> = <span class="code-num">1</span>; <span class="code-var">j</span> &lt;= <span class="code-num">4</span>; <span class="code-var">j</span>++) {
+        cout &lt;&lt; <span class="code-str">"Hi"</span>;
+    }
+}</pre>
+                </div>
+              </div>
+              <div class="mcq-options">
+                <button class="mcq-opt-btn" onclick="checkAnswer(2, 0, false)">أ) 7 مرات</button>
+                <button class="mcq-opt-btn" onclick="checkAnswer(2, 1, true)">ب) 12 مرة</button>
+                <button class="mcq-opt-btn" onclick="checkAnswer(2, 2, false)">ج) 15 مرة</button>
+                <button class="mcq-opt-btn" onclick="checkAnswer(2, 3, false)">د) 8 مرات</button>
+              </div>
+              <div class="mcq-feedback" id="feedback-2"></div>
+            </div>
+
+            <!-- Q3 -->
+            <div class="mcq-card" id="qcard-3">
+              <div class="mcq-question">
+                <b>س 3:</b> ما هي المخرجات الدقيقة لتتبع هذا الكود؟
+                <div class="code-container" style="margin-top:6px;">
+                  <pre class="code-snippet"><span class="code-kw">for</span> (<span class="code-kw">int</span> <span class="code-var">i</span> = <span class="code-num">1</span>; <span class="code-var">i</span> &lt;= <span class="code-num">2</span>; <span class="code-var">i</span>++) {
+    <span class="code-kw">for</span> (<span class="code-kw">int</span> <span class="code-var">j</span> = <span class="code-num">1</span>; <span class="code-var">j</span> &lt;= <span class="code-num">2</span>; <span class="code-var">j</span>++) {
+        <span class="code-kw">if</span> (<span class="code-var">j</span> == <span class="code-num">2</span>) <span class="code-kw">break</span>;
+        cout &lt;&lt; <span class="code-var">i</span> &lt;&lt; <span class="code-var">j</span> &lt;&lt; <span class="code-str">" "</span>;
+    }
+}</pre>
+                </div>
+              </div>
+              <div class="mcq-options">
+                <button class="mcq-opt-btn" onclick="checkAnswer(3, 0, false)">أ) 11 12 21 22</button>
+                <button class="mcq-opt-btn" onclick="checkAnswer(3, 1, true)">ب) 11 21</button>
+                <button class="mcq-opt-btn" onclick="checkAnswer(3, 2, false)">ج) 11 فقط</button>
+                <button class="mcq-opt-btn" onclick="checkAnswer(3, 3, false)">د) 21 22</button>
+              </div>
+              <div class="mcq-feedback" id="feedback-3"></div>
+            </div>
+
+            <!-- Q4 -->
+            <div class="mcq-card" id="qcard-4">
+              <div class="mcq-question">
+                <b>س 4:</b> إذا دارت الحلقة الخارجية $N$ مرات وكان شرط الداخلية <span class="code-inline">j &lt;= i</span> (بدءاً من 1)، فما القانون الحسابي لإجمالي مرات التنفيذ؟
+              </div>
+              <div class="mcq-options">
+                <button class="mcq-opt-btn" onclick="checkAnswer(4, 0, false)">أ) $N \times (N - 1)$</button>
+                <button class="mcq-opt-btn" onclick="checkAnswer(4, 1, false)">ب) $N^2$</button>
+                <button class="mcq-opt-btn" onclick="checkAnswer(4, 2, true)">ج) $\frac{N(N + 1)}{2}$</button>
+                <button class="mcq-opt-btn" onclick="checkAnswer(4, 3, false)">د) $2N + 1$</button>
+              </div>
+              <div class="mcq-feedback" id="feedback-4"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- MODULE 2: LIVE SIMULATOR & VISUALIZER -->
+    <!-- ============================================================ -->
+    <div id="simulator-container" style="display: none;">
+      <div class="lecture-content-wrapper">
+        <h2 class="purple">المحاكي التفاعلي ومسار التتبع اللحظي للحلقات المتداخلة</h2>
+        <p style="font-size:0.84rem; color:var(--text-muted); margin-bottom:12px;">
+          قم بمحاكاة وتتبع حركة عدادي الصفوف <span class="code-inline">row</span> والأعمدة <span class="code-inline">col</span> في الذاكرة خطوة بخطوة أو بالتشغيل التلقائي.
+        </p>
+
+        <div class="simulator-box">
+          <div class="sim-controls">
+            <div>
+              <label style="font-size:0.78rem; font-weight:700;">النمط الهندسي:</label>
+              <select id="simPattern" class="sim-select" onchange="resetSimulator()">
+                <option value="rect">مستطيل ثابت (col &le; maxCols)</option>
+                <option value="triangle">مثلث تزايدي تابع (col &le; row)</option>
+              </select>
+            </div>
+            <div>
+              <label style="font-size:0.78rem; font-weight:700;">الصفوف:</label>
+              <input type="number" id="simRows" class="sim-input" value="4" min="2" max="6" style="width:55px;" onchange="resetSimulator()">
+            </div>
+            <div>
+              <label style="font-size:0.78rem; font-weight:700;">الأعمدة:</label>
+              <input type="number" id="simCols" class="sim-input" value="4" min="2" max="6" style="width:55px;" onchange="resetSimulator()">
+            </div>
+            <button class="sim-btn" onclick="stepSimulator()">▶ خطوة (Step)</button>
+            <button class="sim-btn" onclick="autoPlaySimulator()" id="simPlayBtn">⚡ تشغيل تلقائي</button>
+            <button class="sim-btn" style="border-color:var(--rose); color:var(--rose);" onclick="resetSimulator()">↺ إعادة ضبط</button>
+          </div>
+
+          <div class="grid-visualizer" id="simGrid"></div>
+
+          <div class="sim-status">
+            <div>السطر النشط (row): <span class="sim-tag" id="simRowVal">-</span></div>
+            <div>العمود النشط (col): <span class="sim-tag" id="simColVal">-</span></div>
+            <div>إجمالي المطبوع: <span class="sim-tag" id="simCountVal">0</span></div>
+            <div>الحالة الحالية: <span class="sim-tag" id="simStatusMsg">جاهز</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    let currentPart = 6; // default open to cheat sheet
+    let currentModule = 1;
+    let answeredQuestions = {};
+    let correctCount = 0;
+
+    const partTitles = [
+      "جميع الأقسام: المرجع الشامل لمحاضرة التكرار المتداخل (الفصل 2.2)",
+      "الجزء 1: المفهوم وآلية التنفيذ ومقارنة الحلقة الفردية بالمتداخلة",
+      "الجزء 2: الأنماط الأساسية وجداول التتبع المنظم (Trace Tables)",
+      "الجزء 3: الحسابات الرياضية للتكرارات — الحلقات المستقلة مقابل التابعة",
+      "الجزء 4: الأخطاء الشائعة وجلسة تنقيح الأخطاء (Debug It)",
+      "الجزء 5: التطبيقات الواقعية، مسألة التتبع وبطاقة التقييم",
+      "كبسولة ليلة الامتحان: القواعد الذهبية الست، القوانين والأفخاخ",
+      "الجزء 7: تحديات الأنماط الشائعة (المثلث المقلوب والمربع المفرغ)",
+      "الجزء 8: بنك الأسئلة التفاعلي واختبار التتبع الذاتي"
+    ];
+
+    function showPart(num) {
+      currentPart = num;
+      document.getElementById('page-main-title').innerText = partTitles[num];
+      
+      for (let i = 0; i <= 8; i++) {
+        const b = document.getElementById('part-btn-' + i);
+        if (b) b.classList.remove('active');
+      }
+      const activeBtn = document.getElementById('part-btn-' + num);
+      if (activeBtn) activeBtn.classList.add('active');
+
+      for (let i = 1; i <= 8; i++) {
+        const p = document.getElementById('part-view-' + i);
+        if (p) {
+          if (num === 0) p.classList.add('active-panel');
+          else p.classList.remove('active-panel');
+        }
+      }
+
+      if (num !== 0) {
+        const activePart = document.getElementById('part-view-' + num);
+        if (activePart) activePart.classList.add('active-panel');
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function switchCourseModule(modNum) {
+      currentModule = modNum;
+      const tab1 = document.getElementById('lec-tab-1');
+      const tab2 = document.getElementById('lec-tab-2');
+      const subnav = document.getElementById('subnav-wrapper-1');
+      const lecCont = document.getElementById('lecture-container');
+      const simCont = document.getElementById('simulator-container');
+
+      if (modNum === 1) {
+        tab1.classList.add('active');
+        tab2.classList.remove('active');
+        subnav.style.display = 'block';
+        lecCont.style.display = 'block';
+        simCont.style.display = 'none';
+        showPart(currentPart);
+      } else {
+        tab2.classList.add('active');
+        tab1.classList.remove('active');
+        subnav.style.display = 'none';
+        lecCont.style.display = 'none';
+        simCont.style.display = 'block';
+        document.getElementById('header-badge').innerText = "CONTOSO CS101 • المحاكي التفاعلي اللحظي";
+        document.getElementById('page-main-title').innerText = "المحاكي التفاعلي: تتبع خطوات العدادات في الذاكرة";
+        resetSimulator();
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function toggleCardSolution(btn) {
+      const card = btn.closest('.card');
+      const sol = card.querySelector('.solution-content');
+      if (sol.classList.contains('show')) {
+        sol.classList.remove('show');
+        btn.classList.remove('active');
+        btn.innerHTML = '👁️ إظهار الحل';
+      } else {
+        sol.classList.add('show');
+        btn.classList.add('active');
+        btn.innerHTML = '🙈 إخفاء الحل';
+      }
+    }
+
+    function toggleAllSolutions(show) {
+      const buttons = document.querySelectorAll('#part-view-5 .sol-toggle-btn');
+      const solutions = document.querySelectorAll('#part-view-5 .solution-content');
+
+      solutions.forEach((sol, idx) => {
+        const btn = buttons[idx];
+        if (show) {
+          sol.classList.add('show');
+          if (btn) {
+            btn.classList.add('active');
+            btn.innerHTML = '🙈 إخفاء الحل';
+          }
+        } else {
+          sol.classList.remove('show');
+          if (btn) {
+            btn.classList.remove('active');
+            btn.innerHTML = '👁️ إظهار الحل';
+          }
+        }
+      });
+    }
+
+    function copyCode(btn) {
+      const snippet = btn.closest('.code-container').querySelector('.code-snippet');
+      const clone = snippet.cloneNode(true);
+      clone.querySelectorAll('.explain-block').forEach(c => c.remove());
+      const cleanCode = clone.innerText.trim();
+
+      const textarea = document.createElement('textarea');
+      textarea.value = cleanCode;
+      textarea.style.position = 'fixed';
+      textarea.style.opacity = '0';
+      document.body.appendChild(textarea);
+      textarea.select();
+      try {
+        document.execCommand('copy');
+        const orig = btn.innerText;
+        btn.innerText = 'تم النسخ!';
+        btn.style.color = '#34d399';
+        btn.style.borderColor = '#34d399';
+        setTimeout(() => {
+          btn.innerText = orig;
+          btn.style.color = '';
+          btn.style.borderColor = '';
+        }, 1800);
+      } catch (err) {
+        console.error('فشل النسخ', err);
+      }
+      document.body.removeChild(textarea);
+    }
+
+    /* MCQ Engine Logic */
+    const quizExplanations = {
+      1: "صحيح! جملة break في لغة C++ تُنهي فقط أضيق حلقة تحيط بها مباشرة (Innermost Loop)، مما يسمح للحلقة الخارجية بالاستمرار في باقي دوراتها.",
+      2: "صحيح! تدور الحلقة الخارجية 3 مرات (i = 0, 1, 2) والحلقة الداخلية 4 مرات (j = 1, 2, 3, 4). إجمالي التنفيذ = 3 &times; 4 = 12 مرة.",
+      3: "صحيح! عند i = 1، ينطبع j=1 فيظهر '11'، ثم عند j=2 يحدث break. وعند i = 2، ينطبع j=1 فيظهر '21'، ثم عند j=2 يحدث break ثانية. الناتج النهائي: '11 21 '.",
+      4: "صحيح! هذه متسلسلة غاوس الحسابية الشهيرة: 1 + 2 + 3 + ... + N = N(N + 1) / 2."
+    };
+
+    function checkAnswer(qNum, optIdx, isCorrect) {
+      if (answeredQuestions[qNum]) return;
+      answeredQuestions[qNum] = true;
+
+      const card = document.getElementById('qcard-' + qNum);
+      const buttons = card.querySelectorAll('.mcq-opt-btn');
+      const feedback = document.getElementById('feedback-' + qNum);
+
+      buttons.forEach((btn, idx) => {
+        btn.style.pointerEvents = 'none';
+        if (idx === optIdx) {
+          btn.classList.add(isCorrect ? 'correct' : 'incorrect');
+        }
+      });
+
+      if (isCorrect) correctCount++;
+
+      feedback.className = 'mcq-feedback show-feed ' + (isCorrect ? 'label-green' : 'label-rose');
+      feedback.style.background = isCorrect ? 'rgba(52, 211, 153, 0.1)' : 'rgba(244, 63, 94, 0.1)';
+      feedback.style.border = isCorrect ? '1px solid rgba(52, 211, 153, 0.3)' : '1px solid rgba(244, 63, 94, 0.3)';
+      feedback.innerHTML = `<b>${isCorrect ? '✅ إجابة صحيحة وممتازة!' : '❌ إجابة غير صحيحة!'}</b> ${quizExplanations[qNum]}`;
+
+      document.getElementById('quizScoreDisplay').innerText = `النتيجة: تم حل ${correctCount} بشكل صحيح من ${Object.keys(answeredQuestions).length} أسئلة مجابة (إجمالي 4 أسئلة)`;
+    }
+
+    /* Simulator Logic */
+    let simR = 1;
+    let simC = 1;
+    let simTimer = null;
+    let printedCount = 0;
+
+    function resetSimulator() {
+      if (simTimer) {
+        clearInterval(simTimer);
+        simTimer = null;
+        document.getElementById('simPlayBtn').innerText = '⚡ تشغيل تلقائي';
+      }
+      simR = 1;
+      simC = 1;
+      printedCount = 0;
+
+      const maxR = parseInt(document.getElementById('simRows').value) || 4;
+      const maxC = parseInt(document.getElementById('simCols').value) || 4;
+      const grid = document.getElementById('simGrid');
+      grid.innerHTML = '';
+
+      for (let r = 1; r <= maxR; r++) {
+        const rowDiv = document.createElement('div');
+        rowDiv.className = 'sim-row';
+        rowDiv.id = 'sim-r-' + r;
+
+        for (let c = 1; c <= maxC; c++) {
+          const cell = document.createElement('div');
+          cell.className = 'sim-cell';
+          cell.id = `cell-${r}-${c}`;
+          cell.innerText = '*';
+          rowDiv.appendChild(cell);
+        }
+        grid.appendChild(rowDiv);
+      }
+
+      document.getElementById('simRowVal').innerText = '-';
+      document.getElementById('simColVal').innerText = '-';
+      document.getElementById('simCountVal').innerText = '0';
+      document.getElementById('simStatusMsg').innerText = 'جاهز';
+    }
+
+    function stepSimulator() {
+      const maxR = parseInt(document.getElementById('simRows').value) || 4;
+      const maxC = parseInt(document.getElementById('simCols').value) || 4;
+      const pattern = document.getElementById('simPattern').value;
+
+      if (simR > maxR) {
+        document.getElementById('simStatusMsg').innerText = 'اكتمل التنفيذ بنجاح!';
+        if (simTimer) {
+          clearInterval(simTimer);
+          simTimer = null;
+          document.getElementById('simPlayBtn').innerText = '⚡ تشغيل تلقائي';
+        }
+        return;
+      }
+
+      const limitC = (pattern === 'triangle') ? simR : maxC;
+
+      const prevActive = document.querySelector('.sim-cell.active-cell');
+      if (prevActive) {
+        prevActive.classList.remove('active-cell');
+        prevActive.classList.add('printed');
+      }
+
+      const currentCell = document.getElementById(`cell-${simR}-${simC}`);
+      if (currentCell) {
+        currentCell.classList.add('active-cell');
+      }
+
+      document.getElementById('simRowVal').innerText = simR;
+      document.getElementById('simColVal').innerText = simC;
+      printedCount++;
+      document.getElementById('simCountVal').innerText = printedCount;
+      document.getElementById('simStatusMsg').innerText = `قيد التنفيذ (السطر ${simR}، العمود ${simC})`;
+
+      simC++;
+      if (simC > limitC) {
+        simR++;
+        simC = 1;
+      }
+    }
+
+    function autoPlaySimulator() {
+      const btn = document.getElementById('simPlayBtn');
+      if (simTimer) {
+        clearInterval(simTimer);
+        simTimer = null;
+        btn.innerText = '⚡ تشغيل تلقائي';
+      } else {
+        btn.innerText = '⏸ إيقاف مؤقت';
+        simTimer = setInterval(() => {
+          stepSimulator();
+        }, 320);
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+      if (typeof renderMathInElement === 'function') {
+        renderMathInElement(document.body, {
+          delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "$", right: "$", display: false}
+          ],
+          throwOnError: false
+        });
+      }
+      resetSimulator();
+    });
+  </script>
+</body>
+</html>
