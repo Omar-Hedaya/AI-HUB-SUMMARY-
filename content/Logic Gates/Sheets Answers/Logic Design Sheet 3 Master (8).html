@@ -1,0 +1,2540 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <title>Logic Design — Sheet 3: Boolean Algebra & K-Maps (Interactive Pro Suite)</title>
+  <!-- KaTeX CSS & JS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+  <!-- Google Fonts: Noto Sans Arabic & Roboto (Exact Match to Selected Screenshot) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;500;600;700;800;900&family=Roboto:wght@400;500;700;900&family=JetBrains+Mono:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-base: #070b12;
+      --bg-card: #0d1422;
+      --bg-code: #090e17;
+      --border-card: #1e293b;
+      --cyan: #38bdf8;
+      --emerald: #34d399;
+      --amber: #f59e0b;
+      --amber-light: #fbbf24;
+      --purple: #c084fc;
+      --rose: #f43f5e;
+      --indigo: #818cf8;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box !important;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      width: 100% !important;
+      max-width: 100% !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      overflow-x: hidden !important;
+      background-color: var(--bg-base);
+      color: var(--text-main);
+      /* Exact Target Font: Noto Sans Arabic & Roboto */
+      font-family: 'Noto Sans Arabic', 'Roboto', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif !important;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      line-height: 1.65;
+      letter-spacing: 0;
+      padding-bottom: 70px !important;
+    }
+
+    /* Enforce strict LTR on technical items */
+    .ltr-block,
+    .math-block,
+    .katex,
+    .katex-display,
+    .mono,
+    .table-fit-container,
+    table,
+    .circuit-container,
+    .kmap-container,
+    .rule-card,
+    .sim-container,
+    .quiz-bar,
+    .trace-status-bar,
+    .step-rule-badge,
+    .copy-btn-wrap,
+    .kmap-term-badge {
+      direction: ltr !important;
+      text-align: left !important;
+      unicode-bidi: isolate !important;
+    }
+
+    .math-scroll-wrapper {
+      width: 100%;
+      overflow-x: auto;
+      white-space: nowrap;
+      -webkit-overflow-scrolling: touch;
+      padding: 6px 8px;
+      margin: 4px 0;
+      background: rgba(15, 23, 42, 0.45);
+      border-radius: 6px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    .math-scroll-wrapper::-webkit-scrollbar { height: 3px; }
+    .math-scroll-wrapper::-webkit-scrollbar-thumb { background: #334155; border-radius: 3px; }
+
+    .mono {
+      font-family: 'JetBrains Mono', 'Roboto Mono', monospace !important;
+      font-weight: 700;
+    }
+
+    .container {
+      width: 100% !important;
+      max-width: 980px !important;
+      margin: 0 auto !important;
+      padding: 8px 10px !important;
+    }
+
+    /* Navigation */
+    .subnav-wrapper {
+      position: sticky;
+      top: 6px;
+      z-index: 1000;
+      background: rgba(7, 11, 18, 0.95);
+      backdrop-filter: blur(14px);
+      padding: 6px;
+      border-radius: 10px;
+      border: 1px solid var(--border-card);
+      margin-bottom: 12px;
+      overflow-x: auto !important;
+      scrollbar-width: none;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.7);
+    }
+    .subnav-wrapper::-webkit-scrollbar { display: none; }
+    .subnav-tabs {
+      display: flex;
+      gap: 6px;
+      width: 100%;
+      min-width: min-content;
+    }
+    .tab-btn {
+      flex: 1;
+      padding: 7px 12px;
+      background: #111827;
+      border: 1px solid #1f2937;
+      color: var(--text-muted);
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.78rem;
+      text-align: center;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+      font-family: 'Noto Sans Arabic', 'Roboto', sans-serif !important;
+    }
+    .tab-btn:hover { color: #fff; border-color: rgba(56, 189, 248, 0.4); }
+    .tab-btn.active {
+      background: rgba(56, 189, 248, 0.16);
+      border-color: var(--cyan);
+      color: var(--cyan);
+      box-shadow: 0 0 10px rgba(56, 189, 248, 0.25);
+    }
+    .tab-btn.all-btn {
+      background: rgba(52, 211, 153, 0.12);
+      border-color: rgba(52, 211, 153, 0.35);
+      color: var(--emerald);
+    }
+    .tab-btn.all-btn.active {
+      background: rgba(52, 211, 153, 0.22);
+      border-color: var(--emerald);
+      color: #fff;
+    }
+
+    /* Header */
+    .header {
+      padding: 6px 4px 12px 4px;
+      border-bottom: 1px solid var(--border-card);
+      margin-bottom: 12px;
+    }
+    .header-badge {
+      display: inline-block;
+      background: rgba(56, 189, 248, 0.12);
+      color: var(--cyan);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      padding: 3px 10px;
+      border-radius: 9999px;
+      font-size: 0.72rem;
+      font-weight: 800;
+      margin-bottom: 6px;
+      direction: ltr !important;
+      font-family: 'Roboto', sans-serif !important;
+    }
+    .header h1 {
+      font-size: 1.32rem;
+      font-weight: 900;
+      color: #fff;
+      margin-bottom: 6px;
+      line-height: 1.45;
+      font-family: 'Noto Sans Arabic', 'Roboto', sans-serif !important;
+    }
+    .header p {
+      font-size: 0.83rem;
+      color: var(--text-muted);
+      line-height: 1.65;
+      font-family: 'Noto Sans Arabic', sans-serif !important;
+    }
+
+    /* Cards */
+    .cheat-sheet-card {
+      background: linear-gradient(145deg, #0d1422, #080d16);
+      border: 1px solid rgba(56, 189, 248, 0.25);
+      border-radius: 10px;
+      margin-bottom: 12px;
+      padding: 10px 12px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.5);
+    }
+    .cheat-sheet-header {
+      font-size: 0.88rem;
+      font-weight: 800;
+      color: var(--cyan);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-family: 'Noto Sans Arabic', sans-serif !important;
+    }
+    .rules-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 8px;
+    }
+    .rule-card {
+      background: #060a11;
+      border: 1px solid #1a2538;
+      border-radius: 8px;
+      padding: 8px 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+    .rule-tag {
+      font-size: 0.77rem;
+      font-weight: 800;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-family: 'Roboto', 'Noto Sans Arabic', sans-serif !important;
+    }
+    .rule-tag.cyan { color: var(--cyan); }
+    .rule-tag.amber { color: var(--amber-light); }
+    .rule-tag.emerald { color: var(--emerald); }
+    .rule-tag.purple { color: var(--purple); }
+    .rule-body {
+      font-size: 0.78rem;
+      color: #cbd5e1;
+      line-height: 1.5;
+      font-family: 'Noto Sans Arabic', 'Roboto', sans-serif !important;
+    }
+    .rule-math {
+      background: #0d1524;
+      border: 1px solid #1e293b;
+      border-radius: 5px;
+      padding: 2px 6px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      color: #38bdf8;
+      margin-top: 2px;
+      display: inline-block;
+    }
+
+    .global-toggle-bar {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 12px;
+      background: rgba(255, 255, 255, 0.02);
+      padding: 6px;
+      border-radius: 8px;
+      border: 1px solid var(--border-card);
+    }
+    .global-toggle-bar button {
+      flex: 1;
+      padding: 7px 10px;
+      font-size: 0.76rem;
+      font-weight: 800;
+      border-radius: 6px;
+      cursor: pointer;
+      border: 1px solid #1e293b;
+      background: #111827;
+      color: #e2e8f0;
+      font-family: 'Noto Sans Arabic', sans-serif !important;
+      transition: all 0.2s ease;
+    }
+    .global-toggle-bar button:hover { border-color: var(--cyan); color: #fff; }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-card);
+      border-radius: 10px;
+      margin-bottom: 12px;
+      overflow: hidden !important;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.4);
+    }
+    .card-header {
+      background: rgba(255, 255, 255, 0.02);
+      border-bottom: 1px solid var(--border-card);
+      padding: 8px 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .prob-tag {
+      font-weight: 800;
+      font-size: 0.85rem;
+      color: var(--cyan);
+      flex: 1;
+      min-width: 200px;
+      direction: ltr !important;
+      text-align: left !important;
+      font-family: 'Roboto', 'Noto Sans Arabic', sans-serif !important;
+    }
+    .card-header-actions {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .sol-toggle-btn, .quiz-mode-btn, .reset-trace-btn, .kmap-indices-btn {
+      padding: 5px 9px;
+      border-radius: 6px;
+      font-size: 0.74rem;
+      font-weight: 800;
+      cursor: pointer;
+      font-family: 'Noto Sans Arabic', sans-serif !important;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+    .sol-toggle-btn {
+      background: rgba(244, 63, 94, 0.14);
+      border: 1px solid var(--rose);
+      color: var(--rose);
+    }
+    .sol-toggle-btn.collapsed {
+      background: rgba(56, 189, 248, 0.12);
+      border-color: rgba(56, 189, 248, 0.4);
+      color: var(--cyan);
+    }
+    .quiz-mode-btn {
+      background: rgba(245, 158, 11, 0.15);
+      border: 1px solid var(--amber);
+      color: var(--amber-light);
+    }
+    .quiz-mode-btn.active {
+      background: rgba(52, 211, 153, 0.2);
+      border-color: var(--emerald);
+      color: var(--emerald);
+    }
+    .reset-trace-btn {
+      background: rgba(56, 189, 248, 0.14);
+      border: 1px solid var(--cyan);
+      color: var(--cyan);
+    }
+    .kmap-indices-btn {
+      background: rgba(192, 132, 252, 0.14);
+      border: 1px solid var(--purple);
+      color: var(--purple);
+    }
+    .kmap-indices-btn.active {
+      background: rgba(192, 132, 252, 0.3);
+      color: #fff;
+      box-shadow: 0 0 8px rgba(192, 132, 252, 0.4);
+    }
+
+    .card-body {
+      padding: 10px 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .question-prompt {
+      background: rgba(56, 189, 248, 0.05);
+      border-left: 3px solid var(--cyan);
+      padding: 8px 10px;
+      font-size: 0.83rem;
+      color: #f1f5f9;
+      border-radius: 0 6px 6px 0;
+      line-height: 1.55;
+      direction: ltr !important;
+      text-align: left !important;
+      font-family: 'Roboto', 'Noto Sans Arabic', sans-serif !important;
+    }
+    .solution-content { display: none; flex-direction: column; gap: 8px; }
+    .solution-content.show { display: flex; }
+
+    .step-block {
+      background: var(--bg-code);
+      border: 1px solid #1a2538;
+      border-radius: 8px;
+      padding: 8px 10px;
+      font-size: 0.82rem;
+      line-height: 1.55;
+      font-family: 'Noto Sans Arabic', 'Roboto', sans-serif !important;
+    }
+    .step-label {
+      font-size: 0.77rem;
+      font-weight: 800;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 6px;
+      font-family: 'Roboto', 'Noto Sans Arabic', sans-serif !important;
+    }
+    .label-blue { color: var(--cyan); }
+    .label-amber { color: var(--amber-light); }
+    .label-green { color: var(--emerald); }
+    .label-purple { color: var(--purple); }
+    .label-rose { color: var(--rose); }
+
+    .step-rule-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: rgba(56, 189, 248, 0.1);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      color: var(--cyan);
+      padding: 2px 7px;
+      border-radius: 5px;
+      font-size: 0.7rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 700;
+      margin-left: 4px;
+      white-space: nowrap;
+    }
+    .step-rule-badge.amber {
+      background: rgba(245, 158, 11, 0.1);
+      border-color: rgba(245, 158, 11, 0.4);
+      color: var(--amber-light);
+    }
+    .step-rule-badge.green {
+      background: rgba(52, 211, 153, 0.1);
+      border-color: rgba(52, 211, 153, 0.4);
+      color: var(--emerald);
+    }
+    .step-rule-badge.purple {
+      background: rgba(192, 132, 252, 0.1);
+      border-color: rgba(192, 132, 252, 0.4);
+      color: var(--purple);
+    }
+
+    .result-badge-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      margin-top: 6px;
+    }
+    .result-badge {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 6px;
+      background: rgba(52, 211, 153, 0.1);
+      border: 1px solid rgba(52, 211, 153, 0.35);
+      color: var(--emerald);
+      padding: 6px 10px;
+      border-radius: 6px;
+      font-weight: 700;
+      font-size: 0.81rem;
+      direction: ltr !important;
+      text-align: left !important;
+      font-family: 'Roboto', 'Noto Sans Arabic', sans-serif !important;
+    }
+    .result-actions {
+      display: inline-flex;
+      gap: 5px;
+      align-items: center;
+    }
+    .copy-btn {
+      background: #111a28;
+      border: 1px solid #1e2e46;
+      color: #94a3b8;
+      padding: 3px 8px;
+      border-radius: 5px;
+      font-size: 0.71rem;
+      font-family: 'Noto Sans Arabic', sans-serif !important;
+      cursor: pointer;
+      font-weight: 700;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+    }
+    .copy-btn:hover {
+      background: #1a273b;
+      color: #fff;
+      border-color: var(--cyan);
+    }
+    .validate-toggle-btn {
+      background: rgba(129, 140, 248, 0.14);
+      border: 1px solid rgba(129, 140, 248, 0.4);
+      color: var(--indigo);
+      padding: 3px 8px;
+      border-radius: 5px;
+      font-size: 0.71rem;
+      font-weight: 800;
+      cursor: pointer;
+      font-family: 'Noto Sans Arabic', sans-serif !important;
+      transition: all 0.2s ease;
+    }
+    .validate-toggle-btn:hover {
+      background: rgba(129, 140, 248, 0.25);
+      color: #fff;
+    }
+
+    .validator-panel {
+      display: none;
+      background: #060910;
+      border: 1px solid #1a283d;
+      border-radius: 6px;
+      padding: 6px 8px;
+      margin-top: 4px;
+      animation: fadeIn 0.2s ease-in-out;
+    }
+    .validator-panel.open { display: block; }
+    .validator-header {
+      font-size: 0.75rem;
+      font-weight: 800;
+      color: var(--indigo);
+      margin-bottom: 4px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: 'Noto Sans Arabic', sans-serif !important;
+    }
+
+    /* Circuit SVG */
+    .circuit-container {
+      position: relative;
+      background: #050912;
+      border: 1px solid #1a2538;
+      border-radius: 8px;
+      padding: 6px;
+      width: 100% !important;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .diagram-title {
+      font-size: 0.75rem;
+      font-weight: 800;
+      color: var(--cyan);
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+      margin-bottom: 4px;
+      width: 100%;
+      text-align: left;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 4px;
+      font-family: 'Roboto', 'Noto Sans Arabic', sans-serif !important;
+    }
+    .circuit-svg {
+      width: 100% !important;
+      max-width: 360px !important;
+      max-height: 150px !important;
+      height: auto !important;
+      display: block !important;
+    }
+
+    /* K-Map Styles & Highlight Interactions */
+    .kmap-container {
+      background: #050912;
+      border: 1px solid #1a2538;
+      border-radius: 8px;
+      padding: 6px;
+      width: 100% !important;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+    .kmap-svg {
+      width: 100% !important;
+      max-width: 250px !important;
+      max-height: 140px !important;
+      height: auto !important;
+      display: block !important;
+    }
+    .kmap-svg-4var {
+      width: 100% !important;
+      max-width: 270px !important;
+      max-height: 155px !important;
+      height: auto !important;
+      display: block !important;
+    }
+
+    /* Minterm cell indices */
+    .kmap-index-label {
+      font-size: 7px;
+      font-weight: bold;
+      font-family: 'JetBrains Mono', monospace;
+      fill: #475569;
+      opacity: 0;
+      transition: opacity 0.25s ease;
+    }
+    .show-indices .kmap-index-label {
+      opacity: 0.75;
+      fill: #94a3b8;
+    }
+
+    /* K-Map Interactive Groups/Loops */
+    .kmap-loop {
+      transition: all 0.25s ease;
+      cursor: pointer;
+    }
+    .kmap-loop.dimmed {
+      opacity: 0.12 !important;
+      stroke-width: 1 !important;
+    }
+    .kmap-loop.highlighted {
+      stroke-width: 3.2 !important;
+      filter: drop-shadow(0 0 8px currentColor) !important;
+      animation: loopPulse 1.2s infinite alternate;
+    }
+    @keyframes loopPulse {
+      0% { opacity: 0.7; transform: scale(0.99); }
+      100% { opacity: 1; transform: scale(1.02); }
+    }
+
+    /* Interactive Term Badges */
+    .kmap-legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 6px;
+      font-size: 0.73rem;
+      color: var(--text-muted);
+      justify-content: center;
+      font-family: 'Noto Sans Arabic', 'Roboto', sans-serif !important;
+    }
+    .kmap-term-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-family: 'JetBrains Mono', monospace;
+      background: #0d1522;
+      border: 1px solid #1e293b;
+      padding: 3px 8px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      user-select: none;
+    }
+    .kmap-term-badge:hover, .kmap-term-badge.active {
+      border-color: var(--cyan);
+      background: rgba(56, 189, 248, 0.15);
+      color: #fff;
+      transform: translateY(-1px);
+    }
+    .kmap-legend-color {
+      width: 10px;
+      height: 10px;
+      border-radius: 2px;
+      display: inline-block;
+    }
+
+    .trace-status-bar {
+      width: 100%;
+      background: #080e18;
+      border: 1px solid #1b283d;
+      border-radius: 6px;
+      padding: 4px 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+      font-family: 'Noto Sans Arabic', sans-serif !important;
+    }
+    .glow-state-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-weight: 800;
+    }
+    .pulse-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--emerald);
+      box-shadow: 0 0 6px var(--emerald);
+      animation: pulseAnim 1.4s infinite;
+    }
+    @keyframes pulseAnim {
+      0% { opacity: 0.4; transform: scale(0.9); }
+      50% { opacity: 1; transform: scale(1.15); box-shadow: 0 0 10px var(--cyan); }
+      100% { opacity: 0.4; transform: scale(0.9); }
+    }
+
+    .table-fit-container {
+      width: 100% !important;
+      max-width: 100% !important;
+      overflow-x: auto !important;
+      border: 1px solid #1e293b !important;
+      border-radius: 6px !important;
+      background: #070b12 !important;
+    }
+    table {
+      width: 100% !important;
+      min-width: 440px;
+      border-collapse: collapse !important;
+      text-align: center !important;
+    }
+    th {
+      background: #111a29 !important;
+      color: var(--cyan) !important;
+      font-weight: 800 !important;
+      font-size: 0.74rem !important;
+      padding: 6px 4px !important;
+      border: 1px solid #1e293b !important;
+      white-space: nowrap;
+      font-family: 'Noto Sans Arabic', 'Roboto', sans-serif !important;
+    }
+    td {
+      padding: 5px 4px !important;
+      border: 1px solid #162030 !important;
+      color: #e2e8f0 !important;
+      font-size: 0.75rem !important;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    tr:nth-child(even) td { background: #0a101a !important; }
+
+    tr.trace-row { cursor: pointer; transition: all 0.2s ease; }
+    tr.trace-row:hover td { background: rgba(56, 189, 248, 0.1) !important; }
+    tr.trace-row.tr-isolated td {
+      background: rgba(56, 189, 248, 0.22) !important;
+      border-color: rgba(56, 189, 248, 0.5) !important;
+      color: #fff !important;
+      font-weight: bold;
+    }
+
+    .quiz-cell-btn {
+      width: 26px;
+      height: 24px;
+      border-radius: 4px;
+      border: 1px solid #334155;
+      background: #111827;
+      color: #94a3b8;
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 800;
+      font-size: 0.77rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto;
+    }
+    .quiz-cell-btn.correct {
+      background: rgba(52, 211, 153, 0.25) !important;
+      border-color: var(--emerald) !important;
+      color: var(--emerald) !important;
+    }
+    .quiz-cell-btn.wrong {
+      background: rgba(244, 63, 94, 0.25) !important;
+      border-color: var(--rose) !important;
+      color: var(--rose) !important;
+    }
+    .quiz-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #090e17;
+      border: 1px solid #1b263b;
+      padding: 6px 10px;
+      border-radius: 6px;
+      margin-top: 4px;
+      font-size: 0.75rem;
+      font-family: 'Noto Sans Arabic', sans-serif !important;
+    }
+    .quiz-score-badge {
+      font-weight: 800;
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--amber-light);
+    }
+    .quiz-action-btn {
+      background: #1e293b;
+      border: 1px solid #334155;
+      color: #cbd5e1;
+      padding: 3px 8px;
+      border-radius: 5px;
+      font-size: 0.71rem;
+      font-family: 'Noto Sans Arabic', sans-serif !important;
+      cursor: pointer;
+      font-weight: 700;
+    }
+    .quiz-action-btn:hover { background: #2d3b52; color: #fff; }
+
+    .sim-container {
+      background: #0b111c;
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      border-radius: 8px;
+      padding: 10px;
+      margin-top: 12px;
+      font-family: 'Noto Sans Arabic', 'Roboto', sans-serif !important;
+    }
+    .sim-title {
+      color: var(--cyan);
+      font-weight: 800;
+      font-size: 0.88rem;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    #copy-toast {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: rgba(52, 211, 153, 0.95);
+      color: #070b12;
+      padding: 6px 14px;
+      border-radius: 6px;
+      font-weight: 800;
+      font-size: 0.79rem;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.4);
+      z-index: 9999;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+      font-family: 'Noto Sans Arabic', sans-serif !important;
+    }
+    #copy-toast.show { opacity: 1; }
+  </style>
+</head>
+<body>
+  <div class="container" id="app-container">
+
+    <!-- Top Sticky Navigation -->
+    <div class="subnav-wrapper">
+      <div class="subnav-tabs">
+        <div id="filter-btn-0" class="tab-btn all-btn active" onclick="filterGroup(0)">All Questions (Q1 to Q7)</div>
+        <div id="filter-btn-1" class="tab-btn" onclick="filterGroup(1)">Q1 (Boolean Simplification)</div>
+        <div id="filter-btn-2" class="tab-btn" onclick="filterGroup(2)">Q2 & Q3 (Circuits & DeMorgan)</div>
+        <div id="filter-btn-3" class="tab-btn" onclick="filterGroup(3)">Q4 & Q5 (SOP & POS Forms)</div>
+        <div id="filter-btn-4" class="tab-btn" onclick="filterGroup(4)">Q6 & Q7 (K-Maps 3 & 4 Vars)</div>
+      </div>
+    </div>
+
+    <!-- Header -->
+    <div class="header">
+      <span class="header-badge">BENHA UNIVERSITY • FACULTY OF ENGINEERING AT SHOUBRA • EEC213 / ELE113</span>
+      <h1>Logic Design — Sheet 3: Boolean Algebra & Karnaugh Maps (K-Maps)</h1>
+      <p>حلول هندسية منظمة وشاملة بالبراهين الجبرية الدقيقة، جداول الحقيقة التفاعلية، مسارات تدفق الإشارات المضيئة ⚡، وخرائط كارنوف (K-Maps) مزودة <b>بمفتاح أرقام المينتيرمز ($m_0, m_1, \dots$)</b> و<b>الربط التفاعلي بين الحدود وحلقات الخريطة (Term-to-Loop Highlight)</b>.</p>
+    </div>
+
+    <!-- Summary Cheat Sheet -->
+    <div class="cheat-sheet-card">
+      <div class="cheat-sheet-header">
+        <span>⚡ Quick Reference Guide: Postulates & Theorems (قوانين الجبر البوليني وخرائط كارنوف)</span>
+      </div>
+      <div class="rules-grid">
+        <div class="rule-card">
+          <div class="rule-tag cyan"><span>🔘 Postulates & Identity</span></div>
+          <div class="rule-body">
+            &bull; $A + 0 = A$, &nbsp; $A \cdot 1 = A$<br>
+            &bull; $A + 1 = 1$, &nbsp; $A \cdot 0 = 0$<br>
+            &bull; $A + A = A$, &nbsp; $A \cdot A = A$
+          </div>
+          <div class="rule-math">A + A' = 1 &nbsp;|&nbsp; A · A' = 0 &nbsp;|&nbsp; (A')' = A</div>
+        </div>
+
+        <div class="rule-card">
+          <div class="rule-tag amber"><span>➕ Absorption & Distributive</span></div>
+          <div class="rule-body">
+            &bull; $A + AB = A$<br>
+            &bull; $A + \overline{A}B = A + B$<br>
+            &bull; $(A + B)(A + C) = A + BC$
+          </div>
+          <div class="rule-math">A(A + B) = A &nbsp;|&nbsp; A(A' + B) = AB</div>
+        </div>
+
+        <div class="rule-card">
+          <div class="rule-tag emerald"><span>⭕ DeMorgan's Theorems</span></div>
+          <div class="rule-body">
+            &bull; $\overline{A \cdot B} = \overline{A} + \overline{B}$ (NAND)<br>
+            &bull; $\overline{A + B} = \overline{A} \cdot \overline{B}$ (NOR)
+          </div>
+          <div class="rule-math">(A + B + ... + Z)' = A' · B' · ... · Z'</div>
+        </div>
+
+        <div class="rule-card">
+          <div class="rule-tag purple"><span>🗺️ K-Map Grouping Rules</span></div>
+          <div class="rule-body">
+            &bull; Groups must be powers of 2 ($1, 2, 4, 8, 16$).<br>
+            &bull; Wrap-around edges & 4 corners are adjacent.<br>
+            &bull; Click any term badge to flash its exact loop!
+          </div>
+          <div class="rule-math">Gray Code: 00 &rarr; 01 &rarr; 11 &rarr; 10</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Global Toggle Bar -->
+    <div class="global-toggle-bar">
+      <button onclick="toggleAllSolutions(true)">👁️ إظهار جميع الحلول والخطوات (Show All)</button>
+      <button onclick="toggleAllSolutions(false)">🙈 إخفاء الخطوات للحل الذاتي (Hide All)</button>
+    </div>
+
+    <!-- ==========================================
+         QUESTION 1: BOOLEAN SIMPLIFICATION
+    ========================================== -->
+    <div class="card" data-group="1">
+      <div class="card-header">
+        <span class="prob-tag">Q1. Simplify Expressions Using Boolean Algebra (a to e)</span>
+        <div class="card-header-actions">
+          <button class="sol-toggle-btn" onclick="toggleCardSolution(this)">🙈 Hide Steps</button>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="question-prompt">
+          <b>Q1.</b> Simplify the following expressions using Boolean algebra laws and theorems:<br>
+          <b>(a)</b> $(A+\overline{B})(A+C)$ &nbsp;&nbsp;&nbsp;&nbsp; 
+          <b>(b)</b> $A(\overline{A}+AB)$ &nbsp;&nbsp;&nbsp;&nbsp; 
+          <b>(c)</b> $AB+\overline{AB}C+A$<br>
+          <b>(d)</b> $A\overline{B}C+\overline{A}BC+\overline{A}\overline{B}C$ &nbsp;&nbsp;&nbsp;&nbsp; 
+          <b>(e)</b> $(B+BC)(B+\overline{B}C)(B+D)$
+        </div>
+        <div class="solution-content show">
+
+          <!-- Part (a) -->
+          <div class="step-block ltr-block">
+            <div class="step-label label-blue">
+              <span>(a) Expression: $(A+\overline{B})(A+C)$</span>
+              <span class="step-rule-badge cyan">Dual Distributive: (X+Y)(X+Z) = X+YZ</span>
+            </div>
+            <div><b>Step 1 (Expand using Distributive Law):</b> <span class="step-rule-badge">Distributive Law</span></div>
+            <div class="math-scroll-wrapper">$$= A \cdot A + A \cdot C + \overline{B} \cdot A + \overline{B} \cdot C$$</div>
+            <div><b>Step 2 (Apply Idempotence & Factor out $A$):</b> <span class="step-rule-badge green">Idempotent: A · A = A</span></div>
+            <div class="math-scroll-wrapper">$$= A + AC + A\overline{B} + \overline{B}C = A(1 + C + \overline{B}) + \overline{B}C$$</div>
+            <div><b>Step 3 (Apply Null Element / Annulment):</b> <span class="step-rule-badge amber">Annulment: 1 + X = 1</span></div>
+            <div class="math-scroll-wrapper">$$= A(1) + \overline{B}C = \mathbf{A + \overline{B}C}$$</div>
+
+            <div class="result-badge-wrap">
+              <div class="result-badge">
+                <span>Result (a): $\mathbf{A + \overline{B}C}$</span>
+                <div class="result-actions">
+                  <button class="validate-toggle-btn" onclick="toggleValidator('q1a')">🔍 تحقق من التطابق</button>
+                  <button class="copy-btn" onclick="copyText('A + B\'C', 'A + \\overline{B}C')">📋 نسخ</button>
+                </div>
+              </div>
+              <div class="validator-panel" id="val-q1a">
+                <div class="validator-header">
+                  <span>جدول التحقق والمطابقة العددية لجميع الاحتمالات ($2^3 = 8$)</span>
+                  <span style="color:var(--emerald);">✓ متطابق 100%</span>
+                </div>
+                <div class="table-fit-container">
+                  <table>
+                    <thead>
+                      <tr><th>A</th><th>B</th><th>C</th><th>الأصلي: $(A+B')(A+C)$</th><th>المبسط: $A + B'C$</th><th>الحالة</th></tr>
+                    </thead>
+                    <tbody id="val-tbody-q1a"></tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Part (b) -->
+          <div class="step-block ltr-block">
+            <div class="step-label label-amber">
+              <span>(b) Expression: $A(\overline{A}+AB)$</span>
+              <span class="step-rule-badge amber">Absorption: X' + XY = X' + Y</span>
+            </div>
+            <div><b>Method 1 (Internal Absorption First):</b> <span class="step-rule-badge green">Complement: A · A' = 0</span></div>
+            <div class="math-scroll-wrapper">$$A(\overline{A} + B) = A\overline{A} + AB = 0 + AB = \mathbf{AB}$$</div>
+            <div><b>Method 2 (Distribute $A$ Directly):</b> <span class="step-rule-badge">Distributive</span></div>
+            <div class="math-scroll-wrapper">$$= A \cdot \overline{A} + A \cdot (AB) = 0 + (A \cdot A)B = \mathbf{AB}$$</div>
+
+            <div class="result-badge-wrap">
+              <div class="result-badge">
+                <span>Result (b): $\mathbf{AB}$</span>
+                <div class="result-actions">
+                  <button class="validate-toggle-btn" onclick="toggleValidator('q1b')">🔍 تحقق من التطابق</button>
+                  <button class="copy-btn" onclick="copyText('AB', 'AB')">📋 نسخ</button>
+                </div>
+              </div>
+              <div class="validator-panel" id="val-q1b">
+                <div class="validator-header">
+                  <span>جدول التحقق والمطابقة العددية ($2^2 = 4$)</span>
+                  <span style="color:var(--emerald);">✓ متطابق 100%</span>
+                </div>
+                <div class="table-fit-container">
+                  <table>
+                    <thead>
+                      <tr><th>A</th><th>B</th><th>الأصلي: $A(A' + AB)$</th><th>المبسط: $AB$</th><th>الحالة</th></tr>
+                    </thead>
+                    <tbody id="val-tbody-q1b"></tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Part (c) -->
+          <div class="step-block ltr-block">
+            <div class="step-label label-green">
+              <span>(c) Expression: $AB+\overline{AB}C+A$</span>
+              <span class="step-rule-badge green">DeMorgan & Absorption</span>
+            </div>
+            <div><b>Step 1 (Combine $AB + A$):</b> <span class="step-rule-badge amber">A + AB = A</span></div>
+            <div class="math-scroll-wrapper">$$= A + AB + \overline{AB}C = A(1 + B) + \overline{AB}C = A + \overline{AB}C$$</div>
+            <div><b>Step 2 (Apply DeMorgan on $\overline{AB}$):</b> <span class="step-rule-badge purple">(AB)' = A' + B'</span></div>
+            <div class="math-scroll-wrapper">$$= A + (\overline{A} + \overline{B})C = A + \overline{A}C + \overline{B}C$$</div>
+            <div><b>Step 3 (Simplify $A + \overline{A}C = A + C$):</b> <span class="step-rule-badge">X + X'Y = X + Y</span></div>
+            <div class="math-scroll-wrapper">$$= (A + C) + \overline{B}C = A + C(1 + \overline{B}) = \mathbf{A + C}$$</div>
+
+            <div class="result-badge-wrap">
+              <div class="result-badge">
+                <span>Result (c): $\mathbf{A + C}$</span>
+                <div class="result-actions">
+                  <button class="validate-toggle-btn" onclick="toggleValidator('q1c')">🔍 تحقق من التطابق</button>
+                  <button class="copy-btn" onclick="copyText('A + C', 'A + C')">📋 نسخ</button>
+                </div>
+              </div>
+              <div class="validator-panel" id="val-q1c">
+                <div class="validator-header">
+                  <span>جدول التحقق والمطابقة العددية ($2^3 = 8$)</span>
+                  <span style="color:var(--emerald);">✓ متطابق 100%</span>
+                </div>
+                <div class="table-fit-container">
+                  <table>
+                    <thead>
+                      <tr><th>A</th><th>B</th><th>C</th><th>الأصلي</th><th>المبسط: $A + C$</th><th>الحالة</th></tr>
+                    </thead>
+                    <tbody id="val-tbody-q1c"></tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Part (d) -->
+          <div class="step-block ltr-block">
+            <div class="step-label label-purple">
+              <span>(d) Expression: $A\overline{B}C+\overline{A}BC+\overline{A}\overline{B}C$</span>
+              <span class="step-rule-badge purple">Factoring & Complement</span>
+            </div>
+            <div><b>Step 1 (Factor common $\overline{B}C$):</b> <span class="step-rule-badge green">A + A' = 1</span></div>
+            <div class="math-scroll-wrapper">$$= \overline{B}C(A + \overline{A}) + \overline{A}BC = \overline{B}C(1) + \overline{A}BC = \overline{B}C + \overline{A}BC$$</div>
+            <div><b>Step 2 (Factor variable $C$):</b> <span class="step-rule-badge amber">X' + XY = X' + Y</span></div>
+            <div class="math-scroll-wrapper">$$= C(\overline{B} + \overline{A}B) = C(\overline{B} + \overline{A}) = \mathbf{\overline{B}C + \overline{A}C}$$</div>
+
+            <div class="result-badge-wrap">
+              <div class="result-badge">
+                <span>Result (d): $\mathbf{\overline{B}C + \overline{A}C} = \mathbf{(\overline{A} + \overline{B})C}$</span>
+                <div class="result-actions">
+                  <button class="validate-toggle-btn" onclick="toggleValidator('q1d')">🔍 تحقق من التطابق</button>
+                  <button class="copy-btn" onclick="copyText('B\'C + A\'C', '\\overline{B}C + \\overline{A}C')">📋 نسخ</button>
+                </div>
+              </div>
+              <div class="validator-panel" id="val-q1d">
+                <div class="validator-header">
+                  <span>جدول التحقق والمطابقة العددية ($2^3 = 8$)</span>
+                  <span style="color:var(--emerald);">✓ متطابق 100%</span>
+                </div>
+                <div class="table-fit-container">
+                  <table>
+                    <thead>
+                      <tr><th>A</th><th>B</th><th>C</th><th>الأصلي</th><th>المبسط: $B'C + A'C$</th><th>الحالة</th></tr>
+                    </thead>
+                    <tbody id="val-tbody-q1d"></tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Part (e) -->
+          <div class="step-block ltr-block">
+            <div class="step-label label-rose">
+              <span>(e) Expression: $(B+BC)(B+\overline{B}C)(B+D)$</span>
+              <span class="step-rule-badge amber">Absorption Law</span>
+            </div>
+            <div><b>Step 1:</b> $B + BC = B(1 + C) = \mathbf{B}$</div>
+            <div><b>Step 2:</b> $B + \overline{B}C = \mathbf{B + C}$</div>
+            <div><b>Step 3:</b> $[B] \cdot (B + C) \cdot (B + D) = [B] \cdot (B + D) = \mathbf{B}$</div>
+
+            <div class="result-badge-wrap">
+              <div class="result-badge">
+                <span>Result (e): $\mathbf{B}$</span>
+                <div class="result-actions">
+                  <button class="validate-toggle-btn" onclick="toggleValidator('q1e')">🔍 تحقق من التطابق</button>
+                  <button class="copy-btn" onclick="copyText('B', 'B')">📋 نسخ</button>
+                </div>
+              </div>
+              <div class="validator-panel" id="val-q1e">
+                <div class="validator-header">
+                  <span>جدول التحقق والمطابقة العددية ($2^3 = 8$)</span>
+                  <span style="color:var(--emerald);">✓ متطابق 100%</span>
+                </div>
+                <div class="table-fit-container">
+                  <table>
+                    <thead>
+                      <tr><th>B</th><th>C</th><th>D</th><th>الأصلي</th><th>المبسط: $B$</th><th>الحالة</th></tr>
+                    </thead>
+                    <tbody id="val-tbody-q1e"></tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- ==========================================
+         QUESTION 2: TRUTH TABLE & CIRCUITS
+    ========================================== -->
+    <div class="card" data-group="2" id="card-q2">
+      <div class="card-header">
+        <span class="prob-tag">Q2. Expression Analysis: $Y=A\overline{B}C+\overline{A}\overline{B}C+\overline{A}BC+A\overline{B}C+ABC$</span>
+        <div class="card-header-actions">
+          <button class="reset-trace-btn" onclick="resetCircuitSelection('q2')">✨ إضاءة شاملة للمسارات</button>
+          <button class="quiz-mode-btn" onclick="toggleQuizMode('q2')">✍️ اختبر نفسك (Quiz)</button>
+          <button class="sol-toggle-btn" onclick="toggleCardSolution(this)">🙈 Hide Steps</button>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="question-prompt">
+          <b>Q2.</b> For the Boolean expression: $Y=A\overline{B}C+\overline{A}\overline{B}C+\overline{A}BC+A\overline{B}C+ABC$<br>
+          <b>(a)</b> Obtain the truth table of Y.<br>
+          <b>(b)</b> Draw the logic circuit using the original Boolean expression.<br>
+          <b>(c)</b> Draw the logic circuit after simplification using Boolean algebra.
+        </div>
+        <div class="solution-content show">
+
+          <div class="step-block ltr-block">
+            <div class="step-label label-blue">
+              <span>Boolean Algebraic Simplification:</span>
+              <span class="step-rule-badge green">Idempotent: X + X = X</span>
+            </div>
+            <div>Notice term $A\overline{B}C$ is repeated. The 4 unique minterms are:</div>
+            <div class="math-scroll-wrapper">$$Y = \overline{A}\overline{B}C + \overline{A}BC + A\overline{B}C + ABC$$</div>
+            <div>Factor $C$ from all four minterms:</div>
+            <div class="math-scroll-wrapper">$$Y = C \left( \overline{A}\overline{B} + \overline{A}B + A\overline{B} + AB \right) = C \left[ \overline{A}(\overline{B}+B) + A(\overline{B}+B) \right] = C(\overline{A}+A) = \mathbf{C}$$</div>
+            
+            <div class="result-badge-wrap">
+              <div class="result-badge">
+                <span>Remarkable Simplification: $\mathbf{Y = C}$ (Output identically equals input C)</span>
+                <div class="result-actions">
+                  <button class="copy-btn" onclick="copyText('Y = C', 'Y = C')">📋 نسخ</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Trace Status Bar -->
+          <div class="trace-status-bar" id="trace-bar-q2">
+            <span class="glow-state-badge">
+              <span class="pulse-dot"></span>
+              <span id="trace-text-q2" style="color:var(--cyan);">المسارات مضيئة دائماً (اضغط على أي صف لتحديد مسار الإشارة)</span>
+            </span>
+            <span style="font-size:0.7rem; color:var(--text-muted);">انقر خارج الجدول للعودة للإضاءة الشاملة</span>
+          </div>
+
+          <!-- (b) Original Unsimplified Circuit Schematic (Compact) -->
+          <div class="circuit-container ltr-block" id="schematic-container-q2">
+            <!-- Dynamic SVG injected by JS -->
+          </div>
+
+          <!-- (c) Simplified Circuit (Compact) -->
+          <div class="step-block ltr-block">
+            <div class="step-label label-green">(c) Logic Circuit After Simplification: $Y = C$</div>
+            <div class="circuit-container" style="padding: 10px 4px;">
+              <svg class="circuit-svg" viewBox="0 0 320 40" preserveAspectRatio="xMidYMid meet" style="max-height: 40px !important;">
+                <line x1="40" y1="20" x2="240" y2="20" stroke="#34d399" stroke-width="3" stroke-linecap="round" style="filter: drop-shadow(0 0 5px rgba(52, 211, 153, 0.9));"/>
+                <circle cx="40" cy="20" r="4" fill="#34d399"/>
+                <circle cx="240" cy="20" r="4" fill="#34d399"/>
+                <text x="18" y="24" fill="#38bdf8" font-size="12" font-weight="bold" font-family="JetBrains Mono">C</text>
+                <text x="252" y="24" fill="#34d399" font-size="12" font-weight="bold" font-family="JetBrains Mono">Y = C</text>
+              </svg>
+            </div>
+            <div style="font-size:0.74rem; color:var(--text-muted); margin-top:2px;">
+              💡 <b>مقارنة هندسية:</b> الدائرة الأصلية تتطلب 4 بوابات AND ثلاثية المداخل + 1 بوابة OR رباعية المداخل، بينما بعد التبسيط يتم ربط خط الدخل $C$ مباشرة بالخرج $Y$ دون الحاجة لأي بوابة!
+            </div>
+          </div>
+
+          <!-- (a) Truth Table -->
+          <div class="table-fit-container" id="circuit-table-q2"></div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- ==========================================
+         QUESTION 3: DE MORGAN'S THEOREM
+    ========================================== -->
+    <div class="card" data-group="2">
+      <div class="card-header">
+        <span class="prob-tag">Q3. Apply DeMorgan's Theorem (a, b, c)</span>
+        <div class="card-header-actions">
+          <button class="sol-toggle-btn" onclick="toggleCardSolution(this)">🙈 Hide Steps</button>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="question-prompt">
+          <b>Q3.</b> Apply DeMorgan's Theorem to find the complement and simplify:<br>
+          <b>(a)</b> $\overline{(A+\overline{B})(\overline{C}+D)}$<br>
+          <b>(b)</b> $\overline{(A+\overline{B\overline{C}}+CD)+\overline{BC}}$<br>
+          <b>(c)</b> $\overline{(\overline{A}+B+C+D)(A\overline{B}\overline{C}D)}$
+        </div>
+        <div class="solution-content show">
+
+          <!-- Part (a) -->
+          <div class="step-block ltr-block">
+            <div class="step-label label-blue">
+              <span>(a) Expression: $\overline{(A+\overline{B})(\overline{C}+D)}$</span>
+              <span class="step-rule-badge purple">DeMorgan: (X · Y)' = X' + Y'</span>
+            </div>
+            <div><b>Step 1 (Apply Product Complement):</b></div>
+            <div class="math-scroll-wrapper">$$= \overline{A + \overline{B}} + \overline{\overline{C} + D}$$</div>
+            <div><b>Step 2 (Apply Sum Complement & Double Inversion):</b></div>
+            <div class="math-scroll-wrapper">$$= (\overline{A} \cdot \overline{\overline{B}}) + (\overline{\overline{C}} \cdot \overline{D}) = \mathbf{\overline{A}B + C\overline{D}}$$</div>
+
+            <div class="result-badge-wrap">
+              <div class="result-badge">
+                <span>Result (a): $\mathbf{\overline{A}B + C\overline{D}}$</span>
+                <div class="result-actions">
+                  <button class="copy-btn" onclick="copyText('A\'B + CD\'', '\\overline{A}B + C\\overline{D}')">📋 نسخ</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Part (b) -->
+          <div class="step-block ltr-block">
+            <div class="step-label label-amber">
+              <span>(b) Expression: $\overline{(A+\overline{B\overline{C}}+CD)+\overline{BC}}$</span>
+              <span class="step-rule-badge amber">Tautology Complement</span>
+            </div>
+            <div>$\overline{B\overline{C}} = \overline{B} + C$, so $A + \overline{B} + C + CD = A + \overline{B} + C$.</div>
+            <div>Also $\overline{BC} = \overline{B} + \overline{C}$.</div>
+            <div class="math-scroll-wrapper">$$\text{Inner} = (A + \overline{B} + C) + (\overline{B} + \overline{C}) = A + \overline{B} + (C + \overline{C}) = A + \overline{B} + 1 = 1$$</div>
+            <div><b>Step 2 (Complement the Tautology):</b> <span class="step-rule-badge green">(1)' = 0</span></div>
+            <div class="math-scroll-wrapper">$$\overline{1} = \mathbf{0}$$</div>
+
+            <div class="result-badge-wrap">
+              <div class="result-badge">
+                <span>Result (b): $\mathbf{0}$ &nbsp;&nbsp;(Tautology complemented to 0)</span>
+                <div class="result-actions">
+                  <button class="copy-btn" onclick="copyText('0', '0')">📋 نسخ</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Part (c) -->
+          <div class="step-block ltr-block">
+            <div class="step-label label-purple">
+              <span>(c) Expression: $\overline{(\overline{A}+B+C+D)(A\overline{B}\overline{C}D)}$</span>
+              <span class="step-rule-badge purple">DeMorgan & Absorption</span>
+            </div>
+            <div class="math-scroll-wrapper">$$= \overline{(\overline{A} + B + C + D)} + \overline{(A\overline{B}\overline{C}D)} = (A\overline{B}\overline{C}\overline{D}) + (\overline{A} + B + C + \overline{D})$$</div>
+            <div>Notice $\overline{D}$ absorbs $A\overline{B}\overline{C}\overline{D}$ ($X + XY = X$ where $X = \overline{D}$):</div>
+            <div class="math-scroll-wrapper">$$= \mathbf{\overline{A} + B + C + \overline{D}}$$</div>
+
+            <div class="result-badge-wrap">
+              <div class="result-badge">
+                <span>Result (c): $\mathbf{\overline{A} + B + C + \overline{D}}$</span>
+                <div class="result-actions">
+                  <button class="copy-btn" onclick="copyText('A\' + B + C + D\'', '\\overline{A} + B + C + \\overline{D}')">📋 نسخ</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- ==========================================
+         QUESTION 4: STANDARD SOP & POS
+    ========================================== -->
+    <div class="card" data-group="3">
+      <div class="card-header">
+        <span class="prob-tag">Q4. Standard (SOP) & (POS) Canonical Forms for $(A+B)(C+B)$</span>
+        <div class="card-header-actions">
+          <button class="quiz-mode-btn" onclick="toggleQuizMode('q4')">✍️ اختبر نفسك (Quiz)</button>
+          <button class="sol-toggle-btn" onclick="toggleCardSolution(this)">🙈 Hide Steps</button>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="question-prompt">
+          <b>Q4.</b> For the given expression: $(A+B)(C+B)$<br>
+          Find the <b>Standard SOP</b> (Canonical Sum of Minterms) and <b>Standard POS</b> (Canonical Product of Maxterms) by replacing the missing variable and using the truth table method.
+        </div>
+        <div class="solution-content show">
+
+          <div class="step-block ltr-block">
+            <div class="step-label label-blue">Method 1: Algebraic Missing Variable Expansion</div>
+            <div><b>A) Standard POS Formulation:</b></div>
+            <div>Term $(A + B + C\overline{C}) = (A + B + C)(A + B + \overline{C})$ (Maxterms $M_0, M_1$)</div>
+            <div>Term $(A\overline{A} + B + C) = (A + B + C)(\overline{A} + B + C)$ (Maxterms $M_0, M_4$)</div>
+            <div class="math-scroll-wrapper">$$\text{Standard POS} = (A + B + C)(A + B + \overline{C})(\overline{A} + B + C) = \prod M(0, 1, 4)$$</div>
+
+            <div style="margin-top:6px;"><b>B) Standard SOP Formulation:</b></div>
+            <div>Algebraic expansion: $(A + B)(B + C) = B + AC$</div>
+            <div>$B = B(A + \overline{A})(C + \overline{C}) \implies m_2, m_3, m_6, m_7$</div>
+            <div>$AC = AC(B + \overline{B}) \implies m_5, m_7$</div>
+            <div class="math-scroll-wrapper">$$\text{Standard SOP} = \sum m(2, 3, 5, 6, 7) = \overline{A}B\overline{C} + \overline{A}BC + A\overline{B}C + AB\overline{C} + ABC$$</div>
+          </div>
+
+          <div class="step-block ltr-block">
+            <div class="step-label label-amber">Method 2: Truth Table Verification</div>
+            <div class="table-fit-container" id="circuit-table-q4"></div>
+          </div>
+
+          <div class="result-badge-wrap">
+            <div class="result-badge">
+              <span>Canonical SOP: $Y = \sum m(2, 3, 5, 6, 7)$ &nbsp;|&nbsp; Canonical POS: $Y = \prod M(0, 1, 4)$</span>
+              <div class="result-actions">
+                <button class="copy-btn" onclick="copyText('Sigma m(2,3,5,6,7)', '\\sum m(2, 3, 5, 6, 7)')">📋 نسخ SOP</button>
+                <button class="copy-btn" onclick="copyText('Pi M(0,1,4)', '\\prod M(0, 1, 4)')">📋 نسخ POS</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==========================================
+         QUESTION 5: SOP & POS FROM TRUTH TABLE
+    ========================================== -->
+    <div class="card" data-group="3">
+      <div class="card-header">
+        <span class="prob-tag">Q5. Derive SOP and POS from Given Truth Table</span>
+        <div class="card-header-actions">
+          <button class="sol-toggle-btn" onclick="toggleCardSolution(this)">🙈 Hide Steps</button>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="question-prompt">
+          <b>Q5.</b> Using the given table, find an expression of the output Y in:<br>
+          <b>(a)</b> SOP form &nbsp;&nbsp;&nbsp;&nbsp; <b>(b)</b> POS form
+        </div>
+        <div class="solution-content show">
+
+          <div class="table-fit-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Row</th><th>A</th><th>B</th><th>C</th><th>Output Y</th><th>Designation</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>0</td><td>0</td><td>0</td><td>0</td><td style="color:var(--rose); font-weight:bold;">0</td><td>$M_0 = (A + B + C)$</td></tr>
+                <tr style="background:rgba(52,211,153,0.1) !important;"><td>1</td><td>0</td><td>0</td><td>1</td><td style="color:var(--emerald); font-weight:bold;">1</td><td>$m_1 = \overline{A}\overline{B}C$</td></tr>
+                <tr><td>2</td><td>0</td><td>1</td><td>0</td><td style="color:var(--rose); font-weight:bold;">0</td><td>$M_2 = (A + \overline{B} + C)$</td></tr>
+                <tr style="background:rgba(52,211,153,0.1) !important;"><td>3</td><td>0</td><td>1</td><td>1</td><td style="color:var(--emerald); font-weight:bold;">1</td><td>$m_3 = \overline{A}BC$</td></tr>
+                <tr><td>4</td><td>1</td><td>0</td><td>0</td><td style="color:var(--rose); font-weight:bold;">0</td><td>$M_4 = (\overline{A} + B + C)$</td></tr>
+                <tr><td>5</td><td>1</td><td>0</td><td>1</td><td style="color:var(--rose); font-weight:bold;">0</td><td>$M_5 = (\overline{A} + B + \overline{C})$</td></tr>
+                <tr style="background:rgba(52,211,153,0.1) !important;"><td>6</td><td>1</td><td>1</td><td>0</td><td style="color:var(--emerald); font-weight:bold;">1</td><td>$m_6 = AB\overline{C}$</td></tr>
+                <tr style="background:rgba(52,211,153,0.1) !important;"><td>7</td><td>1</td><td>1</td><td>1</td><td style="color:var(--emerald); font-weight:bold;">1</td><td>$m_7 = ABC$</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="step-block ltr-block">
+            <div class="step-label label-green">(a) Sum of Products (SOP) Formulation:</div>
+            <div>Minterms where $Y = 1$ are $m_1, m_3, m_6, m_7$:</div>
+            <div class="math-scroll-wrapper">$$\text{Standard SOP} = \sum m(1, 3, 6, 7) = \mathbf{\overline{A}\overline{B}C + \overline{A}BC + AB\overline{C} + ABC}$$</div>
+            <div><b>Minimized SOP:</b> $\overline{A}C(\overline{B}+B) + AB(\overline{C}+C) = \mathbf{\overline{A}C + AB}$</div>
+          </div>
+
+          <div class="step-block ltr-block">
+            <div class="step-label label-amber">(b) Product of Sums (POS) Formulation:</div>
+            <div>Maxterms where $Y = 0$ are $M_0, M_2, M_4, M_5$:</div>
+            <div class="math-scroll-wrapper">$$\text{Standard POS} = \prod M(0, 2, 4, 5) = \mathbf{(A+B+C)(A+\overline{B}+C)(\overline{A}+B+C)(\overline{A}+B+\overline{C})}$$</div>
+            <div><b>Minimized POS:</b> $\mathbf{(A + C)(\overline{A} + B)}$</div>
+          </div>
+
+          <div class="result-badge-wrap">
+            <div class="result-badge">
+              <span>Canonical: $Y = \sum m(1, 3, 6, 7) = \prod M(0, 2, 4, 5)$ &nbsp;|&nbsp; Minimized: $Y = \overline{A}C + AB$</span>
+              <div class="result-actions">
+                <button class="copy-btn" onclick="copyText('A\'C + AB', '\\overline{A}C + AB')">📋 نسخ المبسط</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==========================================
+         QUESTION 6: FIND OUTPUT OF GIVEN K-MAPS
+    ========================================== -->
+    <div class="card" data-group="4" id="card-q6">
+      <div class="card-header">
+        <span class="prob-tag">Q6. Find Output of Given K-Maps (a, b, c, d)</span>
+        <div class="card-header-actions">
+          <button class="kmap-indices-btn" onclick="toggleKMapIndices()">🔢 أرقام المينتيرمز (m#)</button>
+          <button class="sol-toggle-btn" onclick="toggleCardSolution(this)">🙈 Hide Steps</button>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="question-prompt">
+          <b>Q6.</b> Find the simplified Boolean output for each of the given Karnaugh Maps (K-Maps):<br>
+          <b>(a)</b> 3-variable K-map &nbsp;&nbsp;&nbsp;&nbsp; <b>(b)</b> 3-variable K-map<br>
+          <b>(c)</b> 4-variable K-map &nbsp;&nbsp;&nbsp;&nbsp; <b>(d)</b> 4-variable K-map
+        </div>
+        <div class="solution-content show">
+
+          <!-- K-Map (a) Compact -->
+          <div class="step-block ltr-block">
+            <div class="step-label label-blue">
+              <span>K-Map (a): 3-Variable (AB \ C)</span>
+              <span style="font-size:0.7rem; color:var(--text-muted);">انقر على أي حد بالأسفل لتوهج مجموعته! ✨</span>
+            </div>
+            <div class="kmap-container" id="kmap-wrap-6a">
+              <svg class="kmap-svg" viewBox="0 0 240 140" preserveAspectRatio="xMidYMid meet">
+                <line x1="25" y1="12" x2="65" y2="32" stroke="#475569" stroke-width="1.2"/>
+                <text x="28" y="28" fill="#38bdf8" font-size="9" font-weight="bold" font-family="JetBrains Mono">AB</text>
+                <text x="54" y="20" fill="#fbbf24" font-size="9" font-weight="bold" font-family="JetBrains Mono">C</text>
+
+                <text x="110" y="25" fill="#fbbf24" font-size="10" font-weight="bold" font-family="JetBrains Mono">0</text>
+                <text x="180" y="25" fill="#fbbf24" font-size="10" font-weight="bold" font-family="JetBrains Mono">1</text>
+
+                <text x="50" y="52" fill="#38bdf8" font-size="10" font-weight="bold" font-family="JetBrains Mono">00</text>
+                <text x="50" y="76" fill="#38bdf8" font-size="10" font-weight="bold" font-family="JetBrains Mono">01</text>
+                <text x="50" y="100" fill="#38bdf8" font-size="10" font-weight="bold" font-family="JetBrains Mono">11</text>
+                <text x="50" y="124" fill="#38bdf8" font-size="10" font-weight="bold" font-family="JetBrains Mono">10</text>
+
+                <g fill="#0c1320" stroke="#1e293b" stroke-width="1">
+                  <rect x="75" y="38" width="70" height="24"/><rect x="145" y="38" width="70" height="24"/>
+                  <rect x="75" y="62" width="70" height="24"/><rect x="145" y="62" width="70" height="24"/>
+                  <rect x="75" y="86" width="70" height="24"/><rect x="145" y="86" width="70" height="24"/>
+                  <rect x="75" y="110" width="70" height="24"/><rect x="145" y="110" width="70" height="24"/>
+                </g>
+
+                <!-- Minterm cell index superscripts -->
+                <g class="kmap-index-label">
+                  <text x="78" y="47">m0</text><text x="148" y="47">m1</text>
+                  <text x="78" y="71">m2</text><text x="148" y="71">m3</text>
+                  <text x="78" y="95">m6</text><text x="148" y="95">m7</text>
+                  <text x="78" y="119">m4</text><text x="148" y="119">m5</text>
+                </g>
+
+                <!-- Cell Values -->
+                <text x="110" y="54" fill="#34d399" font-size="11" font-weight="bold" font-family="JetBrains Mono" text-anchor="middle">1</text>
+                <text x="180" y="54" fill="#475569" font-size="10" font-weight="bold" font-family="JetBrains Mono" text-anchor="middle">0</text>
+                <text x="110" y="78" fill="#475569" font-size="10" font-weight="bold" font-family="JetBrains Mono" text-anchor="middle">0</text>
+                <text x="180" y="78" fill="#34d399" font-size="11" font-weight="bold" font-family="JetBrains Mono" text-anchor="middle">1</text>
+                <text x="110" y="102" fill="#34d399" font-size="11" font-weight="bold" font-family="JetBrains Mono" text-anchor="middle">1</text>
+                <text x="180" y="102" fill="#34d399" font-size="11" font-weight="bold" font-family="JetBrains Mono" text-anchor="middle">1</text>
+                <text x="110" y="126" fill="#475569" font-size="10" font-weight="bold" font-family="JetBrains Mono" text-anchor="middle">0</text>
+                <text x="180" y="126" fill="#475569" font-size="10" font-weight="bold" font-family="JetBrains Mono" text-anchor="middle">0</text>
+
+                <!-- Interactive Groups -->
+                <rect id="loop-6a-ab" class="kmap-loop" x="80" y="90" width="130" height="16" rx="8" fill="rgba(56,189,248,0.25)" stroke="#38bdf8" stroke-width="1.8"/>
+                <rect id="loop-6a-bc" class="kmap-loop" x="150" y="66" width="60" height="40" rx="8" fill="rgba(52,211,153,0.25)" stroke="#34d399" stroke-width="1.8"/>
+                <rect id="loop-6a-single" class="kmap-loop" x="85" y="42" width="50" height="16" rx="8" fill="rgba(245,158,11,0.25)" stroke="#f59e0b" stroke-width="1.8"/>
+              </svg>
+            </div>
+            <div class="kmap-legend">
+              <span class="kmap-term-badge" onmouseenter="highlightKMapLoop('6a', 'ab')" onmouseleave="resetKMapLoops('6a')" onclick="highlightKMapLoop('6a', 'ab', true)">
+                <span class="kmap-legend-color" style="background:#38bdf8;"></span> Row 11: $AB$
+              </span>
+              <span class="kmap-term-badge" onmouseenter="highlightKMapLoop('6a', 'bc')" onmouseleave="resetKMapLoops('6a')" onclick="highlightKMapLoop('6a', 'bc', true)">
+                <span class="kmap-legend-color" style="background:#34d399;"></span> Pair: $BC$
+              </span>
+              <span class="kmap-term-badge" onmouseenter="highlightKMapLoop('6a', 'single')" onmouseleave="resetKMapLoops('6a')" onclick="highlightKMapLoop('6a', 'single', true)">
+                <span class="kmap-legend-color" style="background:#f59e0b;"></span> Single: $\overline{A}\overline{B}\overline{C}$
+              </span>
+            </div>
+
+            <div class="result-badge-wrap">
+              <div class="result-badge">
+                <span>Simplified Output (a): $\mathbf{Y = AB + BC + \overline{A}\overline{B}\overline{C}}$</span>
+                <div class="result-actions">
+                  <button class="copy-btn" onclick="copyText('AB + BC + A\'B\'C\'', 'AB + BC + \\overline{A}\\overline{B}\\overline{C}')">📋 نسخ</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- K-Map (b) Compact -->
+          <div class="step-block ltr-block">
+            <div class="step-label label-amber">
+              <span>K-Map (b): 3-Variable (AB \ C)</span>
+              <span style="font-size:0.7rem; color:var(--text-muted);">انقر على أي حد بالأسفل لتوهج مجموعته! ✨</span>
+            </div>
+            <div class="kmap-container" id="kmap-wrap-6b">
+              <svg class="kmap-svg" viewBox="0 0 240 140" preserveAspectRatio="xMidYMid meet">
+                <line x1="25" y1="12" x2="65" y2="32" stroke="#475569" stroke-width="1.2"/>
+                <text x="28" y="28" fill="#38bdf8" font-size="9" font-weight="bold" font-family="JetBrains Mono">AB</text>
+                <text x="54" y="20" fill="#fbbf24" font-size="9" font-weight="bold" font-family="JetBrains Mono">C</text>
+
+                <text x="110" y="25" fill="#fbbf24" font-size="10" font-weight="bold" font-family="JetBrains Mono">0</text>
+                <text x="180" y="25" fill="#fbbf24" font-size="10" font-weight="bold" font-family="JetBrains Mono">1</text>
+
+                <text x="50" y="52" fill="#38bdf8" font-size="10" font-weight="bold" font-family="JetBrains Mono">00</text>
+                <text x="50" y="76" fill="#38bdf8" font-size="10" font-weight="bold" font-family="JetBrains Mono">01</text>
+                <text x="50" y="100" fill="#38bdf8" font-size="10" font-weight="bold" font-family="JetBrains Mono">11</text>
+                <text x="50" y="124" fill="#38bdf8" font-size="10" font-weight="bold" font-family="JetBrains Mono">10</text>
+
+                <g fill="#0c1320" stroke="#1e293b" stroke-width="1">
+                  <rect x="75" y="38" width="70" height="24"/><rect x="145" y="38" width="70" height="24"/>
+                  <rect x="75" y="62" width="70" height="24"/><rect x="145" y="62" width="70" height="24"/>
+                  <rect x="75" y="86" width="70" height="24"/><rect x="145" y="86" width="70" height="24"/>
+                  <rect x="75" y="110" width="70" height="24"/><rect x="145" y="110" width="70" height="24"/>
+                </g>
+
+                <!-- Minterm cell index superscripts -->
+                <g class="kmap-index-label">
+                  <text x="78" y="47">m0</text><text x="148" y="47">m1</text>
+                  <text x="78" y="71">m2</text><text x="148" y="71">m3</text>
+                  <text x="78" y="95">m6</text><text x="148" y="95">m7</text>
+                  <text x="78" y="119">m4</text><text x="148" y="119">m5</text>
+                </g>
+
+                <text x="110" y="54" fill="#34d399" font-size="11" font-weight="bold" font-family="JetBrains Mono" text-anchor="middle">1</text>
+                <text x="180" y="54" fill="#34d399" font-size="11" font-weight="bold" font-family="JetBrains Mono" text-anchor="middle">1</text>
+                <text x="110" y="78" fill="#34d399" font-size="11" font-weight="bold" font-family="JetBrains Mono" text-anchor="middle">1</text>
+                <text x="180" y="78" fill="#475569" font-size="10" font-weight="bold" font-family="JetBrains Mono" text-anchor="middle">0</text>
+                <text x="110" y="102" fill="#475569" font-size="10" font-weight="bold" font-family="JetBrains Mono" text-anchor="middle">0</text>
+                <text x="180" y="102" fill="#34d399" font-size="11" font-weight="bold" font-family="JetBrains Mono" text-anchor="middle">1</text>
+                <text x="110" y="126" fill="#34d399" font-size="11" font-weight="bold" font-family="JetBrains Mono" text-anchor="middle">1</text>
+                <text x="180" y="126" fill="#34d399" font-size="11" font-weight="bold" font-family="JetBrains Mono" text-anchor="middle">1</text>
+
+                <!-- Groups -->
+                <g id="loop-6b-bbar" class="kmap-loop">
+                  <rect x="80" y="40" width="130" height="18" rx="8" fill="rgba(56,189,248,0.25)" stroke="#38bdf8" stroke-width="1.8"/>
+                  <rect x="80" y="113" width="130" height="18" rx="8" fill="rgba(56,189,248,0.25)" stroke="#38bdf8" stroke-width="1.8"/>
+                </g>
+                <rect id="loop-6b-acbar" class="kmap-loop" x="85" y="42" width="50" height="40" rx="8" fill="rgba(244,63,94,0.25)" stroke="#f43f5e" stroke-width="1.8"/>
+                <rect id="loop-6b-ac" class="kmap-loop" x="155" y="90" width="50" height="40" rx="8" fill="rgba(52,211,153,0.25)" stroke="#34d399" stroke-width="1.8"/>
+              </svg>
+            </div>
+            <div class="kmap-legend">
+              <span class="kmap-term-badge" onmouseenter="highlightKMapLoop('6b', 'bbar')" onmouseleave="resetKMapLoops('6b')" onclick="highlightKMapLoop('6b', 'bbar', true)">
+                <span class="kmap-legend-color" style="background:#38bdf8;"></span> Quad (00 & 10 wrap): $\overline{B}$
+              </span>
+              <span class="kmap-term-badge" onmouseenter="highlightKMapLoop('6b', 'acbar')" onmouseleave="resetKMapLoops('6b')" onclick="highlightKMapLoop('6b', 'acbar', true)">
+                <span class="kmap-legend-color" style="background:#f43f5e;"></span> Pair (m0, m2): $\overline{A}\overline{C}$
+              </span>
+              <span class="kmap-term-badge" onmouseenter="highlightKMapLoop('6b', 'ac')" onmouseleave="resetKMapLoops('6b')" onclick="highlightKMapLoop('6b', 'ac', true)">
+                <span class="kmap-legend-color" style="background:#34d399;"></span> Pair (m7, m5): $AC$
+              </span>
+            </div>
+
+            <div class="result-badge-wrap">
+              <div class="result-badge">
+                <span>Simplified Output (b): $\mathbf{Y = \overline{B} + \overline{A}\overline{C} + AC}$</span>
+                <div class="result-actions">
+                  <button class="copy-btn" onclick="copyText('B\' + A\'C\' + AC', '\\overline{B} + \\overline{A}\\overline{C} + AC')">📋 نسخ</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- K-Map (c) Compact 4-Var -->
+          <div class="step-block ltr-block">
+            <div class="step-label label-green">
+              <span>K-Map (c): 4-Variable (AB \ CD)</span>
+              <span style="font-size:0.7rem; color:var(--text-muted);">انقر على أي حد بالأسفل لتوهج مجموعته! ✨</span>
+            </div>
+            <div class="kmap-container" id="kmap-wrap-6c">
+              <svg class="kmap-svg-4var" viewBox="0 0 280 155" preserveAspectRatio="xMidYMid meet">
+                <line x1="20" y1="10" x2="55" y2="28" stroke="#475569" stroke-width="1.2"/>
+                <text x="22" y="24" fill="#38bdf8" font-size="8" font-weight="bold" font-family="JetBrains Mono">AB</text>
+                <text x="46" y="18" fill="#fbbf24" font-size="8" font-weight="bold" font-family="JetBrains Mono">CD</text>
+
+                <text x="82" y="24" fill="#fbbf24" font-size="9" font-weight="bold" font-family="JetBrains Mono">00</text>
+                <text x="132" y="24" fill="#fbbf24" font-size="9" font-weight="bold" font-family="JetBrains Mono">01</text>
+                <text x="182" y="24" fill="#fbbf24" font-size="9" font-weight="bold" font-family="JetBrains Mono">11</text>
+                <text x="232" y="24" fill="#fbbf24" font-size="9" font-weight="bold" font-family="JetBrains Mono">10</text>
+
+                <text x="40" y="48" fill="#38bdf8" font-size="9" font-weight="bold" font-family="JetBrains Mono">00</text>
+                <text x="40" y="74" fill="#38bdf8" font-size="9" font-weight="bold" font-family="JetBrains Mono">01</text>
+                <text x="40" y="100" fill="#38bdf8" font-size="9" font-weight="bold" font-family="JetBrains Mono">11</text>
+                <text x="40" y="126" fill="#38bdf8" font-size="9" font-weight="bold" font-family="JetBrains Mono">10</text>
+
+                <g stroke="#1e293b" fill="#0c1320">
+                  <rect x="60" y="34" width="50" height="26"/><rect x="110" y="34" width="50" height="26"/><rect x="160" y="34" width="50" height="26"/><rect x="210" y="34" width="50" height="26"/>
+                  <rect x="60" y="60" width="50" height="26"/><rect x="110" y="60" width="50" height="26"/><rect x="160" y="60" width="50" height="26"/><rect x="210" y="60" width="50" height="26"/>
+                  <rect x="60" y="86" width="50" height="26"/><rect x="110" y="86" width="50" height="26"/><rect x="160" y="86" width="50" height="26"/><rect x="210" y="86" width="50" height="26"/>
+                  <rect x="60" y="112" width="50" height="26"/><rect x="110" y="112" width="50" height="26"/><rect x="160" y="112" width="50" height="26"/><rect x="210" y="112" width="50" height="26"/>
+                </g>
+
+                <!-- Minterm cell index superscripts -->
+                <g class="kmap-index-label">
+                  <text x="63" y="42">m0</text><text x="113" y="42">m1</text><text x="163" y="42">m3</text><text x="213" y="42">m2</text>
+                  <text x="63" y="68">m4</text><text x="113" y="68">m5</text><text x="163" y="68">m7</text><text x="213" y="68">m6</text>
+                  <text x="63" y="94">m12</text><text x="113" y="94">m13</text><text x="163" y="94">m15</text><text x="213" y="94">m14</text>
+                  <text x="63" y="120">m8</text><text x="113" y="120">m9</text><text x="163" y="120">m11</text><text x="213" y="120">m10</text>
+                </g>
+
+                <text x="85" y="50" fill="#34d399" font-size="10" font-weight="bold" font-family="JetBrains Mono" text-anchor="middle">1</text>
+                <text x="135" y="50" fill="#34d399" font-size="10" font-weight="bold" font-family="JetBrains Mono" text-anchor="middle">1</text>
+                <text x="185" y="50" fill="#475569" font-size="9" font-weight="bold" font-family="JetBrains Mono" text-anchor="middle">0</text>
+                <text x="235" y="50" fill="#475569" font-size="9" font-weight="bold" font-family="JetBrains Mono" text-anchor="middle">0</text>
+
+                <text x="85" y="76" fill="#34d399" font-size="10" font-weight="bold" font-family="JetBrains Mono" text-anchor="middle">1</text>
+                <text x="135" y="76" fill="#34d399" font-size="10" font-weight="bold" font-family="JetBrains Mono" text-anchor="middle">1</text>
+                <text x="185" y="76" fill="#34d399" font-size="10" font-weight="bold" font-family="JetBrains Mono" text-anchor="middle">1</text>
+                <text x="235" y="76" fill="#34d399" font-size="10" font-weight="bold" font-family="JetBrains Mono" text-anchor="middle">1</text>
+
+                <text x="85" y="102" fill="#475569" font-size="9" font-weight="bold" font-family="JetBrains Mono" text-anchor="middle">0</text>
+                <text x="135" y="102" fill="#475569" font-size="9" font-weight="bold" font-family="JetBrains Mono" text-anchor="middle">0</text>
+                <text x="185" y="102" fill="#475569" font-size="9" font-weight="bold" font-family="JetBrains Mono" text-anchor="middle">0</text>
+                <text x="235" y="102" fill="#475569" font-size="9" font-weight="bold" font-family="JetBrains Mono" text-anchor="middle">0</text>
+
+                <text x="85" y="128" fill="#475569" font-size="9" font-weight="bold" font-family="JetBrains Mono" text-anchor="middle">0</text>
+                <text x="135" y="128" fill="#34d399" font-size="10" font-weight="bold" font-family="JetBrains Mono" text-anchor="middle">1</text>
+                <text x="185" y="128" fill="#34d399" font-size="10" font-weight="bold" font-family="JetBrains Mono" text-anchor="middle">1</text>
+                <text x="235" y="128" fill="#475569" font-size="9" font-weight="bold" font-family="JetBrains Mono" text-anchor="middle">0</text>
+
+                <!-- Groups -->
+                <rect id="loop-6c-ab" class="kmap-loop" x="64" y="64" width="192" height="18" rx="8" fill="rgba(56,189,248,0.25)" stroke="#38bdf8" stroke-width="1.8"/>
+                <rect id="loop-6c-acbar" class="kmap-loop" x="66" y="38" width="90" height="44" rx="8" fill="rgba(52,211,153,0.25)" stroke="#34d399" stroke-width="1.8"/>
+                <rect id="loop-6c-abd" class="kmap-loop" x="116" y="116" width="90" height="18" rx="8" fill="rgba(245,158,11,0.25)" stroke="#f59e0b" stroke-width="1.8"/>
+              </svg>
+            </div>
+            <div class="kmap-legend">
+              <span class="kmap-term-badge" onmouseenter="highlightKMapLoop('6c', 'ab')" onmouseleave="resetKMapLoops('6c')" onclick="highlightKMapLoop('6c', 'ab', true)">
+                <span class="kmap-legend-color" style="background:#38bdf8;"></span> Quad (Row 01): $\overline{A}B$
+              </span>
+              <span class="kmap-term-badge" onmouseenter="highlightKMapLoop('6c', 'acbar')" onmouseleave="resetKMapLoops('6c')" onclick="highlightKMapLoop('6c', 'acbar', true)">
+                <span class="kmap-legend-color" style="background:#34d399;"></span> Quad: $\overline{A}\overline{C}$
+              </span>
+              <span class="kmap-term-badge" onmouseenter="highlightKMapLoop('6c', 'abd')" onmouseleave="resetKMapLoops('6c')" onclick="highlightKMapLoop('6c', 'abd', true)">
+                <span class="kmap-legend-color" style="background:#f59e0b;"></span> Pair: $A\overline{B}D$
+              </span>
+            </div>
+
+            <div class="result-badge-wrap">
+              <div class="result-badge">
+                <span>Simplified Output (c): $\mathbf{Y = \overline{A}B + \overline{A}\overline{C} + A\overline{B}D}$</span>
+                <div class="result-actions">
+                  <button class="copy-btn" onclick="copyText('A\'B + A\'C\' + AB\'D', '\\overline{A}B + \\overline{A}\\overline{C} + A\\overline{B}D')">📋 نسخ</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- K-Map (d) Compact 4-Var -->
+          <div class="step-block ltr-block">
+            <div class="step-label label-purple">
+              <span>K-Map (d): 4-Variable (AB \ CD)</span>
+              <span style="font-size:0.7rem; color:var(--text-muted);">انقر على أي حد بالأسفل لتوهج مجموعته! ✨</span>
+            </div>
+            <div class="kmap-container" id="kmap-wrap-6d">
+              <svg class="kmap-svg-4var" viewBox="0 0 280 155" preserveAspectRatio="xMidYMid meet">
+                <line x1="20" y1="10" x2="55" y2="28" stroke="#475569" stroke-width="1.2"/>
+                <text x="22" y="24" fill="#38bdf8" font-size="8" font-weight="bold" font-family="JetBrains Mono">AB</text>
+                <text x="46" y="18" fill="#fbbf24" font-size="8" font-weight="bold" font-family="JetBrains Mono">CD</text>
+
+                <text x="82" y="24" fill="#fbbf24" font-size="9" font-weight="bold" font-family="JetBrains Mono">00</text>
+                <text x="132" y="24" fill="#fbbf24" font-size="9" font-weight="bold" font-family="JetBrains Mono">01</text>
+                <text x="182" y="24" fill="#fbbf24" font-size="9" font-weight="bold" font-family="JetBrains Mono">11</text>
+                <text x="232" y="24" fill="#fbbf24" font-size="9" font-weight="bold" font-family="JetBrains Mono">10</text>
+
+                <text x="40" y="48" fill="#38bdf8" font-size="9" font-weight="bold" font-family="JetBrains Mono">00</text>
+                <text x="40" y="74" fill="#38bdf8" font-size="9" font-weight="bold" font-family="JetBrains Mono">01</text>
+                <text x="40" y="100" fill="#38bdf8" font-size="9" font-weight="bold" font-family="JetBrains Mono">11</text>
+                <text x="40" y="126" fill="#38bdf8" font-size="9" font-weight="bold" font-family="JetBrains Mono">10</text>
+
+                <g stroke="#1e293b" fill="#0c1320">
+                  <rect x="60" y="34" width="50" height="26"/><rect x="110" y="34" width="50" height="26"/><rect x="160" y="34" width="50" height="26"/><rect x="210" y="34" width="50" height="26"/>
+                  <rect x="60" y="60" width="50" height="26"/><rect x="110" y="60" width="50" height="26"/><rect x="160" y="60" width="50" height="26"/><rect x="210" y="60" width="50" height="26"/>
+                  <rect x="60" y="86" width="50" height="26"/><rect x="110" y="86" width="50" height="26"/><rect x="160" y="86" width="50" height="26"/><rect x="210" y="86" width="50" height="26"/>
+                  <rect x="60" y="112" width="50" height="26"/><rect x="110" y="112" width="50" height="26"/><rect x="160" y="112" width="50" height="26"/><rect x="210" y="112" width="50" height="26"/>
+                </g>
+
+                <!-- Minterm cell index superscripts -->
+                <g class="kmap-index-label">
+                  <text x="63" y="42">m0</text><text x="113" y="42">m1</text><text x="163" y="42">m3</text><text x="213" y="42">m2</text>
+                  <text x="63" y="68">m4</text><text x="113" y="68">m5</text><text x="163" y="68">m7</text><text x="213" y="68">m6</text>
+                  <text x="63" y="94">m12</text><text x="113" y="94">m13</text><text x="163" y="94">m15</text><text x="213" y="94">m14</text>
+                  <text x="63" y="120">m8</text><text x="113" y="120">m9</text><text x="163" y="120">m11</text><text x="213" y="120">m10</text>
+                </g>
+
+                <text x="85" y="50" fill="#34d399" font-size="10" font-weight="bold" font-family="JetBrains Mono" text-anchor="middle">1</text>
+                <text x="135" y="50" fill="#475569" font-size="9" font-weight="bold" font-family="JetBrains Mono" text-anchor="middle">0</text>
+                <text x="185" y="50" fill="#475569" font-size="9" font-weight="bold" font-family="JetBrains Mono" text-anchor="middle">0</text>
+                <text x="235" y="50" fill="#34d399" font-size="10" font-weight="bold" font-family="JetBrains Mono" text-anchor="middle">1</text>
+
+                <text x="85" y="76" fill="#34d399" font-size="10" font-weight="bold" font-family="JetBrains Mono" text-anchor="middle">1</text>
+                <text x="135" y="76" fill="#34d399" font-size="10" font-weight="bold" font-family="JetBrains Mono" text-anchor="middle">1</text>
+                <text x="185" y="76" fill="#475569" font-size="9" font-weight="bold" font-family="JetBrains Mono" text-anchor="middle">0</text>
+                <text x="235" y="76" fill="#34d399" font-size="10" font-weight="bold" font-family="JetBrains Mono" text-anchor="middle">1</text>
+
+                <text x="85" y="102" fill="#34d399" font-size="10" font-weight="bold" font-family="JetBrains Mono" text-anchor="middle">1</text>
+                <text x="135" y="102" fill="#34d399" font-size="10" font-weight="bold" font-family="JetBrains Mono" text-anchor="middle">1</text>
+                <text x="185" y="102" fill="#475569" font-size="9" font-weight="bold" font-family="JetBrains Mono" text-anchor="middle">0</text>
+                <text x="235" y="102" fill="#34d399" font-size="10" font-weight="bold" font-family="JetBrains Mono" text-anchor="middle">1</text>
+
+                <text x="85" y="128" fill="#34d399" font-size="10" font-weight="bold" font-family="JetBrains Mono" text-anchor="middle">1</text>
+                <text x="135" y="128" fill="#475569" font-size="9" font-weight="bold" font-family="JetBrains Mono" text-anchor="middle">0</text>
+                <text x="185" y="128" fill="#34d399" font-size="10" font-weight="bold" font-family="JetBrains Mono" text-anchor="middle">1</text>
+                <text x="235" y="128" fill="#34d399" font-size="10" font-weight="bold" font-family="JetBrains Mono" text-anchor="middle">1</text>
+
+                <!-- Groups -->
+                <g id="loop-6d-dbar" class="kmap-loop">
+                  <rect x="64" y="38" width="42" height="96" rx="8" fill="rgba(52,211,153,0.25)" stroke="#34d399" stroke-width="1.8"/>
+                  <rect x="214" y="38" width="42" height="96" rx="8" fill="rgba(52,211,153,0.25)" stroke="#34d399" stroke-width="1.8"/>
+                </g>
+                <rect id="loop-6d-bcbar" class="kmap-loop" x="68" y="64" width="84" height="44" rx="8" fill="rgba(56,189,248,0.25)" stroke="#38bdf8" stroke-width="1.8"/>
+                <rect id="loop-6d-abc" class="kmap-loop" x="168" y="116" width="84" height="18" rx="8" fill="rgba(245,158,11,0.25)" stroke="#f59e0b" stroke-width="1.8"/>
+              </svg>
+            </div>
+            <div class="kmap-legend">
+              <span class="kmap-term-badge" onmouseenter="highlightKMapLoop('6d', 'dbar')" onmouseleave="resetKMapLoops('6d')" onclick="highlightKMapLoop('6d', 'dbar', true)">
+                <span class="kmap-legend-color" style="background:#34d399;"></span> Octet (Cols 00 & 10 wrap): $\overline{D}$
+              </span>
+              <span class="kmap-term-badge" onmouseenter="highlightKMapLoop('6d', 'bcbar')" onmouseleave="resetKMapLoops('6d')" onclick="highlightKMapLoop('6d', 'bcbar', true)">
+                <span class="kmap-legend-color" style="background:#38bdf8;"></span> Quad: $B\overline{C}$
+              </span>
+              <span class="kmap-term-badge" onmouseenter="highlightKMapLoop('6d', 'abc')" onmouseleave="resetKMapLoops('6d')" onclick="highlightKMapLoop('6d', 'abc', true)">
+                <span class="kmap-legend-color" style="background:#f59e0b;"></span> Pair: $A\overline{B}C$
+              </span>
+            </div>
+
+            <div class="result-badge-wrap">
+              <div class="result-badge">
+                <span>Simplified Output (d): $\mathbf{Y = \overline{D} + B\overline{C} + A\overline{B}C}$</span>
+                <div class="result-actions">
+                  <button class="copy-btn" onclick="copyText('D\' + BC\' + AB\'C', '\\overline{D} + B\\overline{C} + A\\overline{B}C')">📋 نسخ</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- ==========================================
+         QUESTION 7: K-MAP SIMPLIFICATION OF EXPRESSIONS
+    ========================================== -->
+    <div class="card" data-group="4">
+      <div class="card-header">
+        <span class="prob-tag">Q7. Simplify Given Expressions Using K-Maps (a to d)</span>
+        <div class="card-header-actions">
+          <button class="sol-toggle-btn" onclick="toggleCardSolution(this)">🙈 Hide Steps</button>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="question-prompt">
+          <b>Q7.</b> Use Karnaugh Map (K-Map) to simplify the following expressions:<br>
+          <b>(a)</b> $\overline{A}(BC+B\overline{C})+A(BC+B\overline{C})$<br>
+          <b>(b)</b> $DE\overline{F}+\overline{D}E\overline{F}+\overline{D}\overline{E}\overline{F}$<br>
+          <b>(c)</b> $\overline{A}\overline{B}\overline{C}\overline{D}+\overline{A}\overline{B}\overline{C}D+ABC\overline{D}$<br>
+          <b>(d)</b> $(\overline{A}\overline{B}+A\overline{B})(CD+C\overline{D})$
+        </div>
+        <div class="solution-content show">
+
+          <!-- Part (a) -->
+          <div class="step-block ltr-block">
+            <div class="step-label label-blue">
+              <span>(a) Expression: $\overline{A}(BC+B\overline{C})+A(BC+B\overline{C})$</span>
+              <span class="step-rule-badge cyan">Quad Covering: 4 Minterms</span>
+            </div>
+            <div><b>Minterm Expansion:</b></div>
+            <div class="math-scroll-wrapper">$$\overline{A}BC + \overline{A}B\overline{C} + ABC + AB\overline{C} = m_3 + m_2 + m_7 + m_6$$</div>
+            <div><b>K-Map Mapping (3 Variables $A, B, C$):</b></div>
+            <div>All cells where $B = 1$ are covered ($m_2, m_3, m_6, m_7$). This forms a <b>Quad of 4</b> across row 01 and row 11!</div>
+            <div>Since $A$ changes ($0 \to 1$) and $C$ changes ($0 \to 1$), only $B$ remains constant:</div>
+
+            <div class="result-badge-wrap">
+              <div class="result-badge">
+                <span>Result (a): $\mathbf{Y = B}$</span>
+                <div class="result-actions">
+                  <button class="copy-btn" onclick="copyText('B', 'B')">📋 نسخ</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Part (b) -->
+          <div class="step-block ltr-block">
+            <div class="step-label label-amber">
+              <span>(b) Expression: $DE\overline{F}+\overline{D}E\overline{F}+\overline{D}\overline{E}\overline{F}$</span>
+              <span class="step-rule-badge amber">Adjacent Pairs Grouping</span>
+            </div>
+            <div><b>Minterms ($D, E, F$ order):</b></div>
+            <div>&bull; $DE\overline{F} = (110)_2 = m_6$ &nbsp;|&nbsp; $\overline{D}E\overline{F} = (010)_2 = m_2$ &nbsp;|&nbsp; $\overline{D}\overline{E}\overline{F} = (000)_2 = m_0$</div>
+            <div><b>K-Map Grouping:</b></div>
+            <div>&bull; <b>Group 1 (Pair $m_2, m_6$):</b> $E\overline{F}$ &nbsp;&nbsp;|&nbsp;&nbsp; <b>Group 2 (Pair $m_0, m_2$):</b> $\overline{D}\overline{F}$</div>
+
+            <div class="result-badge-wrap">
+              <div class="result-badge">
+                <span>Result (b): $\mathbf{Y = E\overline{F} + \overline{D}\overline{F}} = \mathbf{\overline{F}(E + \overline{D})}$</span>
+                <div class="result-actions">
+                  <button class="copy-btn" onclick="copyText('EF\' + D\'F\'', 'E\\overline{F} + \\overline{D}\\overline{F}')">📋 نسخ</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Part (c) -->
+          <div class="step-block ltr-block">
+            <div class="step-label label-purple">
+              <span>(c) Expression: $\overline{A}\overline{B}\overline{C}\overline{D}+\overline{A}\overline{B}\overline{C}D+ABC\overline{D}$</span>
+              <span class="step-rule-badge purple">Pair & Isolated Minterm</span>
+            </div>
+            <div><b>Minterms (4 Variables $A, B, C, D$):</b></div>
+            <div>&bull; $\overline{A}\overline{B}\overline{C}\overline{D} = m_0$ &nbsp;|&nbsp; $\overline{A}\overline{B}\overline{C}D = m_1$ &nbsp;|&nbsp; $ABC\overline{D} = m_{14}$</div>
+            <div><b>K-Map Grouping:</b></div>
+            <div>&bull; <b>Pair ($m_0, m_1$):</b> Covers $\overline{A}\overline{B}\overline{C}$ ($D$ changes $0 \to 1$).</div>
+            <div>&bull; <b>Single Minterm ($m_{14}$):</b> Has no adjacent 1s, remains isolated as $ABC\overline{D}$.</div>
+
+            <div class="result-badge-wrap">
+              <div class="result-badge">
+                <span>Result (c): $\mathbf{Y = \overline{A}\overline{B}\overline{C} + ABC\overline{D}}$</span>
+                <div class="result-actions">
+                  <button class="copy-btn" onclick="copyText('A\'B\'C\' + ABCD\'', '\\overline{A}\\overline{B}\\overline{C} + ABC\\overline{D}')">📋 نسخ</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Part (d) -->
+          <div class="step-block ltr-block">
+            <div class="step-label label-rose">
+              <span>(d) Expression: $(\overline{A}\overline{B}+A\overline{B})(CD+C\overline{D})$</span>
+              <span class="step-rule-badge green">Complement & Factorization</span>
+            </div>
+            <div><b>Algebraic Factorization & K-Map Alignment:</b></div>
+            <div class="math-scroll-wrapper">$$(\overline{A}\overline{B} + A\overline{B}) = \overline{B}(\overline{A} + A) = \overline{B}$$</div>
+            <div class="math-scroll-wrapper">$$(CD + C\overline{D}) = C(D + \overline{D}) = C$$</div>
+            <div class="math-scroll-wrapper">$$Y = \overline{B} \cdot C = \mathbf{\overline{B}C}$$</div>
+            <div><b>In 4-variable K-map:</b> Represents a <b>Quad of 4 minterms</b> ($m_2, m_3, m_{10}, m_{11}$) where $B=0$ and $C=1$.</div>
+
+            <div class="result-badge-wrap">
+              <div class="result-badge">
+                <span>Result (d): $\mathbf{Y = \overline{B}C}$</span>
+                <div class="result-actions">
+                  <button class="copy-btn" onclick="copyText('B\'C', '\\overline{B}C')">📋 نسخ</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- ==========================================
+         INTERACTIVE BOOLEAN LOGIC EVALUATOR
+    ========================================== -->
+    <div class="sim-container">
+      <div class="sim-title">
+        <span>⚡ محاكي التحقق اللحظي للبوابات والتعبيرات المنطقية (Live 3-Variable Boolean Evaluator)</span>
+        <span style="font-size:0.75rem; color:var(--emerald); font-weight:700;">Inputs: A, B, C</span>
+      </div>
+      <div style="font-size:0.76rem; color:var(--text-muted); margin-bottom:8px;">
+        غيّر قيم المداخل $A, B, C$ بالضغط على الأزرار لمشاهدة ناتج التعبير المباشر لجميع مسائل الشيت في الوقت الفعلي:
+      </div>
+      <div style="display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-bottom:8px;">
+        <button id="sim-btn-a" class="quiz-cell-btn" style="width:70px; height:28px; font-size:0.8rem;" onclick="toggleSimVar('A')">A = 0</button>
+        <button id="sim-btn-b" class="quiz-cell-btn" style="width:70px; height:28px; font-size:0.8rem;" onclick="toggleSimVar('B')">B = 0</button>
+        <button id="sim-btn-c" class="quiz-cell-btn" style="width:70px; height:28px; font-size:0.8rem;" onclick="toggleSimVar('C')">C = 0</button>
+      </div>
+
+      <div class="table-fit-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Problem</th><th>Expression Formula</th><th>Evaluated Value (0 or 1)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><b>Q1(a)</b></td><td>$(A + \overline{B})(A + C) = A + \overline{B}C$</td><td id="sim-res-q1a" style="font-weight:bold;">0</td></tr>
+            <tr><td><b>Q1(c)</b></td><td>$AB + \overline{AB}C + A = A + C$</td><td id="sim-res-q1c" style="font-weight:bold;">0</td></tr>
+            <tr><td><b>Q2</b></td><td>$Y = A\overline{B}C + \overline{A}\overline{B}C + \overline{A}BC + ABC = C$</td><td id="sim-res-q2" style="font-weight:bold; color:var(--emerald);">0</td></tr>
+            <tr><td><b>Q4</b></td><td>$(A + B)(C + B) = B + AC$</td><td id="sim-res-q4" style="font-weight:bold;">0</td></tr>
+            <tr><td><b>Q5</b></td><td>$Y = \overline{A}C + AB$</td><td id="sim-res-q5" style="font-weight:bold;">0</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Notification Toast -->
+  <div id="copy-toast">تم نسخ التعبير المنطقي بنجاح! 📋</div>
+
+  <script>
+    /* =========================================================================
+       K-MAP MINTERM INDICES TOGGLE & INTERACTIVE TERM-TO-LOOP HIGHLIGHT
+    ========================================================================= */
+    let mintermIndicesVisible = false;
+
+    function toggleKMapIndices() {
+      mintermIndicesVisible = !mintermIndicesVisible;
+      const containers = document.querySelectorAll('.kmap-container');
+      containers.forEach(c => {
+        if (mintermIndicesVisible) {
+          c.classList.add('show-indices');
+        } else {
+          c.classList.remove('show-indices');
+        }
+      });
+
+      const btns = document.querySelectorAll('.kmap-indices-btn');
+      btns.forEach(b => {
+        if (mintermIndicesVisible) {
+          b.classList.add('active');
+          b.innerHTML = '🔢 إخفاء أرقام (m#)';
+        } else {
+          b.classList.remove('active');
+          b.innerHTML = '🔢 أرقام المينتيرمز (m#)';
+        }
+      });
+      showToast(mintermIndicesVisible ? 'تم تفعيل أرقام المينتيرمز داخل الخلايا' : 'تم إخفاء أرقام المينتيرمز');
+    }
+
+    let activePinnedLoop = {};
+
+    function highlightKMapLoop(kmapId, loopKey, togglePin = false) {
+      const container = document.getElementById(`kmap-wrap-${kmapId}`);
+      if (!container) return;
+
+      const targetId = `loop-${kmapId}-${loopKey}`;
+      const targetLoop = document.getElementById(targetId);
+      if (!targetLoop) return;
+
+      if (togglePin && activePinnedLoop[kmapId] === loopKey) {
+        // Unpin
+        activePinnedLoop[kmapId] = null;
+        resetKMapLoops(kmapId);
+        return;
+      }
+
+      if (togglePin) {
+        activePinnedLoop[kmapId] = loopKey;
+      }
+
+      // Highlight target, dim others
+      const allLoops = container.querySelectorAll('.kmap-loop');
+      allLoops.forEach(l => {
+        if (l.id === targetId) {
+          l.classList.add('highlighted');
+          l.classList.remove('dimmed');
+        } else {
+          l.classList.add('dimmed');
+          l.classList.remove('highlighted');
+        }
+      });
+    }
+
+    function resetKMapLoops(kmapId) {
+      if (activePinnedLoop[kmapId]) {
+        // Keep pinned
+        highlightKMapLoop(kmapId, activePinnedLoop[kmapId], false);
+        return;
+      }
+      const container = document.getElementById(`kmap-wrap-${kmapId}`);
+      if (!container) return;
+
+      const allLoops = container.querySelectorAll('.kmap-loop');
+      allLoops.forEach(l => {
+        l.classList.remove('highlighted', 'dimmed');
+      });
+    }
+
+    /* =========================================================================
+       VALIDATORS & COPY UTILITIES
+    ========================================================================= */
+    function toggleValidator(panelId) {
+      const panel = document.getElementById(`val-${panelId}`);
+      if (!panel) return;
+      panel.classList.toggle('open');
+      if (panel.classList.contains('open')) {
+        populateValidator(panelId);
+      }
+    }
+
+    function populateValidator(panelId) {
+      const tbody = document.getElementById(`val-tbody-${panelId}`);
+      if (!tbody || tbody.children.length > 0) return;
+
+      let html = '';
+      if (panelId === 'q1a') {
+        for (let a = 0; a <= 1; a++) {
+          for (let b = 0; b <= 1; b++) {
+            for (let c = 0; c <= 1; c++) {
+              const b_bar = b === 0 ? 1 : 0;
+              const orig = (a | b_bar) & (a | c);
+              const simp = a | (b_bar & c);
+              const match = orig === simp;
+              html += `<tr><td>${a}</td><td>${b}</td><td>${c}</td><td>${orig}</td><td style="color:var(--emerald); font-weight:bold;">${simp}</td><td style="color:${match ? 'var(--emerald)' : 'var(--rose)'};">${match ? '✓ متطابق' : '✗ غير متطابق'}</td></tr>`;
+            }
+          }
+        }
+      } else if (panelId === 'q1b') {
+        for (let a = 0; a <= 1; a++) {
+          for (let b = 0; b <= 1; b++) {
+            const a_bar = a === 0 ? 1 : 0;
+            const orig = a & (a_bar | (a & b));
+            const simp = a & b;
+            const match = orig === simp;
+            html += `<tr><td>${a}</td><td>${b}</td><td>${orig}</td><td style="color:var(--emerald); font-weight:bold;">${simp}</td><td style="color:${match ? 'var(--emerald)' : 'var(--rose)'};">${match ? '✓ متطابق' : '✗ غير متطابق'}</td></tr>`;
+          }
+        }
+      } else if (panelId === 'q1c') {
+        for (let a = 0; a <= 1; a++) {
+          for (let b = 0; b <= 1; b++) {
+            for (let c = 0; c <= 1; c++) {
+              const ab_bar = (a & b) === 0 ? 1 : 0;
+              const orig = (a & b) | (ab_bar & c) | a;
+              const simp = a | c;
+              const match = orig === simp;
+              html += `<tr><td>${a}</td><td>${b}</td><td>${c}</td><td>${orig}</td><td style="color:var(--emerald); font-weight:bold;">${simp}</td><td style="color:${match ? 'var(--emerald)' : 'var(--rose)'};">${match ? '✓ متطابق' : '✗ غير متطابق'}</td></tr>`;
+            }
+          }
+        }
+      } else if (panelId === 'q1d') {
+        for (let a = 0; a <= 1; a++) {
+          for (let b = 0; b <= 1; b++) {
+            for (let c = 0; c <= 1; c++) {
+              const a_bar = a === 0 ? 1 : 0;
+              const b_bar = b === 0 ? 1 : 0;
+              const orig = (a & b_bar & c) | (a_bar & b & c) | (a_bar & b_bar & c);
+              const simp = (b_bar & c) | (a_bar & c);
+              const match = orig === simp;
+              html += `<tr><td>${a}</td><td>${b}</td><td>${c}</td><td>${orig}</td><td style="color:var(--emerald); font-weight:bold;">${simp}</td><td style="color:${match ? 'var(--emerald)' : 'var(--rose)'};">${match ? '✓ متطابق' : '✗ غير متطابق'}</td></tr>`;
+            }
+          }
+        }
+      } else if (panelId === 'q1e') {
+        const d = 1;
+        for (let b = 0; b <= 1; b++) {
+          for (let c = 0; c <= 1; c++) {
+            const b_bar = b === 0 ? 1 : 0;
+            const orig = (b | (b & c)) & (b | (b_bar & c)) & (b | d);
+            const simp = b;
+            const match = orig === simp;
+            html += `<tr><td>${b}</td><td>${c}</td><td>${d}</td><td>${orig}</td><td style="color:var(--emerald); font-weight:bold;">${simp}</td><td style="color:${match ? 'var(--emerald)' : 'var(--rose)'};">${match ? '✓ متطابق' : '✗ غير متطابق'}</td></tr>`;
+          }
+        }
+      }
+      tbody.innerHTML = html;
+    }
+
+    function copyText(plainText, latexCode) {
+      const copyContent = plainText;
+      const el = document.createElement('textarea');
+      el.value = copyContent;
+      document.body.appendChild(el);
+      el.select();
+      try {
+        document.execCommand('copy');
+        showToast(`Copied: ${copyContent}`);
+      } catch (err) {
+        showToast('Error copying text');
+      }
+      document.body.removeChild(el);
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('copy-toast');
+      if (!toast) return;
+      toast.innerText = msg;
+      toast.classList.add('show');
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 2000);
+    }
+
+    /* =========================================================================
+       CIRCUIT TRACING & ISOLATION FOR QUESTION 2
+    ========================================================================= */
+    const q2Data = {
+      A: [0, 0, 0, 0, 1, 1, 1, 1],
+      B: [0, 0, 1, 1, 0, 0, 1, 1],
+      C: [0, 1, 0, 1, 0, 1, 0, 1],
+      Y: [0, 1, 0, 1, 0, 1, 0, 1]
+    };
+
+    const q4Data = {
+      A: [0, 0, 0, 0, 1, 1, 1, 1],
+      B: [0, 0, 1, 1, 0, 0, 1, 1],
+      C: [0, 1, 0, 1, 0, 1, 0, 1],
+      AB: [0, 0, 1, 1, 1, 1, 1, 1],
+      BC: [0, 1, 1, 1, 0, 1, 1, 1],
+      Y:  [0, 0, 1, 1, 0, 1, 1, 1]
+    };
+
+    let isolatedRowQ2 = null;
+
+    const quizState = {
+      q2: { active: false, userVals: Array(8).fill('?') },
+      q4: { active: false, userVals: Array(8).fill('?') }
+    };
+
+    function isolateRow(probId, index) {
+      if (probId === 'q2') {
+        isolatedRowQ2 = index;
+        updateCircuitQ2();
+      }
+    }
+
+    function resetCircuitSelection(probId) {
+      if (probId === 'q2') {
+        isolatedRowQ2 = null;
+        updateCircuitQ2();
+      }
+    }
+
+    function updateCircuitQ2() {
+      const isIsolated = (isolatedRowQ2 !== null);
+      const barText = document.getElementById('trace-text-q2');
+
+      if (!isIsolated) {
+        if (barText) barText.innerHTML = '✨ <b>جميع المسارات مضيئة بالتوهج الكامل</b> (اضغط على أي صف لتحديد مسار الإشارة)';
+      } else {
+        const a = q2Data.A[isolatedRowQ2];
+        const b = q2Data.B[isolatedRowQ2];
+        const c = q2Data.C[isolatedRowQ2];
+        const y = q2Data.Y[isolatedRowQ2];
+        if (barText) {
+          barText.innerHTML = `🎯 <b>تم تحديد الصف m${isolatedRowQ2} [A=${a}, B=${b}, C=${c} &rarr; Y=${y}]</b> (انقر خارج الجدول للعودة للإضاءة الشاملة)`;
+        }
+      }
+
+      renderSchematicQ2(isolatedRowQ2);
+      renderTableQ2();
+    }
+
+    function renderSchematicQ2(rowIndex) {
+      const container = document.getElementById('schematic-container-q2');
+      if (!container) return;
+
+      const isIsolated = (rowIndex !== null);
+      let aVal, bVal, cVal, yVal;
+      let styleA, styleB, styleC, styleY;
+      let dotA, dotB, dotC, dotY;
+
+      let g1_out = 0, g2_out = 0, g3_out = 0, g4_out = 0;
+
+      if (!isIsolated) {
+        styleA = 'stroke: #38bdf8; stroke-width: 2.2; filter: drop-shadow(0 0 3px rgba(56, 189, 248, 0.8));';
+        styleB = 'stroke: #fbbf24; stroke-width: 2.2; filter: drop-shadow(0 0 3px rgba(251, 191, 36, 0.8));';
+        styleC = 'stroke: #c084fc; stroke-width: 2.2; filter: drop-shadow(0 0 3px rgba(192, 132, 252, 0.8));';
+        styleY = 'stroke: #34d399; stroke-width: 3.0; filter: drop-shadow(0 0 5px rgba(52, 211, 153, 0.95));';
+        dotA = '#38bdf8'; dotB = '#fbbf24'; dotC = '#c084fc'; dotY = '#34d399';
+        aVal = 'A'; bVal = 'B'; cVal = 'C'; yVal = 'Y = C';
+      } else {
+        aVal = q2Data.A[rowIndex];
+        bVal = q2Data.B[rowIndex];
+        cVal = q2Data.C[rowIndex];
+        yVal = q2Data.Y[rowIndex];
+
+        g1_out = (!aVal && !bVal && cVal) ? 1 : 0;
+        g2_out = (!aVal && bVal && cVal) ? 1 : 0;
+        g3_out = (aVal && !bVal && cVal) ? 1 : 0;
+        g4_out = (aVal && bVal && cVal) ? 1 : 0;
+
+        const getStyle = (val) => val === 1
+          ? 'stroke: #38bdf8; stroke-width: 2.8; filter: drop-shadow(0 0 4px rgba(56, 189, 248, 0.95));'
+          : 'stroke: #334155; stroke-width: 1.5; opacity: 0.45;';
+
+        styleA = getStyle(aVal); dotA = aVal ? '#38bdf8' : '#64748b';
+        styleB = getStyle(bVal); dotB = bVal ? '#fbbf24' : '#64748b';
+        styleC = getStyle(cVal); dotC = cVal ? '#c084fc' : '#64748b';
+        styleY = yVal === 1
+          ? 'stroke: #34d399; stroke-width: 3.2; filter: drop-shadow(0 0 6px rgba(52, 211, 153, 1));'
+          : 'stroke: #334155; stroke-width: 1.5; opacity: 0.45;';
+        dotY = yVal ? '#34d399' : '#64748b';
+      }
+
+      const getGateWireStyle = (outVal) => (!isIsolated)
+        ? 'stroke: #38bdf8; stroke-width: 1.8; filter: drop-shadow(0 0 3px rgba(56, 189, 248, 0.7));'
+        : (outVal === 1
+            ? 'stroke: #34d399; stroke-width: 2.6; filter: drop-shadow(0 0 5px rgba(52, 211, 153, 1));'
+            : 'stroke: #334155; stroke-width: 1.2; opacity: 0.4;');
+
+      container.innerHTML = `
+        <div class="diagram-title">
+          <span>Q2(b) Original Circuit Schematic (4 AND Gates &rarr; 1 OR Gate)</span>
+          <span style="color:${isIsolated ? (yVal ? 'var(--emerald)' : 'var(--rose)') : 'var(--cyan)'}; font-weight:800;">
+            ${isIsolated ? `Selected Row: m${rowIndex} &rarr; Y = ${yVal}` : 'All Lines Glowing'}
+          </span>
+        </div>
+        <svg class="circuit-svg" viewBox="0 0 520 150" preserveAspectRatio="xMidYMid meet">
+          <!-- Input Busses -->
+          <g>
+            <text x="8" y="29" fill="${dotA}" font-size="10" font-weight="bold" font-family="JetBrains Mono">${isIsolated ? `A=${aVal}` : 'A'}</text>
+            <circle cx="28" cy="25" r="3" fill="${dotA}"/>
+            <line x1="28" y1="25" x2="130" y2="25" style="${styleA}" stroke-linecap="round"/>
+
+            <text x="8" y="79" fill="${dotB}" font-size="10" font-weight="bold" font-family="JetBrains Mono">${isIsolated ? `B=${bVal}` : 'B'}</text>
+            <circle cx="28" cy="75" r="3" fill="${dotB}"/>
+            <line x1="28" y1="75" x2="130" y2="75" style="${styleB}" stroke-linecap="round"/>
+
+            <text x="8" y="129" fill="${dotC}" font-size="10" font-weight="bold" font-family="JetBrains Mono">${isIsolated ? `C=${cVal}` : 'C'}</text>
+            <circle cx="28" cy="125" r="3" fill="${dotC}"/>
+            <line x1="28" y1="125" x2="130" y2="125" style="${styleC}" stroke-linecap="round"/>
+          </g>
+
+          <!-- Input distribution lines -->
+          <g stroke="#334155" stroke-width="1.2" fill="none">
+            <line x1="80" y1="25" x2="130" y2="18"/>
+            <line x1="95" y1="75" x2="130" y2="25"/>
+            <line x1="110" y1="125" x2="130" y2="32"/>
+
+            <line x1="80" y1="25" x2="130" y2="52"/>
+            <line x1="95" y1="75" x2="130" y2="58"/>
+            <line x1="110" y1="125" x2="130" y2="65"/>
+
+            <line x1="80" y1="25" x2="130" y2="85"/>
+            <line x1="95" y1="75" x2="130" y2="92"/>
+            <line x1="110" y1="125" x2="130" y2="98"/>
+
+            <line x1="80" y1="25" x2="130" y2="118"/>
+            <line x1="95" y1="75" x2="130" y2="125"/>
+            <line x1="110" y1="125" x2="130" y2="132"/>
+          </g>
+
+          <!-- 4 AND Gates -->
+          <g>
+            <path d="M 130 14 L 155 14 A 11 11 0 0 1 155 36 L 130 36 Z" fill="#0d1524" stroke="#38bdf8" stroke-width="1.6"/>
+            <text x="135" y="10" fill="#38bdf8" font-size="8" font-weight="bold" font-family="JetBrains Mono">m1 (A'B'C)</text>
+            <line x1="166" y1="25" x2="310" y2="65" style="${getGateWireStyle(g1_out)}" stroke-linecap="round"/>
+          </g>
+
+          <g>
+            <path d="M 130 47 L 155 47 A 11 11 0 0 1 155 69 L 130 69 Z" fill="#0d1524" stroke="#38bdf8" stroke-width="1.6"/>
+            <text x="135" y="44" fill="#38bdf8" font-size="8" font-weight="bold" font-family="JetBrains Mono">m3 (A'BC)</text>
+            <line x1="166" y1="58" x2="310" y2="70" style="${getGateWireStyle(g2_out)}" stroke-linecap="round"/>
+          </g>
+
+          <g>
+            <path d="M 130 81 L 155 81 A 11 11 0 0 1 155 103 L 130 103 Z" fill="#0d1524" stroke="#38bdf8" stroke-width="1.6"/>
+            <text x="135" y="78" fill="#38bdf8" font-size="8" font-weight="bold" font-family="JetBrains Mono">m5 (AB'C)</text>
+            <line x1="166" y1="92" x2="310" y2="78" style="${getGateWireStyle(g3_out)}" stroke-linecap="round"/>
+          </g>
+
+          <g>
+            <path d="M 130 114 L 155 114 A 11 11 0 0 1 155 136 L 130 136 Z" fill="#0d1524" stroke="#38bdf8" stroke-width="1.6"/>
+            <text x="135" y="111" fill="#38bdf8" font-size="8" font-weight="bold" font-family="JetBrains Mono">m7 (ABC)</text>
+            <line x1="166" y1="125" x2="310" y2="85" style="${getGateWireStyle(g4_out)}" stroke-linecap="round"/>
+          </g>
+
+          <!-- OR Gate -->
+          <g>
+            <path d="M 310 50 Q 330 75 310 100 Q 365 100 395 75 Q 365 50 310 50 Z" fill="#0a1220" stroke="#34d399" stroke-width="2.0" stroke-linejoin="round" style="filter: drop-shadow(0 0 5px rgba(52, 211, 153, 0.7));"/>
+            <text x="334" y="78" fill="#34d399" font-size="9" font-weight="bold" font-family="JetBrains Mono">OR</text>
+          </g>
+
+          <!-- Output Y -->
+          <g>
+            <line x1="395" y1="75" x2="445" y2="75" style="${styleY}" stroke-linecap="round"/>
+            <circle cx="445" cy="75" r="3.5" fill="${dotY}"/>
+            <text x="455" y="79" fill="${dotY}" font-size="11" font-weight="bold" font-family="JetBrains Mono">${isIsolated ? `Y=${yVal}` : 'Y = C'}</text>
+          </g>
+        </svg>
+      `;
+    }
+
+    function renderTableQ2() {
+      const tableContainer = document.getElementById('circuit-table-q2');
+      if (!tableContainer) return;
+
+      const isQuiz = quizState.q2.active;
+      let score = 0;
+
+      let html = '<table class="truth-table"><thead><tr>';
+      html += '<th>Minterm</th><th>A</th><th>B</th><th>C</th><th>Output Y (SOP)</th><th>الحالة المنطقية</th></tr></thead><tbody>';
+
+      for (let i = 0; i < 8; i++) {
+        const isCurrentIsolated = (isolatedRowQ2 === i);
+        const trClass = `trace-row ${isCurrentIsolated ? 'tr-isolated' : ''}`;
+
+        html += `<tr class="${trClass}" onclick="event.stopPropagation(); isolateRow('q2', ${i})">`;
+        html += `<td>m${i}</td><td>${q2Data.A[i]}</td><td>${q2Data.B[i]}</td><td>${q2Data.C[i]}</td>`;
+
+        if (!isQuiz) {
+          const yVal = q2Data.Y[i];
+          const yColor = yVal === 1 ? 'color:var(--emerald); font-weight:bold;' : 'color:var(--rose); font-weight:bold;';
+          html += `<td style="${yColor}">${yVal}</td>`;
+        } else {
+          const userVal = quizState.q2.userVals[i];
+          let btnClass = 'quiz-cell-btn';
+          if (userVal !== '?') {
+            if (userVal === q2Data.Y[i]) {
+              btnClass += ' correct';
+              score++;
+            } else {
+              btnClass += ' wrong';
+            }
+          }
+          html += `<td><button class="${btnClass}" onclick="event.stopPropagation(); toggleQuizCell('q2', ${i})">${userVal}</button></td>`;
+        }
+
+        html += `<td><span style="font-size:0.7rem; color:${isCurrentIsolated ? 'var(--cyan)' : 'var(--text-muted)'};">${isCurrentIsolated ? '🎯 مسار معزول' : 'انقر لتحديد'}</span></td>`;
+        html += '</tr>';
+      }
+      html += '</tbody></table>';
+
+      if (isQuiz) {
+        html += `
+          <div class="quiz-bar">
+            <div>درجتك الحالية: <span class="quiz-score-badge">${score} / 8</span> ${score === 8 ? '🎉 إجابة صحيحة بالكامل!' : ''}</div>
+            <div style="display:flex; gap:6px;">
+              <button class="quiz-action-btn" onclick="checkAllQuiz('q2')">✔️ كشف كل الإجابات</button>
+              <button class="quiz-action-btn" onclick="resetQuiz('q2')">🔄 إعادة الاختبار</button>
+            </div>
+          </div>
+        `;
+      }
+
+      tableContainer.innerHTML = html;
+    }
+
+    function renderTableQ4() {
+      const tableContainer = document.getElementById('circuit-table-q4');
+      if (!tableContainer) return;
+
+      const isQuiz = quizState.q4.active;
+      let score = 0;
+
+      let html = '<table class="truth-table"><thead><tr>';
+      html += '<th>Row</th><th>A</th><th>B</th><th>C</th><th>A + B</th><th>C + B</th><th>Y = (A+B)(C+B)</th><th>Canonical Term</th></tr></thead><tbody>';
+
+      for (let i = 0; i < 8; i++) {
+        html += `<tr>`;
+        html += `<td>${i}</td><td>${q4Data.A[i]}</td><td>${q4Data.B[i]}</td><td>${q4Data.C[i]}</td>`;
+        html += `<td>${q4Data.AB[i]}</td><td>${q4Data.BC[i]}</td>`;
+
+        if (!isQuiz) {
+          const yVal = q4Data.Y[i];
+          const yColor = yVal === 1 ? 'color:var(--emerald); font-weight:bold;' : 'color:var(--rose); font-weight:bold;';
+          html += `<td style="${yColor}">${yVal}</td>`;
+        } else {
+          const userVal = quizState.q4.userVals[i];
+          let btnClass = 'quiz-cell-btn';
+          if (userVal !== '?') {
+            if (userVal === q4Data.Y[i]) {
+              btnClass += ' correct';
+              score++;
+            } else {
+              btnClass += ' wrong';
+            }
+          }
+          html += `<td><button class="${btnClass}" onclick="event.stopPropagation(); toggleQuizCell('q4', ${i})">${userVal}</button></td>`;
+        }
+
+        const tag = q4Data.Y[i] === 1 ? `<span style="color:var(--emerald); font-weight:bold;">m${i} (SOP)</span>` : `<span style="color:var(--rose); font-weight:bold;">M${i} (POS)</span>`;
+        html += `<td>${tag}</td></tr>`;
+      }
+      html += '</tbody></table>';
+
+      if (isQuiz) {
+        html += `
+          <div class="quiz-bar">
+            <div>درجتك الحالية: <span class="quiz-score-badge">${score} / 8</span> ${score === 8 ? '🎉 ممتاز!' : ''}</div>
+            <div style="display:flex; gap:6px;">
+              <button class="quiz-action-btn" onclick="checkAllQuiz('q4')">✔️ كشف كل الإجابات</button>
+              <button class="quiz-action-btn" onclick="resetQuiz('q4')">🔄 إعادة الاختبار</button>
+            </div>
+          </div>
+        `;
+      }
+
+      tableContainer.innerHTML = html;
+    }
+
+    document.addEventListener('click', function(e) {
+      if (!e.target.closest('table.truth-table') && !e.target.closest('.reset-trace-btn')) {
+        if (isolatedRowQ2 !== null) {
+          isolatedRowQ2 = null;
+          updateCircuitQ2();
+        }
+      }
+    });
+
+    function toggleQuizMode(probId) {
+      quizState[probId].active = !quizState[probId].active;
+      const card = document.getElementById(`card-${probId}`);
+      if (card) {
+        const qBtn = card.querySelector('.quiz-mode-btn');
+        if (qBtn) {
+          if (quizState[probId].active) {
+            qBtn.classList.add('active');
+            qBtn.innerHTML = '📋 وضع المذاكرة (Study)';
+          } else {
+            qBtn.classList.remove('active');
+            qBtn.innerHTML = '✍️ اختبر نفسك (Quiz)';
+          }
+        }
+      }
+
+      if (probId === 'q2') renderTableQ2();
+      if (probId === 'q4') renderTableQ4();
+    }
+
+    function toggleQuizCell(probId, index) {
+      const cur = quizState[probId].userVals[index];
+      if (cur === '?') quizState[probId].userVals[index] = 0;
+      else if (cur === 0) quizState[probId].userVals[index] = 1;
+      else quizState[probId].userVals[index] = 0;
+
+      if (probId === 'q2') renderTableQ2();
+      if (probId === 'q4') renderTableQ4();
+    }
+
+    function checkAllQuiz(probId) {
+      if (probId === 'q2') {
+        quizState.q2.userVals = [...q2Data.Y];
+        renderTableQ2();
+      }
+      if (probId === 'q4') {
+        quizState.q4.userVals = [...q4Data.Y];
+        renderTableQ4();
+      }
+    }
+
+    function resetQuiz(probId) {
+      if (probId === 'q2') {
+        quizState.q2.userVals = Array(8).fill('?');
+        renderTableQ2();
+      }
+      if (probId === 'q4') {
+        quizState.q4.userVals = Array(8).fill('?');
+        renderTableQ4();
+      }
+    }
+
+    /* Live Boolean Evaluator Logic */
+    let simVars = { A: 0, B: 0, C: 0 };
+
+    function toggleSimVar(v) {
+      simVars[v] = simVars[v] === 0 ? 1 : 0;
+      const btn = document.getElementById(`sim-btn-${v.toLowerCase()}`);
+      if (btn) {
+        btn.innerText = `${v} = ${simVars[v]}`;
+        btn.className = simVars[v] === 1 ? 'quiz-cell-btn correct' : 'quiz-cell-btn';
+      }
+      updateSimResults();
+    }
+
+    function updateSimResults() {
+      const A = simVars.A;
+      const B = simVars.B;
+      const C = simVars.C;
+      const B_bar = B === 0 ? 1 : 0;
+      const A_bar = A === 0 ? 1 : 0;
+
+      const q1a = A | (B_bar & C);
+      const q1c = A | C;
+      const q2 = C;
+      const q4 = B | (A & C);
+      const q5 = (A_bar & C) | (A & B);
+
+      setSimEl('sim-res-q1a', q1a);
+      setSimEl('sim-res-q1c', q1c);
+      setSimEl('sim-res-q2', q2);
+      setSimEl('sim-res-q4', q4);
+      setSimEl('sim-res-q5', q5);
+    }
+
+    function setSimEl(id, val) {
+      const el = document.getElementById(id);
+      if (el) {
+        el.innerText = val;
+        el.style.color = val === 1 ? 'var(--emerald)' : 'var(--rose)';
+      }
+    }
+
+    function toggleCardSolution(btn) {
+      const card = btn.closest('.card');
+      const sol = card.querySelector('.solution-content');
+      if (sol.classList.contains('show')) {
+        sol.classList.remove('show');
+        btn.classList.add('collapsed');
+        btn.innerHTML = '👁️ Show Steps';
+      } else {
+        sol.classList.add('show');
+        btn.classList.remove('collapsed');
+        btn.innerHTML = '🙈 Hide Steps';
+      }
+    }
+
+    function toggleAllSolutions(show) {
+      const buttons = document.querySelectorAll('.sol-toggle-btn');
+      const solutions = document.querySelectorAll('.solution-content');
+
+      solutions.forEach((sol, idx) => {
+        const btn = buttons[idx];
+        if (show) {
+          sol.classList.add('show');
+          if (btn) {
+            btn.classList.remove('collapsed');
+            btn.innerHTML = '🙈 Hide Steps';
+          }
+        } else {
+          sol.classList.remove('show');
+          if (btn) {
+            btn.classList.add('collapsed');
+            btn.innerHTML = '👁️ Show Steps';
+          }
+        }
+      });
+    }
+
+    function filterGroup(groupNum) {
+      for (let i = 0; i <= 4; i++) {
+        const btn = document.getElementById(`filter-btn-${i}`);
+        if (btn) btn.classList.remove('active');
+      }
+      const activeBtn = document.getElementById(`filter-btn-${groupNum}`);
+      if (activeBtn) activeBtn.classList.add('active');
+
+      const cards = document.querySelectorAll('.card');
+      cards.forEach(card => {
+        const g = card.getAttribute('data-group');
+        if (groupNum === 0 || !g || g == groupNum) {
+          card.style.display = 'block';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+      updateCircuitQ2();
+      renderTableQ4();
+      updateSimResults();
+
+      if (typeof renderMathInElement === 'function') {
+        renderMathInElement(document.body, {
+          delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "$", right: "$", display: false}
+          ],
+          throwOnError: false
+        });
+      }
+    });
+  </script>
+</body>
+</html>
